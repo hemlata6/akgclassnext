@@ -135,8 +135,8 @@ export const Loader = () => (
       marginBottom: '1.5rem'
     }}>
       <img 
-        src="/logo.png" 
-        alt="IWision Logo" 
+        src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" 
+        alt="AKG Logo" 
         style={{ 
           height: '96px',
           width: 'auto',

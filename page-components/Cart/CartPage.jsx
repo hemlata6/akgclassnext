@@ -283,6 +283,9 @@ export default function CartPage() {
     );
   }
 
+  console.log('cartItems', cartItems);
+  
+
   return (
     <div className="bg-slate-50 min-h-screen md:pb-0">
       <div className={`py-12 ${LAYOUT_PADDING}`}>

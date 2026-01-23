@@ -114,8 +114,8 @@ export const CoursesSection = ({ onAddToCart }) => {
                     && c.tags.some(tag => tag.tag === "Featured Course")
                 )
                 : [];
-                console.log('activeCourses', activeCourses);
-                
+            console.log('activeCourses', activeCourses);
+
             setCoursesData(activeCourses);
             setError(null);
         } catch (err) {
@@ -135,7 +135,7 @@ export const CoursesSection = ({ onAddToCart }) => {
     });
 
     // console.log('filtered', filtered, activeDomain);
-    
+
 
     // Reset currentIndex when filtering changes
     useEffect(() => {

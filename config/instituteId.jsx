@@ -1,5 +1,5 @@
 // classio 
-// const instId = 49;
+const instId = 49;
 
 // providya
 // const instId = 152;
@@ -20,6 +20,9 @@
 // const instId = 262;
 
 // cafinal
-const instId = 364;
+// const instId = 364;
+
+// akg
+// const instId = 376;
 
 export default instId;

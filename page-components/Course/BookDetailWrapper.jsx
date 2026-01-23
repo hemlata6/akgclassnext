@@ -24,7 +24,8 @@ function BookDetailWrapper() {
           ? await Network.getStudentAuthCourse(authToken) 
           : await Network.getFreeCourseList(instId);
         const courses = response?.courses || response || [];
-        const book = courses.find(c => c.id === bookId && c.type === "books");
+        // Convert bookId to number for comparison
+        const book = courses.find(c => c.id === parseInt(bookId) && c.type === "books");
         setBookData(book || null);
       } catch (err) {
         console.error('Error fetching book:', err);

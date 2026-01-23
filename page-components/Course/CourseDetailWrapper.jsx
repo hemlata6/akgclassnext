@@ -23,7 +23,9 @@ function CourseDetailWrapper() {
       try {
         setLoading(true);
         const response = await Network.getFreeCourseList(instId);
-        const course = response?.find(c => c.id === courseId);
+        const courses = response?.courses || response || [];
+        // Convert courseId to number for comparison
+        const course = courses.find(c => c.id === parseInt(courseId));
         setCourseData(course || null);
       } catch (err) {
         console.error('Error fetching course:', err);

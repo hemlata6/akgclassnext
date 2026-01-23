@@ -258,6 +258,8 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         }
     };
 
+    console.log('payloadCart', payloadCart, cartCourses);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 

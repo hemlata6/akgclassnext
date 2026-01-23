@@ -73,7 +73,7 @@ Create a `.env.local` file (for local dev) or set these in your deployment platf
 
 ```env
 NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com/
-NEXT_PUBLIC_MEDIA_BASE_URL=https://classiocafinal.in-maa-1.linodeobjects.com/
+NEXT_PUBLIC_MEDIA_BASE_URL=https://classioakg.in-maa-1.linodeobjects.com/
 PORT=3000
 NODE_ENV=production
 ```

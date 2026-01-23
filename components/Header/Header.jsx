@@ -339,7 +339,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src="/logo.png" alt="IWision Logo" className="h-16 md:h-16 object-contain" />
+                <img src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" alt="AKG Logo" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 

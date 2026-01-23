@@ -16,7 +16,7 @@ const nextConfig = {
       },
     ],
   },
-  trailingSlash: true,
+  trailingSlash: false,
   // Enable SWC minification for better performance
   swcMinify: true,
   // Compression

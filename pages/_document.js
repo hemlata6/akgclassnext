@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/logo.png" />
-        <link rel="apple-touch-icon" href="/logo.png" />
+        <link rel="icon" href="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" />
+        <link rel="apple-touch-icon" href="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />
