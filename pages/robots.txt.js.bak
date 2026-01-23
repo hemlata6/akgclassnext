@@ -1,0 +1,31 @@
+// pages/robots.txt.js - Dynamic robots.txt generation
+export async function getServerSideProps({ res }) {
+  const robotsTxt = `# *
+User-agent: *
+Allow: /
+
+# Disallow admin or private areas (if any)
+Disallow: /api/
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://lecturedekho.in/sitemap.xml
+
+# Crawl-delay
+Crawl-delay: 0
+`;
+
+  res.setHeader('Content-Type', 'text/plain');
+  res.setHeader('Cache-Control', 'public, s-maxage=86400, stale-while-revalidate=604800');
+  res.write(robotsTxt);
+  res.end();
+
+  return {
+    props: {},
+  };
+}
+
+export default function RobotsTxt() {
+  // This component will never be rendered
+  return null;
+}

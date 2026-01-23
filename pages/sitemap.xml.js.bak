@@ -1,0 +1,126 @@
+// This generates a dynamic sitemap for all blog posts
+import Network from '../config/Network';
+import instId from '../config/instituteId';
+
+const SITE_URL = 'https://lecturedekho.in';
+
+// Slugify helper function
+const slugify = (str) => {
+  if (!str) return '';
+  return str.toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+};
+
+// Fetch all blog posts recursively
+async function getAllBlogs(courseId, parentId = 0, blogs = []) {
+  try {
+    const response = await Network.fetchFreePublicScheduleApi(courseId, parentId);
+    const contentList = response?.contentList || [];
+
+    for (const item of contentList) {
+      if (item.entityType === 'blog') {
+        blogs.push({
+          courseId,
+          parentId,
+          title: item.title,
+          slug: slugify(item.title),
+          updatedAt: item.updatedAt || item.createdAt || new Date().toISOString(),
+        });
+      } else if (item.entityType === 'folder' && !item.drip) {
+        // Recursively fetch blogs from folders
+        await getAllBlogs(courseId, item.id, blogs);
+      }
+    }
+
+    return blogs;
+  } catch (error) {
+    console.error('Error fetching blogs for sitemap:', error);
+    return blogs;
+  }
+}
+
+function generateSiteMap(blogs) {
+  return `<?xml version="1.0" encoding="UTF-8"?>
+   <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+     <!-- Static Pages -->
+     <url>
+       <loc>${SITE_URL}</loc>
+       <lastmod>${new Date().toISOString()}</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>1.0</priority>
+     </url>
+     <url>
+       <loc>${SITE_URL}/blog</loc>
+       <lastmod>${new Date().toISOString()}</lastmod>
+       <changefreq>daily</changefreq>
+       <priority>0.9</priority>
+     </url>
+     <url>
+       <loc>${SITE_URL}/store</loc>
+       <lastmod>${new Date().toISOString()}</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.8</priority>
+     </url>
+     <url>
+       <loc>${SITE_URL}/free-resources</loc>
+       <lastmod>${new Date().toISOString()}</lastmod>
+       <changefreq>weekly</changefreq>
+       <priority>0.8</priority>
+     </url>
+     <!-- Blog Posts -->
+     ${blogs
+       .map((blog) => {
+         const blogUrl = `${SITE_URL}/blog/${blog.courseId}-${blog.parentId}-${blog.slug}`;
+         return `
+     <url>
+       <loc>${blogUrl}</loc>
+       <lastmod>${blog.updatedAt}</lastmod>
+       <changefreq>monthly</changefreq>
+       <priority>0.7</priority>
+     </url>`;
+       })
+       .join('')}
+   </urlset>
+ `;
+}
+
+export async function getServerSideProps({ res }) {
+  try {
+    // Fetch all courses
+    const coursesResponse = await Network.getFreeCourseList(instId);
+    const courses = coursesResponse?.courses || [];
+    const activeCourses = courses.filter(course => course?.active === true);
+
+    // Fetch all blogs from all courses
+    let allBlogs = [];
+    for (const course of activeCourses) {
+      const courseBlogs = await getAllBlogs(course.id, 0);
+      allBlogs = [...allBlogs, ...courseBlogs];
+    }
+
+    // Generate the XML sitemap
+    const sitemap = generateSiteMap(allBlogs);
+
+    res.setHeader('Content-Type', 'text/xml');
+    res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400');
+    res.write(sitemap);
+    res.end();
+
+    return {
+      props: {},
+    };
+  } catch (error) {
+    console.error('Error generating sitemap:', error);
+    res.statusCode = 500;
+    res.end();
+    return {
+      props: {},
+    };
+  }
+}
+
+export default function Sitemap() {
+  // This component will never be rendered
+  return null;
+}
