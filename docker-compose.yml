@@ -1,0 +1,44 @@
+# Docker Compose for local development and testing
+version: '3.8'
+
+services:
+  akgclass:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: akgclass-nextjs
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com/
+      - NEXT_PUBLIC_MEDIA_BASE_URL=https://classiocafinal.in-maa-1.linodeobjects.com/
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - akgclass-network
+
+  # Optional: Nginx as reverse proxy
+  nginx:
+    image: nginx:alpine
+    container_name: akgclass-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - akgclass
+    restart: unless-stopped
+    networks:
+      - akgclass-network
+
+networks:
+  akgclass-network:
+    driver: bridge

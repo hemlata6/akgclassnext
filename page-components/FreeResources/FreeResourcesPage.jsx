@@ -232,20 +232,28 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     .toLowerCase()
                     .replace(/[^a-z0-9]+/g, '-')
                     .replace(/^-+|-+$/g, '');
-                
+
                 // Store blog data in sessionStorage
                 if (typeof window !== 'undefined') {
                     sessionStorage.setItem('blogData', JSON.stringify(item));
                 }
-                
+
                 router.push(`/blog/${titleSlug}`);
                 return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
             }
             if (item?.entityType === "note" && authToken && isAuthenticated) {
                 if (item?.note?.note) {
                     window.open(Endpoints.mediaBaseUrl + item?.note?.note, "_blank");
                 }
                 return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
             }
 
             if (item?.entityType === "video" && authToken && isAuthenticated) {
@@ -254,6 +262,10 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     setopenDialog(true)
                 }
                 return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
             }
 
             if (item?.entityType === "audio" && authToken && isAuthenticated) {
@@ -263,7 +275,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                 }
                 return;
             } else {
-                if (authToken && isAuthenticated) {
+                if (!authToken && !isAuthenticated) {
                     setShowLoginWarning(true)
                 }
             }

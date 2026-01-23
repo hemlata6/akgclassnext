@@ -3,7 +3,7 @@ import { Icons } from '../../constants/Icons';
 
 export const ShareButtons = ({ title, url, description }) => {
   const [canShare, setCanShare] = useState(false);
-  .
+  
   
   useEffect(() => {
     // Check for native share support only on client

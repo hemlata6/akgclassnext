@@ -149,7 +149,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
         // Helper to fix old CDN URLs
         const fixCdnUrl = (url) => {
             if (!url) return url;
-            return url.replace('classiopsacad.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
+            return url.replace('classiocafinal.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
         };
 
         // Check nested blog.thumb first

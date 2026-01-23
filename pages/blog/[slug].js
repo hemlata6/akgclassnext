@@ -41,7 +41,7 @@ export default function BlogDetail({ blogData, error }) {
     // Helper to fix old CDN URLs
     const fixCdnUrl = (url) => {
       if (!url) return url;
-      return url.replace('classiopsacad.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
+      return url.replace('classiocafinal.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
     };
     
     // Check for blog.thumb first (nested structure)
@@ -150,90 +150,17 @@ export default function BlogDetail({ blogData, error }) {
   );
 }
 
-// Helper function to get all blogs recursively
-async function getAllBlogs() {
-  const allBlogs = [];
-  
-  async function fetchCourseBlogs(courseId, parentId = 0) {
-    try {
-      const response = await Network.fetchFreePublicScheduleApi(courseId, parentId);
-      const contentList = response?.contentList || [];
-      
-      for (const item of contentList) {
-        if (item.entityType === 'blog') {
-          allBlogs.push({
-            ...item,
-            courseId: courseId,
-            parentId: parentId
-          });
-        } else if (item.entityType === 'folder' && !item.drip) {
-          // Recursively fetch blogs from folders
-          await fetchCourseBlogs(courseId, item.id);
-        }
-      }
-    } catch (error) {
-      console.error(`Error fetching blogs for course ${courseId}, parent ${parentId}:`, error);
-    }
-  }
-  
-  try {
-    // Get all active courses
-    const coursesResponse = await Network.getFreeCourseList(instId);
-    const courses = coursesResponse?.courses || [];
-    const activeCourses = courses.filter(course => course?.active === true);
-    
-    console.log(`Found ${activeCourses.length} active courses`);
-    
-    // Fetch blogs from all courses
-    for (const course of activeCourses) {
-      console.log(`Fetching blogs for course ${course.id}: ${course.title}`);
-      await fetchCourseBlogs(course.id, 0);
-    }
-    
-    console.log(`Total blogs found: ${allBlogs.length}`);
-  } catch (error) {
-    console.error('Error fetching courses:', error);
-  }
-  
-  return allBlogs;
-}
-
-// Generate static paths at build time
-export async function getStaticPaths() {
-  try {
-    const blogs = await getAllBlogs();
-    
-    const slugify = (str) => {
-      if (!str) return '';
-      return str.toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
-    };
-    
-    const paths = blogs.map(blog => ({
-      params: {
-        slug: `${blog.courseId}-${blog.parentId}-${slugify(blog.title)}`
-      }
-    }));
-    
-    console.log(`Generated ${paths.length} blog paths for static export`);
-    
-    return {
-      paths,
-      fallback: false // Required for static export
-    };
-  } catch (error) {
-    console.error('Error generating static paths:', error);
-    return {
-      paths: [],
-      fallback: false
-    };
-  }
-}
-
-// Fetch blog data at build time for static generation
-export async function getStaticProps(context) {
+// Fetch blog data dynamically on each request (SSR)
+// Changed from getStaticProps to getServerSideProps for dynamic content
+export async function getServerSideProps(context) {
   const { slug } = context.params;
+  const { res } = context;
+
+  // Set cache headers for better performance
+  res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=60, stale-while-revalidate=120'
+  );
 
   // Parse slug
   let courseId, parentId, actualSlug;
@@ -286,11 +213,9 @@ export async function getStaticProps(context) {
       }
     }
 
+    // Return 404 if blog not found
     return {
-      props: {
-        blogData: null,
-        error: 'Blog not found'
-      }
+      notFound: true
     };
   } catch (error) {
     console.error('Error fetching blog:', error);

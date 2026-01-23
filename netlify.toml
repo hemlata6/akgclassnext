@@ -1,19 +1,58 @@
+# Netlify Configuration for Next.js Dynamic Deployment
 [build]
   command = "npm run build"
   publish = ".next"
 
+# Use the Next.js plugin for dynamic features
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [build.environment]
   NODE_VERSION = "18"
+  NEXT_TELEMETRY_DISABLED = "1"
 
-# Redirects for Next.js routing
+# Enable Next.js runtime for dynamic routes
+[functions]
+  node_bundler = "esbuild"
+  external_node_modules = ["sharp"]
+
+# Redirects for proper routing
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"]}
+
+# Handle 404
 [[redirects]]
   from = "/*"
   to = "/404.html"
   status = 404
 
-# Environment variables (add your own in Netlify dashboard)
-# [build.environment]
-#   NEXT_PUBLIC_API_URL = "your-api-url"
+# Headers for security and caching
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "origin-when-cross-origin"
+
+[[headers]]
+  for = "/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/_next/image*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Environment variables (configure in Netlify dashboard)
+# NEXT_PUBLIC_API_BASE_URL
+# NEXT_PUBLIC_MEDIA_BASE_URL
