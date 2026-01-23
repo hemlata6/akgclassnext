@@ -184,7 +184,7 @@ const formatDuration = (duration) => {
                 alt="Faculty"
               />
               <div>
-                <p className="text-sm font-bold text-slate-900">CA Vipul Dhal</p>
+                <p className="text-sm font-bold text-slate-900">CA Akshansh Garg</p>
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
               </div>
               <button className="ml-auto text-slate-400 hover:text-slate-600 transition flex items-center gap-1 text-xs font-bold border border-slate-200 px-3 py-1.5 rounded-full">
@@ -459,7 +459,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                           onClick={() => setSelectedMode(mode)}
                           className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedMode === mode
                             ? `border-2 ${BRAND_GREEN_CLASS} text-white`
-                            : 'border border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-slate-50'
+                            : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
                             }`}
                         >
                           {mode}
@@ -542,7 +542,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                 {suggestedCourses.map((suggestedCourse) => (
                   <div
                     key={suggestedCourse.id}
-                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-emerald-400 overflow-hidden flex flex-col group max-w-sm"
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-indigo-400 overflow-hidden flex flex-col group max-w-sm"
                   >
                     {/* Green Header with Badge and Hours */}
                     <div className={`${BRAND_GREEN_CLASS} p-0 relative h-48 flex items-end justify-start overflow-hidden`}>

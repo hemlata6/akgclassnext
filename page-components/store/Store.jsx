@@ -71,10 +71,10 @@ const Store = () => {
     const batchCount = selectedTag ? 1 : 0;
     const priceCount = priceSorting ? 1 : 0;
 
-    // Website brand colors (emerald green theme)
-    const primaryColor = '#164e33'; // emerald-900 (rgb(22, 78, 51))
-    const primaryColorLight = '#10b981'; // emerald-500
-    const primaryColorDark = '#059669'; // emerald-600
+    // Website brand colors (indigo theme)
+    const primaryColor = '#4338ca'; // indigo-700 (rgb(67, 56, 202))
+    const primaryColorLight = '#6366f1'; // indigo-500
+    const primaryColorDark = '#3730a3'; // indigo-800
 
     // Convert hex color to RGB
     const hexToRgb = (hex) => {
@@ -130,6 +130,11 @@ const Store = () => {
         // Check if coming from CourseExplore or if this is a page refresh
         const fromCourseExplore = sessionStorage.getItem('fromCourseExplore');
         const storePageActive = sessionStorage.getItem('storePageActive');
+
+        // Set product type if coming from navigation
+        if (productTypeFromNavigation) {
+            setSelectedProductType(productTypeFromNavigation);
+        }
 
         if (facultyFilter) {
             // Coming from faculty click - set only the selected faculty (but NOT exam stage)
@@ -212,8 +217,8 @@ const Store = () => {
         // Handle navigation from footer (examType and examStage as names)
         if (examTypeFromState && examStageNameFromState && domains.length > 0) {
             // Find the exam type (parent domain) by name
-            const parentDomain = domains.find(d => 
-                d.parentId === 0 && 
+            const parentDomain = domains.find(d =>
+                d.parentId === 0 &&
                 d.name.toLowerCase() === examTypeFromState.toLowerCase()
             );
 
@@ -222,7 +227,7 @@ const Store = () => {
 
                 // Find the exam stage (child domain) by name
                 if (parentDomain.child && parentDomain.child.length > 0) {
-                    const examStage = parentDomain.child.find(child => 
+                    const examStage = parentDomain.child.find(child =>
                         child.name.toLowerCase().includes(examStageNameFromState.toLowerCase())
                     );
                     if (examStage) {
@@ -760,7 +765,12 @@ const Store = () => {
     };
 
     const handleCardClick = (course) => {
-        router.push(`/course/${course.id}`, { state: { course } });
+        if (course?.type === "books") {
+            router.push(`/book/${course.id}`);
+
+        } else {
+            router.push(`/course/${course.id}`, { state: { course } });
+        }
     };
 
     const handleAddtoCart = (course) => {
@@ -871,10 +881,10 @@ const Store = () => {
 
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 via-emerald-50/30 to-green-50/30 lg:pt-4">
+        <div className="bg-gradient-to-br from-gray-50 via-indigo-50/30 to-indigo-50/30 lg:pt-4">
             {/* Main Store Content */}
             {/* Header Section - Fixed on mobile only */}
-            <div className="lg:relative lg:z-auto fixed top-15 left-0 right-0 z-30 lg:bg-white lg:border-0 border-b lg:shadow-md shadow-sm bg-white border-emerald-100 lg:rounded-xl lg:mx-4">
+            <div className="lg:relative lg:z-auto fixed top-15 left-0 right-0 z-30 lg:bg-white lg:border-0 border-b lg:shadow-md shadow-sm bg-white border-indigo-100 lg:rounded-xl lg:mx-4">
                 <div className="max-w-[1800px] mx-auto px-2 pt-2.5 md:px-3 md:py-2">
                     {/* Header Section - Course Store Title + Sort, Search, Cart */}
                     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-1">
@@ -1167,7 +1177,7 @@ const Store = () => {
 
                         {/* Left Sidebar - Filters (Desktop Only) */}
                         <div className="hidden lg:block w-full lg:w-72 flex-shrink-0">
-                            <div className="bg-white rounded-2xl shadow-lg p-5 border-2 border-emerald-100 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ borderLeft: `5px solid ${primaryColor}` }}>
+                            <div className="bg-white rounded-2xl shadow-lg p-5 border-2 border-indigo-100 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ borderLeft: `5px solid ${primaryColor}` }}>
                                 {(selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting || searchTerm) && (
                                     <div className="mb-4 pb-4 border-b-2" style={{ borderColor: `${primaryColor}40` }}>
                                         <button
@@ -1297,8 +1307,8 @@ const Store = () => {
                                                         className="w-full text-left px-2 py-1.5 rounded-md text-xs transition-all cursor-pointer flex items-center gap-2 hover:bg-gray-50 group"
                                                     >
                                                         <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${isSelected
-                                                            ? 'border-emerald-600 bg-emerald-600 shadow-sm'
-                                                            : 'border-gray-300 group-hover:border-emerald-400'
+                                                            ? 'border-indigo-600 bg-indigo-600 shadow-sm'
+                                                            : 'border-gray-300 group-hover:border-indigo-400'
                                                             }`}>
                                                             {isSelected && (
                                                                 <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1373,8 +1383,8 @@ const Store = () => {
                                                                     <button
                                                                         onClick={() => togglePaper(paper)}
                                                                         className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${isSelected
-                                                                            ? 'bg-emerald-600 text-white shadow-lg'
-                                                                            : 'border-2 border-emerald-200 text-emerald-600 hover:border-emerald-600'
+                                                                            ? 'bg-indigo-600 text-white shadow-lg'
+                                                                            : 'border-2 border-indigo-200 text-indigo-700 hover:border-indigo-700'
                                                                             }`}
                                                                     >
                                                                         {paper.name}
@@ -1437,7 +1447,7 @@ const Store = () => {
                                                         setSelectedTag(tag || null);
                                                     }
                                                 }}
-                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-emerald-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-indigo-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
                                             >
                                                 <option value="">All Tags</option>
                                                 {tags.map(tag => (
@@ -1455,7 +1465,7 @@ const Store = () => {
                                         <select
                                             value={priceSorting}
                                             onChange={(e) => setPriceSorting(e.target.value)}
-                                            className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-emerald-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                            className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-indigo-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
                                         >
                                             <option value="">All Prices</option>
                                             <option value="low-to-high">Price: Low to High</option>
@@ -1481,7 +1491,7 @@ const Store = () => {
                                                     key={item.id}
                                                     className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
                                                         ? 'border-amber-200 hover:border-amber-400'
-                                                        : 'border-emerald-100 hover:border-emerald-400'
+                                                        : 'border-indigo-100 hover:border-indigo-400'
                                                         }`}
                                                 >
                                                     {/* Course Image with Overlay */}
@@ -1496,7 +1506,7 @@ const Store = () => {
                                                     {/* Course Content */}
                                                     <div className="p-2.5 flex-1 flex flex-col">
                                                         <div className="flex items-start justify-between gap-1.5 mb-1">
-                                                            <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-emerald-700`}>
+                                                            <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-indigo-700`}>
                                                                 {item.title}
                                                             </h3>
                                                         </div>
@@ -1528,7 +1538,7 @@ const Store = () => {
                                                                         e.stopPropagation();
                                                                         toggleExpandDescription(item?.shortDescription);
                                                                     }}
-                                                                    className={`font-medium ml-1 underline text-emerald-600 hover:text-emerald-700`}
+                                                                    className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
                                                                 >
                                                                     more
                                                                 </button>
@@ -1716,7 +1726,7 @@ const Store = () => {
                                             setSelectedExamStage(null);
                                             setSelectedFaculties([]);
                                         }}
-                                        className="font-black text-xs text-emerald-600 hover:text-emerald-700 transition-colors"
+                                        className="font-black text-xs text-indigo-700 hover:text-indigo-800 transition-colors"
                                     >
                                         Reset
                                     </button>

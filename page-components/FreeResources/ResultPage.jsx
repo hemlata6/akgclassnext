@@ -682,7 +682,7 @@ const Result = () => {
                     {/* {onRetakeTest && (
             <button
               onClick={onRetakeTest}
-              className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center"
+              className="bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 px-8 rounded-lg transition-colors duration-200 flex items-center justify-center"
             >
               <RotateCcw className="h-5 w-5 mr-2" />
               Retake Test

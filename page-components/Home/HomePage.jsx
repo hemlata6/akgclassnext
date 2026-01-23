@@ -6,10 +6,15 @@ import { WhyChooseUs } from './sections/WhyChooseUs';
 import { AboutSection } from './sections/AboutSection';
 import { CoursesSection } from './sections/CoursesSection';
 import { BookStore } from './sections/BookStore';
+import { MarathonGallery } from './sections/MarathonGallery';
+import { StudentGallery } from './sections/StudentGallery';
+import { FreeResources } from './sections/FreeResources';
+import { StudentSupportSection } from './sections/StudentSupportSection';
 import { StudentHub } from './sections/StudentHub';
 import { AppDownload } from './sections/AppDownload';
 import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
+import { PromoBanners } from './sections/PromoBanners';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -28,14 +33,19 @@ export default function HomePage() {
   return (
     <>
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
+      <PromoBanners />
       <HeroSection onExploreClick={handleScrollToCourses} />
       <WhyChooseUs />
       <AboutSection />
       <CoursesSection />
       <BookStore />
-      <StudentHub />
+      <MarathonGallery />
+      <StudentGallery />
+      <FreeResources />
+      <StudentSupportSection />
+      {/* <StudentHub />
       <AppDownload />
-      <CounsellingStrip />
+      <CounsellingStrip /> */}
       <Footer />
       <a href="#" className="fixed z-40 right-4 bottom-24 md:bottom-12 group">
         <div className="bg-[#25D366] text-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform">

@@ -51,7 +51,7 @@ export const ShareButtons = ({ title, url, description }) => {
       {canShare && (
         <button
           onClick={() => handleShare('native')}
-          className="p-2 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-600 hover:text-emerald-700 transition-colors"
+          className="p-2 rounded-full bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-700 transition-colors"
           title="Share"
           aria-label="Share">
           <Icons.Share className="w-5 h-5" />
@@ -94,7 +94,7 @@ export const ShareButtons = ({ title, url, description }) => {
       {/* WhatsApp */}
       <button
         onClick={() => handleShare('whatsapp')}
-        className="p-2 rounded-full bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 transition-colors"
+        className="p-2 rounded-full bg-indigo-50 hover:bg-indigo-100 text-indigo-600 hover:text-indigo-700 transition-colors"
         title="Share on WhatsApp"
         aria-label="Share on WhatsApp">
         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -105,7 +105,7 @@ export const ShareButtons = ({ title, url, description }) => {
       {/* Copy Link */}
       <button
         onClick={copyToClipboard}
-        className="p-2 rounded-full bg-slate-100 hover:bg-emerald-100 text-slate-600 hover:text-emerald-700 transition-colors"
+        className="p-2 rounded-full bg-slate-100 hover:bg-indigo-100 text-slate-600 hover:text-indigo-700 transition-colors"
         title="Copy Link"
         aria-label="Copy Link">
         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

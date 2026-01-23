@@ -44,13 +44,13 @@ export const StickyMobileFooter = ({ cartCount }) => {
               <div className={`h-14 w-14 ${BRAND_GREEN_CLASS} rounded-full text-white shadow-lg border-4 border-white flex items-center justify-center transform active:scale-95 -mt-8 mb-1`}>
                 {item.i}
               </div>
-              <span className="text-[10px] font-bold text-emerald-800">
+              <span className="text-[10px] font-bold text-indigo-800">
                 {item.l}
               </span>
             </>
           ) : (
             <>
-              <div className="text-slate-500 hover:text-emerald-600 active:text-emerald-600 relative mb-1">
+              <div className="text-slate-500 hover:text-indigo-600 active:text-indigo-600 relative mb-1">
                 {item.i}
                 {item.badge > 0 && <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-600 rounded-full border border-white"></span>}
               </div>
@@ -195,7 +195,7 @@ export const Header = ({ cartCount }) => {
     } else if (domain.child && domain.child.length > 0) {
       router.push({
         pathname: '/store',
-        query: { selectedDomainId: domain.id, selectedDomainName: domain.name, isMobile: false }
+        query: { selectedDomainId: domain.id, selectedDomainName: domain.name, isMobile: false, productType: 'lecture' }
       });
     }
   };
@@ -209,7 +209,8 @@ export const Header = ({ cartCount }) => {
         selectedDomainName: selectedParentDomain?.name,
         selectedExamStageId: domain.id,
         selectedExamStageName: domain.name,
-        isMobile: false
+        isMobile: false,
+        productType: 'lecture'
       }
     });
   };
@@ -230,7 +231,7 @@ export const Header = ({ cartCount }) => {
     } else if (domain.child && domain.child.length > 0) {
       router.push({
         pathname: '/store',
-        query: { selectedDomainId: domain.id, selectedDomainName: domain.name, isMobile: false }
+        query: { selectedDomainId: domain.id, selectedDomainName: domain.name, isMobile: false, productType: 'books' }
       });
     }
   };
@@ -244,7 +245,8 @@ export const Header = ({ cartCount }) => {
         selectedDomainName: booksSelectedParentDomain?.name,
         selectedExamStageId: domain.id,
         selectedExamStageName: domain.name,
-        isMobile: false
+        isMobile: false,
+        productType: 'books'
       }
     });
   };
@@ -282,7 +284,7 @@ export const Header = ({ cartCount }) => {
         {label} {hasSub && <Icons.ChevronDown />}
       </button>
       {hasSub && (
-        <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-emerald-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === label ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+        <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-indigo-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === label ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
           {subItems && subItems.length > 0 ? (
             subItems.map((sub, i) => (
               <div
@@ -294,7 +296,7 @@ export const Header = ({ cartCount }) => {
                 }}
                 className="px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0 flex justify-between items-center group/item"
               >
-                <span className="text-xs font-semibold text-slate-600 group-hover/item:text-emerald-700">{sub.label}</span>
+                <span className="text-xs font-semibold text-slate-600 group-hover/item:text-indigo-700">{sub.label}</span>
                 {sub.tag && <span className="text-[9px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded font-bold">{sub.tag}</span>}
               </div>
             ))
@@ -361,10 +363,10 @@ export const Header = ({ cartCount }) => {
                 >
                   Lectures <Icons.ChevronDown />
                 </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-emerald-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-indigo-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                   {domainLoading ? (
                     <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce"></div>
+                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
                       <span>Loading...</span>
                     </div>
                   ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
@@ -372,13 +374,13 @@ export const Header = ({ cartCount }) => {
                   ) : (
                     <>
                       {currentLevel === 'second' && (
-                        <button onClick={handleBackToFirstLevel} className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 mb-1 flex items-center gap-2 transition-all">
+                        <button onClick={handleBackToFirstLevel} className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 mb-1 flex items-center gap-2 transition-all">
                           <Icons.ChevronLeft size={14} />
                           Back to Categories
                         </button>
                       )}
                       {currentLevel === 'first' && firstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? 'bg-emerald-500 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-700'}`}>
+                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? 'bg-indigo-500 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-indigo-700'}`}>
                           <span className="truncate">{domain.name}</span>
                           {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
                             <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${selectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
@@ -390,13 +392,13 @@ export const Header = ({ cartCount }) => {
                       ))}
                       {currentLevel === 'second' && selectedParentDomain && (
                         <>
-                          <div className="px-4 py-2 text-xs font-bold text-white bg-emerald-700 mb-1 flex items-center gap-2">
+                          <div className="px-4 py-2 text-xs font-bold text-white bg-indigo-700 mb-1 flex items-center gap-2">
                             <div className="w-2 h-4 rounded-full bg-white opacity-80"></div>
                             <span>{selectedParentDomain.name}</span>
                           </div>
                           {secondLevelDomains.map((domain) => (
-                            <button key={domain.id} onClick={() => handleSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${selectedSecondLevelDomain?.id === domain.id ? 'bg-emerald-400 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-emerald-700'}`}>
-                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${selectedSecondLevelDomain?.id === domain.id ? 'bg-white' : 'bg-emerald-400'}`}></span>
+                            <button key={domain.id} onClick={() => handleSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${selectedSecondLevelDomain?.id === domain.id ? 'bg-indigo-400 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-indigo-700'}`}>
+                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${selectedSecondLevelDomain?.id === domain.id ? 'bg-white' : 'bg-indigo-400'}`}></span>
                               <span className="truncate">{domain.name}</span>
                             </button>
                           ))}
@@ -419,7 +421,7 @@ export const Header = ({ cartCount }) => {
                 >
                   Books <Icons.ChevronDown />
                 </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-emerald-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Books' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-indigo-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Books' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                   {booksLoading ? (
                     <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
                       <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></div>
@@ -512,7 +514,7 @@ export const Header = ({ cartCount }) => {
               ) : (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="hidden md:block text-slate-700 hover:text-green-600 px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+                  className="hidden md:block text-slate-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-bold transition-colors"
                 >
                   Login
                 </button>
@@ -547,7 +549,7 @@ export const Header = ({ cartCount }) => {
                 {/* Home */}
                 <button
                   onClick={() => { router.push('/'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition"
+                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                 >
                   Home
                 </button>
@@ -565,7 +567,7 @@ export const Header = ({ cartCount }) => {
                         fetchDomainsForMenu();
                       }
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition"
+                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                   >
                     <span>Lectures</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'courses' ? 'rotate-180' : ''}`} />
@@ -574,7 +576,7 @@ export const Header = ({ cartCount }) => {
                     <div className="space-y-1 mt-1 pl-2">
                       {domainLoading ? (
                         <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-bounce"></div>
+                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
                           <span>Loading...</span>
                         </div>
                       ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
@@ -584,7 +586,7 @@ export const Header = ({ cartCount }) => {
                           {currentLevel === 'second' && (
                             <button
                               onClick={handleBackToFirstLevel}
-                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-lg flex items-center gap-2 transition-all"
+                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg flex items-center gap-2 transition-all"
                             >
                               <Icons.ChevronLeft size={14} />
                               Back to Categories
@@ -603,8 +605,8 @@ export const Header = ({ cartCount }) => {
                                 }
                               }}
                               className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${selectedFirstLevelDomain?.id === domain.id
-                                ? 'bg-emerald-100 text-emerald-700 font-semibold'
-                                : 'text-slate-600 hover:bg-emerald-50 hover:text-emerald-700'
+                                ? 'bg-indigo-100 text-indigo-700 font-semibold'
+                                : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
                                 }`}
                             >
                               <span className="truncate">{domain.name}</span>
@@ -615,7 +617,7 @@ export const Header = ({ cartCount }) => {
                           ))}
                           {currentLevel === 'second' && selectedParentDomain && (
                             <>
-                              <div className="px-4 py-2 text-xs font-bold text-emerald-700 bg-emerald-50 rounded-lg mb-1">
+                              <div className="px-4 py-2 text-xs font-bold text-indigo-700 bg-indigo-50 rounded-lg mb-1">
                                 {selectedParentDomain.name}
                               </div>
                               {secondLevelDomains.map((domain) => (
@@ -628,9 +630,9 @@ export const Header = ({ cartCount }) => {
                                     setCurrentLevel('first');
                                     setSelectedParentDomain(null);
                                   }}
-                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-emerald-50 hover:text-emerald-700"
+                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
                                 >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0"></span>
+                                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
                                   <span className="truncate">{domain.name}</span>
                                 </button>
                               ))}
@@ -655,7 +657,7 @@ export const Header = ({ cartCount }) => {
                         fetchBooksDomainsForMenu();
                       }
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition"
+                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                   >
                     <span>Books</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'books' ? 'rotate-180' : ''}`} />
@@ -735,7 +737,7 @@ export const Header = ({ cartCount }) => {
                 {/* Blog */}
                 <button
                   onClick={() => { router.push('/blog'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition"
+                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                 >
                   Blog
                 </button>
@@ -743,7 +745,7 @@ export const Header = ({ cartCount }) => {
                 {/* Free Resources */}
                 <button
                   onClick={() => { router.push('/free-resources'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition"
+                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                 >
                   Free Resources
                 </button>
@@ -752,7 +754,7 @@ export const Header = ({ cartCount }) => {
                 {user && (
                   <button
                     onClick={() => { router.push('/my-purchases'); setMobileMenuOpen(false); }}
-                    className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-emerald-50 hover:text-emerald-700 rounded-lg transition"
+                    className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                   >
                     My Purchases
                   </button>
@@ -797,7 +799,7 @@ export const Header = ({ cartCount }) => {
               ) : (
                 <button
                   onClick={() => { setShowLoginModal(true); setMobileMenuOpen(false); }}
-                  className={`w-full px-4 py-3 font-bold text-white text-sm ${BRAND_GREEN_CLASS} hover:bg-emerald-700 rounded-lg transition flex items-center justify-center gap-2`}
+                  className={`w-full px-4 py-3 font-bold text-white text-sm ${BRAND_GREEN_CLASS} hover:bg-indigo-700 rounded-lg transition flex items-center justify-center gap-2`}
                 >
                   <Icons.User size={16} />
                   Login / Signup

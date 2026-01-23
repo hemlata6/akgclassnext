@@ -153,6 +153,13 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
         }
     };
 
+    const slugify = (str) => {
+        if (!str) return '';
+        return str.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '');
+    };
+
     const handleCardClick = (item) => {
 
         if (!courseId && !item?.entityType) {
@@ -226,19 +233,12 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                 return;
             }
 
-            if (item?.entityType === "blog") {
+            if (item?.entityType === 'blog') {
                 // Create URL-friendly slug from title
-                const titleSlug = (item.title || item.name || 'blog')
-                    .toLowerCase()
-                    .replace(/[^a-z0-9]+/g, '-')
-                    .replace(/^-+|-+$/g, '');
-
-                // Store blog data in sessionStorage
-                if (typeof window !== 'undefined') {
-                    sessionStorage.setItem('blogData', JSON.stringify(item));
-                }
-
-                router.push(`/blog/${titleSlug}`);
+                const titleSlug = slugify(item.title || '');
+                // Combine courseId, parentId, and slug with hyphens for the route
+                const combinedSlug = `${courseId}-${parentId ? parentId : 0}-${titleSlug}`;
+                router.push(`/blog/${combinedSlug}`);
                 return;
             } else {
                 if (!authToken && !isAuthenticated) {
@@ -498,7 +498,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                             ) : item?.entityType === "video" ? (
                                                 <PlayCircle className="w-15 h-15 text-blue-500 opacity-70" size={60} />
                                             ) : item?.entityType === "audio" ? (
-                                                <Music className="w-15 h-15 text-green-500 opacity-70" size={60} />
+                                                <Music className="w-15 h-15 text-indigo-500 opacity-70" size={60} />
                                             ) : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ? (
                                                 <div className="flex flex-col items-center">
                                                     <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-2">
@@ -521,7 +521,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                         ) : item?.entityType === "video" ? (
                                             <PlayCircle className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
                                         ) : item?.entityType === "audio" ? (
-                                            <Music className="w-5 h-5 text-green-400 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
+                                            <Music className="w-5 h-5 text-indigo-400 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
                                         ) : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ? (
                                             <div className="w-5 h-5 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300">
                                                 ?
@@ -617,7 +617,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
                         {/* Header */}
-                        <div className={`bg-gradient-to-r from-brandGreen to-emerald-700 p-6 text-white`}>
+                        <div className={`bg-gradient-to-r from-indigo-700 to-indigo-800 p-6 text-white`}>
                             <div className="text-center">
                                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <span className="text-3xl">🎓</span>
@@ -641,23 +641,23 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                             </div>
 
                             {/* Benefits */}
-                            <div className="bg-emerald-50 rounded-xl p-4 mb-6">
+                            <div className="bg-indigo-50 rounded-xl p-4 mb-6">
                                 <h4 className="font-semibold text-gray-800 mb-2 text-sm">What you'll get:</h4>
                                 <ul className="space-y-2 text-sm text-gray-700">
                                     <li className="flex items-start">
-                                        <span className="text-emerald-600 mr-2">✓</span>
+                                        <span className="text-indigo-600 mr-2">✓</span>
                                         <span>Lifetime access to course content</span>
                                     </li>
                                     <li className="flex items-start">
-                                        <span className="text-emerald-600 mr-2">✓</span>
+                                        <span className="text-indigo-600 mr-2">✓</span>
                                         <span>Track your learning progress</span>
                                     </li>
                                     <li className="flex items-start">
-                                        <span className="text-emerald-600 mr-2">✓</span>
+                                        <span className="text-indigo-600 mr-2">✓</span>
                                         <span>Access to quizzes and assignments</span>
                                     </li>
                                     <li className="flex items-start">
-                                        <span className="text-emerald-600 mr-2">✓</span>
+                                        <span className="text-indigo-600 mr-2">✓</span>
                                         <span>100% FREE - No hidden charges</span>
                                     </li>
                                 </ul>
@@ -699,7 +699,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                     <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
                         {/* Header */}
-                        <div className={`bg-gradient-to-r from-brandGreen to-emerald-700 p-6 text-white`}>
+                        <div className={`bg-gradient-to-r from-indigo-700 to-indigo-800 p-6 text-white`}>
                             <div className="text-center">
                                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <span className="text-3xl">🔐</span>
@@ -778,7 +778,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                         {/* Audio Player */}
                         <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-2xl">
                             <div className="flex items-center justify-center mb-6">
-                                <Music className="w-16 h-16 text-green-500 opacity-80" />
+                                <Music className="w-16 h-16 text-indigo-500 opacity-80" />
                             </div>
                             <audio
                                 controls

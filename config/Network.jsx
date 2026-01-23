@@ -112,6 +112,7 @@ export default class Network {
   static studentEditProfileUrl = Endpoints.baseURL + "student/edit-profile";
   static studentEditProfilePicUrl = Endpoints.baseURL + "student/edit-profile-pic";
   static studentFetchQuiz = Endpoints.baseURL + "student/test/fetch-quiz";
+  static studentFetchGallery = Endpoints.baseURL + "/admin/fetch/gallery/";
 
 
   static async fetchQuizs(auth, body) {
@@ -120,6 +121,17 @@ export default class Network {
       withCredentials: false,
     };
     const response = await axios.post(this.studentFetchQuiz, body, requestOptions);
+    return response.data;
+  };
+
+  static async fetchGalley(instId) {
+    const body = {
+      "group": ""
+    }
+    let requestOptions = {
+      withCredentials: false,
+    };
+    const response = await axios.post(this.studentFetchGallery + instId, body, requestOptions);
     return response.data;
   };
 

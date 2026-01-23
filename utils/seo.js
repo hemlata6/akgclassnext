@@ -37,8 +37,8 @@ export const generateMetaTags = (options) => {
   const {
     title = 'AKG Classes',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://lecturedekho.in/logo.png',
-    url = 'https://lecturedekho.in',
+    image = 'https://akgclass.netlify.app/logo.png',
+    url = 'https://akgclass.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
@@ -105,7 +105,7 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://lecturedekho.in/logo.png',
+    image = 'https://akgclass.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
     author = 'AKG Classes',
@@ -131,10 +131,10 @@ export const generateBlogStructuredData = (blog, url) => {
     publisher: {
       '@type': 'Organization',
       name: 'AKG Classes',
-      url: 'https://lecturedekho.in',
+      url: 'https://akgclass.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://lecturedekho.in/logo.png',
+        url: 'https://akgclass.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -153,8 +153,8 @@ export const generateOrganizationStructuredData = () => {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
     name: 'AKG Classes',
-    url: 'https://lecturedekho.in',
-    logo: 'https://lecturedekho.in/logo.png',
+    url: 'https://akgclass.netlify.app',
+    logo: 'https://akgclass.netlify.app/logo.png',
     description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by AKG Sir',
     sameAs: [
       // Add your social media URLs
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://lecturedekho.in/logo.png';
+  if (!blog) return 'https://akgclass.netlify.app/logo.png';
   
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
   
   // Default fallback
-  return 'https://lecturedekho.in/logo.png';
+  return 'https://akgclass.netlify.app/logo.png';
 };
 
 /**

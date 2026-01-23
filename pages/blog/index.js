@@ -3,10 +3,10 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://lecturedekho.in/blog/';
-  const ogImage = 'https://lecturedekho.in/logo.png';
-  const title = 'Blog - AKG Classes | Financial Reporting & Ind AS Insights';
-  const description = 'Stay updated with latest insights on Financial Reporting, Ind AS Amendments, and CA Final Exam Strategies. Expert articles and resources for CA students.';
+  const siteUrl = 'https://akgclass.netlify.app/blog/';
+  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp';
+  const title = 'AKG Classes | AKG Classes - CA Akshansh Garg';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Akshansh Garg';
 
   return (
     <>
@@ -15,7 +15,7 @@ export default function Blog() {
         <meta name="description" content={description} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="canonical" href={siteUrl} />
-        
+
         {/* Open Graph */}
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
@@ -24,14 +24,14 @@ export default function Blog() {
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="AKG Classes" />
         <meta property="og:locale" content="en_US" />
-        
+
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
         <meta name="twitter:site" content="@akgclasses" />
-        
+
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
         <meta name="keywords" content="AKG Classes Blog, Financial Reporting, Ind AS, CA Final, Accounting Standards, Exam Preparation" />

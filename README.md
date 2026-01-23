@@ -1,6 +1,6 @@
 # AKG Classes - Next.js Application
 
-This is a Next.js conversion of the original React app for AKG Classes - CA Final FR Courses & Materials Platform.
+This is a Next.js conversion of the original React app for AKG Classes - AKG Classes | AKG Classes - CA Akshansh Garg.
 
 ## Getting Started
 
@@ -27,8 +27,8 @@ yarn install
 ```
 NEXT_PUBLIC_BUTTER_CMS_API_KEY=your_buttercms_api_key
 NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com
-NEXT_PUBLIC_MEDIA_BASE_URL=https://classiocafinal.in-maa-1.linodeobjects.com
-NEXT_PUBLIC_SITE_URL=https://lecturedekho.in
+NEXT_PUBLIC_MEDIA_BASE_URL=https://classioakg.in-maa-1.linodeobjects.com
+NEXT_PUBLIC_SITE_URL=https://akgclass.netlify.app
 ```
 
 ### Development

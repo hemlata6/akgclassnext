@@ -1,7 +1,7 @@
 {
   "name": "akgclass",
   "version": "1.0.0",
-  "description": "CA Final FR Courses & Materials Platform - Next.js",
+  "description": "AKG Classes | AKG Classes - CA Akshansh Garg - Next.js",
   "private": true,
   "scripts": {
     "dev": "next dev",

@@ -210,8 +210,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
         {/* Header */}
         <div className="text-center">
           <div className="relative mx-auto h-16 w-16 mb-4">
-            <div className="absolute inset-0 bg-gradient-to-tr from-green-800 to-emerald-800 rounded-2xl"></div>
-            <div className="relative h-full w-full bg-gradient-to-tr from-green-700 to-emerald-700 rounded-2xl flex items-center justify-center transform rotate-3">
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-800 to-indigo-800 rounded-2xl"></div>
+            <div className="relative h-full w-full bg-gradient-to-tr from-indigo-700 to-indigo-700 rounded-2xl flex items-center justify-center transform rotate-3">
               <LogIn className="h-7 w-7 text-white" />
             </div>
           </div>
@@ -232,7 +232,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                 handleClose();
                 onSignupClick();
               }}
-              className="font-semibold text-green-700 hover:text-green-800 transition-all duration-200"
+              className="font-semibold text-indigo-700 hover:text-indigo-800 transition-all duration-200"
             >
               Create one here
             </button>
@@ -247,7 +247,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
               Phone Number
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-green-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
                 <Phone className="h-5 w-5" />
               </div>
               <div className="absolute inset-y-0 left-12 flex items-center pointer-events-none">
@@ -260,8 +260,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                 autoComplete="tel"
                 className={`block w-full pl-20 pr-4 py-3 border-2 ${errors.phone
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-300 focus:border-green-700'
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : 'border-gray-300 focus:border-indigo-700'
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
                 placeholder="Enter your 10-digit mobile number"
                 value={formData.phone}
                 onChange={handleChange}
@@ -284,7 +284,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                 Enter OTP
               </label>
               <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-green-700">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
                   <MessageCircle className="h-5 w-5" />
                 </div>
                 <input
@@ -294,8 +294,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                   inputMode="numeric"
                   className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.otp
                     ? 'border-red-300 focus:border-red-500'
-                    : 'border-gray-300 focus:border-green-700'
-                    } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70 text-lg font-mono tracking-widest`}
+                    : 'border-gray-300 focus:border-indigo-700'
+                    } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70 text-lg font-mono tracking-widest`}
                   placeholder="------"
                   value={formData.otp}
                   onChange={handleChange}
@@ -315,7 +315,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                   OTP sent to +91 {formData.phone}
                 </span>
                 {countdown > 0 ? (
-                  <span className="text-green-700 flex items-center gap-1">
+                  <span className="text-indigo-700 flex items-center gap-1">
                     <Timer className="h-4 w-4" />
                     Resend in {countdown}s
                   </span>
@@ -323,7 +323,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                   <button
                     type="button"
                     onClick={handleResendOTP}
-                    className="text-green-700 hover:text-green-800 font-medium transition-colors duration-200 hover:underline"
+                    className="text-indigo-700 hover:text-indigo-800 font-medium transition-colors duration-200 hover:underline"
                   >
                     Resend OTP
                   </button>
@@ -351,7 +351,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-green-700 to-emerald-700 hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-4 focus:ring-green-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
+              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-indigo-700 to-indigo-700 hover:from-indigo-800 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
             >
               {isLoading ? (
                 <>
@@ -381,9 +381,9 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
         <div className="text-center pt-4 border-t border-gray-100">
           <p className="text-xs text-gray-500">
             By signing in, you agree to our{' '}
-            <a href="#" className="text-green-700 hover:text-green-800 font-medium">Terms</a>
+            <a href="#" className="text-indigo-700 hover:text-indigo-800 font-medium">Terms</a>
             {' '}and{' '}
-            <a href="#" className="text-green-700 hover:text-green-800 font-medium">Privacy Policy</a>
+            <a href="#" className="text-indigo-700 hover:text-indigo-800 font-medium">Privacy Policy</a>
           </p>
         </div>
       </div>

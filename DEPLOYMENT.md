@@ -50,7 +50,7 @@ This guide covers deploying the AKG Class Next.js application with dynamic conte
    - Go to Site Settings > Environment Variables
    - Add:
      - `NEXT_PUBLIC_API_BASE_URL`: https://prodapi.classiolabs.com/
-     - `NEXT_PUBLIC_MEDIA_BASE_URL`: https://classiocafinal.in-maa-1.linodeobjects.com/
+     - `NEXT_PUBLIC_MEDIA_BASE_URL`: https://classioakg.in-maa-1.linodeobjects.com/
 
 5. **Enable Next.js Plugin**:
    - The `netlify.toml` already configures this
@@ -109,7 +109,7 @@ This guide covers deploying the AKG Class Next.js application with dynamic conte
 3. **Add Environment Variables** to `.env.local`:
    ```env
    NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com/
-   NEXT_PUBLIC_MEDIA_BASE_URL=https://classiocafinal.in-maa-1.linodeobjects.com/
+   NEXT_PUBLIC_MEDIA_BASE_URL=https://classioakg.in-maa-1.linodeobjects.com/
    PORT=3000
    ```
 
@@ -242,7 +242,7 @@ pm2 status
    npm install -g lighthouse
    
    # Run audit
-   lighthouse https://lecturedekho.in/blog/your-blog-post --view
+   lighthouse https://akgclass.netlify.app/blog/your-blog-post --view
    ```
 
 ---

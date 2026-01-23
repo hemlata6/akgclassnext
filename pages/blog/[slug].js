@@ -36,7 +36,7 @@ export default function BlogDetail({ blogData, error }) {
   };
 
   const getBlogImage = () => {
-    if (!blogData) return 'https://lecturedekho.in/logo.png';
+    if (!blogData) return 'https://akgclass.netlify.app/logo.png';
     
     // Helper to fix old CDN URLs
     const fixCdnUrl = (url) => {
@@ -52,7 +52,7 @@ export default function BlogDetail({ blogData, error }) {
     if (blogData.thumb) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.thumb);
     if (blogData.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.logo);
     // Default fallback
-    return 'https://lecturedekho.in/logo.png';
+    return 'https://akgclass.netlify.app/logo.png';
   };
 
   const getBlogContent = () => {
@@ -66,7 +66,7 @@ export default function BlogDetail({ blogData, error }) {
     30
   ) : 'Read insightful articles on Financial Reporting, Ind AS, and Exam Strategies at AKG Classes';
   const blogImage = getBlogImage();
-  const currentUrl = `https://lecturedekho.in/blog/${slug}/`;
+  const currentUrl = `https://akgclass.netlify.app/blog/${slug}/`;
   const publishedDate = blogData?.blog?.createdAt || blogData?.published || blogData?.createdAt || new Date().toISOString();
   const authorName = blogData?.author?.first_name || blogData?.author || 'AKG Classes';
 
@@ -88,7 +88,7 @@ export default function BlogDetail({ blogData, error }) {
       "name": "AKG Classes",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://lecturedekho.in/logo.png"
+        "url": "https://akgclass.netlify.app/logo.png"
       }
     }
   };

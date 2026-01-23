@@ -40,7 +40,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-emerald-200 selection:text-emerald-900">
+    <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
       <Header cartCount={cartCount} />
       {children}
       <StickyMobileFooter cartCount={cartCount} />

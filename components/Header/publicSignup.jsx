@@ -164,8 +164,8 @@ const PublicSignup = ({ onSwitchToLogin, onClose }) => {
           </div>
 
           {tempSignupData && (
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-sm text-green-800">
+            <div className="mt-4 p-3 bg-indigo-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-indigo-800">
                 Phone number verified for +91 {tempSignupData.phone}
               </p>
             </div>

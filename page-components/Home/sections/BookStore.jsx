@@ -181,8 +181,8 @@ export const BookStore = () => {
                         </div>
                         {/* Mobile: Explore Store button next to title */}
                         <button
-                            onClick={() => router.push('/store')}
-                            className={`md:hidden ${BRAND_GREEN_CLASS} hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
+                            onClick={() => router.push('/store?productType=books')}
+                            className={`md:hidden ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
                         >
                             Explore Store <Icons.ChevronRight size={16} />
                         </button>
@@ -191,8 +191,8 @@ export const BookStore = () => {
                         <div className="flex items-center gap-4 w-full md:w-auto">
                             {/* Desktop: Explore Store button with filters */}
                             <button
-                                onClick={() => router.push('/store')}
-                                className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                onClick={() => router.push('/store?productType=books')}
+                                className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
                             >
                                 Explore Store <Icons.ChevronRight size={16} />
                             </button>
@@ -335,7 +335,7 @@ export const BookStore = () => {
                                                     }}
                                                     className={`text-[10px] font-bold px-3 py-0.5 rounded-full transition-all ${cartCourses.some(item => item.id === book.id)
                                                         ? `${BRAND_GREEN_CLASS} text-white border-0`
-                                                        : 'border border-emerald-200 text-emerald-800 hover:bg-emerald-800 hover:text-white'
+                                                        : 'border border-indigo-200 text-indigo-800 hover:bg-indigo-800 hover:text-white'
                                                         }`}
                                                 >
                                                     {cartCourses.some(item => item.id === book.id) ? 'Remove' : 'Add'}

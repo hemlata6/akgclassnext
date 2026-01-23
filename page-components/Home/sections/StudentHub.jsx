@@ -16,7 +16,7 @@ export const StudentHub = () => {
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-slate-900">Free Resources</h3>
-              <span onClick={handleNavigateToResources} className="text-[10px] text-emerald-600 font-bold uppercase cursor-pointer hover:text-emerald-700 transition-colors">View Library</span>
+              <span onClick={handleNavigateToResources} className="text-[10px] text-indigo-600 font-bold uppercase cursor-pointer hover:text-indigo-700 transition-colors">View Library</span>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">
               {[
@@ -28,7 +28,7 @@ export const StudentHub = () => {
                 <div
                   key={i}
                   onClick={handleNavigateToResources}
-                  className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100 hover:border-emerald-200 transition-all cursor-pointer"
+                  className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 border border-slate-100 hover:border-indigo-200 transition-all cursor-pointer"
                 >
                   <span className="text-base">{r.i}</span>
                   <span className="text-xs font-bold text-slate-700">{r.t}</span>
@@ -48,14 +48,14 @@ export const StudentHub = () => {
               <div className="space-y-3 mb-4">
                 {[1, 2].map((i) => (
                   <div key={i} className="flex gap-3 items-center group cursor-pointer p-2 rounded-lg hover:bg-white/10 transition-colors" onClick={handleNavigateToResources}>
-                    <div className="h-10 w-16 bg-slate-800 rounded flex items-center justify-center flex-shrink-0 border border-slate-700 group-hover:border-emerald-500">
+                    <div className="h-10 w-16 bg-slate-800 rounded flex items-center justify-center flex-shrink-0 border border-slate-700 group-hover:border-indigo-500">
                       <Icons.Play />
                     </div>
                     <div>
-                      <p className="font-bold text-xs leading-tight group-hover:text-emerald-300">
+                      <p className="font-bold text-xs leading-tight group-hover:text-indigo-300">
                         Ind AS 115 - Revenue (Part {i})
                       </p>
-                      <p className="text-[10px] text-slate-400">CA Vipul Dhal • 25k views</p>
+                      <p className="text-[10px] text-slate-400">CA Akshansh Garg • 25k views</p>
                     </div>
                   </div>
                 ))}

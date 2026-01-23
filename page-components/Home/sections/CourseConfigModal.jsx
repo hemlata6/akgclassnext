@@ -138,7 +138,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
                   className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                     selectedMode === mode
                       ? `${BRAND_GREEN_CLASS} text-white`
-                      : 'border border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-slate-50'
+                      : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
                   }`}
                 >
                   {mode}

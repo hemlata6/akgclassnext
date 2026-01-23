@@ -239,7 +239,7 @@ export const BlogListPage = () => {
       <div className="bg-white border-b border-slate-200 pt-10 pb-16">
         <div className={LAYOUT_PADDING}>
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-emerald-600 font-bold tracking-widest text-xs uppercase mb-2 block">
+            <span className="text-indigo-600 font-bold tracking-widest text-xs uppercase mb-2 block">
               Knowledge Hub
             </span>
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
@@ -258,7 +258,7 @@ export const BlogListPage = () => {
           <div className="mb-6">
             <button
               onClick={handleBack}
-              className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-700 transition-colors">
+              className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-indigo-700 transition-colors">
               <Icons.Back />
               Back
             </button>
@@ -272,8 +272,8 @@ export const BlogListPage = () => {
               <button
                 onClick={() => handleFolderSelect(null)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition-all border-2 ${!selectedFolder
-                  ? 'bg-emerald-700 text-white border-emerald-700 shadow-lg'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-700 hover:text-emerald-700'
+                  ? 'bg-indigo-700 text-white border-indigo-700 shadow-lg'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-700 hover:text-indigo-700'
                   }`}
               >
                 All Content
@@ -283,8 +283,8 @@ export const BlogListPage = () => {
                   key={folder.id}
                   onClick={() => handleFolderSelect(folder)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition-all border-2 ${selectedFolder?.id === folder.id
-                    ? 'bg-emerald-700 text-white border-emerald-700 shadow-lg'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-700 hover:text-emerald-700'
+                    ? 'bg-indigo-700 text-white border-indigo-700 shadow-lg'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-700 hover:text-indigo-700'
                     }`}
                 >
                   <Icons.Folder className="w-4 h-4" />
@@ -333,7 +333,7 @@ export const BlogListPage = () => {
                     </div>
                   )}
 
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-emerald-800">
+                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-800">
                     {item.entityType === 'folder' ? '📁 Folder' : '📄 Content'}
                   </div>
                 </div>
@@ -364,7 +364,7 @@ export const BlogListPage = () => {
                     )}
                   </div>
 
-                  <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
+                  <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-indigo-700 transition-colors line-clamp-2">
                     {String(item.title || item.name || 'Untitled')}
                   </h3>
 
@@ -373,7 +373,7 @@ export const BlogListPage = () => {
                     {/* {String(item.desc || item.description || 'Click to explore more...')} */}
                   </p>
 
-                  <button className="mt-4 text-emerald-700 text-xs font-bold flex items-center gap-1 group/btn">
+                  <button className="mt-4 text-indigo-700 text-xs font-bold flex items-center gap-1 group/btn">
                     {item.entityType === 'folder' ? 'Open Folder' : 'Read More'}{' '}
                     <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
                   </button>

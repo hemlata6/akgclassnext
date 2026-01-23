@@ -116,7 +116,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
             {/* Breadcrumb */}
             <div className={`${LAYOUT_PADDING} pt-3 pb-1`}>
                 <div className="flex items-center gap-1.5 text-[10px] text-slate-500 font-medium animate-in slide-in-from-left duration-300">
-                    <button onClick={onBack} className="hover:text-emerald-600 transition-colors">Home</button>
+                    <button onClick={onBack} className="hover:text-indigo-600 transition-colors">Home</button>
                     <Icons.ChevronRight size={10} />
                     {/* <span className="text-slate-800 font-bold">CA Final</span>
           <Icons.ChevronRight size={10} /> */}
@@ -183,7 +183,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                             </button>
                                             <button
                                                 onClick={() => router.push('/cart')}
-                                                className={`w-full ${BRAND_GREEN_CLASS} hover:bg-emerald-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5`}
+                                                className={`w-full ${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5`}
                                             >
                                                 <Icons.Cart size={14} />
                                                 View Cart
@@ -192,7 +192,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                     ) : (
                                         <button
                                             onClick={() => setShowConfigModal(true)}
-                                            className={`w-full ${BRAND_GREEN_CLASS} hover:bg-emerald-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5 animate-pulse`}
+                                            className={`w-full ${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5 animate-pulse`}
                                         >
                                             <Icons.Cart size={14} />
                                             Add to Cart
@@ -249,7 +249,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                         CA
                                     </div>
                                     <div>
-                                        <p className="font-bold text-slate-900 text-xs">CA Vipul Dhal</p>
+                                        <p className="font-bold text-slate-900 text-xs">CA Akshansh Garg</p>
                                         <p className="text-[10px] text-emerald-600">Author</p>
                                     </div>
                                 </div>
@@ -380,7 +380,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                     {suggestedCourses.map((suggestedCourse) => (
                                         <div
                                             key={suggestedCourse.id}
-                                            className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 hover:border-emerald-300 transform hover:-translate-y-1 overflow-hidden flex flex-col"
+                                            className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 border border-slate-100 hover:border-indigo-300 transform hover:-translate-y-1 overflow-hidden flex flex-col"
                                         >
                                             <div className="relative h-40 overflow-hidden bg-gradient-to-br from-emerald-50 to-emerald-100">
                                                 <img
@@ -423,7 +423,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                                         onClick={() => handleSuggestedCourseAddToCart(suggestedCourse)}
                                                         className={`flex-1 font-semibold py-2 px-3 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md ${cartCourses.some(item => item.id === suggestedCourse.id)
                                                                 ? 'bg-slate-600 hover:bg-slate-700 text-white'
-                                                                : `${BRAND_GREEN_CLASS} hover:bg-emerald-700 text-white`
+                                                                : `${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white`
                                                             }`}
                                                     >
                                                         <ShoppingCart className="h-3.5 w-3.5" />

@@ -28,10 +28,10 @@ export const Footer = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div className="col-span-2 md:col-span-1">
             <div className="text-white font-bold text-lg mb-2 flex items-center gap-2">
-              <div className="h-10 w-10 bg-emerald-700 rounded flex items-center justify-center text-[10px]">
+              {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
-              </div>
-              {institute?.institue ? institute?.institue : "IWision"}
+              </div> */}
+              {institute?.institue ? institute?.institue : "AKG Classes"}
             </div>
             <p>Best CA Classes for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
@@ -40,19 +40,19 @@ export const Footer = () => {
             <ul className="space-y-1.5">
               <li
                 onClick={() => handleCourseClick('CA Foundation')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
                 CA Foundation
               </li>
               <li
                 onClick={() => handleCourseClick('CA Inter')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
                 CA Inter
               </li>
               <li
                 onClick={() => handleCourseClick('CA Final')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
                 CA Final
               </li>
@@ -61,21 +61,21 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Legal</h4>
             <ul className="space-y-1.5">
-              <li 
+              <li
                 onClick={() => router.push('/privacy-policy')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
                 Privacy Policy
               </li>
-              <li 
+              <li
                 onClick={() => router.push('/terms-of-use')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
                 Terms of Use
               </li>
-              <li 
+              <li
                 onClick={() => router.push('/refund-policy')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
                 Refund Policy
               </li>
@@ -84,14 +84,14 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: 9310226047</li>
-              <li>admin@iwision.com</li>
-              <li>New Delhi</li>
+              <li>Call: +91 98765 43210</li>
+              <li>support@agclasses.com</li>
+              <li>Jaipur, Rajasthan</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 IWision Education. All rights reserved.
+          © 2026 AKG Classes Education. All rights reserved.
           <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>
@@ -103,7 +103,7 @@ export const SuccessNotification = ({ show }) => {
   if (!show) return null;
   return (
     <div className="fixed top-20 right-4 z-[100] animate-in slide-in-from-right fade-in duration-300">
-      <div className="bg-emerald-800 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
+      <div className="bg-indigo-800 text-white px-6 py-3 rounded-xl shadow-2xl flex items-center gap-3">
         <div className="bg-white/20 p-1 rounded-full"><Icons.Check /></div>
         <div><h4 className="font-bold text-sm">Added to Cart!</h4></div>
       </div>
@@ -127,17 +127,17 @@ export const Loader = () => (
     margin: '0',
     padding: '0'
   }}>
-    <div style={{ 
-      position: 'relative', 
-      display: 'flex', 
-      alignItems: 'center', 
+    <div style={{
+      position: 'relative',
+      display: 'flex',
+      alignItems: 'center',
       justifyContent: 'center',
       marginBottom: '1.5rem'
     }}>
-      <img 
-        src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" 
-        alt="AKG Logo" 
-        style={{ 
+      <img
+        src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp"
+        alt="AKG Logo"
+        style={{
           height: '96px',
           width: 'auto',
           objectFit: 'contain',
@@ -149,32 +149,32 @@ export const Loader = () => (
         }}
       />
     </div>
-    <div style={{ 
-      display: 'flex', 
+    <div style={{
+      display: 'flex',
       gap: '8px',
       alignItems: 'center',
       justifyContent: 'center'
     }}>
-      <div style={{ 
-        width: '10px', 
-        height: '10px', 
-        backgroundColor: '#164e33', 
-        borderRadius: '50%', 
-        animation: 'loaderBounce 1s infinite' 
+      <div style={{
+        width: '10px',
+        height: '10px',
+        backgroundColor: '#164e33',
+        borderRadius: '50%',
+        animation: 'loaderBounce 1s infinite'
       }}></div>
-      <div style={{ 
-        width: '10px', 
-        height: '10px', 
-        backgroundColor: '#164e33', 
-        borderRadius: '50%', 
+      <div style={{
+        width: '10px',
+        height: '10px',
+        backgroundColor: '#164e33',
+        borderRadius: '50%',
         animation: 'loaderBounce 1s infinite',
         animationDelay: '0.1s'
       }}></div>
-      <div style={{ 
-        width: '10px', 
-        height: '10px', 
-        backgroundColor: '#164e33', 
-        borderRadius: '50%', 
+      <div style={{
+        width: '10px',
+        height: '10px',
+        backgroundColor: '#164e33',
+        borderRadius: '50%',
         animation: 'loaderBounce 1s infinite',
         animationDelay: '0.2s'
       }}></div>

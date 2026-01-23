@@ -92,6 +92,9 @@ const MCQTest = () => {
     }
   }, [quizData?.quiz?.id])
 
+  console.log('quizData', quizData);
+
+
 
   // Handle fullscreen changes and keyboard restrictions
   useEffect(() => {
@@ -531,7 +534,7 @@ const MCQTest = () => {
       localStorage.removeItem('quizData');
       // Exit fullscreen and navigate to results page
       await exitFullScreen();
-      router.push('/quiz-result', { state: { results, quizData, answers } });
+      router.push('/quiz-result');
     } catch (error) {
       console.error('Error submitting quiz:', error);
       // Still show results even if API fails
@@ -540,7 +543,7 @@ const MCQTest = () => {
       if (typeof window !== 'undefined') localStorage.removeItem('quizData');
       // Exit fullscreen and navigate to results page
       await exitFullScreen();
-      router.push('/quiz-result', { state: { results, quizData, answers } });
+      router.push('/quiz-result');
     } finally {
       setIsSubmitting(false);
       setShowConfirmModal(false);
@@ -557,7 +560,7 @@ const MCQTest = () => {
       if (typeof window !== 'undefined') localStorage.removeItem('quizData');
       // Exit fullscreen and navigate to results page
       await exitFullScreen();
-      router.push('/quiz-result', { state: { results, quizData, answers } });
+      router.push('/quiz-result');
     } catch (error) {
       console.error('Error auto-submitting quiz:', error);
       // Still show results even if API fails
@@ -566,7 +569,7 @@ const MCQTest = () => {
       if (typeof window !== 'undefined') localStorage.removeItem('quizData');
       // Exit fullscreen and navigate to results page
       await exitFullScreen();
-      router.push('/quiz-result', { state: { results, quizData, answers } });
+      router.push('/quiz-result');
     } finally {
       setIsSubmitting(false);
     }
@@ -1187,7 +1190,7 @@ const MCQTest = () => {
                 </button> */}
                 <button
                   onClick={handleFinishQuiz}
-                  className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 sm:px-6 rounded-lg transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
+                  className="bg-indigo-700 hover:bg-indigo-800 text-white font-semibold py-2 px-4 sm:px-6 rounded-lg transition-colors duration-200 text-sm sm:text-base w-full sm:w-auto"
                 >
                   Finish Test
                 </button>
@@ -1213,8 +1216,8 @@ const MCQTest = () => {
                       key={question.id}
                       onClick={() => handleGoToQuestion(index)}
                       className={`relative w-10 h-10 rounded-lg border-2 font-semibold transition-colors duration-200 ${isCurrent
-                          ? 'text-white'
-                          : 'border-gray-200 bg-white text-gray-700'
+                        ? 'text-white'
+                        : 'border-gray-200 bg-white text-gray-700'
                         }`}
                       style={isCurrent ? { borderColor: BRAND_GREEN, backgroundColor: BRAND_GREEN } : {}}
                       title={`Section: ${getSectionName(originalQuestion?.sectionId)}`}
@@ -1494,8 +1497,8 @@ const MCQTest = () => {
                         key={index}
                         onClick={() => handleAnswerSelect(index)}
                         className={`w-full text-left p-3 sm:p-4 rounded-lg border-2 transition-colors duration-200 ${isSelected
-                            ? 'text-white'
-                            : 'border-gray-200 bg-white text-gray-700'
+                          ? 'text-white'
+                          : 'border-gray-200 bg-white text-gray-700'
                           }`}
                         style={isSelected ? { borderColor: BRAND_GREEN, backgroundColor: `${BRAND_GREEN}15` } : {}}
                       >
@@ -1687,7 +1690,7 @@ const MCQTest = () => {
                     <button
                       onClick={handleConfirmSubmit}
                       disabled={isSubmitting}
-                      className="flex-1 px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 flex items-center justify-center"
+                      className="flex-1 px-6 py-3 bg-indigo-700 text-white rounded-lg font-semibold hover:bg-indigo-800 transition-colors duration-200 disabled:opacity-50 flex items-center justify-center"
                     >
                       {isSubmitting ? (
                         <>

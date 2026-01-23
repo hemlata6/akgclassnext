@@ -13,7 +13,7 @@ const TermsOfUse = () => {
           <div className="py-8">
             <button 
               onClick={() => router.push('/')} 
-              className="flex items-center gap-2 text-sm text-slate-600 hover:text-emerald-700 mb-4 transition-colors"
+              className="flex items-center gap-2 text-sm text-slate-600 hover:text-indigo-700 mb-4 transition-colors"
             >
               <Icons.ChevronLeft size={16} />
               Back to Home
@@ -31,25 +31,25 @@ const TermsOfUse = () => {
             
             <section className="mb-8">
               <p className="text-slate-700 leading-relaxed mb-4">
-                By signing up on the iWision Website you are agreeing to be bound by the following terms and conditions ("Terms of Use").
+                By signing up on the AKG Classes Website you are agreeing to be bound by the following terms and conditions ("Terms of Use").
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                As the original purchaser of content sold on iWision, you are entitled to access and use the content which is identified in the course and which is on the iWision website, at www.iwision.com ("Website"). In order to access and use this content, you must register with iWision and create a password to use in accessing the content on the Website.
+                As the original purchaser of content sold on AKG Classes, you are entitled to access and use the content which is identified in the course and which is on the AKG Classes website, at www.AKG Classes.com ("Website"). In order to access and use this content, you must register with AKG Classes and create a password to use in accessing the content on the Website.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                Your password is unique and exclusive to you, and you may not transfer your password to any other person or allow any other person to use your password to access or use content on the Website. You agree to notify iWision immediately if any other person makes unauthorized use of your password. iWision reserves the right to suspend or revoke your password in the event of any misuse of your password or any use of your password in violation of these Terms and Conditions. In the event of any such suspension or revocation, you will not be entitled to any refund or payment.
+                Your password is unique and exclusive to you, and you may not transfer your password to any other person or allow any other person to use your password to access or use content on the Website. You agree to notify AKG Classes immediately if any other person makes unauthorized use of your password. AKG Classes reserves the right to suspend or revoke your password in the event of any misuse of your password or any use of your password in violation of these Terms and Conditions. In the event of any such suspension or revocation, you will not be entitled to any refund or payment.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                These Terms of Use govern your access to and use of the Website and the content on the Website. By accessing and using the Website, you agree to these Terms of Use. If you do not agree to any of these Terms of Use, you may not access or use the site. iWision reserves the right to modify these Terms of Use at any time and in its sole discretion. Your use of the site following any modification will constitute your assent to and acceptance of the modifications.
+                These Terms of Use govern your access to and use of the Website and the content on the Website. By accessing and using the Website, you agree to these Terms of Use. If you do not agree to any of these Terms of Use, you may not access or use the site. AKG Classes reserves the right to modify these Terms of Use at any time and in its sole discretion. Your use of the site following any modification will constitute your assent to and acceptance of the modifications.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                Upon registration, iWision grants you a non-exclusive, non-transferable, non-assignable, personal license to access and use the iWision content identified in the content you purchased via an online/offline reader.
+                Upon registration, AKG Classes grants you a non-exclusive, non-transferable, non-assignable, personal license to access and use the AKG Classes content identified in the content you purchased via an online/offline reader.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                iWision will not be liable for any delay or interruption in your access to the site or any content located on the site, or for any transmission errors, equipment or software incompatibilities, force majeure or other failure of performance. iWision will use reasonable efforts to correct any failure of performance, but iWision will not be required to make any changes to any equipment or software used by iWision or its contractors or agents to ensure compatibility with any equipment or software used by you. You may not use the site or the content on the site for any commercial purpose, including but not limited to the use of any of the content to market or sell goods or services to any person. You agree not to launch any automated system, including without limitation, "robots," "spiders," or "offline readers," to access the site.
+                AKG Classes will not be liable for any delay or interruption in your access to the site or any content located on the site, or for any transmission errors, equipment or software incompatibilities, force majeure or other failure of performance. AKG Classes will use reasonable efforts to correct any failure of performance, but AKG Classes will not be required to make any changes to any equipment or software used by AKG Classes or its contractors or agents to ensure compatibility with any equipment or software used by you. You may not use the site or the content on the site for any commercial purpose, including but not limited to the use of any of the content to market or sell goods or services to any person. You agree not to launch any automated system, including without limitation, "robots," "spiders," or "offline readers," to access the site.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
-                iWision reserves the right to change, suspend access to, or remove any or all of the content on the Website at any time, for any reason, in its sole discretion. iWision also reserves the right to discontinue the Website at any time, either temporarily or permanently. In the event of the removal of any content from the Website or the termination of the Website, you will not be entitled to any refund or payment.
+                AKG Classes reserves the right to change, suspend access to, or remove any or all of the content on the Website at any time, for any reason, in its sole discretion. AKG Classes also reserves the right to discontinue the Website at any time, either temporarily or permanently. In the event of the removal of any content from the Website or the termination of the Website, you will not be entitled to any refund or payment.
               </p>
             </section>
 
@@ -57,10 +57,10 @@ const TermsOfUse = () => {
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Disclaimer and Limitation of Liability</h2>
               <div className="bg-amber-50 border-l-4 border-amber-500 p-6 mb-4">
                 <p className="text-slate-700 leading-relaxed mb-4">
-                  YOU AGREE THAT YOUR USE OF THE SITE SHALL BE AT YOUR SOLE RISK, AND iWision WILL NOT BE HELD LIABLE IN ANY WAY FOR YOUR USE OF THE SITE OR FOR ANY INFORMATION CONTAINED ON THE SITE. ALL CONTENT CONTAINED IN OR REFERRED TO ON THE SITE IS PROVIDED "AS IS," WITHOUT ANY REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, iWision DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. iWision MAKES NO WARRANTIES THAT THE SITE WILL BE ERROR-FREE, OR THAT ANY ERRORS WILL BE CORRECTED, OR THAT THE SITE OR THE SERVER FROM WHICH THE SITE IS OPERATED WILL BE FREE OF VIRUSES OR OTHER POTENTIALLY HARMFUL CODES.
+                  YOU AGREE THAT YOUR USE OF THE SITE SHALL BE AT YOUR SOLE RISK, AND AKG Classes WILL NOT BE HELD LIABLE IN ANY WAY FOR YOUR USE OF THE SITE OR FOR ANY INFORMATION CONTAINED ON THE SITE. ALL CONTENT CONTAINED IN OR REFERRED TO ON THE SITE IS PROVIDED "AS IS," WITHOUT ANY REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, AKG Classes DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. AKG Classes MAKES NO WARRANTIES THAT THE SITE WILL BE ERROR-FREE, OR THAT ANY ERRORS WILL BE CORRECTED, OR THAT THE SITE OR THE SERVER FROM WHICH THE SITE IS OPERATED WILL BE FREE OF VIRUSES OR OTHER POTENTIALLY HARMFUL CODES.
                 </p>
                 <p className="text-slate-700 leading-relaxed">
-                  UNDER NO CIRCUMSTANCES, INCLUDING NEGLIGENCE, SHALL iWision BE HELD LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES AND EXPENSES OF ANY KIND (INCLUDING, WITHOUT LIMITATION, PERSONAL INJURY OR PROPERTY DAMAGE, LOST PROFITS, AND DAMAGES ARISING FROM COMPUTER VIRUSES, BUSINESS INTERRUPTION, LOST DATA, UNAUTHORIZED ACCESS TO OR USE OF SITE SERVERS OR ANY PERSONAL INFORMATION STORED THEREIN, OR ANY INTERRUPTION OR CESSATION OF OPERATION OF THE SITE) ARISING OUT OF OR IN ANY WAY CONNECTED WITH THE USE OF THE SITE OR ANY INFORMATION CONTAINED ON THE SITE, WHETHER SUCH DAMAGES ARE BASED ON CONTRACT, TORT, STRICT LIABILITY OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+                  UNDER NO CIRCUMSTANCES, INCLUDING NEGLIGENCE, SHALL AKG Classes BE HELD LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL OR CONSEQUENTIAL DAMAGES AND EXPENSES OF ANY KIND (INCLUDING, WITHOUT LIMITATION, PERSONAL INJURY OR PROPERTY DAMAGE, LOST PROFITS, AND DAMAGES ARISING FROM COMPUTER VIRUSES, BUSINESS INTERRUPTION, LOST DATA, UNAUTHORIZED ACCESS TO OR USE OF SITE SERVERS OR ANY PERSONAL INFORMATION STORED THEREIN, OR ANY INTERRUPTION OR CESSATION OF OPERATION OF THE SITE) ARISING OUT OF OR IN ANY WAY CONNECTED WITH THE USE OF THE SITE OR ANY INFORMATION CONTAINED ON THE SITE, WHETHER SUCH DAMAGES ARE BASED ON CONTRACT, TORT, STRICT LIABILITY OR OTHERWISE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
                 </p>
               </div>
             </section>
@@ -68,7 +68,7 @@ const TermsOfUse = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Indemnification</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
-                You agree to indemnify, hold harmless and defend iWision from and against any and all claims, damages, losses, liabilities, judgments, awards, settlements, costs and expenses (including attorney's fees and court costs) arising out of or resulting from your use of this Website or the violation by you of any of these Terms of Use.
+                You agree to indemnify, hold harmless and defend AKG Classes from and against any and all claims, damages, losses, liabilities, judgments, awards, settlements, costs and expenses (including attorney's fees and court costs) arising out of or resulting from your use of this Website or the violation by you of any of these Terms of Use.
               </p>
             </section>
 
@@ -82,7 +82,7 @@ const TermsOfUse = () => {
             <section className="mb-8">
               <h2 className="text-2xl font-bold text-slate-900 mb-4">Entire Agreement</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
-                These Terms of Use constitute the entire agreement between you and iWision concerning your use of the Website and the contents of the Website. If any provision is deemed invalid by a court of competent jurisdiction, the remaining provisions shall remain in full force and effect. No waiver of any the Terms of Use shall be deemed a further or continuing waiver of such term or condition or any other term or condition, and any failure by iWision to assert any right or provision under these Terms of Use shall not constitute a waiver of such right or provision.
+                These Terms of Use constitute the entire agreement between you and AKG Classes concerning your use of the Website and the contents of the Website. If any provision is deemed invalid by a court of competent jurisdiction, the remaining provisions shall remain in full force and effect. No waiver of any the Terms of Use shall be deemed a further or continuing waiver of such term or condition or any other term or condition, and any failure by AKG Classes to assert any right or provision under these Terms of Use shall not constitute a waiver of such right or provision.
               </p>
             </section>
 
@@ -92,7 +92,7 @@ const TermsOfUse = () => {
                 If you have any questions about these Terms of Use, please contact us at:
               </p>
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <p className="text-slate-700 mb-2"><strong>Email:</strong> admin@iwision.com</p>
+                <p className="text-slate-700 mb-2"><strong>Email:</strong> admin@AKG Classes.com</p>
                 <p className="text-slate-700 mb-2"><strong>Phone:</strong> 9310226047</p>
                 <p className="text-slate-700"><strong>Location:</strong> New Delhi, India</p>
               </div>

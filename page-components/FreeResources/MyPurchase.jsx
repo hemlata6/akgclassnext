@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../config/AuthContext';
-import { Calendar, Clock, Star, Play, Download, BookOpen, Folder, FolderOpen, FileText, PlayCircle, X, ChevronDown, Music } from 'lucide-react';
+import { Calendar, Clock, Star, Play, Download, BookOpen, Folder, FolderOpen, FileText, PlayCircle, X, ChevronDown, Music, Eye } from 'lucide-react';
 import Network from '../../config/Network';
 import Endpoints from '../../config/endpoints';
 import instId from '../../config/instituteId';
@@ -100,6 +100,13 @@ const MyPurchases = () => {
     }
   };
 
+  const slugify = (str) => {
+    if (!str) return '';
+    return str.toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '');
+  };
+
   const handleCardClick = (item) => {
 
     if (currentView === 'courses') {
@@ -118,9 +125,15 @@ const MyPurchases = () => {
 
     if ((item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") && authToken && item?.quiz?.id) {
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem('quizData', JSON.stringify(item));
+        localStorage.setItem('quizData', JSON.stringify(item));
       }
-      router.push('/mcq-test');
+      if (item?.quiz?.attempt === true) {
+        // Navigate to result page for already attempted quiz
+        router.push('/quiz-result');
+      } else {
+        // Navigate to test page for new quiz
+        router.push('/mcq-test');
+      }
       return;
     }
     if (item?.entityType === "note" && authToken) {
@@ -136,18 +149,12 @@ const MyPurchases = () => {
       }
       return;
     }
-    if (item?.entityType === "blog") {
+    if (item?.entityType === 'blog') {
       // Create URL-friendly slug from title
-      const titleSlug = (item.title || item.name || 'blog')
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-+|-+$/g, '');
-      
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('blogData', JSON.stringify(item));
-      }
-      
-      router.push(`/blog/${titleSlug}`);
+      const titleSlug = slugify(item.title || '');
+      // Combine courseId, parentId, and slug with hyphens for the route
+      const combinedSlug = `${courseId}-${parentId ? parentId : 0}-${titleSlug}`;
+      router.push(`/blog/${combinedSlug}`);
       return;
     }
 
@@ -267,7 +274,7 @@ const MyPurchases = () => {
             </p>
             <button
               onClick={() => router.push('/')}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg"
+              className="bg-indigo-700 hover:bg-indigo-800 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg"
             >
               Explore Courses
             </button>
@@ -299,7 +306,7 @@ const MyPurchases = () => {
           <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button
               onClick={goBackToCourses}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center font-semibold shadow-md"
+              className="bg-indigo-700 hover:bg-indigo-800 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center font-semibold shadow-md"
             >
               ← Back to My Purchases
             </button>
@@ -330,7 +337,7 @@ const MyPurchases = () => {
               >
                 <div
                   onClick={() => handleCardClick(course)}
-                  className="group bg-white border border-slate-200 rounded-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-emerald-300 flex flex-col relative"
+                  className="group bg-white border border-slate-200 rounded-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-indigo-300 flex flex-col relative"
                 >
                   {/* Status Badge */}
                   <div className={`absolute top-4 right-4 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10 transform group-hover:scale-110 transition-transform duration-300 ${course.active
@@ -394,7 +401,7 @@ const MyPurchases = () => {
               >
                 <div
                   onClick={() => handleCardClick(item)}
-                  className="group bg-white border border-slate-200 rounded-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-emerald-300 flex flex-col relative"
+                  className="group bg-white border border-slate-200 rounded-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-indigo-300 flex flex-col relative"
                 >
                   {/* Content Type Badge */}
                   <div className={`absolute top-4 right-4 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10 transform group-hover:scale-110 transition-transform duration-300 ${item?.entityType?.toLowerCase() === "folder"
@@ -421,7 +428,7 @@ const MyPurchases = () => {
                             <FolderOpen className="w-16 h-16 text-amber-500 opacity-70" />
                             <span className="text-amber-600 font-semibold text-sm mt-1">FOLDER</span>
                           </div> :
-                          item?.entityType === "video" || item?.entityType === "blog" ?
+                          item?.entityType === "video" ?
                             <PlayCircle className="w-16 h-16 text-emerald-500 opacity-70" /> : item?.entityType === "audio" ?
                               <Music className="w-16 h-16 text-green-500 opacity-70" /> : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ?
                                 <div className="flex flex-col items-center">
@@ -439,7 +446,7 @@ const MyPurchases = () => {
                     <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm rounded-xl p-2">
                       {item?.entityType?.toLowerCase() === "folder" ?
                         <Folder className="w-5 h-5 text-amber-300 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" /> :
-                        item?.entityType === "video" || item?.entityType === "blog" ?
+                        item?.entityType === "video" ?
                           <PlayCircle className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" /> : item?.entityType === "audio" ?
                             <Music className="w-5 h-5 text-green-400 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" /> : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ?
                               <div className="w-5 h-5 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300">
@@ -494,9 +501,13 @@ const MyPurchases = () => {
                           </>
                         ) : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ? (
                           <>
-                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white text-purple-600 rounded-full flex items-center justify-center text-xs font-bold">?</div>
-                            <span className="hidden xs:inline">Start Quiz</span>
-                            <span className="xs:hidden">Quiz</span>
+                            {item?.quiz?.attempt === true ? (
+                              <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+                            ) : (
+                              <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white text-purple-600 rounded-full flex items-center justify-center text-xs font-bold">?</div>
+                            )}
+                            <span className="hidden xs:inline">{item?.quiz?.attempt === true ? "View Result" : "Start Quiz"}</span>
+                            <span className="xs:hidden">{item?.quiz?.attempt === true ? "Result" : "Quiz"}</span>
                           </>
                         ) : (
                           <>

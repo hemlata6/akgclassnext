@@ -14,10 +14,10 @@ export const WhyChooseUs = () => (
           { t: "Exam Strategy", i: "🎯" }
         ].map((item, idx) => (
           <div key={idx} className="flex flex-col items-center gap-2 group cursor-pointer hover:-translate-y-1 transition-transform">
-            <div className="h-12 w-12 bg-emerald-50 rounded-xl flex items-center justify-center text-xl group-hover:bg-emerald-100 transition-colors border border-emerald-100/50">
+            <div className="h-12 w-12 bg-indigo-50 rounded-xl flex items-center justify-center text-xl group-hover:bg-indigo-100 transition-colors border border-indigo-100/50">
               {item.i}
             </div>
-            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wide group-hover:text-emerald-700">
+            <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wide group-hover:text-indigo-700">
               {item.t}
             </span>
           </div>

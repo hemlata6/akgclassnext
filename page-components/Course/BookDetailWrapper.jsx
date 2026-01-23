@@ -49,7 +49,7 @@ function BookDetailWrapper() {
           <p className="text-slate-600 mb-6">The book you're looking for doesn't exist or has been removed.</p>
           <button 
             onClick={() => router.push('/')} 
-            className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-all active:scale-95"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-all active:scale-95"
           >
             Back to Home
           </button>

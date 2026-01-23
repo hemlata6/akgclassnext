@@ -152,8 +152,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
         {/* Header */}
         <div className="text-center">
           <div className="relative mx-auto h-16 w-16 mb-4">
-            <div className="absolute inset-0 bg-gradient-to-tr from-green-800 to-emerald-800 rounded-2xl"></div>
-            <div className="relative h-full w-full bg-gradient-to-tr from-green-700 to-emerald-700 rounded-2xl flex items-center justify-center transform rotate-3">
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-800 to-indigo-800 rounded-2xl"></div>
+            <div className="relative h-full w-full bg-gradient-to-tr from-indigo-700 to-indigo-700 rounded-2xl flex items-center justify-center transform rotate-3">
               <UserPlus className="h-7 w-7 text-white" />
             </div>
           </div>
@@ -168,8 +168,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
           </div>
 
           {tempSignupData && (
-            <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-              <p className="text-sm text-green-800">
+            <div className="mt-4 p-3 bg-indigo-50 border border-green-200 rounded-lg">
+              <p className="text-sm text-indigo-800">
                 Phone number verified for +91 {tempSignupData.phone}
               </p>
             </div>
@@ -182,7 +182,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 handleClose();
                 onLoginClick();
               }}
-              className="font-semibold text-green-700 hover:text-green-800 transition-all duration-200"
+              className="font-semibold text-indigo-700 hover:text-indigo-800 transition-all duration-200"
             >
               Sign in here
             </button>
@@ -197,7 +197,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               First Name
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-green-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
                 <User className="h-5 w-5" />
               </div>
               <input
@@ -207,8 +207,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 autoComplete="given-name"
                 className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.firstname
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-300 focus:border-green-700'
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : 'border-gray-300 focus:border-indigo-700'
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
                 placeholder="Enter your first name"
                 value={formData.firstname}
                 onChange={handleChange}
@@ -228,7 +228,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               Last Name
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-green-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
                 <User className="h-5 w-5" />
               </div>
               <input
@@ -238,8 +238,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 autoComplete="family-name"
                 className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.lastname
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-300 focus:border-green-700'
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : 'border-gray-300 focus:border-indigo-700'
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
                 placeholder="Enter your last name"
                 value={formData.lastname}
                 onChange={handleChange}
@@ -259,7 +259,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               Email Address
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-green-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
                 <Mail className="h-5 w-5" />
               </div>
               <input
@@ -269,8 +269,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 autoComplete="email"
                 className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.email
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-300 focus:border-green-700'
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-green-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : 'border-gray-300 focus:border-indigo-700'
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
                 placeholder="Enter your email address"
                 value={formData.email}
                 onChange={handleChange}
@@ -303,7 +303,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-green-700 to-emerald-700 hover:from-green-800 hover:to-emerald-800 focus:outline-none focus:ring-4 focus:ring-green-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
+              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-indigo-700 to-indigo-700 hover:from-indigo-800 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
             >
               {isLoading ? (
                 <>
@@ -324,9 +324,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
         <div className="text-center pt-4 border-t border-gray-100">
           <p className="text-xs text-gray-500">
             By creating an account, you agree to our{' '}
-            <a href="#" className="text-green-700 hover:text-green-800 font-medium">Terms</a>
+            <a href="#" className="text-indigo-700 hover:text-indigo-800 font-medium">Terms</a>
             {' '}and{' '}
-            <a href="#" className="text-green-700 hover:text-green-800 font-medium">Privacy Policy</a>
+            <a href="#" className="text-indigo-700 hover:text-indigo-800 font-medium">Privacy Policy</a>
           </p>
         </div>
       </div>

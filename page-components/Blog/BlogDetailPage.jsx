@@ -144,7 +144,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
 
     // Get blog image with fallback - checks all possible image properties
     const getBlogImage = () => {
-        if (!blog) return 'https://lecturedekho.in/logo.png';
+        if (!blog) return 'https://akgclass.netlify.app/logo.png';
 
         // Helper to fix old CDN URLs
         const fixCdnUrl = (url) => {
@@ -162,7 +162,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
         if (blog.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blog.logo);
 
         // Default fallback
-        return 'https://lecturedekho.in/logo.png';
+        return 'https://akgclass.netlify.app/logo.png';
     };
 
     // Get blog description with 50 word limit
@@ -173,7 +173,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
 
     // Get current URL - use router for consistent URL on server and client
     const blogSlug = `${courseId}-${parentId}-${slug}`;
-    const currentUrl = `https://lecturedekho.in/blog/${blogSlug}`;
+    const currentUrl = `https://akgclass.netlify.app/blog/${blogSlug}`;
     const blogImage = getBlogImage();
     const metaDescription = getMetaDescription();
     const blogTitle = blog.seo_title || blog.title || 'Blog Post';
@@ -184,7 +184,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
         <>
             <div className="bg-white min-h-screen pb-20">
                 <article className="max-w-3xl mx-auto px-4 py-12">
-                    <button onClick={() => router.push('/blog')} className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-emerald-700 mb-6 transition-colors">
+                    <button onClick={() => router.push('/blog')} className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-indigo-700 mb-6 transition-colors">
                         <Icons.Back /> Back to Blogs
                     </button>
                     <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">

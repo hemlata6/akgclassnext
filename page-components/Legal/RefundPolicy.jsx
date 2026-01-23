@@ -31,7 +31,7 @@ const RefundPolicy = () => {
             
             <section className="mb-8">
               <p className="text-slate-700 leading-relaxed mb-4">
-                Thank you for shopping at www.iwision.com
+                Thank you for shopping at www.AKG Classes.com
               </p>
             </section>
 
@@ -51,7 +51,7 @@ const RefundPolicy = () => {
                 If you have any questions about our Returns and Refunds Policy, please contact us:
               </p>
               <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-slate-700"><strong>By email:</strong> admin@iwision.com</p>
+                <p className="text-slate-700"><strong>By email:</strong> admin@AKG Classes.com</p>
               </div>
             </section>
 

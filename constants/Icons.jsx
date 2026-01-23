@@ -6,7 +6,7 @@ export const Icons = {
   Phone: () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>,
   Cart: () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>,
   Play: () => <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>,
-  Check: () => <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>,
+  Check: () => <svg className="w-4 h-4 text-indigo-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"/></svg>,
   ChevronRight: () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/></svg>,
   ChevronLeft: () => <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"/></svg>,
   ChevronDown: () => <svg className="w-3 h-3 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/></svg>,
@@ -32,11 +32,11 @@ export const Icons = {
 };
 
 export const LAYOUT_PADDING = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
-// For inline styles - use hex colors
-export const BRAND_GREEN = "#164e33";
-export const BRAND_GREEN_HOVER = "#0f3824";
+// For inline styles - use hex colors - INDIGO THEME
+export const BRAND_GREEN = "rgb(67, 56, 202)"; // indigo-700
+export const BRAND_GREEN_HOVER = "rgb(55, 48, 163)"; // indigo-800
 // For className strings - use Tailwind classes
-export const BRAND_GREEN_CLASS = "bg-brandGreen";
-export const BRAND_GREEN_HOVER_CLASS = "hover:bg-brandGreenHover";
-export const TEXT_GREEN = "text-brandGreen";
+export const BRAND_GREEN_CLASS = "bg-indigo-700";
+export const BRAND_GREEN_HOVER_CLASS = "hover:bg-indigo-800";
+export const TEXT_GREEN = "text-indigo-700";
 
