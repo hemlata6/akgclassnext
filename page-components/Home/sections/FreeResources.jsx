@@ -11,7 +11,7 @@ const FREE_RESOURCES = [
 
 export const FreeResources = () => {
     return (
-        <section id="resources" className="py-6 bg-slate-50 border-t border-slate-200">
+        <section id="free-resources-section" className="py-6 bg-slate-50 border-t border-slate-200">
             <div className={LAYOUT_PADDING}>
                 <div className="grid md:grid-cols-2 gap-8 items-start">
                     <div>

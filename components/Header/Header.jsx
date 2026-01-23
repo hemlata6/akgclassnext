@@ -32,7 +32,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
         { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
         { l: "Store", i: <Icons.Cart />, action: () => router.push('/store'), h: true },
         { l: "Free", i: <Icons.Book />, action: () => { router.push('/free-resources') } },
-        { l: "App", i: <Icons.Download />, action: () => { router.push('/'); setTimeout(() => document.getElementById('app')?.scrollIntoView({ behavior: 'smooth' }), 100); } }
+        { l: "App", i: <Icons.Download />, action: () => { router.push('/'); setTimeout(() => document.getElementById('free-resources-section')?.scrollIntoView({ behavior: 'smooth' }), 100); } }
       ].map((item, idx) => (
         <button
           key={idx}
@@ -521,7 +521,7 @@ export const Header = ({ cartCount }) => {
               )}
 
               <button
-                onClick={() => document.getElementById('app')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => document.getElementById('free-resources-section')?.scrollIntoView({ behavior: 'smooth' })}
                 className={`hidden md:block ${BRAND_GREEN_CLASS} hover:bg-brandGreenHover text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
                 Download App
               </button>
