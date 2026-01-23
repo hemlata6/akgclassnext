@@ -537,7 +537,7 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <img src="/logo.png" alt="Logo" className="h-20" />
+              <img src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

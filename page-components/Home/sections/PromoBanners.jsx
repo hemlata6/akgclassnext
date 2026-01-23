@@ -116,7 +116,7 @@ export const PromoBanners = () => {
                     {slides.map((slide, index) => (
                         <div
                             key={index}
-                            className={`min-w-full md:min-w-[85%] h-[300px] sm:h-[350px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer shrink-0 ${slide.bg}`}
+                            className={`min-w-full md:min-w-[85%] h-[180px] sm:h-[220px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer shrink-0 ${slide.bg}`}
                         >
                             <img
                                 src={slide.mobileSrc}
