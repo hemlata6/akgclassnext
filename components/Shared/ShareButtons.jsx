@@ -28,7 +28,7 @@ export const ShareButtons = ({ title, url, description }) => {
       navigator
         .share({
           title: title,
-          text: description,
+          // text: description,
           url: url,
         })
         .catch((error) => console.log('Error sharing:', error));
