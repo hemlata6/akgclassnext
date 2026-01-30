@@ -6,8 +6,9 @@ import { Icons, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_H
 import axios from 'axios';
 import instId from '../../config/instituteId';
 import Endpoints, { BASE_URL } from '../../config/endpoints';
+import { Dialog, DialogContent, IconButton } from '@mui/material';
 
-const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin, setCartItems }) => {
+const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin, setCartItems, onSubmitCheckout }) => {
     const router = useRouter();
 
     const { isAuthenticated, user, authToken } = useAuth();
@@ -29,6 +30,11 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     const [urlParams, setUrlParams] = useState({ studentName: null, contact: null, email: null });
     const [checkoutResponse, setCheckoutResponse] = useState(null);
     const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
+    const [paymentUrl, setPaymentUrl] = useState('');
+    const [showErrorBar, setShowErrorBar] = useState(false);
+    const [errorBarMessage, setErrorBarMessage] = useState('');
+    const [showSuccessBar, setShowSuccessBar] = useState(false);
+    const [successBarMessage, setSuccessBarMessage] = useState('');
 
     useEffect(() => {
         // Extract URL parameters
@@ -67,6 +73,32 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
             setFormData(prev => ({ ...prev, phone: studentData?.contact || user?.phone || '' }));
         }
     }, [isAuthenticated, user, studentData]);
+
+    // Auto-dismiss error bar after 5 seconds
+    useEffect(() => {
+        if (!showErrorBar) return;
+        const timer = setTimeout(() => setShowErrorBar(false), 5000);
+        return () => clearTimeout(timer);
+    }, [showErrorBar]);
+
+    // Auto-dismiss success bar after 5 seconds
+    useEffect(() => {
+        if (!showSuccessBar) return;
+        const timer = setTimeout(() => setShowSuccessBar(false), 5000);
+        return () => clearTimeout(timer);
+    }, [showSuccessBar]);
+
+    // Prevent body scroll when payment drawer is open
+    useEffect(() => {
+        if (paymentDrawerOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [paymentDrawerOpen]);
 
     useEffect(() => {
         if (cartCourses?.length > 0) {
@@ -190,16 +222,20 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
 
             if (response?.data?.paymentStatus === "successful") {
                 console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
+                setShowSuccessBar(true);
+                setSuccessBarMessage('Payment successful! Thank you for your purchase.');
                 handleClearCart();
-                setPaymentDrawerOpen(false);
-                onClose();
-                // alert('Payment successful! Thank you for your purchase.');
+                setTimeout(() => {
+                    setPaymentDrawerOpen(false);
+                    onClose();
+                }, 2000);
             } else if (response?.data?.paymentStatus === 'pending') {
                 console.log('⏳ Payment still pending...');
             } else if (response?.data?.paymentStatus === 'failed') {
                 console.error('✗ PAYMENT FAILED');
+                setShowErrorBar(true);
+                setErrorBarMessage('Payment failed. Please try again.');
                 setPaymentDrawerOpen(false);
-                // alert('Payment failed. Please try again.');
             }
         } catch (err) {
             console.error('Error checking payment status:', err);
@@ -227,15 +263,27 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
             const response = await axios.post(`${BASE_URL}/student/coupon/verify`, body);
             if (response.data.errorCode === 0) {
                 setIsCouponValid(response.data?.valid);
+                if (response.data?.valid) {
+                    setShowSuccessBar(true);
+                    setSuccessBarMessage("✓ Coupon applied successfully!");
+                } else {
+                    setShowErrorBar(true);
+                    setErrorBarMessage("Invalid coupon code");
+                }
                 setErrorMessage("");
             } else {
                 setIsCouponValid(response.data?.valid === null ? false : response.data?.valid);
-                setErrorMessage(response.data?.message ? response.data?.message : "Invalid Coupon Code");
+                const msg = response.data?.message ? response.data?.message : "Invalid Coupon Code";
+                setErrorMessage(msg);
+                setShowErrorBar(true);
+                setErrorBarMessage(msg);
             }
         } catch (err) {
             console.log(err);
             setIsCouponValid(false);
             setErrorMessage("Failed to verify coupon");
+            setShowErrorBar(true);
+            setErrorBarMessage("Failed to verify coupon");
         }
     };
 
@@ -270,73 +318,25 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         setIsSubmitting(true);
 
         try {
-            // Prepare payload
+            // Prepare payload data to send back to CartPage
             const nameParts = formData.fullName.split(' ');
-            const firstName = nameParts[0] || 'User';
-            const lastName = nameParts.slice(1).join(' ') || '';
-
-            const body = {
-                firstName,
-                lastName,
+            const checkoutData = {
+                firstName: nameParts[0] || 'User',
+                lastName: nameParts.slice(1).join(' ') || '',
                 contact: formData.phone,
                 email: formData.email,
-                instId: instId,
-                campaignId: null,
                 coupon: isCouponValid ? couponNumber : "",
-                coursePricingId: 0,
-                entityModals: payloadCart
+                entityModals: payloadCart,
+                urlParams: urlParams
             };
 
-            // Call checkout API
-            const response = await axios.post(
-                `${BASE_URL}/admin/payment/fetch-public-checkout-url`,
-                body
-            );
-
-            if (response?.data?.status === true && response?.data?.url) {
-                // Store checkout response for payment polling
-                setCheckoutResponse(response?.data);
-
-                // Open payment URL in popup
-                const width = 480;
-                const height = 1080;
-                const left = window.screenX + (window.outerWidth / 2) - (width / 2);
-                const top = window.screenY + (window.outerHeight / 2) - (height / 2);
-
-                window.open(
-                    response.data.url,
-                    'payment',
-                    `location=no,width=${width},height=${height},top=${top},left=${left}`
-                );
-
-                // Start payment polling
-                setPaymentDrawerOpen(true);
-
-                // Clear form
-                setFormData({ fullName: '', email: '', phone: '' });
-                // Don't close modal or clear cart here - will be handled after successful payment
-
-                // Redirect back with URL parameters if they exist
-                const routeData = new URLSearchParams(window.location.search).get('isMobile');
-                if (urlParams.studentName || urlParams.contact || urlParams.email) {
-                    let queryParams = [];
-                    if (routeData) queryParams.push(`isMobile=${routeData}`);
-                    if (urlParams.studentName) queryParams.push(`studentname=${encodeURIComponent(urlParams.studentName)}`);
-                    if (urlParams.contact) queryParams.push(`contact=${urlParams.contact}`);
-                    if (urlParams.email) queryParams.push(`email=${encodeURIComponent(urlParams.email)}`);
-                    router.push(`/?${queryParams.join('&')}`);
-                } else if (!authToken && !isAuthenticated) {
-                    if (onShowLogin) {
-                        onShowLogin();
-                        handleClearCart();
-                    }
-                }
-            } else {
-                alert('Failed to generate checkout URL. Please try again.');
-            }
+            // Pass data back to CartPage for API call
+            await onSubmitCheckout(checkoutData);
+            
+            // Clear form
+            setFormData({ fullName: '', email: '', phone: '' });
         } catch (error) {
-            console.error('Checkout error:', error);
-            alert('An error occurred during checkout. Please try again.');
+            console.error('Form submission error:', error);
         } finally {
             setIsSubmitting(false);
         }
@@ -505,6 +505,132 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                     </p>
                 </form>
             </div>
+
+            {/* Payment Dialog */}
+            <Dialog
+                open={paymentDrawerOpen}
+                onClose={() => setPaymentDrawerOpen(false)}
+                fullScreen
+                PaperProps={{
+                    sx: {
+                        margin: 0,
+                        maxHeight: '100vh',
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }
+                }}
+            >
+                {/* Header */}
+                <div
+                    className="flex items-center justify-between p-3 bg-emerald-800 flex-shrink-0"
+                    style={{ minHeight: '56px' }}
+                >
+                    <h2 className="text-white font-bold text-sm truncate flex-1">Complete Payment</h2>
+                    <IconButton
+                        onClick={() => {
+                            setPaymentDrawerOpen(false);
+                            setPaymentUrl('');
+                            window.dispatchEvent(new Event('showFooter'));
+                        }}
+                        sx={{
+                            color: 'white',
+                            backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                            '&:hover': {
+                                backgroundColor: 'rgba(255, 255, 255, 0.3)'
+                            },
+                            width: 32,
+                            height: 32
+                        }}
+                    >
+                        ✕
+                    </IconButton>
+                </div>
+
+                {/* Content */}
+                <DialogContent
+                    sx={{
+                        padding: 0,
+                        overflow: 'auto',
+                        overflowX: 'hidden',
+                        WebkitOverflowScrolling: 'touch',
+                        flex: 1,
+                        position: 'relative',
+                        '&::-webkit-scrollbar': {
+                            display: 'none'
+                        }
+                    }}
+                >
+                    <iframe
+                        src={paymentUrl}
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            border: 'none',
+                            display: 'block',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            bottom: 20,
+                        }}
+                        title="Payment Gateway"
+                        allow="payment"
+                        sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+                        scrolling="yes"
+                    />
+                </DialogContent>
+            </Dialog>
+
+            {/* Error Notification Bar */}
+            {showErrorBar && (
+                <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+                    <div className="bg-red-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-1">
+                                <div className="flex-shrink-0">
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <p className="text-sm font-semibold">{errorBarMessage}</p>
+                            </div>
+                            <button
+                                onClick={() => setShowErrorBar(false)}
+                                className="flex-shrink-0 text-white hover:text-red-200 transition-colors"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Success Notification Bar */}
+            {showSuccessBar && (
+                <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+                    <div className="bg-green-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+                        <div className="flex items-center justify-between gap-4">
+                            <div className="flex items-center gap-3 flex-1">
+                                <div className="flex-shrink-0">
+                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                </div>
+                                <p className="text-sm font-semibold">{successBarMessage}</p>
+                            </div>
+                            <button
+                                onClick={() => setShowSuccessBar(false)}
+                                className="flex-shrink-0 text-white hover:text-green-200 transition-colors"
+                            >
+                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

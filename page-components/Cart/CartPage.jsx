@@ -9,6 +9,7 @@ import axios from 'axios';
 import instId from '../../config/instituteId';
 import Endpoints, { BASE_URL } from '../../config/endpoints';
 import { useStudent } from '../../config/StudentContext';
+import { Dialog, DialogContent, IconButton } from '@mui/material';
 
 export default function CartPage() {
   const router = useRouter();
@@ -27,6 +28,12 @@ export default function CartPage() {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showErrorBar, setShowErrorBar] = useState(false);
+  const [errorBarMessage, setErrorBarMessage] = useState('');
+  const [showSuccessBar, setShowSuccessBar] = useState(false);
+  const [successBarMessage, setSuccessBarMessage] = useState('');
+  const [showMobilePaymentModal, setShowMobilePaymentModal] = useState(false);
+  const [paymentUrl, setPaymentUrl] = useState('');
 
   // Load cart from localStorage
   useEffect(() => {
@@ -59,6 +66,42 @@ export default function CartPage() {
     };
   }, []);
 
+  // Auto-dismiss error bar after 5 seconds
+  useEffect(() => {
+    if (!showErrorBar) return;
+    const timer = setTimeout(() => setShowErrorBar(false), 5000);
+    return () => clearTimeout(timer);
+  }, [showErrorBar]);
+
+  // Auto-dismiss success bar after 5 seconds
+  useEffect(() => {
+    if (!showSuccessBar) return;
+    const timer = setTimeout(() => setShowSuccessBar(false), 5000);
+    return () => clearTimeout(timer);
+  }, [showSuccessBar]);
+
+  // Prevent body scroll when mobile payment modal is open
+  useEffect(() => {
+    if (showMobilePaymentModal) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.height = '100%';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    }
+
+    return () => {
+      document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.height = '';
+    };
+  }, [showMobilePaymentModal]);
+
   const parsePrice = (priceValue) => {
     if (typeof priceValue === 'number') return priceValue;
     if (typeof priceValue === 'string') return parseInt(priceValue.replace(/[^0-9]/g, ''), 10);
@@ -86,8 +129,8 @@ export default function CartPage() {
 
   // Payment polling - check payment status every 5 seconds
   useEffect(() => {
-    if (!paymentDrawerOpen || !checkoutResponse?.transactionId) {
-      console.log('Payment polling stopped - Drawer closed or no transaction ID');
+    if ((!paymentDrawerOpen && !showMobilePaymentModal) || !checkoutResponse?.transactionId) {
+      console.log('Payment polling stopped - Drawer/Modal closed or no transaction ID');
       return;
     }
 
@@ -100,7 +143,7 @@ export default function CartPage() {
       console.log('Payment polling interval cleared');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentDrawerOpen, checkoutResponse?.transactionId]);
+  }, [paymentDrawerOpen, showMobilePaymentModal, checkoutResponse?.transactionId]);
 
   const getColor = () => {
     if (isCouponValid === null) return '#1e40af';
@@ -130,21 +173,32 @@ export default function CartPage() {
       const response = await axios.post(`${BASE_URL}student/coupon/verify`, body);
       if (response.data.errorCode === 0) {
         setIsCouponValid(response.data?.valid);
-        setErrorMessage("");
-        if (response.data?.valid && response.data?.discountAmount) {
-          setDiscountAmount(response.data.discountAmount);
+        if (response.data?.valid) {
+          setShowSuccessBar(true);
+          setSuccessBarMessage("✓ Coupon applied successfully!");
+          if (response.data?.discountAmount) {
+            setDiscountAmount(response.data.discountAmount);
+          }
         } else {
+          setShowErrorBar(true);
+          setErrorBarMessage("Invalid coupon code");
           setDiscountAmount(0);
         }
+        setErrorMessage("");
       } else {
         setIsCouponValid(response.data?.valid === null ? false : response.data?.valid);
-        setErrorMessage(response.data?.message ? response.data?.message : "Invalid Coupon Code");
+        const msg = response.data?.message ? response.data?.message : "Invalid Coupon Code";
+        setErrorMessage(msg);
+        setShowErrorBar(true);
+        setErrorBarMessage(msg);
         setDiscountAmount(0);
       }
     } catch (err) {
       console.log(err);
       setIsCouponValid(false);
       setErrorMessage("Failed to verify coupon");
+      setShowErrorBar(true);
+      setErrorBarMessage("Failed to verify coupon");
       setDiscountAmount(0);
     }
   };
@@ -155,13 +209,25 @@ export default function CartPage() {
         `${Endpoints.baseURL}payment/check-payment-status/${checkoutResponse?.transactionId}`,
         { headers: { "Authorization": `Bearer ${authToken}` } }
       );
-      console.log('💳 Payment Status Response:', response);
 
       if (response?.data?.paymentStatus === "successful") {
-        console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
-        handleClearCart();
+
+        setShowMobilePaymentModal(false);
         setPaymentDrawerOpen(false);
-        // alert('Payment successful! Thank you for your purchase.');
+        setPaymentUrl('');
+        window.dispatchEvent(new Event('showFooter'));
+        handleClearCart();
+        setSuccessBarMessage('Payment successful! Thank you for your purchase.');
+        setShowSuccessBar(true);
+
+        // Open login modal for non-authenticated users after payment modal closes
+        if (!isAuthenticated && !authToken) {
+          setTimeout(() => {
+            setShowLoginModal(true);
+          }, 1000);
+        } else {
+          console.log('✓ User is already authenticated, skipping login modal');
+        }
       } else if (response?.data?.paymentStatus === 'pending') {
         console.log('⏳ Payment still pending...');
       } else if (response?.data?.paymentStatus === 'failed') {
@@ -178,7 +244,6 @@ export default function CartPage() {
     localStorage.removeItem('cartCourses');
     setCartItems([]);
     window.dispatchEvent(new Event('cartUpdated'));
-    console.log('Cart cleared');
   };
 
   const removeFromCart = (index) => {
@@ -187,6 +252,79 @@ export default function CartPage() {
     localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
     window.dispatchEvent(new Event('cartUpdated'));
   };
+
+  const handlePublicCheckout = async (checkoutData) => {
+    try {
+      const body = {
+        firstName: checkoutData.firstName,
+        lastName: checkoutData.lastName,
+        contact: checkoutData.contact,
+        email: checkoutData.email,
+        instId: instId,
+        campaignId: null,
+        coupon: checkoutData.coupon,
+        coursePricingId: 0,
+        entityModals: checkoutData.entityModals
+      };
+
+      // Call public checkout API
+      const response = await axios.post(
+        `${BASE_URL}/admin/payment/fetch-public-checkout-url`,
+        body
+      );
+
+      if (response?.data?.status === true && response?.data?.url) {
+        // Close checkout modal
+        setShowCheckoutModal(false);
+
+        // Store checkout response for payment polling
+        setCheckoutResponse(response?.data);
+
+        const isMobile = window.innerWidth <= 768;
+
+        if (isMobile) {
+          setPaymentUrl(response.data.url);
+          setShowMobilePaymentModal(true);
+          setPaymentDrawerOpen(true);
+          window.dispatchEvent(new Event('hideFooter'));
+        } else {
+          // Open payment URL in popup for desktop
+          const width = 480;
+          const height = 1080;
+          const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+          const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+          window.open(
+            response.data.url,
+            'payment',
+            `location=no,width=${width},height=${height},top=${top},left=${left}`
+          );
+
+          // Start payment polling
+          setPaymentDrawerOpen(true);
+        }
+
+        // Check if should show login modal after checkout
+        // if (!isAuthenticated && !authToken) {
+        //   setTimeout(() => {
+        //     setShowLoginModal(true);
+        //   }, 500);
+        // }
+      } else {
+        const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+        setErrorBarMessage(errorMsg);
+        setShowErrorBar(true);
+        setShowCheckoutModal(false);
+      }
+    } catch (error) {
+      console.error('Public checkout error:', error);
+      const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+      setShowCheckoutModal(false);
+    }
+  };
+
 
   const handleProceedToCheckout = async () => {
     if (isAuthenticated && authToken) {
@@ -229,33 +367,47 @@ export default function CartPage() {
           // Store checkout response for payment polling
           setCheckoutResponse(response?.data);
 
-          // Open payment URL in popup
-          const width = 480;
-          const height = 1080;
-          const left = window.screenX + (window.outerWidth / 2) - (width / 2);
-          const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+          // Check if mobile device
+          const isMobile = window.innerWidth <= 768;
 
-          window.open(
-            response.data.url,
-            'payment',
-            `location=no,width=${width},height=${height},top=${top},left=${left}`
-          );
+          if (isMobile) {
+            setPaymentUrl(response.data.url);
+            setShowMobilePaymentModal(true);
+            setPaymentDrawerOpen(true);
+            // Hide footer when payment modal opens
+            window.dispatchEvent(new Event('hideFooter'));
+          } else {
+            const width = 480;
+            const height = 1080;
+            const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+            const top = window.screenY + (window.outerHeight / 2) - (height / 2);
 
-          // Start payment polling
-          setPaymentDrawerOpen(true);
+            window.open(
+              response.data.url,
+              'payment',
+              `location=no,width=${width},height=${height},top=${top},left=${left}`
+            );
+
+            // Start payment polling for desktop
+            setPaymentDrawerOpen(true);
+          }
 
           // Don't clear cart here - will be cleared after successful payment
         } else {
-          // alert('Failed to generate checkout URL. Please try again.');
+          const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+          setErrorBarMessage(errorMsg);
+          setShowErrorBar(true);
         }
       } catch (error) {
         console.error('Checkout error:', error);
-        // alert('An error occurred during checkout. Please try again.');
+        const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+        setErrorBarMessage(errorMsg);
+        setShowErrorBar(true);
       } finally {
         setIsProcessing(false);
       }
     } else {
-      // User is not logged in - show modal
+      // User is not authenticated - show checkout modal
       setShowCheckoutModal(true);
     }
   };
@@ -284,7 +436,7 @@ export default function CartPage() {
   }
 
   console.log('cartItems', cartItems);
-  
+
 
   return (
     <div className="bg-slate-50 min-h-screen md:pb-0">
@@ -427,24 +579,163 @@ export default function CartPage() {
       <Footer />
 
       {/* Checkout Modal */}
-      {showCheckoutModal && (
+      <Dialog
+        open={showCheckoutModal}
+        onClose={() => setShowCheckoutModal(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            margin: 2
+          }
+        }}
+      >
         <ProceedToCheckoutForm
-        setCartItems={setCartItems}
           cartCourses={cartItems}
           onClose={() => setShowCheckoutModal(false)}
           totalAmount={total}
-          onShowLogin={() => {
-            setShowCheckoutModal(false);
-            setShowLoginModal(true);
-          }}
+          onSubmitCheckout={handlePublicCheckout}
         />
-      )}
+      </Dialog>
 
       {/* Login Modal */}
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
       />
+
+      {/* Mobile Payment Dialog */}
+      <Dialog
+        open={showMobilePaymentModal}
+        onClose={() => {
+          setShowMobilePaymentModal(false);
+          setPaymentUrl('');
+          setPaymentDrawerOpen(false);
+          window.dispatchEvent(new Event('showFooter'));
+        }}
+        fullScreen
+        PaperProps={{
+          sx: {
+            margin: 0,
+            maxHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column'
+          }
+        }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between p-3 bg-emerald-800 flex-shrink-0"
+          style={{ minHeight: '56px' }}
+        >
+          <h2 className="text-white font-bold text-sm truncate flex-1">Complete Payment</h2>
+          <IconButton
+            onClick={() => {
+              setShowMobilePaymentModal(false);
+              setPaymentUrl('');
+              setPaymentDrawerOpen(false);
+              window.dispatchEvent(new Event('showFooter'));
+            }}
+            sx={{
+              color: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.3)'
+              },
+              width: 32,
+              height: 32
+            }}
+          >
+            ✕
+          </IconButton>
+        </div>
+
+        {/* Content */}
+        <DialogContent
+          sx={{
+            padding: 0,
+            overflow: 'auto',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            flex: 1,
+            position: 'relative',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
+          }}
+        >
+          <iframe
+            src={paymentUrl}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 20,
+            }}
+            title="Payment Gateway"
+            allow="payment"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+            scrolling="yes"
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* Error Notification Bar */}
+      {showErrorBar && (
+        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+          <div className="bg-red-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold">{errorBarMessage}</p>
+              </div>
+              <button
+                onClick={() => setShowErrorBar(false)}
+                className="flex-shrink-0 text-white hover:text-red-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Notification Bar */}
+      {showSuccessBar && (
+        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+          <div className="bg-green-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold">{successBarMessage}</p>
+              </div>
+              <button
+                onClick={() => setShowSuccessBar(false)}
+                className="flex-shrink-0 text-white hover:text-green-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
