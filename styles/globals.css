@@ -102,6 +102,43 @@
   border-color: rgba(var(--theme-primary) / 0.1) !important;
 }
 
+/* Blue color overrides for production builds */
+.bg-blue-500 {
+  background-color: var(--theme-primary) !important;
+}
+
+.bg-blue-600 {
+  background-color: var(--theme-primary-hover) !important;
+}
+
+.hover\:bg-blue-600:hover {
+  background-color: var(--theme-primary-hover) !important;
+}
+
+.text-blue-500 {
+  color: var(--theme-primary) !important;
+}
+
+.text-blue-600 {
+  color: var(--theme-primary) !important;
+}
+
+.border-blue-500 {
+  border-color: var(--theme-primary) !important;
+}
+
+.hover\:text-blue-500:hover {
+  color: var(--theme-primary) !important;
+}
+
+.from-blue-500 {
+  --tw-gradient-from: var(--theme-primary) !important;
+}
+
+.to-blue-600 {
+  --tw-gradient-to: var(--theme-primary-hover) !important;
+}
+
 * {
   margin: 0;
   padding: 0;

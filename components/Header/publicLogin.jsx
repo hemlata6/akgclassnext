@@ -286,7 +286,8 @@ const PublicLogin = ({ onSwitchToSignup, onClose }) => {
                         Don't have an account?{' '}
                         <button
                             onClick={onSwitchToSignup}
-                            className="font-semibold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105"
+                            className="font-semibold hover:opacity-80 transition-all duration-200 transform hover:scale-105"
+                            style={{ color: theme?.primary || '#2196F3' }}
                         >
                             Create one here
                         </button>
@@ -405,7 +406,8 @@ const PublicLogin = ({ onSwitchToSignup, onClose }) => {
                         <button
                             type="submit"
                             disabled={isLoading}
-                            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-500/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
+                            className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
+                            style={{ backgroundColor: theme?.primary || '#2196F3' }}
                         >
                             {isLoading ? (
                                 <>

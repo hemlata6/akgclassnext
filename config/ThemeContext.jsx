@@ -18,11 +18,11 @@ export const THEMES = {
     name: 'Blue',
     primary: '#2196F3',
     primaryHover: '#1976D2',
-    primaryClass: 'bg-[#2196F3]',
-    primaryHoverClass: 'hover:bg-[#1976D2]',
-    textClass: 'text-[#2196F3]',
-    borderClass: 'border-[#2196F3]',
-    bgGradient: 'from-[#2196F3] to-[#1976D2]',
+    primaryClass: 'bg-blue-500',
+    primaryHoverClass: 'hover:bg-blue-600',
+    textClass: 'text-blue-500',
+    borderClass: 'border-blue-500',
+    bgGradient: 'from-blue-500 to-blue-600',
   },
 };
 
