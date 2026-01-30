@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_CLASS, TEXT_GREEN } from '../../../constants/Icons';
+import { Icons, LAYOUT_PADDING } from '../../../constants/Icons';
 import { useAuth } from '../../../config/AuthContext';
+import { useTheme } from '../../../config/ThemeContext';
 import Network from '../../../config/Network';
 import instId from '../../../config/instituteId';
 import CourseConfigModal from './CourseConfigModal';
@@ -10,6 +11,7 @@ import Endpoints from '../../../config/endpoints';
 export const CoursesSection = ({ onAddToCart }) => {
     const router = useRouter();
     const { authToken } = useAuth();
+    const { theme } = useTheme();
     const [active, setActive] = useState(null);
     const [activeDomain, setActiveDomain] = useState(null);
     const [coursesData, setCoursesData] = useState([]);
@@ -180,13 +182,13 @@ export const CoursesSection = ({ onAddToCart }) => {
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-4 gap-2">
                         <div>
-                            <span className={`${TEXT_GREEN} font-bold tracking-widest text-xs uppercase`}>Our Flagship</span>
+                            <span className={`${theme.textClass} font-bold tracking-widest text-xs uppercase`}>Our Flagship</span>
                             <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured Courses</h2>
                         </div>
                         {/* Mobile: Explore Store button next to title */}
                         <button
                             onClick={() => router.push('/store?productType=lecture')}
-                            className={`md:hidden ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
+                            className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
                         >
                             Explore Store <Icons.ChevronRight size={16} />
                         </button>
@@ -196,7 +198,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                             {/* Desktop: Explore Store button with filters */}
                             <button
                                 onClick={() => router.push('/store?productType=lecture')}
-                                className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
                             >
                                 Explore Store <Icons.ChevronRight size={16} />
                             </button>
@@ -204,7 +206,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button
                                     onClick={() => setActiveDomain(null)}
-                                    className={`ml-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === null ? `${BRAND_GREEN_CLASS} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
+                                    className={`ml-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === null ? `${theme.primaryClass} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
                                 >
                                     All
                                 </button>
@@ -212,7 +214,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                                     <button
                                         key={domain.id}
                                         onClick={() => setActiveDomain(domain.id)}
-                                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === domain.id ? `${BRAND_GREEN_CLASS} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
+                                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === domain.id ? `${theme.primaryClass} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
                                     >
                                         {domain.name}
                                     </button>
@@ -273,7 +275,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                                         >
                                             <div
                                                 onClick={() => router.push(`/course/${course.id}`)}
-                                                className={`rounded-xl ${BRAND_GREEN_CLASS} relative overflow-hidden flex items-end p-3 cursor-pointer`}
+                                                className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
                                                 style={{ aspectRatio: '16/9' }}
                                             >
                                                 {course.logo && (
@@ -294,7 +296,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                                                 </div>
                                             </div>
                                             <div className="p-2 pt-3 flex-1 flex flex-col">
-                                                <h3 onClick={() => router.push(`/course/${course.id}`)} className="text-sm font-bold text-slate-900 leading-snug mb-1 cursor-pointer hover:text-indigo-700">
+                                                <h3 onClick={() => router.push(`/course/${course.id}`)} className={`text-sm font-bold text-slate-900 leading-snug mb-1 cursor-pointer hover:${theme.textClass}`}>
                                                     {course.title}
                                                 </h3>
                                                 {/* <p className="text-[10px] text-slate-500 font-medium mb-3">GD / PD / App</p> */}
@@ -344,8 +346,8 @@ export const CoursesSection = ({ onAddToCart }) => {
                                                             }
                                                         }}
                                                         className={`${cartCourses.some(item => item.id === course.id)
-                                                            ? `${BRAND_GREEN_CLASS} shadow-lg scale-110`
-                                                            : BRAND_GREEN_CLASS
+                                                            ? `${theme.primaryClass} shadow-lg scale-110`
+                                                            : theme.primaryClass
                                                             } text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md`}
                                                     >
                                                         {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
@@ -363,7 +365,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <button
                                 onClick={handlePrev}
                                 disabled={!canGoPrev}
-                                className={`${BRAND_GREEN_CLASS} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
+                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
                                     }`}
                             >
                                 <Icons.ChevronLeft />
@@ -371,7 +373,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <button
                                 onClick={handleNext}
                                 disabled={!canGoNext}
-                                className={`${BRAND_GREEN_CLASS} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
+                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
                                     }`}
                             >
                                 <Icons.ChevronRight />

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import MCQTest from '../page-components/FreeResources/McqTest';
+import { Footer } from '../components/Shared/SharedComponents';
 
 export default function McqTestPage() {
   return (

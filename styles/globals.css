@@ -2,6 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --theme-primary: #2196F3;
+  --theme-primary-hover: #1976D2;
+  --theme-primary-class: bg-[#2196F3];
+  --theme-primary-hover-class: hover:bg-[#1976D2];
+  --theme-text-class: text-[#2196F3];
+  --theme-border-class: border-[#2196F3];
+}
+
+/* Theme-aware dynamic classes */
+.theme-bg {
+  background-color: var(--theme-primary);
+}
+
+.theme-bg:hover {
+  background-color: var(--theme-primary-hover);
+}
+
+.theme-text {
+  color: var(--theme-primary);
+}
+
+.theme-border {
+  border-color: var(--theme-primary);
+}
+
+/* Override indigo classes with CSS variables */
+.bg-indigo-700 {
+  background-color: var(--theme-primary) !important;
+}
+
+.hover\:bg-indigo-600:hover,
+.hover\:bg-indigo-700:hover,
+.hover\:bg-indigo-800:hover {
+  background-color: var(--theme-primary-hover) !important;
+}
+
+.text-indigo-700 {
+  color: var(--theme-primary) !important;
+}
+
+.text-indigo-800 {
+  color: var(--theme-primary) !important;
+}
+
+.text-indigo-600 {
+  color: var(--theme-primary) !important;
+}
+
+.border-indigo-700 {
+  border-color: var(--theme-primary) !important;
+}
+
+.hover\:text-indigo-700:hover,
+.hover\:text-indigo-600:hover {
+  color: var(--theme-primary) !important;
+}
+
+.bg-indigo-500 {
+  background-color: var(--theme-primary) !important;
+}
+
+.bg-indigo-600 {
+  background-color: var(--theme-primary) !important;
+}
+
+.bg-indigo-400 {
+  background-color: var(--theme-primary) !important;
+}
+
+.border-t-2.border-indigo-700 {
+  border-color: var(--theme-primary) !important;
+}
+
+/* Also cover violet classes for backward compatibility */
+.bg-violet-500 {
+  background-color: var(--theme-primary) !important;
+}
+
+.bg-violet-600 {
+  background-color: var(--theme-primary) !important;
+}
+
+.text-violet-500 {
+  color: var(--theme-primary) !important;
+}
+
+/* Light indigo/violet background tints */
+.bg-indigo-50 {
+  background-color: rgba(var(--tw-rgb-indigo-50) / 0.3) !important;
+}
+
+.via-indigo-50 {
+  --tw-gradient-stops: var(--theme-primary), rgba(var(--tw-rgb-indigo-50) / 0.3) var(--tw-gradient-to-pos) !important;
+}
+
+.border-indigo-100 {
+  border-color: rgba(var(--theme-primary) / 0.1) !important;
+}
+
 * {
   margin: 0;
   padding: 0;

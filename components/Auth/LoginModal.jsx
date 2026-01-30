@@ -4,10 +4,12 @@ import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
+import { useTheme } from '../../config/ThemeContext';
 
 const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
   const { login } = useAuth();
   const { setStudentAuth } = useStudent();
+  const { theme } = useTheme();
   const [formData, setFormData] = useState({
     phone: '',
     otp: ''
@@ -210,8 +212,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
         {/* Header */}
         <div className="text-center">
           <div className="relative mx-auto h-16 w-16 mb-4">
-            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-800 to-indigo-800 rounded-2xl"></div>
-            <div className="relative h-full w-full bg-gradient-to-tr from-indigo-700 to-indigo-700 rounded-2xl flex items-center justify-center transform rotate-3">
+            <div className="absolute inset-0 rounded-2xl" style={{ backgroundColor: theme?.primary || '#2196F3', opacity: 0.3 }}></div>
+            <div className="relative h-full w-full rounded-2xl flex items-center justify-center transform rotate-3" style={{ backgroundColor: theme?.primary || '#2196F3' }}>
               <LogIn className="h-7 w-7 text-white" />
             </div>
           </div>
@@ -232,7 +234,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                 handleClose();
                 onSignupClick();
               }}
-              className="font-semibold text-indigo-700 hover:text-indigo-800 transition-all duration-200"
+              className="font-semibold hover:opacity-80 transition-all duration-200"
+              style={{ color: theme?.primary || '#2196F3' }}
             >
               Create one here
             </button>
@@ -260,7 +263,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                 autoComplete="tel"
                 className={`block w-full pl-20 pr-4 py-3 border-2 ${errors.phone
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-300 focus:border-indigo-700'
+                  : `border-gray-300 focus:border-indigo-700`
                   } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
                 placeholder="Enter your 10-digit mobile number"
                 value={formData.phone}
@@ -294,7 +297,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                   inputMode="numeric"
                   className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.otp
                     ? 'border-red-300 focus:border-red-500'
-                    : 'border-gray-300 focus:border-indigo-700'
+                    : `border-gray-300 focus:border-indigo-700`
                     } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70 text-lg font-mono tracking-widest`}
                   placeholder="------"
                   value={formData.otp}
@@ -315,7 +318,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                   OTP sent to +91 {formData.phone}
                 </span>
                 {countdown > 0 ? (
-                  <span className="text-indigo-700 flex items-center gap-1">
+                  <span className={`${theme.textClass} flex items-center gap-1`}>
                     <Timer className="h-4 w-4" />
                     Resend in {countdown}s
                   </span>
@@ -323,7 +326,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
                   <button
                     type="button"
                     onClick={handleResendOTP}
-                    className="text-indigo-700 hover:text-indigo-800 font-medium transition-colors duration-200 hover:underline"
+                    className={`${theme.textClass} hover:opacity-80 font-medium transition-colors duration-200 hover:underline`}
                   >
                     Resend OTP
                   </button>
@@ -351,7 +354,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-indigo-700 to-indigo-700 hover:from-indigo-800 hover:to-indigo-800 focus:outline-none focus:ring-4 focus:ring-indigo-700/50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
+              className={`group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
             >
               {isLoading ? (
                 <>
@@ -381,9 +384,9 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
         <div className="text-center pt-4 border-t border-gray-100">
           <p className="text-xs text-gray-500">
             By signing in, you agree to our{' '}
-            <a href="#" className="text-indigo-700 hover:text-indigo-800 font-medium">Terms</a>
+            <a href="#" className={`${theme.textClass} hover:opacity-80 font-medium`}>Terms</a>
             {' '}and{' '}
-            <a href="#" className="text-indigo-700 hover:text-indigo-800 font-medium">Privacy Policy</a>
+            <a href="#" className={`${theme.textClass} hover:opacity-80 font-medium`}>Privacy Policy</a>
           </p>
         </div>
       </div>

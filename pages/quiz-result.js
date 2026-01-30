@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import Result from '../page-components/FreeResources/ResultPage';
+import { Footer } from '../components/Shared/SharedComponents';
 
 export default function QuizResult() {
   return (

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import CartPage from '../page-components/Cart/CartPage';
+import { Footer } from '../components/Shared/SharedComponents';
 
 export default function Cart() {
   return (

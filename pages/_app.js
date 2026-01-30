@@ -1,6 +1,7 @@
 import '../styles/globals.css';
 import { AuthProvider } from '../config/AuthContext';
 import { StudentProvider } from '../config/StudentContext';
+import { ThemeProvider } from '../config/ThemeContext';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 
@@ -21,11 +22,13 @@ function MyApp({ Component, pageProps }) {
   }, [router.events]);
 
   return (
-    <AuthProvider>
-      <StudentProvider>
-        <Component {...pageProps} />
-      </StudentProvider>
-    </AuthProvider>
+    <ThemeProvider>
+      <AuthProvider>
+        <StudentProvider>
+          <Component {...pageProps} />
+        </StudentProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 

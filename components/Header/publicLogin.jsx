@@ -267,8 +267,8 @@ const PublicLogin = ({ onSwitchToSignup, onClose }) => {
                 {/* Header */}
                 <div className="text-center">
                     <div className="relative mx-auto h-16 w-16 mb-4">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-indigo-600 to-purple-600 rounded-2xl"></div>
-                        <div className="relative h-full w-full bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center transform rotate-3">
+                        <div className="absolute inset-0 rounded-2xl" style={{ backgroundColor: theme?.primary || '#2196F3', opacity: 0.3 }}></div>
+                        <div className="relative h-full w-full rounded-2xl flex items-center justify-center transform rotate-3" style={{ backgroundColor: theme?.primary || '#2196F3' }}>
                             <LogIn className="h-7 w-7 text-white" />
                         </div>
                     </div>

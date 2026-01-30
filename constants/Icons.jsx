@@ -32,11 +32,12 @@ export const Icons = {
 };
 
 export const LAYOUT_PADDING = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
-// For inline styles - use hex colors - INDIGO THEME
-export const BRAND_GREEN = "rgb(67, 56, 202)"; // indigo-700
-export const BRAND_GREEN_HOVER = "rgb(55, 48, 163)"; // indigo-800
+// Theme colors - these will be used by components that haven't been converted to useTheme yet
+// Purple theme (indigo-700)
+export const BRAND_GREEN = "rgb(55, 48, 163)"; // indigo-700
+export const BRAND_GREEN_HOVER = "rgb(67, 56, 202)"; // indigo-600
 // For className strings - use Tailwind classes
 export const BRAND_GREEN_CLASS = "bg-indigo-700";
-export const BRAND_GREEN_HOVER_CLASS = "hover:bg-indigo-800";
+export const BRAND_GREEN_HOVER_CLASS = "hover:bg-indigo-600";
 export const TEXT_GREEN = "text-indigo-700";
 

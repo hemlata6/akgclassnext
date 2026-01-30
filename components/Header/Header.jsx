@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, TEXT_GREEN } from '../../constants/Icons';
+import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
+import { useTheme } from '../../config/ThemeContext';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { useAuth } from '../../config/AuthContext';
@@ -12,6 +13,7 @@ import Endpoints from '@/config/endpoints';
 
 export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
+  const theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -27,7 +29,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   if (!isMobile) return null;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]">
+    <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
       {[
         { l: "Call", i: <Icons.Phone />, a: "tel:+" },
         { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
@@ -42,20 +44,23 @@ export const StickyMobileFooter = ({ cartCount }) => {
         >
           {item.h ? (
             <>
-              <div className={`h-14 w-14 ${BRAND_GREEN_CLASS} rounded-full text-white shadow-lg border-4 border-white flex items-center justify-center transform active:scale-95 -mt-8 mb-1`}>
+              <div 
+                className={`h-14 w-14 ${theme.primaryClass} rounded-full text-white shadow-lg border-4 border-white flex items-center justify-center transform active:scale-95 -mt-8 mb-1 z-10`}
+                style={{ backgroundColor: `var(--theme-primary, #2196F3)` }}
+              >
                 {item.i}
               </div>
-              <span className="text-[10px] font-bold text-indigo-800">
+              <span className={`text-[10px] font-bold ${theme.textClass}`}>
                 {item.l}
               </span>
             </>
           ) : (
             <>
-              <div className="text-slate-500 hover:text-indigo-600 active:text-indigo-600 relative mb-1">
+              <div className={`${theme.textClass} relative mb-1 transition-colors`}>
                 {item.i}
                 {item.badge > 0 && <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-600 rounded-full border border-white"></span>}
               </div>
-              <span className="text-[10px] font-bold text-slate-500">
+              <span className={`text-[10px] font-bold ${theme.textClass}`}>
                 {item.l}
               </span>
             </>
@@ -69,6 +74,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
 export const Header = ({ cartCount }) => {
 
   const router = useRouter();
+  const { theme, changeTheme } = useTheme();
   const { user, logout, institute, instituteAppSettingsModals } = useAuth();
   const { studentData } = useStudent();
   const [scrolled, setScrolled] = useState(false);
@@ -81,6 +87,7 @@ export const Header = ({ cartCount }) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [openMobileSubmenu, setOpenMobileSubmenu] = useState(null);
+  const [showThemeMenu, setShowThemeMenu] = useState(false);
 
   // Domain states for Lectures
   const [domains, setDomains] = useState([]);
@@ -98,7 +105,7 @@ export const Header = ({ cartCount }) => {
   const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
   const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
 
-  console.log('institute', institute, instituteAppSettingsModals);
+  // console.log('institute', institute, instituteAppSettingsModals);
 
 
   useEffect(() => {
@@ -284,12 +291,12 @@ export const Header = ({ cartCount }) => {
     >
       <button
         onClick={onClick}
-        className={`hover:${TEXT_GREEN} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+        className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
       >
         {label} {hasSub && <Icons.ChevronDown />}
       </button>
       {hasSub && (
-        <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-indigo-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === label ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+        <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === label ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
           {subItems && subItems.length > 0 ? (
             subItems.map((sub, i) => (
               <div
@@ -301,7 +308,7 @@ export const Header = ({ cartCount }) => {
                 }}
                 className="px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0 flex justify-between items-center group/item"
               >
-                <span className="text-xs font-semibold text-slate-600 group-hover/item:text-indigo-700">{sub.label}</span>
+                <span className={`text-xs font-semibold text-slate-600 group-hover/item:${theme.textClass}`}>{sub.label}</span>
                 {sub.tag && <span className="text-[9px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded font-bold">{sub.tag}</span>}
               </div>
             ))
@@ -346,7 +353,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "anm_logo.png"} alt="ANM Logo" className="h-16 md:h-16 object-contain" />
+                <img src={"anm_logo.png"} alt="ANM Logo" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 
@@ -364,14 +371,14 @@ export const Header = ({ cartCount }) => {
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button
-                  className={`hover:${TEXT_GREEN} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+                  className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
                 >
                   Lectures <Icons.ChevronDown />
                 </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-indigo-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                   {domainLoading ? (
                     <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
+                      <div className={`w-1.5 h-1.5 rounded-full ${theme.primaryClass} animate-bounce`}></div>
                       <span>Loading...</span>
                     </div>
                   ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
@@ -379,13 +386,13 @@ export const Header = ({ cartCount }) => {
                   ) : (
                     <>
                       {currentLevel === 'second' && (
-                        <button onClick={handleBackToFirstLevel} className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 mb-1 flex items-center gap-2 transition-all">
+                        <button onClick={handleBackToFirstLevel} className={`w-full text-left px-4 py-2.5 text-xs font-semibold text-white ${theme.primaryClass} ${theme.primaryHoverClass} mb-1 flex items-center gap-2 transition-all`}>
                           <Icons.ChevronLeft size={14} />
                           Back to Categories
                         </button>
                       )}
                       {currentLevel === 'first' && firstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? 'bg-indigo-500 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-indigo-700'}`}>
+                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
                           <span className="truncate">{domain.name}</span>
                           {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
                             <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${selectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
@@ -397,13 +404,13 @@ export const Header = ({ cartCount }) => {
                       ))}
                       {currentLevel === 'second' && selectedParentDomain && (
                         <>
-                          <div className="px-4 py-2 text-xs font-bold text-white bg-indigo-700 mb-1 flex items-center gap-2">
+                          <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>
                             <div className="w-2 h-4 rounded-full bg-white opacity-80"></div>
                             <span>{selectedParentDomain.name}</span>
                           </div>
                           {secondLevelDomains.map((domain) => (
-                            <button key={domain.id} onClick={() => handleSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${selectedSecondLevelDomain?.id === domain.id ? 'bg-indigo-400 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-indigo-700'}`}>
-                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${selectedSecondLevelDomain?.id === domain.id ? 'bg-white' : 'bg-indigo-400'}`}></span>
+                            <button key={domain.id} onClick={() => handleSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${selectedSecondLevelDomain?.id === domain.id ? `${theme.primaryClass} opacity-60 text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${selectedSecondLevelDomain?.id === domain.id ? 'bg-white' : theme.primaryClass}`}></span>
                               <span className="truncate">{domain.name}</span>
                             </button>
                           ))}
@@ -422,14 +429,14 @@ export const Header = ({ cartCount }) => {
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button
-                  className={`hover:${TEXT_GREEN} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+                  className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
                 >
                   Books <Icons.ChevronDown />
                 </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 border-indigo-700 shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Books' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Books' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                   {booksLoading ? (
                     <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
-                      <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></div>
+                      <div className={`w-1.5 h-1.5 rounded-full ${theme.primaryClass} animate-bounce`}></div>
                       <span>Loading...</span>
                     </div>
                   ) : booksCurrentLevel === 'first' && booksFirstLevelDomains.length === 0 ? (
@@ -437,13 +444,13 @@ export const Header = ({ cartCount }) => {
                   ) : (
                     <>
                       {booksCurrentLevel === 'second' && (
-                        <button onClick={handleBooksBackToFirstLevel} className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700 mb-1 flex items-center gap-2 transition-all">
+                        <button onClick={handleBooksBackToFirstLevel} className={`w-full text-left px-4 py-2.5 text-xs font-semibold text-white ${theme.primaryClass} ${theme.primaryHoverClass} mb-1 flex items-center gap-2 transition-all`}>
                           <Icons.ChevronLeft size={14} />
                           Back to Categories
                         </button>
                       )}
                       {booksCurrentLevel === 'first' && booksFirstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleBooksFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${booksSelectedFirstLevelDomain?.id === domain.id ? 'bg-amber-500 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-amber-700'}`}>
+                        <button key={domain.id} onClick={() => handleBooksFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${booksSelectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
                           <span className="truncate">{domain.name}</span>
                           {!booksShowSecondLevel && domain.child && domain.child.length > 0 && (
                             <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${booksSelectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
@@ -455,13 +462,13 @@ export const Header = ({ cartCount }) => {
                       ))}
                       {booksCurrentLevel === 'second' && booksSelectedParentDomain && (
                         <>
-                          <div className="px-4 py-2 text-xs font-bold text-white bg-amber-700 mb-1 flex items-center gap-2">
+                          <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>
                             <div className="w-2 h-4 rounded-full bg-white opacity-80"></div>
                             <span>{booksSelectedParentDomain.name}</span>
                           </div>
                           {booksSecondLevelDomains.map((domain) => (
-                            <button key={domain.id} onClick={() => handleBooksSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${booksSelectedSecondLevelDomain?.id === domain.id ? 'bg-amber-400 text-white font-bold' : 'text-slate-700 hover:bg-slate-50 hover:text-amber-700'}`}>
-                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${booksSelectedSecondLevelDomain?.id === domain.id ? 'bg-white' : 'bg-amber-400'}`}></span>
+                            <button key={domain.id} onClick={() => handleBooksSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${booksSelectedSecondLevelDomain?.id === domain.id ? `${theme.primaryClass} opacity-60 text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${booksSelectedSecondLevelDomain?.id === domain.id ? 'bg-white' : theme.primaryClass}`}></span>
                               <span className="truncate">{domain.name}</span>
                             </button>
                           ))}
@@ -477,6 +484,46 @@ export const Header = ({ cartCount }) => {
             </div>
 
             <div className="flex items-center gap-3">
+              {/* Theme Switcher - Hidden by default */}
+              <div className="relative hidden">
+                <button 
+                  onClick={() => setShowThemeMenu(!showThemeMenu)}
+                  className="p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
+                  </svg>
+                </button>
+                
+                {/* Theme Dropdown */}
+                {showThemeMenu && (
+                  <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+                    <div className="py-1">
+                      <button
+                        onClick={() => {
+                          changeTheme('purple');
+                          setShowThemeMenu(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
+                      >
+                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'rgb(55, 48, 163)' }}></div>
+                        <span>Purple</span>
+                      </button>
+                      <button
+                        onClick={() => {
+                          changeTheme('blue');
+                          setShowThemeMenu(false);
+                        }}
+                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
+                      >
+                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#2196F3' }}></div>
+                        <span>Blue</span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <button onClick={() => router.push('/cart')} className={`p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors`}>
                 <Icons.Cart />
                 {cartCount > 0 && <span className="absolute top-0 right-0 h-4 w-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-in zoom-in">{cartCount}</span>}
@@ -484,7 +531,7 @@ export const Header = ({ cartCount }) => {
 
               {user ? (
                 <div className="relative group hidden md:block">
-                  <button className={`${BRAND_GREEN_CLASS} hover:bg-brandGreenHover text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2`}>
+                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2`}>
                     <Icons.User size={16} />
                     {studentData?.firstName + " " + studentData?.lastName || user.name}
                   </button>
@@ -519,7 +566,7 @@ export const Header = ({ cartCount }) => {
               ) : (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="hidden md:block text-slate-700 hover:text-indigo-600 px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
                 >
                   Login
                 </button>
@@ -527,7 +574,7 @@ export const Header = ({ cartCount }) => {
 
               <button
                 onClick={() => document.getElementById('free-resources-section')?.scrollIntoView({ behavior: 'smooth' })}
-                className={`hidden md:block ${BRAND_GREEN_CLASS} hover:bg-brandGreenHover text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
+                className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
                 Download App
               </button>
             </div>
@@ -542,7 +589,8 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "anm_logo.png"} alt="Logo" className="h-20" />
+              <img src={"anm_logo.png"} alt="Logo" className="h-20" />
+               {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "anm_logo.png"} alt="Logo" className="h-20" /> */}
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>
@@ -560,7 +608,7 @@ export const Header = ({ cartCount }) => {
                 </button>
 
                 {/* Lectures */}
-                <div className="pt-2">
+                <div className="">
                   <button
                     onClick={() => {
                       if (openMobileSubmenu === 'courses') {
@@ -650,7 +698,7 @@ export const Header = ({ cartCount }) => {
                 </div>
 
                 {/* Books */}
-                <div className="pt-2">
+                <div className="">
                   <button
                     onClick={() => {
                       if (openMobileSubmenu === 'books') {
@@ -804,7 +852,7 @@ export const Header = ({ cartCount }) => {
               ) : (
                 <button
                   onClick={() => { setShowLoginModal(true); setMobileMenuOpen(false); }}
-                  className={`w-full px-4 py-3 font-bold text-white text-sm ${BRAND_GREEN_CLASS} hover:bg-indigo-700 rounded-lg transition flex items-center justify-center gap-2`}
+                  className={`w-full px-4 py-3 font-bold text-white text-sm ${theme.primaryClass} ${theme.primaryHoverClass} rounded-lg transition flex items-center justify-center gap-2`}
                 >
                   <Icons.User size={16} />
                   Login / Signup

@@ -1,12 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
+import { Footer } from '../../components/Shared/SharedComponents';
 
 const RefundPolicy = () => {
   const router = useRouter();
 
   return (
-    <div className="bg-white min-h-screen pb-20 md:pb-0">
+    <div className="bg-white min-h-screen pb-10 md:pb-0">
       {/* Header */}
       <div className="bg-gradient-to-br from-amber-50 to-white border-b border-slate-200">
         <div className={LAYOUT_PADDING}>
@@ -22,9 +23,6 @@ const RefundPolicy = () => {
             <p className="text-slate-600 text-sm">Last updated: January 16, 2026</p>
           </div>
         </div>
-      </div>
-
-      {/* Content */}
       <div className={LAYOUT_PADDING}>
         <div className="max-w-4xl mx-auto py-12">
           <div className="prose prose-slate max-w-none">
@@ -58,6 +56,8 @@ const RefundPolicy = () => {
           </div>
         </div>
       </div>
+      <Footer />
+    </div>
     </div>
   );
 };

@@ -9,8 +9,11 @@ import Endpoints from '../../config/endpoints';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { Footer } from '../../components/Shared/SharedComponents';
+import { useTheme } from '../../config/ThemeContext';
 
 const Store = () => {
+
+    const { theme } = useTheme();
 
     const FILTER_SELECTION_TYPE = {
         paper: 'multiple',   // checkbox
@@ -71,19 +74,37 @@ const Store = () => {
     const batchCount = selectedTag ? 1 : 0;
     const priceCount = priceSorting ? 1 : 0;
 
-    // Website brand colors (indigo theme)
-    const primaryColor = '#4338ca'; // indigo-700 (rgb(67, 56, 202))
-    const primaryColorLight = '#6366f1'; // indigo-500
-    const primaryColorDark = '#3730a3'; // indigo-800
+    // Website brand colors - get from theme
+    const primaryColor = theme.primary;
+    const primaryColorLight = theme.primary;
+    const primaryColorDark = theme.primaryHover;
 
     // Convert hex color to RGB
     const hexToRgb = (hex) => {
+        // Handle CSS variable or hex string
+        if (hex.includes('var(')) {
+            // For CSS variables, parse the theme primary color
+            const color = theme.primary;
+            if (color.includes('rgb')) {
+                const rgbMatch = color.match(/rgb\((\d+),\s*(\d+),\s*(\d+)/);
+                if (rgbMatch) {
+                    return {
+                        r: parseInt(rgbMatch[1], 10),
+                        g: parseInt(rgbMatch[2], 10),
+                        b: parseInt(rgbMatch[3], 10)
+                    };
+                }
+            }
+            // Fallback to blue theme
+            return { r: 33, g: 150, b: 243 };
+        }
+        
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
             r: parseInt(result[1], 16),
             g: parseInt(result[2], 16),
             b: parseInt(result[3], 16)
-        } : { r: 5, g: 150, b: 105 };
+        } : { r: 33, g: 150, b: 243 }; // Blue theme default
     };
 
     const ChevronDownIcon = () => (

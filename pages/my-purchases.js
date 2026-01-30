@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import MyPurchases from '../page-components/FreeResources/MyPurchase';
+import { Footer } from '../components/Shared/SharedComponents';
 
 export default function MyPurchasesPage() {
   return (

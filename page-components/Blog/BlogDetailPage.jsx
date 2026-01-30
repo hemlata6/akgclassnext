@@ -144,7 +144,7 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
 
     return (
         <>
-            <div className="bg-white min-h-screen pb-20">
+            <div className="bg-white min-h-screen">
                 <article className="max-w-3xl mx-auto px-4 py-12">
                     <button onClick={() => router.push('/blog')} className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-indigo-700 mb-6 transition-colors">
                         <Icons.Back /> Back to Blogs

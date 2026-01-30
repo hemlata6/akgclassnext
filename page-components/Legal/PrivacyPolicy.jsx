@@ -1,12 +1,13 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
+import { Footer } from '../../components/Shared/SharedComponents';
 
 const PrivacyPolicy = () => {
     const router = useRouter();
 
     return (
-        <div className="bg-white min-h-screen pb-20 md:pb-0">
+        <div className="bg-white min-h-screen pb-16 md:pb-0">
             {/* Header */}
             <div className="bg-gradient-to-br from-blue-50 to-white border-b border-slate-200">
                 <div className={LAYOUT_PADDING}>
@@ -286,6 +287,7 @@ const PrivacyPolicy = () => {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };
