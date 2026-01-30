@@ -92,8 +92,8 @@ export const PromoBanners = () => {
     };
 
     return (
-        <section className="py-4 md:py-4 overflow-hidden bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
-            <div className="w-full md:max-w-7xl md:mx-auto relative">
+        <section className="py-4 md:py-6 px-3 sm:px-4 md:px-0 overflow-hidden bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
+            <div className="w-full md:max-w-7xl md:mx-auto relative md:px-4 lg:px-8">
                 {/* Navigation Buttons - Desktop */}
                 <button
                     onClick={prevSlide}
@@ -110,13 +110,13 @@ export const PromoBanners = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto gap-3 md:gap-6 pb-0 snap-x snap-mandatory scroll-smooth px-3 md:px-4 lg:px-8"
+                    className="flex overflow-x-auto gap-3 md:gap-6 pb-0 snap-x snap-mandatory scroll-smooth"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
                     {slides.map((slide, index) => (
                         <div
                             key={index}
-                            className={`min-w-full md:min-w-[85%] h-[180px] sm:h-[220px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer shrink-0 ${slide.bg}`}
+                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer ${slide.bg}`}
                         >
                             <img
                                 src={slide.mobileSrc}
