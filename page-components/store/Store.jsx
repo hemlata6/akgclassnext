@@ -765,11 +765,12 @@ const Store = () => {
     };
 
     const handleCardClick = (course) => {
+        console.log('course', course);
+        
         if (course?.type === "books") {
             router.push(`/book/${course.id}`);
-
         } else {
-            router.push(`/course/${course.id}`, { state: { course } });
+            router.push(`/course/${course.id}`);
         }
     };
 

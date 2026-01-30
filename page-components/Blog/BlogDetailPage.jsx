@@ -8,20 +8,17 @@ import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
 import Network from '../../config/Network';
 
-export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId, slug: propSlug, initialBlogData }) => {
+export const BlogDetailPage = ({ blogData, error, cId }) => {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
+    const { slug } = router.query;
 
-    // Get params from props (for dynamic route) or router.query (for direct access)
-    const courseId = propCourseId || router.query.courseId;
-    const parentId = propParentId || router.query.parentId;
-    const slug = propSlug || router.query.slug;
+    const [blog, setBlog] = useState(blogData || null);
+    const [loading, setLoading] = useState(!blogData);
 
-    const [blog, setBlog] = useState(initialBlogData || null);
-    const [loading, setLoading] = useState(!initialBlogData);
+    // console.log('Blog params:', { cId, slug, hasBlogData: !!blogData });
+    // console.log('blogblogblogblog', blog);
 
-    console.log('Blog params:', { courseId, parentId, slug, hasInitialData: !!initialBlogData });
-    console.log('blogblogblogblog', blog);
 
     // Helper function to truncate text to N words
     const truncateToWords = (text, wordLimit = 50) => {
@@ -33,71 +30,37 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
         return words.slice(0, wordLimit).join(' ') + '... read more';
     };
 
-    // Slugify helper function for clean URLs
-    const slugify = (str) => {
-        if (!str) return '';
-        return str.toLowerCase()
-            .replace(/[^a-z0-9]+/g, '-')
-            .replace(/^-|-$/g, '');
-    };
-
-    // Decode and slugify the title from URL params
-    const normalizedUrlSlug = slugify(slug);
-
     useEffect(() => {
-        // If we already have initial data from SSR, skip API call
-        if (initialBlogData) {
-            setBlog(initialBlogData);
+        if (blogData) {
+            setBlog(blogData);
             setLoading(false);
             return;
         }
+        if (cId) {
 
-        if (slug && courseId && parentId !== undefined) {
-            getMergedSchedules();
+            fetchBlogDetail();
         }
-    }, [slug, courseId, parentId, initialBlogData]);
+    }, [cId, blogData]);
 
-    const getMergedSchedules = async () => {
+    const fetchBlogDetail = async () => {
+
+        setLoading(true);
         try {
-            setLoading(true);
-            // Convert parentId: if it's "0" or not provided, use 0, otherwise parse as integer
-            const apiParentId = !parentId || parentId === "0" ? 0 : parseInt(parentId);
 
-            let response = await Network.fetchFreePublicScheduleApi(courseId, apiParentId);
-            // butter.page.retrieve(fetchFreePublicScheduleApi(cId, apiParentId), "simple-page")
-            //     .then(response => {
-            //         console.log(response.data);
-            //     });
-            const blogList = response?.contentList;
-            const blogFilter = blogList?.filter(item => item.entityType === 'blog');
+            const response = await Network.fetchBlogDetailApi(cId);
 
-            // Find the blog that matches the title
-            const matchedBlog = blogFilter?.find(item => {
-                const itemSlug = slugify(item.title);
-                // Match against the normalized slug, original slug, or exact title
-                return itemSlug === normalizedUrlSlug ||
-                    itemSlug === slugify(slug) ||
-                    item.title === slug ||
-                    item.title === decodeURIComponent(slug);
-            });
 
-            if (matchedBlog) {
-                console.log('matchedBlog', matchedBlog);
+            const blogDetail = response?.content;
 
-                setBlog(matchedBlog);
-                // Signal to react-snap that page is ready
-                if (window && typeof window !== 'undefined') {
-                    window.snapSaveState = () => ({});
-                }
+            if (response && response.errorCode === 0 && blogDetail?.id) {
+                setBlog(blogDetail);
             } else {
-                console.log('No matching blog found');
-                // Optionally redirect to blog list if no match found
-                // router.push('/blog');
+                setBlog(null);
             }
             setLoading(false);
-        } catch (err) {
-            console.error('Error fetching schedule:', err);
+        } catch (error) {
             setLoading(false);
+            console.error('Error fetching blog:', error);
         }
     };
 
@@ -172,8 +135,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
     };
 
     // Get current URL - use router for consistent URL on server and client
-    const blogSlug = `${courseId}-${parentId}-${slug}`;
-    const currentUrl = `https://anmclass.netlify.app/blog/${blogSlug}`;
+    const currentUrl = `https://anmclass.netlify.app/blog/${cId}/${slug}`;
     const blogImage = getBlogImage();
     const metaDescription = getMetaDescription();
     const blogTitle = blog.seo_title || blog.title || 'Blog Post';

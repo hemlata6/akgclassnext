@@ -20,23 +20,30 @@ export const BlogListPage = () => {
   const [courseId, setCourseId] = useState(null);
   const [parentId, setParentId] = useState(null);
   const [navigationHistory, setNavigationHistory] = useState([]);
+  const [currentPageSize, setCurrentPageSize] = useState(6);
+  const [hasMoreBlogs, setHasMoreBlogs] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
 
-  console.log('courseId', courseId, parentId);
-  console.log('selectedScheduleList', selectedScheduleList);
-
+  // console.log('courseId', courseId, parentId);
+  // console.log('selectedScheduleList', selectedScheduleList);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     getAllCourses();
   }, []);
 
-
   useEffect(() => {
     if (coursesList?.length > 0) {
       // Automatically select first course and fetch its content
       const firstCourse = coursesList[0];
+
       setCourseId(firstCourse.id);
       setParentId(null);
+      setCurrentPageSize(6);
+      setHasMoreBlogs(true);
+      // Get all blogs from getCourseContent API
+      getCourseContent(firstCourse.id, 6);
+      // Get folders from getMergedSchedules API
       getMergedSchedules(firstCourse.id, null);
       setBreadcrumb([
         { id: null, name: 'Courses' },
@@ -45,11 +52,59 @@ export const BlogListPage = () => {
     }
   }, [coursesList]);
 
+  const getCourseContent = async (courseId, pageSize = 3) => {
+    try {
+      if (pageSize > 3) {
+        setIsLoadingMore(true);
+      }
+
+      const body = {
+        "courseId": courseId,
+        "contentTypes": [
+          "blog"
+        ],
+        "page": 0,
+        "pageSize": pageSize
+      }
+      const response = await Network.fetchAllContentFromCourse(body);
+      if (response?.errorCode === 0 && response?.contentList) {
+        // Display all blogs from this API
+        const blogs = response.contentList.filter(item => item.entityType === 'blog');
+
+        // Sort blogs by date (latest first)
+        const sortedBlogs = blogs.sort((a, b) => {
+          const dateA = new Date(a.blog?.updatedAt || 0);
+          const dateB = new Date(b.blog?.updatedAt || 0);
+          return dateB - dateA; // Descending order (newest first)
+        });
+
+        // Always replace with the full list from server
+        setSelectedScheduleList(sortedBlogs);
+
+        // Check if there are more blogs to load
+        setHasMoreBlogs(blogs.length === pageSize);
+        setCurrentPageSize(pageSize);
+      } else {
+        setHasMoreBlogs(false);
+      }
+
+    }
+    catch (err) {
+      console.error('Error fetching course content:', err);
+      setError('Failed to load course content');
+      setHasMoreBlogs(false);
+    } finally {
+      if (pageSize > 3) {
+        setIsLoadingMore(false);
+      }
+    }
+  };
+
   const getAllCourses = async () => {
     try {
       const response = await Network.getFreeCourseList(instId);
       const courses = response?.courses || [];
-      const filteredCourses = courses.filter(course => course?.active === true);
+      const filteredCourses = courses.filter(course => course?.active === true && course?.currentAffair === true);
       setCoursesList(filteredCourses);
       setError(null);
     } catch (err) {
@@ -71,26 +126,50 @@ export const BlogListPage = () => {
         const blogs = content.filter(item => item.entityType === 'blog');
         const foldersData = content.filter(item => item.entityType === 'folder' && item?.drip === false);
 
-        // Display only blogs in the card grid
-        setSelectedScheduleList(blogs);
+        // Sort blogs by date (latest first)
+        const sortedBlogs = blogs.sort((a, b) => {
+          const dateA = new Date(a.blog?.updatedAt || 0);
+          const dateB = new Date(b.blog?.updatedAt || 0);
+          return dateB - dateA; // Descending order (newest first)
+        });
+
+        // If folderId is provided (user clicked on a folder), show blogs from that folder
+        // Otherwise, only set folders (blogs come from getCourseContent)
+        if (folderId) {
+          setSelectedScheduleList(sortedBlogs);
+        }
         setFolders(foldersData);
       } else if (response?.data) {
         const content = Array.isArray(response.data) ? response.data : [];
         const blogs = content.filter(item => item.entityType === 'blog');
         const foldersData = content.filter(item => item.entityType === 'folder' && item?.drip === false);
 
-        // Display only blogs in the card grid
-        setSelectedScheduleList(blogs);
+        // Sort blogs by date (latest first)
+        const sortedBlogs = blogs.sort((a, b) => {
+          const dateA = new Date(a.blog?.updatedAt || 0);
+          const dateB = new Date(b.blog?.updatedAt || 0);
+          return dateB - dateA; // Descending order (newest first)
+        });
+
+        // If folderId is provided (user clicked on a folder), show blogs from that folder
+        // Otherwise, only set folders (blogs come from getCourseContent)
+        if (folderId) {
+          setSelectedScheduleList(sortedBlogs);
+        }
         setFolders(foldersData);
       } else {
-        setSelectedScheduleList([]);
+        if (folderId) {
+          setSelectedScheduleList([]);
+        }
         setFolders([]);
       }
       setError(null);
     } catch (err) {
       console.error('Error fetching schedule:', err);
       setError('Failed to load content');
-      setSelectedScheduleList([]);
+      if (folderId) {
+        setSelectedScheduleList([]);
+      }
       setFolders([]);
     } finally {
       setLoading(false);
@@ -137,9 +216,7 @@ export const BlogListPage = () => {
     if (item?.entityType === 'blog') {
       // Create URL-friendly slug from title
       const titleSlug = slugify(item.title || '');
-      // Combine courseId, parentId, and slug with hyphens for the route
-      const combinedSlug = `${courseId}-${parentId ? parentId : 0}-${titleSlug}`;
-      router.push(`/blog/${combinedSlug}`);
+      router.push(`/blog/${item?.id}/${titleSlug}`);
       return;
     }
 
@@ -158,9 +235,12 @@ export const BlogListPage = () => {
 
   const handleFolderSelect = (folder) => {
     if (!folder) {
-      // Reset to show all content from course root
+      // Reset to show all blogs from getCourseContent API
       setSelectedFolder(null);
       setParentId(null);
+      setCurrentPageSize(6);
+      setHasMoreBlogs(true);
+      getCourseContent(courseId, 6);
       getMergedSchedules(courseId, null);
       setBreadcrumb(prev => prev.slice(0, 2));
       return;
@@ -201,7 +281,15 @@ export const BlogListPage = () => {
     setBreadcrumb(previousState.breadcrumb);
 
     // Fetch content for previous state
-    getMergedSchedules(courseId, previousState.parentId || null);
+    // If going back to root (no parentId), show all blogs from getCourseContent
+    if (!previousState.parentId) {
+      setCurrentPageSize(6);
+      setHasMoreBlogs(true);
+      getCourseContent(courseId, 6);
+      getMergedSchedules(courseId, null);
+    } else {
+      getMergedSchedules(courseId, previousState.parentId);
+    }
   };
 
   const handleBreadcrumbClick = (index) => {
@@ -215,14 +303,25 @@ export const BlogListPage = () => {
       setFolders([]);
       setBreadcrumb([{ id: null, name: 'Courses' }]);
     } else if (index === 1) {
+      // Going back to course root - show all blogs from getCourseContent
       setParentId(null);
       setSelectedFolder(null);
+      setCurrentPageSize(6);
+      setHasMoreBlogs(true);
+      getCourseContent(crumb.id, 6);
       getMergedSchedules(crumb.id, null);
       setBreadcrumb(prev => prev.slice(0, 2));
     } else {
       setSelectedFolder(null);
       getMergedSchedules(courseId, crumb.id);
       setBreadcrumb(prev => prev.slice(0, index + 1));
+    }
+  };
+
+  const handleLoadMore = () => {
+    if (!isLoadingMore && hasMoreBlogs && courseId && !selectedFolder && !parentId) {
+      const newPageSize = currentPageSize + 3;
+      getCourseContent(courseId, newPageSize);
     }
   };
 
@@ -239,7 +338,7 @@ export const BlogListPage = () => {
       <div className="bg-white border-b border-slate-200 pt-10 pb-16">
         <div className={LAYOUT_PADDING}>
           <div className="text-center max-w-2xl mx-auto">
-            <span className="text-indigo-600 font-bold tracking-widest text-xs uppercase mb-2 block">
+            <span className="text-emerald-600 font-bold tracking-widest text-xs uppercase mb-2 block">
               Knowledge Hub
             </span>
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
@@ -258,7 +357,7 @@ export const BlogListPage = () => {
           <div className="mb-6">
             <button
               onClick={handleBack}
-              className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-indigo-700 transition-colors">
+              className="flex items-center gap-2 text-sm font-bold text-slate-600 hover:text-emerald-700 transition-colors">
               <Icons.Back />
               Back
             </button>
@@ -272,8 +371,8 @@ export const BlogListPage = () => {
               <button
                 onClick={() => handleFolderSelect(null)}
                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition-all border-2 ${!selectedFolder
-                  ? 'bg-indigo-700 text-white border-indigo-700 shadow-lg'
-                  : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-700 hover:text-indigo-700'
+                  ? 'bg-emerald-700 text-white border-emerald-700 shadow-lg'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-700 hover:text-emerald-700'
                   }`}
               >
                 All Content
@@ -283,8 +382,8 @@ export const BlogListPage = () => {
                   key={folder.id}
                   onClick={() => handleFolderSelect(folder)}
                   className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm whitespace-nowrap transition-all border-2 ${selectedFolder?.id === folder.id
-                    ? 'bg-indigo-700 text-white border-indigo-700 shadow-lg'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-indigo-700 hover:text-indigo-700'
+                    ? 'bg-emerald-700 text-white border-emerald-700 shadow-lg'
+                    : 'bg-white text-slate-600 border-slate-200 hover:border-emerald-700 hover:text-emerald-700'
                     }`}
                 >
                   <Icons.Folder className="w-4 h-4" />
@@ -341,9 +440,9 @@ export const BlogListPage = () => {
                 <div className="p-5">
                   <div className="flex items-center gap-3 text-[10px] text-slate-400 mb-3 font-bold uppercase">
                     <span className="flex items-center gap-1">
-                      <Icons.Calendar /> {item.date || item.createdAt ? (() => {
+                      <Icons.Calendar /> {item.date || item.blog?.updatedAt ? (() => {
                         try {
-                          const dateStr = item.createdAt || item.date;
+                          const dateStr = item.blog?.updatedAt || item.date;
                           return new Date(dateStr).toLocaleDateString('en-US', {
                             month: 'short',
                             day: 'numeric',
@@ -354,17 +453,17 @@ export const BlogListPage = () => {
                         }
                       })() : 'Recently Added'}
                     </span>
-                    {item.author && typeof item.author === 'string' && (
+                    {item?.blog?.author && typeof item?.blog?.author === 'string' && (
                       <>
                         <span>•</span>
                         <span className="flex items-center gap-1">
-                          <Icons.User /> {item.author}
+                          <Icons.User /> {item?.blog?.author}
                         </span>
                       </>
                     )}
                   </div>
 
-                  <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-indigo-700 transition-colors line-clamp-2">
+                  <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
                     {String(item.title || item.name || 'Untitled')}
                   </h3>
 
@@ -373,13 +472,39 @@ export const BlogListPage = () => {
                     {/* {String(item.desc || item.description || 'Click to explore more...')} */}
                   </p>
 
-                  <button className="mt-4 text-indigo-700 text-xs font-bold flex items-center gap-1 group/btn">
+                  <button className="mt-4 text-emerald-700 text-xs font-bold flex items-center gap-1 group/btn">
                     {item.entityType === 'folder' ? 'Open Folder' : 'Read More'}{' '}
                     <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
                   </button>
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Load More Button - Only show when viewing all content (not inside a folder) */}
+        {!selectedFolder && !parentId && hasMoreBlogs && selectedScheduleList.length > 0 && (
+          <div className="mt-12 text-center">
+            <button
+              onClick={handleLoadMore}
+              disabled={isLoadingMore}
+              className="inline-flex items-center gap-2 px-8 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg"
+            >
+              {isLoadingMore ? (
+                <>
+                  <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Loading...
+                </>
+              ) : (
+                <>
+                  Load More Blogs
+                  <Icons.ChevronRight className="w-4 h-4" />
+                </>
+              )}
+            </button>
           </div>
         )}
       </div>

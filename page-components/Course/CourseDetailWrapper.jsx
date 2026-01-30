@@ -23,6 +23,7 @@ function CourseDetailWrapper() {
       try {
         setLoading(true);
         const response = await Network.getFreeCourseList(instId);
+        
         const courses = response?.courses || response || [];
         // Convert courseId to number for comparison
         const course = courses.find(c => c.id === parseInt(courseId));

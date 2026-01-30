@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/anmclass/adminUploads/anm-logo-circle-white.webp" />
-        <link rel="apple-touch-icon" href="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/anmclass/adminUploads/anm-logo-circle-white.webp" />
+        <link rel="icon" href="/anm_logo.png" />
+        <link rel="apple-touch-icon" href="/anm_logo.png" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />

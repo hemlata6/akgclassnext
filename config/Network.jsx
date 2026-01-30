@@ -113,7 +113,35 @@ export default class Network {
   static studentEditProfilePicUrl = Endpoints.baseURL + "student/edit-profile-pic";
   static studentFetchQuiz = Endpoints.baseURL + "student/test/fetch-quiz";
   static studentFetchGallery = Endpoints.baseURL + "/admin/fetch/gallery/";
+  static studentFetchAllContentUrl = Endpoints.baseURL + "admin/course/fetch-content";
+  static studentFetchBlogContentUrl = Endpoints.baseURL + "student/course/fetchCourseContent/";
+  static studentEnrolledAccessUrl = Endpoints.baseURL + "student/get-access";
 
+
+   static async fetchBlogDetailApi(contentId) {
+
+    let requestOptions = {
+      withCredentials: false,
+    };
+    const response = await axios.get(this.studentFetchBlogContentUrl + contentId, requestOptions);
+    return response.data;
+  };
+  
+  static async fetchAllContentFromCourse(body) {
+    try {
+      let requestOptions = {
+        // headers: { "X-Auth": auth },
+        withCredentials: false,
+      };
+      const response = await axios.post(this.studentFetchAllContentUrl, body, requestOptions);
+      return response.data;
+    } catch (error) {
+      // Additional check for this critical API
+      if (error.response?.status === 401) {
+      }
+      throw error;
+    }
+  };
 
   static async fetchQuizs(auth, body) {
     let requestOptions = {
