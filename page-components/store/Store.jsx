@@ -703,7 +703,7 @@ const Store = () => {
         try {
             setLoading(true);
             const response = await Network.getFreeCourseList(instId);
-            const activeCourses = (response?.courses || []).filter(c => c.active === true);
+            const activeCourses = (response?.courses || []).filter(c => c.active === true && c.paid === true);
 
             setCourseList(activeCourses);
             setAllCourses(activeCourses);

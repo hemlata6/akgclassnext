@@ -110,7 +110,7 @@ export const CoursesSection = ({ onAddToCart }) => {
             // Filter courses that are active AND have "Featured Course" tag
             const activeCourses = Array.isArray(courses)
                 ? courses.filter(c =>
-                    c.active 
+                    c.active && c.paid === true
                     // && c.tags &&
                     // Array.isArray(c.tags)
                     // && c.tags.some(tag => tag.tag === "Featured Course")
@@ -345,10 +345,12 @@ export const CoursesSection = ({ onAddToCart }) => {
                                                                 setShowConfigModal(true);
                                                             }
                                                         }}
-                                                        className={`${cartCourses.some(item => item.id === course.id)
-                                                            ? `${theme.primaryClass} shadow-lg scale-110`
-                                                            : theme.primaryClass
-                                                            } text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md`}
+                                                        className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                                                        style={{
+                                                            backgroundColor: theme?.primary || '#2196F3',
+                                                            transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
+                                                            boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                        }}
                                                     >
                                                         {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
                                                     </button>

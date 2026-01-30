@@ -7,7 +7,7 @@ export const AboutSection = () => (
       <div className="flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-4/12 relative">
           <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-slate-100">
-            <img src="aneesnoor.webp" alt="CA Aneesh Noor Mohammed" className="w-full h-full object-cover" />
+            <img src="aneesnoor.webp" alt="CA Aneesh Noor Mohammed" className="w-full object-cover" />
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
               <p className="font-bold text-lg">CA Aneesh Noor Mohammed</p>
               <p className="text-emerald-300 text-[10px] uppercase tracking-widest">Founder, ANM Class</p>
