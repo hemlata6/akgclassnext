@@ -18,6 +18,8 @@ export default function BlogDetail({ blogData, error }) {
         return words.slice(0, wordLimit).join(' ') + '...';
     };
 
+    console.log('blogData', blogData);
+
 
     const getBlogImage = () => {
         if (!blogData) return 'https://anmclass.netlify.app/logo.png';
@@ -43,10 +45,7 @@ export default function BlogDetail({ blogData, error }) {
     const blogImage = getBlogImage();
     const blogTitle = blogData?.title || blogData?.blog?.title || 'Blog Post';
     const blogDescription = truncateToWords(
-        blogData?.description ||
-        blogData?.blog?.description ||
-        blogData?.desc ||
-        blogData?.blog?.desc ||
+        blogData?.blog?.blog ||
         'Read our latest blog post',
         50
     );
