@@ -108,10 +108,10 @@ export const CoursesSection = ({ onAddToCart }) => {
             // Filter courses that are active AND have "Featured Course" tag
             const activeCourses = Array.isArray(courses)
                 ? courses.filter(c =>
-                    c.active &&
-                    c.tags &&
-                    Array.isArray(c.tags)
-                    && c.tags.some(tag => tag.tag === "Featured Course")
+                    c.active 
+                    // && c.tags &&
+                    // Array.isArray(c.tags)
+                    // && c.tags.some(tag => tag.tag === "Featured Course")
                 )
                 : [];
             console.log('activeCourses', activeCourses);

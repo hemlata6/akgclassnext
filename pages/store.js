@@ -6,7 +6,7 @@ export default function StorePage() {
   return (
     <>
       <Head>
-        <title>Store - AKG Classes</title>
+        <title>Store - ANM Classes</title>
         <meta name="description" content="Browse our collection of courses and books" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

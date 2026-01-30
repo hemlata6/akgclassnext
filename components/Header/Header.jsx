@@ -8,6 +8,7 @@ import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
 import LoginModal from '../Auth/LoginModal';
 import SignupModal from '../Auth/SignupModal';
+import Endpoints from '@/config/endpoints';
 
 export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
@@ -66,8 +67,9 @@ export const StickyMobileFooter = ({ cartCount }) => {
 };
 
 export const Header = ({ cartCount }) => {
+
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, institute, instituteAppSettingsModals } = useAuth();
   const { studentData } = useStudent();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -96,7 +98,10 @@ export const Header = ({ cartCount }) => {
   const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
   const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
 
-  React.useEffect(() => {
+  console.log('institute', institute, instituteAppSettingsModals);
+
+
+  useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handler);
     return () => window.removeEventListener('scroll', handler);
@@ -341,7 +346,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" alt="AKG Logo" className="h-16 md:h-16 object-contain" />
+                <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "anm_logo.png"} alt="ANM Logo" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 
@@ -537,7 +542,7 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <img src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp" alt="Logo" className="h-20" />
+              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "anm_logo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

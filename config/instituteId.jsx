@@ -23,6 +23,9 @@
 // const instId = 364;
 
 // akg
-const instId = 376;
+// const instId = 376;
+
+// anm
+const instId = 367;
 
 export default instId;

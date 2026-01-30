@@ -1,7 +1,7 @@
 {
-  "name": "akgclass",
+  "name": "anmclass",
   "version": "1.0.0",
-  "description": "AKG Classes | AKG Classes - CA Akshansh Garg - Next.js",
+  "description": "ANM Classes | ANM Classes - CA Aneesh Noor Mohammed - Next.js",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,9 +11,9 @@
     "deploy:netlify": "netlify deploy --prod",
     "deploy:preview": "netlify deploy",
     "pm2:start": "pm2 start ecosystem.config.js",
-    "pm2:restart": "pm2 restart akgclass",
-    "pm2:stop": "pm2 stop akgclass",
-    "pm2:logs": "pm2 logs akgclass"
+    "pm2:restart": "pm2 restart anmclass",
+    "pm2:stop": "pm2 stop anmclass",
+    "pm2:logs": "pm2 logs anmclass"
   },
   "dependencies": {
     "axios": "^1.13.2",

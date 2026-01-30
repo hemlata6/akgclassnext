@@ -36,7 +36,7 @@ export default function BlogDetail({ blogData, error }) {
   };
 
   const getBlogImage = () => {
-    if (!blogData) return 'https://akgclass.netlify.app/logo.png';
+    if (!blogData) return 'https://anmclass.netlify.app/logo.png';
     
     // Helper to fix old CDN URLs
     const fixCdnUrl = (url) => {
@@ -52,7 +52,7 @@ export default function BlogDetail({ blogData, error }) {
     if (blogData.thumb) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.thumb);
     if (blogData.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.logo);
     // Default fallback
-    return 'https://akgclass.netlify.app/logo.png';
+    return 'https://anmclass.netlify.app/logo.png';
   };
 
   const getBlogContent = () => {
@@ -60,15 +60,15 @@ export default function BlogDetail({ blogData, error }) {
     return blogData.blog?.blog || blogData.body || blogData.desc || blogData.description || blogData.summary || '';
   };
 
-  const blogTitle = blogData?.seo_title || blogData?.title || 'Blog Post - AKG Classes';
+  const blogTitle = blogData?.seo_title || blogData?.title || 'Blog Post - ANM Classes';
   const blogDescription = blogData ? truncateToWords(
     blogData.meta_description || blogData.summary || blogData.desc || blogData.description || getBlogContent(),
     30
-  ) : 'Read insightful articles on Financial Reporting, Ind AS, and Exam Strategies at AKG Classes';
+  ) : 'Read insightful articles on Financial Reporting, Ind AS, and Exam Strategies at ANM Classes';
   const blogImage = getBlogImage();
-  const currentUrl = `https://akgclass.netlify.app/blog/${slug}/`;
+  const currentUrl = `https://anmclass.netlify.app/blog/${slug}/`;
   const publishedDate = blogData?.blog?.createdAt || blogData?.published || blogData?.createdAt || new Date().toISOString();
-  const authorName = blogData?.author?.first_name || blogData?.author || 'AKG Classes';
+  const authorName = blogData?.author?.first_name || blogData?.author || 'ANM Classes';
 
   // Structured data for SEO
   const structuredData = {
@@ -85,10 +85,10 @@ export default function BlogDetail({ blogData, error }) {
     },
     "publisher": {
       "@type": "Organization",
-      "name": "AKG Classes",
+      "name": "ANM Classes",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://akgclass.netlify.app/logo.png"
+        "url": "https://anmclass.netlify.app/logo.png"
       }
     }
   };
@@ -112,7 +112,7 @@ export default function BlogDetail({ blogData, error }) {
         <meta property="og:image:alt" content={blogTitle} />
         <meta property="og:url" content={currentUrl} />
         <meta property="og:type" content="article" />
-        <meta property="og:site_name" content="AKG Classes" />
+        <meta property="og:site_name" content="ANM Classes" />
         <meta property="og:locale" content="en_US" />
         <meta property="article:published_time" content={publishedDate} />
         <meta property="article:modified_time" content={publishedDate} />
@@ -125,12 +125,12 @@ export default function BlogDetail({ blogData, error }) {
         <meta name="twitter:description" content={blogDescription} />
         <meta name="twitter:image" content={blogImage} />
         <meta name="twitter:image:alt" content={blogTitle} />
-        <meta name="twitter:creator" content="@akgclasses" />
-        <meta name="twitter:site" content="@akgclasses" />
+        <meta name="twitter:creator" content="@anmclass" />
+        <meta name="twitter:site" content="@anmclass" />
         
         {/* Additional SEO tags */}
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="keywords" content="AKG Classes, Financial Reporting, Ind AS, CA Final, Exam Preparation" />
+        <meta name="keywords" content="ANM Classes, Financial Reporting, Ind AS, CA Final, Exam Preparation" />
 
         {/* JSON-LD Structured Data */}
         <script 

@@ -6,7 +6,7 @@ export default function FreeResources() {
   return (
     <>
       <Head>
-        <title>Free Resources - AKG Classes</title>
+        <title>Free Resources - ANM Class</title>
         <meta name="description" content="Access free study materials and resources" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

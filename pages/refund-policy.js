@@ -6,7 +6,7 @@ export default function Refund() {
   return (
     <>
       <Head>
-        <title>Refund Policy - AKG Classes</title>
+        <title>Refund Policy - ANM Classes</title>
         <meta name="description" content="Read our refund policy" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

@@ -91,7 +91,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                 setActiveCoursesList(ActivefilteredCourses);
 
                 const filteredCourses = course.filter(course =>
-                    course?.active === true &&
+                    course?.active === true && course?.paid === false &&
                     course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
                 );
 
@@ -123,12 +123,12 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
             const response = await Network.getFreeCourseList(instId);
             const course = response?.courses || [];
             const ActivefilteredCourses = course.filter(course =>
-                course?.active === true
+                course?.active === true && course?.paid === false
             );
             setActiveCoursesList(ActivefilteredCourses);
 
             const filteredCourses = course.filter(course =>
-                course?.active === true &&
+                course?.active === true && course?.paid === false &&
                 course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
             );
 

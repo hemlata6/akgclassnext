@@ -75,14 +75,14 @@ export const HeroSection = ({ onExploreClick }) => {
                     <div className="grid grid-cols-2 gap-4 w-full">
                         <div className="bg-white p-4 rounded-2xl shadow-xl shadow-indigo-500/5 border border-slate-200 text-center transform hover:scale-105 transition-transform duration-300">
                             <div className="w-full aspect-square bg-gradient-to-br from-slate-800 to-slate-900 rounded-xl mb-3 flex items-center justify-center overflow-hidden">
-                                <img src={slides[0]?.url || "https://placehold.co/400x400/1e293b/FFF?text=AG"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="CA Akshansh" />
+                                <img src={slides[0]?.url || "https://placehold.co/400x400/1e293b/FFF?text=ANM"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="CA Aneesh Noor Mohammed" />
                             </div>
                             <p className="font-bold text-slate-900 text-sm">{slides[0]?.title}</p>
                             {/* <p className="text-[10px] text-indigo-700 font-bold uppercase tracking-wide">IDT Expert</p> */}
                         </div>
                         <div className="bg-white p-4 rounded-2xl shadow-xl shadow-slate-500/5 border border-slate-200 text-center mt-8 transform hover:scale-105 transition-transform duration-300">
                             <div className="w-full aspect-square bg-gradient-to-br from-slate-600 to-slate-700 rounded-xl mb-3 flex items-center justify-center overflow-hidden">
-                                <img src={slides[1]?.url || "https://placehold.co/400x400/475569/FFF?text=MK"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="CA Muskan" />
+                                <img src={slides[1]?.url || "https://placehold.co/400x400/475569/FFF?text=JK"} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500" alt="CA Jeyasree Krishnamoorthy" />
                             </div>
                             <p className="font-bold text-slate-900 text-sm">{slides[1]?.title}</p>
                             {/* <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wide">AFM Expert</p> */}

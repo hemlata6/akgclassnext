@@ -144,7 +144,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
 
     // Get blog image with fallback - checks all possible image properties
     const getBlogImage = () => {
-        if (!blog) return 'https://akgclass.netlify.app/logo.png';
+        if (!blog) return 'https://anmclass.netlify.app/logo.png';
 
         // Helper to fix old CDN URLs
         const fixCdnUrl = (url) => {
@@ -162,7 +162,7 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
         if (blog.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blog.logo);
 
         // Default fallback
-        return 'https://akgclass.netlify.app/logo.png';
+        return 'https://anmclass.netlify.app/logo.png';
     };
 
     // Get blog description with 50 word limit
@@ -173,12 +173,12 @@ export const BlogDetailPage = ({ courseId: propCourseId, parentId: propParentId,
 
     // Get current URL - use router for consistent URL on server and client
     const blogSlug = `${courseId}-${parentId}-${slug}`;
-    const currentUrl = `https://akgclass.netlify.app/blog/${blogSlug}`;
+    const currentUrl = `https://anmclass.netlify.app/blog/${blogSlug}`;
     const blogImage = getBlogImage();
     const metaDescription = getMetaDescription();
     const blogTitle = blog.seo_title || blog.title || 'Blog Post';
     const publishedDate = blog?.blog?.createdAt || blog?.createdAt || new Date().toISOString();
-    const authorName = blog?.author?.first_name || blog?.author || 'AKG Classes';
+    const authorName = blog?.author?.first_name || blog?.author || 'ANM Classes';
 
     return (
         <>

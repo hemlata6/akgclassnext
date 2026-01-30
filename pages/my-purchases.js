@@ -6,7 +6,7 @@ export default function MyPurchasesPage() {
   return (
     <>
       <Head>
-        <title>My Purchases - AKG Classes</title>
+        <title>My Purchases - ANM Classes</title>
         <meta name="description" content="View your purchased courses and materials" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

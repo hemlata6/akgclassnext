@@ -10,14 +10,14 @@ export const PromoBanners = () => {
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Akshansh Garg",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Akshansh Garg",
+            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Aneesh Noor Mohammed",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Aneesh Noor Mohammed",
             alt: "Live Batch",
             bg: "bg-indigo-900"
         },
         {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Muskan Kaur Ahuja",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Muskan Kaur Ahuja",
+            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
             alt: "Combo Offer",
             bg: "bg-slate-900"
         }

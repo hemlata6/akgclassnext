@@ -1,6 +1,6 @@
-# AKG Classes - Next.js Application
+# ANM Classes - Next.js Application
 
-This is a Next.js conversion of the original React app for AKG Classes - AKG Classes | AKG Classes - CA Akshansh Garg.
+This is a Next.js conversion of the original React app for ANM Classes - ANM Classes | ANM Classes - CA Aneesh Noor Mohammed.
 
 ## Getting Started
 
@@ -27,8 +27,8 @@ yarn install
 ```
 NEXT_PUBLIC_BUTTER_CMS_API_KEY=your_buttercms_api_key
 NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com
-NEXT_PUBLIC_MEDIA_BASE_URL=https://classioakg.in-maa-1.linodeobjects.com
-NEXT_PUBLIC_SITE_URL=https://akgclass.netlify.app
+NEXT_PUBLIC_MEDIA_BASE_URL=https://classioanm.in-maa-1.linodeobjects.com
+NEXT_PUBLIC_SITE_URL=https://anmclass.netlify.app
 ```
 
 ### Development

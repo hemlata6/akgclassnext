@@ -184,7 +184,7 @@ const formatDuration = (duration) => {
                 alt="Faculty"
               />
               <div>
-                <p className="text-sm font-bold text-slate-900">CA Akshansh Garg</p>
+                <p className="text-sm font-bold text-slate-900">CA Aneesh Noor Mohammed</p>
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
               </div>
               <button className="ml-auto text-slate-400 hover:text-slate-600 transition flex items-center gap-1 text-xs font-bold border border-slate-200 px-3 py-1.5 rounded-full">

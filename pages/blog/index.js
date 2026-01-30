@@ -3,10 +3,10 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://akgclass.netlify.app/blog/';
-  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/akgclasses/adminUploads/akg-logo-circle-white.webp';
-  const title = 'AKG Classes | AKG Classes - CA Akshansh Garg';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA Akshansh Garg';
+  const siteUrl = 'https://anmclass.netlify.app/blog/';
+  const ogImage = 'anm_logo.webp';
+  const title = 'ANM Classes | ANM Classes - CA Aneesh Noor Mohammed';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Aneesh Noor Mohammed';
 
   return (
     <>
@@ -22,7 +22,7 @@ export default function Blog() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="AKG Classes" />
+        <meta property="og:site_name" content="ANM Class" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -30,11 +30,11 @@ export default function Blog() {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:site" content="@akgclasses" />
+        <meta name="twitter:site" content="@anmclass" />
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="keywords" content="AKG Classes Blog, Financial Reporting, Ind AS, CA Final, Accounting Standards, Exam Preparation" />
+        <meta name="keywords" content="ANM Class Blog, Financial Reporting, Ind AS, CA Final, Accounting Standards, Exam Preparation" />
       </Head>
       <Layout>
         <BlogListPage />

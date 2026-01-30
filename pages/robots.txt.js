@@ -10,7 +10,7 @@ Disallow: /_next/
 Disallow: /static/
 
 # Sitemaps
-Sitemap: https://akgclass.netlify.app/sitemap.xml
+Sitemap: https://anmclass.netlify.app/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1

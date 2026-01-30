@@ -43,10 +43,10 @@ export const FreeResources = () => {
                     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 md:p-8 text-center md:text-left relative overflow-hidden text-white shadow-2xl shadow-slate-900/20 sticky top-24">
                         <div className="relative z-10">
                             <h2 className="text-2xl font-bold mb-2">Study on the Go!</h2>
-                            <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the AKG Classes App for offline viewing, live classes, and unlimited access to study materials.</p>
+                            <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the ANM Classes App for offline viewing, live classes, and unlimited access to study materials.</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                 <a 
-                                    href="https://play.google.com/store/apps/details?id=com.akgclasses.store" 
+                                    href="https://play.google.com/store/apps/details?id=com.anmclass.store" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="bg-white text-black px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-gray-100 transition-colors shadow-md"
@@ -54,7 +54,7 @@ export const FreeResources = () => {
                                     <Download /> Google Play
                                 </a>
                                 <a 
-                                    href="https://apps.apple.com/app/akg-classes/id6584522359" 
+                                    href="https://apps.apple.com/app/anm-class/id6584522359" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition-colors shadow-md"

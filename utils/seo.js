@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'AKG Classes',
+    title = 'ANM Class',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://akgclass.netlify.app/logo.png',
-    url = 'https://akgclass.netlify.app',
+    image = 'https://anmclass.netlify.app/logo.png',
+    url = 'https://anmclass.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'AKG Classes',
-    keywords = 'AKG Classes, CA Final, Financial Reporting, Ind AS',
+    author = 'ANM Class',
+    keywords = 'ANM Class, CA Final, Financial Reporting, Ind AS',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'AKG Classes',
+      site_name: 'ANM Class',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -71,8 +71,8 @@ export const generateMetaTags = (options) => {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@akgclasses',
-      creator: '@akgclasses',
+      site: '@anmclass',
+      creator: '@anmclass',
       title,
       description,
       image,
@@ -105,10 +105,10 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://akgclass.netlify.app/logo.png',
+    image = 'https://anmclass.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'AKG Classes',
+    author = 'ANM Class',
   } = blog;
 
   return {
@@ -130,11 +130,11 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'AKG Classes',
-      url: 'https://akgclass.netlify.app',
+      name: 'ANM Class',
+      url: 'https://anmclass.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://akgclass.netlify.app/logo.png',
+        url: 'https://anmclass.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -152,17 +152,17 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'AKG Classes',
-    url: 'https://akgclass.netlify.app',
-    logo: 'https://akgclass.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by AKG Sir',
+    name: 'ANM Class',
+    url: 'https://anmclass.netlify.app',
+    logo: 'https://anmclass.netlify.app/logo.png',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Aneesh Noor Mohammed',
     sameAs: [
       // Add your social media URLs
-      'https://www.facebook.com/akgclasses',
-      'https://www.twitter.com/akgclasses',
-      'https://www.linkedin.com/company/akgclasses',
-      'https://www.youtube.com/akgclasses',
-      'https://www.instagram.com/akgclasses',
+      'https://www.facebook.com/anmclass',
+      'https://www.twitter.com/anmclass',
+      'https://www.linkedin.com/company/anmclass',
+      'https://www.youtube.com/anmclass',
+      'https://www.instagram.com/anmclass',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://akgclass.netlify.app/logo.png';
+  if (!blog) return 'https://anmclass.netlify.app/logo.png';
   
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
   
   // Default fallback
-  return 'https://akgclass.netlify.app/logo.png';
+  return 'https://anmclass.netlify.app/logo.png';
 };
 
 /**
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: AKG Classes)
+ * @param {string} siteName - Site name (default: ANM Classes)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'AKG Classes') => {
+export const generatePageTitle = (pageTitle, siteName = 'ANM Classes') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };
