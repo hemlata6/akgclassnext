@@ -362,7 +362,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src={"logoiwision.png"} alt="ANM Logo" className="h-16 md:h-16 object-contain" />
+                <img src={"/logoiwision.png"} alt="ca class Logo" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 

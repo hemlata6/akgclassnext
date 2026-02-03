@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'anmclass',
+      name: 'caclass',
       script: 'node_modules/next/dist/bin/next',
       args: 'start',
       cwd: './',
@@ -40,9 +40,9 @@ module.exports = {
     production: {
       user: 'root',
       host: 'your-server-ip',
-      ref: 'origin/anmclass',
-      repo: 'https://github.com/hemlata6/anmclassnext.git',
-      path: '/var/www/anmclass',
+      ref: 'origin/caclass',
+      repo: 'https://github.com/hemlata6/caclassnext.git',
+      path: '/var/www/caclass',
       'post-deploy': 'npm install && npm run build && pm2 reload ecosystem.config.js --env production',
       'pre-deploy-local': '',
       'post-setup': 'npm install'

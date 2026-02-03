@@ -46,7 +46,7 @@ export const FreeResources = () => {
                             <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the iWision App for offline viewing, live classes, and unlimited access to study materials.</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                 <a
-                                    href="https://play.google.com/store/apps/details?id=com.anmclasses.store"
+                                    href="https://play.google.com/store/apps/details?id=com.caclasses.store"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-white text-black px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-gray-100 transition-colors shadow-md"

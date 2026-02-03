@@ -22,7 +22,7 @@ export default function Blog() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="ANM Class" />
+        <meta property="og:site_name" content="CA Class" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -30,11 +30,11 @@ export default function Blog() {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:site" content="@anmclass" />
+        <meta name="twitter:site" content="@caclass" />
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow" />
-        <meta name="keywords" content="ANM Class Blog, Financial Reporting, Ind AS, CA Final, Accounting Standards, Exam Preparation" />
+        <meta name="keywords" content="CA Class Blog, Financial Reporting, Ind AS, CA Final, Accounting Standards, Exam Preparation" />
       </Head>
       <Layout>
         <BlogListPage />

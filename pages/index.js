@@ -4,7 +4,7 @@ import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
   const siteUrl = 'https://caclassestest.netlify.app/';
-  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/anmclass/adminUploads/anm-logo-circle-white.webp';
+  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
   const title = 'iWision | iWision - CA Vipul Dhall';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA Vipul Dhall';
   const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, iWision, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
@@ -17,9 +17,9 @@ export default function Home() {
     "url": siteUrl,
     "logo": ogImage,
     "sameAs": [
-      "https://twitter.com/anmclass",
-      "https://facebook.com/anmclass",
-      "https://linkedin.com/company/anmclass"
+      "https://twitter.com/caclass",
+      "https://facebook.com/caclass",
+      "https://linkedin.com/company/caclass"
     ],
     "address": {
       "@type": "PostalAddress",
@@ -55,7 +55,7 @@ export default function Home() {
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={ogImage} />
-        <meta name="twitter:site" content="@anmclass" />
+        <meta name="twitter:site" content="@caclass" />
 
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />

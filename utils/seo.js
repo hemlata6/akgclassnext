@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'ANM Class',
+    title = 'CA Class',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
     image = 'https://caclassestest.netlify.app/logo.png',
     url = 'https://caclassestest.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'ANM Class',
-    keywords = 'ANM Class, CA Final, Financial Reporting, Ind AS',
+    author = 'CA Class',
+    keywords = 'CA Class, CA Final, Financial Reporting, Ind AS',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'ANM Class',
+      site_name: 'CA Class',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -71,8 +71,8 @@ export const generateMetaTags = (options) => {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@anmclass',
-      creator: '@anmclass',
+      site: '@caclass',
+      creator: '@caclass',
       title,
       description,
       image,
@@ -108,7 +108,7 @@ export const generateBlogStructuredData = (blog, url) => {
     image = 'https://caclassestest.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'ANM Class',
+    author = 'CA Class',
   } = blog;
 
   return {
@@ -130,7 +130,7 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'ANM Class',
+      name: 'CA Class',
       url: 'https://caclassestest.netlify.app',
       logo: {
         '@type': 'ImageObject',
@@ -152,17 +152,17 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'ANM Class',
+    name: 'CA Class',
     url: 'https://caclassestest.netlify.app',
     logo: 'https://caclassestest.netlify.app/logo.png',
     description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Vipul Dhall',
     sameAs: [
       // Add your social media URLs
-      'https://www.facebook.com/anmclass',
-      'https://www.twitter.com/anmclass',
-      'https://www.linkedin.com/company/anmclass',
-      'https://www.youtube.com/anmclass',
-      'https://www.instagram.com/anmclass',
+      'https://www.facebook.com/caclass',
+      'https://www.twitter.com/caclass',
+      'https://www.linkedin.com/company/caclass',
+      'https://www.youtube.com/caclass',
+      'https://www.instagram.com/caclass',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
@@ -198,22 +198,22 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  */
 export const getBlogImage = (blog, baseUrl = '') => {
   if (!blog) return 'https://caclassestest.netlify.app/logo.png';
-  
+
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
     if (!url) return url;
     return url.replace('classiocafinal.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
   };
-  
+
   // Check nested blog.thumb
   if (blog.blog?.thumb) return fixCdnUrl(baseUrl + blog.blog.thumb);
-  
+
   // Check direct properties
   if (blog.featured_image) return fixCdnUrl(blog.featured_image);
   if (blog.img) return fixCdnUrl(baseUrl + blog.img);
   if (blog.thumb) return fixCdnUrl(baseUrl + blog.thumb);
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
-  
+
   // Default fallback
   return 'https://caclassestest.netlify.app/logo.png';
 };
@@ -257,14 +257,14 @@ export const formatDate = (date) => {
  */
 export const sanitizeMetaDescription = (description, maxLength = 160) => {
   if (!description) return '';
-  
+
   // Remove HTML tags
   const plainText = description.replace(/<[^>]*>/g, '');
-  
+
   // Trim and truncate
   const trimmed = plainText.trim();
   if (trimmed.length <= maxLength) return trimmed;
-  
+
   return trimmed.substring(0, maxLength - 3) + '...';
 };
 

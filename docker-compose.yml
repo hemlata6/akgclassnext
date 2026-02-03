@@ -2,11 +2,11 @@
 version: '3.8'
 
 services:
-  anmclass:
+  caclass:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: anmclass-nextjs
+    container_name: caclass-nextjs
     ports:
       - "3000:3000"
     environment:

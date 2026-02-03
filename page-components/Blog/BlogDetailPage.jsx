@@ -9,9 +9,9 @@ import Endpoints from '../../config/endpoints';
 import Network from '../../config/Network';
 import { Avatar } from '@mui/material';
 import { PlayCircle, FileText, Clock, BookOpen, Folder, Music } from 'lucide-react';
-import YouTubePlayer from '../FreeResources/YouTubePlayer';
 import LoginModal from '../../components/Auth/LoginModal';
 import SignupModal from '../../components/Auth/SignupModal';
+import YouTubePlayer from '../FreeResources/YouTubePlayer';
 
 export const BlogDetailPage = ({ blogData, error, cId }) => {
     const router = useRouter();
@@ -183,7 +183,7 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     const handleShare = async () => {
         const baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
             ? 'http://localhost:3000'
-            : 'https://caclasses.in';
+            : 'https://caclassestest.netlify.app';
 
         const shareUrl = `${baseUrl}/blog/${cId}/${slug}`;
 
@@ -287,6 +287,16 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
         setSelectedVideo(null);
     };
 
+    // Sanitize blog HTML to remove style tags that might affect the page
+    const sanitizeBlogHtml = (html) => {
+        if (!html) return '';
+        // Remove all <style> tags and their content to prevent global style leaks
+        let sanitized = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
+        // Also remove style attributes that target body, html, or * selector
+        sanitized = sanitized.replace(/style="([^"]*(?:body|html|\*)[^"]*)"/gi, '');
+        return sanitized;
+    };
+
     return (
         <div className="bg-white">
             <div className="py-8 px-4 md:px-8 max-w-7xl mx-auto">
@@ -342,13 +352,20 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                             />
                         )}
                         {(blog.body || blog?.blog?.blog) ? (
-                            <div className="prose prose-slate prose-lg max-w-none prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg">
+                            <div className="prose prose-slate prose-lg max-w-none prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
                                 <div
-                                    dangerouslySetInnerHTML={{ __html: blog.body || blog?.blog?.blog || '' }}
+                                    className="blog-content"
+                                    dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(blog.body || blog?.blog?.blog || '') }}
                                 />
                                 <style jsx>{`
-                                    /* All links should be clickable with pointer cursor */
-                                    div :global(a) {
+                                    .blog-content {
+                                        all: revert-layer;
+                                        margin: 0;
+                                        padding: 0;
+                                    }
+                                    
+                                    /* All links should be clickable with pointer cursor - scoped to blog content only */
+                                    :global(.prose) a {
                                         cursor: pointer !important;
                                         color: #059669 !important;
                                         transition: all 0.3s ease;
@@ -356,13 +373,13 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                                     }
                                     
                                     /* Text links - add underline on hover */
-                                    div :global(a:hover) {
+                                    :global(.prose) a:hover {
                                         color: #047857 !important;
                                         text-decoration: underline;
                                     }
                                     
                                     /* Image links - special styling */
-                                    div :global(a:has(img)) {
+                                    :global(.prose) a:has(img) {
                                         display: inline-block;
                                         border: none !important;
                                         background: none !important;
@@ -370,17 +387,17 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                                     }
                                     
                                     /* Images within links */
-                                    div :global(a img) {
+                                    :global(.prose) a img {
                                         cursor: pointer;
                                         transition: all 0.3s ease;
                                     }
                                     
                                     /* Image hover effect - no underline for images */
-                                    div :global(a:has(img):hover) {
+                                    :global(.prose) a:has(img):hover {
                                         text-decoration: none !important;
                                     }
                                     
-                                    div :global(a img:hover) {
+                                    :global(.prose) a img:hover {
                                         opacity: 0.8;
                                         transform: scale(1.02);
                                     }

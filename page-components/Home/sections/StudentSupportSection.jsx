@@ -56,10 +56,10 @@ export const StudentSupportSection = () => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href="mailto:anmidtclasses@gmail.com" className="text-slate-300 hover:text-white">anmidtclasses@gmail.com</a>
+                                        <a href="mailto:ca classidtclasses@gmail.com" className="text-slate-300 hover:text-white">ca classidtclasses@gmail.com</a>
                                     </div>
                                 </div>
-
+                            
                                 <div className="space-y-3">
                                     <a
                                         href="tel:+9198765 43210"

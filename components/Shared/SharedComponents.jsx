@@ -141,8 +141,8 @@ export const Loader = () => (
       marginBottom: '1.5rem'
     }}>
       <img
-        src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/anmclass/adminUploads/anm-logo-circle-white.webp"
-        alt="ANM Logo"
+        src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/caclass-logo-circle-white.webp"
+        alt="ca class Logo"
         style={{
           height: '96px',
           width: 'auto',

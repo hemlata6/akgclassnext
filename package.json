@@ -1,5 +1,5 @@
 {
-  "name": "anmclass",
+  "name": "caclass",
   "version": "1.0.0",
   "description": "iWision | iWision - CA Vipul Dhall - Next.js",
   "private": true,
@@ -11,9 +11,9 @@
     "deploy:netlify": "netlify deploy --prod",
     "deploy:preview": "netlify deploy",
     "pm2:start": "pm2 start ecosystem.config.js",
-    "pm2:restart": "pm2 restart anmclass",
-    "pm2:stop": "pm2 stop anmclass",
-    "pm2:logs": "pm2 logs anmclass"
+    "pm2:restart": "pm2 restart caclass",
+    "pm2:stop": "pm2 stop caclass",
+    "pm2:logs": "pm2 logs caclass"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
