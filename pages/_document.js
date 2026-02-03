@@ -5,19 +5,19 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/anm_logo.png" />
-        <link rel="apple-touch-icon" href="/anm_logo.png" />
+        <link rel="icon" href="/feviconiwision.png" />
+        <link rel="apple-touch-icon" href="/feviconiwision.png" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />
         
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://classioanm.in-maa-1.linodeobjects.com" />
+        <link rel="preconnect" href="https://classiocafinal.in-maa-1.linodeobjects.com" />
         
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://classioanm.in-maa-1.linodeobjects.com" />
+        <link rel="dns-prefetch" href="https://classiocafinal.in-maa-1.linodeobjects.com" />
         
         {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />

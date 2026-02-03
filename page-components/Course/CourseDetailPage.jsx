@@ -13,21 +13,21 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
 
   // Format duration from coursePricing
-const formatDuration = (duration) => {
-  if (!duration || isNaN(duration)) return "0 hr";
+  const formatDuration = (duration) => {
+    if (!duration || isNaN(duration)) return "0 hr";
 
-  const hours = Math.floor(duration / 3600);
-  const minutes = Math.floor((duration % 3600) / 60);
-  const seconds = Math.floor(duration % 60);
+    const hours = Math.floor(duration / 3600);
+    const minutes = Math.floor((duration % 3600) / 60);
+    const seconds = Math.floor(duration % 60);
 
-  const parts = [];
+    const parts = [];
 
-  if (hours > 0) parts.push(`${hours} hr${hours > 1 ? 's' : ''}`);
-  if (minutes > 0) parts.push(`${minutes} min${minutes > 1 ? 's' : ''}`);
-  if (seconds > 0) parts.push(`${seconds} sec${seconds > 1 ? 's' : ''}`);
+    if (hours > 0) parts.push(`${hours} hr${hours > 1 ? 's' : ''}`);
+    if (minutes > 0) parts.push(`${minutes} min${minutes > 1 ? 's' : ''}`);
+    if (seconds > 0) parts.push(`${seconds} sec${seconds > 1 ? 's' : ''}`);
 
-  return parts.length ? parts.join(" ") : "0 hr";
-};
+    return parts.length ? parts.join(" ") : "0 hr";
+  };
 
 
 
@@ -73,8 +73,29 @@ const formatDuration = (duration) => {
     setCarouselIndex(prev => (prev === carouselItems.length - 1 ? 0 : prev + 1));
   };
 
-  console.log('courseData', courseData);
+  const handleShare = async () => {
+    const baseUrl = window.location.hostname === 'localhost'
+      ? 'http://localhost:3000'
+      : 'https://caclasses.in';
 
+    const shareUrl = `${baseUrl}/course/${courseData?.id}`;
+    const shareData = {
+      title: courseData?.title || 'Course',
+      url: shareUrl
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(shareUrl);
+        setShowCopyAlert(true);
+        setTimeout(() => setShowCopyAlert(false), 2000);
+      }
+    } catch (err) {
+      console.error('Error sharing:', err);
+    }
+  };
 
   return (
     <div className="bg-slate-50 pt-8 pb-12 border-b border-slate-200">
@@ -184,10 +205,12 @@ const formatDuration = (duration) => {
                 alt="Faculty"
               />
               <div>
-                <p className="text-sm font-bold text-slate-900">CA Aneesh Noor Mohammed</p>
+                <p className="text-sm font-bold text-slate-900">CA Vipul Dhall</p>
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
               </div>
-              <button className="ml-auto text-slate-400 hover:text-slate-600 transition flex items-center gap-1 text-xs font-bold border border-slate-200 px-3 py-1.5 rounded-full">
+              <button
+                onClick={handleShare}
+                className="ml-auto text-slate-400 hover:text-slate-600 transition flex items-center gap-1 text-xs font-bold border border-slate-200 px-3 py-1.5 rounded-full">
                 <Icons.Share /> Share
               </button>
             </div>

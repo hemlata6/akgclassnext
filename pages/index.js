@@ -3,16 +3,16 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://anmclass.netlify.app/';
+  const siteUrl = 'https://caclassestest.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/anmclass/adminUploads/anm-logo-circle-white.webp';
-  const title = 'ANM Classes | ANM Classes - CA Aneesh Noor Mohammed';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA Aneesh Noor Mohammed';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, ANM Classes, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const title = 'iWision | iWision - CA Vipul Dhall';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Vipul Dhall';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, iWision, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "ANM Classes",
+    "name": "iWision",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="ANM Classes" />
+        <meta property="og:site_name" content="iWision" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="ANM Classes" />
+        <meta name="author" content="iWision" />
 
         {/* JSON-LD Structured Data */}
         <script

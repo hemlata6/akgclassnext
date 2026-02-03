@@ -8,6 +8,7 @@ import { CoursesSection } from './sections/CoursesSection';
 import { BookStore } from './sections/BookStore';
 import { MarathonGallery } from './sections/MarathonGallery';
 import { StudentGallery } from './sections/StudentGallery';
+import { BlogSection } from './sections/BlogSection';
 import { FreeResources } from './sections/FreeResources';
 import { StudentSupportSection } from './sections/StudentSupportSection';
 import { StudentHub } from './sections/StudentHub';
@@ -33,19 +34,20 @@ export default function HomePage() {
   return (
     <>
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
-      <PromoBanners />
+      {/* <PromoBanners /> */}
       <HeroSection onExploreClick={handleScrollToCourses} />
       <WhyChooseUs />
       <AboutSection />
       <CoursesSection />
       <BookStore />
-      <MarathonGallery />
+      {/* <MarathonGallery /> */}
       <StudentGallery />
-      <FreeResources />
-      <StudentSupportSection />
-      {/* <StudentHub />
+      <BlogSection />
+      {/* <FreeResources /> */}
+      {/* <StudentSupportSection /> */}
+      <StudentHub />
       <AppDownload />
-      <CounsellingStrip /> */}
+      <CounsellingStrip />
       <Footer />
       <a href="#" className="fixed z-40 right-4 bottom-24 md:bottom-12 group">
         <div className="bg-[#25D366] text-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform">

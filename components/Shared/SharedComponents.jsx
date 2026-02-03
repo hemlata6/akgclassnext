@@ -31,7 +31,7 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "ANM Classes"}
+              {institute?.institue ? institute?.institue : "iWision"}
             </div>
             <p>Best CA Classes for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
@@ -79,19 +79,25 @@ export const Footer = () => {
               >
                 Refund Policy
               </li>
+               <li
+                onClick={() => router.push('/contact-us')}
+                className="cursor-pointer hover:text-emerald-400 transition-colors"
+              >
+                Contact us
+              </li>
             </ul>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: +91 98765 43210</li>
-              <li>support@agclasses.com</li>
-              <li>Jaipur, Rajasthan</li>
+              <li>Call: +91 9310226047</li>
+              <li>admin@iwision.com</li>
+              <li>New Delhi</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 ANM Classes Education. All rights reserved.
+          © 2026 iWision Education. All rights reserved.
           <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>

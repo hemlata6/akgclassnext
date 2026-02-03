@@ -79,6 +79,9 @@ const Store = () => {
     const primaryColorLight = theme.primary;
     const primaryColorDark = theme.primaryHover;
 
+    console.log('productTypes', productTypes, selectedProductType);
+
+
     // Convert hex color to RGB
     const hexToRgb = (hex) => {
         // Handle CSS variable or hex string
@@ -98,7 +101,7 @@ const Store = () => {
             // Fallback to blue theme
             return { r: 33, g: 150, b: 243 };
         }
-        
+
         const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
         return result ? {
             r: parseInt(result[1], 16),
@@ -230,10 +233,37 @@ const Store = () => {
 
     // Handle domain selection from Header navigation (when domains are loaded)
     useEffect(() => {
-        const selectedDomainIdFromState = router.query?.selectedDomainId;
-        const selectedExamStageIdFromState = router.query?.selectedExamStageId;
-        const examTypeFromState = router.query?.examType;
-        const examStageNameFromState = router.query?.examStage;
+        // First check sessionStorage for navigation state from Header
+        const navigationState = sessionStorage.getItem('storeNavigationState');
+        let selectedDomainIdFromState = null;
+        let selectedExamStageIdFromState = null;
+        let examTypeFromState = null;
+        let examStageNameFromState = null;
+        let productTypeFromState = null;
+        console.log('navigationState', navigationState);
+        if (navigationState) {
+
+
+            try {
+                const state = JSON.parse(navigationState);
+                selectedDomainIdFromState = state.selectedDomainId;
+                selectedExamStageIdFromState = state.selectedExamStageId;
+                examTypeFromState = state.selectedDomainName;
+                examStageNameFromState = state.selectedExamStageName;
+                productTypeFromState = state.productType;
+            } catch (error) {
+                console.error('Error parsing navigation state:', error);
+            }
+        }
+
+        // Fallback to URL query params for backward compatibility
+        if (!selectedDomainIdFromState) {
+            selectedDomainIdFromState = router.query?.selectedDomainId;
+            selectedExamStageIdFromState = router.query?.selectedExamStageId;
+            examTypeFromState = router.query?.examType;
+            examStageNameFromState = router.query?.examStage;
+            productTypeFromState = router.query?.productType;
+        }
 
         // Handle navigation from footer (examType and examStage as names)
         if (examTypeFromState && examStageNameFromState && domains.length > 0) {
@@ -253,6 +283,17 @@ const Store = () => {
                     );
                     if (examStage) {
                         setSelectedExamStage(examStage);
+                    }
+                }
+
+                // Set product type if available
+                if (productTypeFromState && productTypes.length > 0) {
+                    // Try to find a matching product type (case-insensitive)
+                    const matchedType = productTypes.find(type =>
+                        type.toLowerCase() === productTypeFromState.toLowerCase()
+                    );
+                    if (matchedType) {
+                        setSelectedProductType(matchedType);
                     }
                 }
 
@@ -305,13 +346,30 @@ const Store = () => {
                     }
                 }
             }
+            console.log('productTypeFromState', productTypeFromState);
+
+            // Set product type if available
+            if (productTypeFromState && productTypes.length > 0) {
+                // Try to find a matching product type (case-insensitive)
+                const matchedType = productTypes.find(type =>
+                    type.toLowerCase() === productTypeFromState.toLowerCase()
+                );
+                if (matchedType) {
+                    setSelectedProductType(matchedType);
+                }
+            }
 
             // Mark filters as initialized to prevent default selection from overriding
             if (!filtersInitialized) {
                 setFiltersInitialized(true);
             }
+
+            // Clear sessionStorage after processing
+            if (navigationState) {
+                sessionStorage.removeItem('storeNavigationState');
+            }
         }
-    }, [domains, router.query])
+    }, [domains, productTypes, router.query])
 
     // Handle pending exam stage selection (when coming from sidebar submenu)
     useEffect(() => {
@@ -787,7 +845,7 @@ const Store = () => {
 
     const handleCardClick = (course) => {
         console.log('course', course);
-        
+
         if (course?.type === "books") {
             router.push(`/book/${course.id}`);
         } else {

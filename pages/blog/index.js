@@ -3,10 +3,10 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://anmclass.netlify.app/blog/';
-  const ogImage = 'anm_logo.webp';
-  const title = 'ANM Classes | ANM Classes - CA Aneesh Noor Mohammed';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA Aneesh Noor Mohammed';
+  const siteUrl = 'https://caclassestest.netlify.app/blog/';
+  const ogImage = 'logoiwision.png';
+  const title = 'iWision | iWision - CA Vipul Dhall';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Vipul Dhall';
 
   return (
     <>

@@ -20,10 +20,10 @@ export const StudentHub = () => {
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">
               {[
-                { t: "Amendments", i: "📄" },
+                { t: "Revision Notes", i: "📄" },
                 { t: "Mock Tests", i: "📝" },
-                { t: "Charts", i: "📊" },
-                { t: "Analysis", i: "📈" }
+                { t: "Courses", i: "📊" },
+                { t: "Strategy PDF", i: "📈" }
               ].map((r, i) => (
                 <div
                   key={i}
@@ -55,7 +55,7 @@ export const StudentHub = () => {
                       <p className="font-bold text-xs leading-tight group-hover:text-indigo-300">
                         Ind AS 115 - Revenue (Part {i})
                       </p>
-                      <p className="text-[10px] text-slate-400">CA Aneesh Noor Mohammed • 25k views</p>
+                      <p className="text-[10px] text-slate-400">CA Vipul Dhall • 25k views</p>
                     </div>
                   </div>
                 ))}

@@ -116,9 +116,26 @@ export default class Network {
   static studentFetchAllContentUrl = Endpoints.baseURL + "admin/course/fetch-content";
   static studentFetchBlogContentUrl = Endpoints.baseURL + "student/course/fetchCourseContent/";
   static studentEnrolledAccessUrl = Endpoints.baseURL + "student/get-access";
+   static studentFetchAttachment = Endpoints.baseURL + "student/course/fetch-attachment/";
 
+   static async fetchBlogAttachment(contentId) {
+    let requestOptions = {
+      withCredentials: false,
+    };
+    const response = await axios.get(this.studentFetchAttachment + contentId, requestOptions);
+    return response.data;
+  };
 
-   static async fetchBlogDetailApi(contentId) {
+  static async getAccessCourseApi(auth, contentId, contentType) {
+    let requestOptions = {
+      headers: { "X-Auth": auth },
+      withCredentials: false,
+    };
+    const response = await axios.get(`${this.studentEnrolledAccessUrl}?contentId=${contentId}&contentType=${contentType}`, requestOptions);
+    return response.data;
+  };
+
+  static async fetchBlogDetailApi(contentId) {
 
     let requestOptions = {
       withCredentials: false,
@@ -126,7 +143,7 @@ export default class Network {
     const response = await axios.get(this.studentFetchBlogContentUrl + contentId, requestOptions);
     return response.data;
   };
-  
+
   static async fetchAllContentFromCourse(body) {
     try {
       let requestOptions = {

@@ -37,8 +37,8 @@ export const generateMetaTags = (options) => {
   const {
     title = 'ANM Class',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://anmclass.netlify.app/logo.png',
-    url = 'https://anmclass.netlify.app',
+    image = 'https://caclassestest.netlify.app/logo.png',
+    url = 'https://caclassestest.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
@@ -105,7 +105,7 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://anmclass.netlify.app/logo.png',
+    image = 'https://caclassestest.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
     author = 'ANM Class',
@@ -131,10 +131,10 @@ export const generateBlogStructuredData = (blog, url) => {
     publisher: {
       '@type': 'Organization',
       name: 'ANM Class',
-      url: 'https://anmclass.netlify.app',
+      url: 'https://caclassestest.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://anmclass.netlify.app/logo.png',
+        url: 'https://caclassestest.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -153,9 +153,9 @@ export const generateOrganizationStructuredData = () => {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
     name: 'ANM Class',
-    url: 'https://anmclass.netlify.app',
-    logo: 'https://anmclass.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Aneesh Noor Mohammed',
+    url: 'https://caclassestest.netlify.app',
+    logo: 'https://caclassestest.netlify.app/logo.png',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Vipul Dhall',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/anmclass',
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://anmclass.netlify.app/logo.png';
+  if (!blog) return 'https://caclassestest.netlify.app/logo.png';
   
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
   
   // Default fallback
-  return 'https://anmclass.netlify.app/logo.png';
+  return 'https://caclassestest.netlify.app/logo.png';
 };
 
 /**
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: ANM Classes)
+ * @param {string} siteName - Site name (default: iWision)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'ANM Classes') => {
+export const generatePageTitle = (pageTitle, siteName = 'iWision') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

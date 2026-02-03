@@ -18,11 +18,9 @@ export default function BlogDetail({ blogData, error }) {
         return words.slice(0, wordLimit).join(' ') + '...';
     };
 
-    console.log('blogData', blogData);
-
 
     const getBlogImage = () => {
-        if (!blogData) return 'https://anmclass.netlify.app/logo.png';
+        if (!blogData) return 'https://caclassestest.netlify.app/logo.png';
 
         // Helper to fix old CDN URLs
         const fixCdnUrl = (url) => {
@@ -39,7 +37,7 @@ export default function BlogDetail({ blogData, error }) {
         if (blogData.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.logo);
         if (blogData.img) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.img);
 
-        return 'https://anmclass.netlify.app/logo.png';
+        return 'https://caclassestest.netlify.app/logo.png';
     };
 
     const blogImage = getBlogImage();
@@ -49,7 +47,7 @@ export default function BlogDetail({ blogData, error }) {
         'Read our latest blog post',
         50
     );
-    const blogUrl = `https://anmclass.netlify.app/blog/${cId}/${slug}`;
+    const blogUrl = `https://caclassestest.netlify.app/blog/${cId}/${slug}`;
 
     return (
         <>

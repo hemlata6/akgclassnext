@@ -4,6 +4,16 @@ const ThemeContext = createContext();
 
 // Theme configurations
 export const THEMES = {
+  darkGreen: {
+    name: 'Dark Green',
+    primary: '#0d5a3e',
+    primaryHover: '#0f7550',
+    primaryClass: 'bg-emerald-900',
+    primaryHoverClass: 'hover:bg-emerald-800',
+    textClass: 'text-emerald-900',
+    borderClass: 'border-emerald-900',
+    bgGradient: 'from-emerald-900 to-emerald-800',
+  },
   purple: {
     name: 'Purple',
     primary: 'rgb(55, 48, 163)', // indigo-700
@@ -27,7 +37,7 @@ export const THEMES = {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState('blue');
+  const [currentTheme, setCurrentTheme] = useState('darkGreen');
 
   // Load theme from localStorage on mount
   useEffect(() => {
@@ -35,8 +45,8 @@ export const ThemeProvider = ({ children }) => {
     if (savedTheme && THEMES[savedTheme]) {
       setCurrentTheme(savedTheme);
     } else {
-      // Set blue as default
-      setCurrentTheme('blue');
+      // Set dark green as default
+      setCurrentTheme('darkGreen');
     }
   }, []);
 

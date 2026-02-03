@@ -10,8 +10,8 @@ export const PromoBanners = () => {
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Aneesh Noor Mohammed",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Aneesh Noor Mohammed",
+            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Vipul Dhall",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Vipul Dhall",
             alt: "Live Batch",
             bg: "bg-indigo-900"
         },

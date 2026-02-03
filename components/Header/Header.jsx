@@ -9,6 +9,7 @@ import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
 import LoginModal from '../Auth/LoginModal';
 import SignupModal from '../Auth/SignupModal';
+import AppDownloadModal from '../Modals/AppDownloadModal';
 import Endpoints from '@/config/endpoints';
 
 export const StickyMobileFooter = ({ cartCount }) => {
@@ -44,7 +45,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
         >
           {item.h ? (
             <>
-              <div 
+              <div
                 className={`h-14 w-14 ${theme.primaryClass} rounded-full text-white shadow-lg border-4 border-white flex items-center justify-center transform active:scale-95 -mt-8 mb-1 z-10`}
                 style={{ backgroundColor: `var(--theme-primary, #2196F3)` }}
               >
@@ -86,6 +87,7 @@ export const Header = ({ cartCount }) => {
   const [announcements, setAnnouncements] = useState([]);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
+  const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
   const [openMobileSubmenu, setOpenMobileSubmenu] = useState(null);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
 
@@ -119,7 +121,12 @@ export const Header = ({ cartCount }) => {
 
     fetchCoursesData();
     fetchAnnouncements();
-  }, []);
+  }, [user]);
+
+  // Refresh student data when user changes (e.g., after signup/login)
+  useEffect(() => {
+    // This will trigger a re-render when studentData updates
+  }, [studentData]);
 
   const fetchCoursesData = async () => {
     try {
@@ -198,6 +205,13 @@ export const Header = ({ cartCount }) => {
     }
   };
 
+    // Handle back button for Lectures
+  const handleBackToFirstLevel = () => {
+    setCurrentLevel('first');
+    setSelectedParentDomain(null);
+    setSelectedFirstLevelDomain(null);
+  };
+  
   // Handle first level domain click for Lectures
   const handleFirstLevelDomainClick = (domain) => {
     if (domain.child && domain.child.length > 0 && !shouldShowSecondLevel) {
@@ -205,33 +219,27 @@ export const Header = ({ cartCount }) => {
       setSelectedFirstLevelDomain(domain);
       setCurrentLevel('second');
     } else if (domain.child && domain.child.length > 0) {
-      router.push({
-        pathname: '/store',
-        query: { selectedDomainId: domain.id, selectedDomainName: domain.name, isMobile: false, productType: 'lecture' }
-      });
+      sessionStorage.setItem('storeNavigationState', JSON.stringify({
+        selectedDomainId: domain.id,
+        selectedDomainName: domain.name,
+        isMobile: false,
+        productType: 'lecture'
+      }));
+      router.push('/store');
     }
   };
 
   // Handle second level domain click for Lectures
   const handleSecondLevelDomainClick = (domain) => {
-    router.push({
-      pathname: '/store',
-      query: {
-        selectedDomainId: selectedParentDomain?.id,
-        selectedDomainName: selectedParentDomain?.name,
-        selectedExamStageId: domain.id,
-        selectedExamStageName: domain.name,
-        isMobile: false,
-        productType: 'lecture'
-      }
-    });
-  };
-
-  // Handle back button for Lectures
-  const handleBackToFirstLevel = () => {
-    setCurrentLevel('first');
-    setSelectedParentDomain(null);
-    setSelectedFirstLevelDomain(null);
+    sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      selectedDomainId: selectedParentDomain?.id,
+      selectedDomainName: selectedParentDomain?.name,
+      selectedExamStageId: domain.id,
+      selectedExamStageName: domain.name,
+      isMobile: false,
+      productType: 'lecture'
+    }));
+    router.push('/store');
   };
 
   // Handle first level domain click for Books
@@ -241,26 +249,27 @@ export const Header = ({ cartCount }) => {
       setBooksSelectedFirstLevelDomain(domain);
       setBooksCurrentLevel('second');
     } else if (domain.child && domain.child.length > 0) {
-      router.push({
-        pathname: '/store',
-        query: { selectedDomainId: domain.id, selectedDomainName: domain.name, isMobile: false, productType: 'books' }
-      });
+      sessionStorage.setItem('storeNavigationState', JSON.stringify({
+        selectedDomainId: domain.id,
+        selectedDomainName: domain.name,
+        isMobile: false,
+        productType: 'books'
+      }));
+      router.push('/store');
     }
   };
 
   // Handle second level domain click for Books
   const handleBooksSecondLevelDomainClick = (domain) => {
-    router.push({
-      pathname: '/store',
-      query: {
-        selectedDomainId: booksSelectedParentDomain?.id,
-        selectedDomainName: booksSelectedParentDomain?.name,
-        selectedExamStageId: domain.id,
-        selectedExamStageName: domain.name,
-        isMobile: false,
-        productType: 'books'
-      }
-    });
+    sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      selectedDomainId: booksSelectedParentDomain?.id,
+      selectedDomainName: booksSelectedParentDomain?.name,
+      selectedExamStageId: domain.id,
+      selectedExamStageName: domain.name,
+      isMobile: false,
+      productType: 'books'
+    }));
+    router.push('/store');
   };
 
   // Handle back button for Books
@@ -353,7 +362,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src={"anm_logo.png"} alt="ANM Logo" className="h-16 md:h-16 object-contain" />
+                <img src={"logoiwision.png"} alt="ANM Logo" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 
@@ -486,7 +495,7 @@ export const Header = ({ cartCount }) => {
             <div className="flex items-center gap-3">
               {/* Theme Switcher - Hidden by default */}
               <div className="relative hidden">
-                <button 
+                <button
                   onClick={() => setShowThemeMenu(!showThemeMenu)}
                   className="p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors"
                 >
@@ -494,7 +503,7 @@ export const Header = ({ cartCount }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
                   </svg>
                 </button>
-                
+
                 {/* Theme Dropdown */}
                 {showThemeMenu && (
                   <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
@@ -533,11 +542,11 @@ export const Header = ({ cartCount }) => {
                 <div className="relative group hidden md:block">
                   <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2`}>
                     <Icons.User size={16} />
-                    {studentData?.firstName + " " + studentData?.lastName || user.name}
+                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
                   </button>
                   <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                     <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-semibold text-slate-900">{studentData?.firstName + " " + studentData?.lastName || user.name}</p>
+                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
                       {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
                     </div>
                     {/* <button 
@@ -573,7 +582,7 @@ export const Header = ({ cartCount }) => {
               )}
 
               <button
-                onClick={() => document.getElementById('free-resources-section')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => setShowAppDownloadModal(true)}
                 className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
                 Download App
               </button>
@@ -589,8 +598,8 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <img src={"anm_logo.png"} alt="Logo" className="h-20" />
-               {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "anm_logo.png"} alt="Logo" className="h-20" /> */}
+              <img src={"logoiwision.png"} alt="Logo" className="h-20" />
+              {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "logoiwision.png"} alt="Logo" className="h-20" /> */}
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>
@@ -820,7 +829,7 @@ export const Header = ({ cartCount }) => {
               {user ? (
                 <>
                   <div className="bg-white p-3 rounded-lg border border-slate-100 mb-3">
-                    <p className="font-semibold text-slate-900 text-sm">{studentData?.firstName + " " + studentData?.lastName || user.name}</p>
+                    <p className="font-semibold text-slate-900 text-sm">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
                     {studentData?.email && <p className="text-xs text-slate-500 mt-0.5">{studentData.email}</p>}
                   </div>
                   {/* <button
@@ -876,6 +885,11 @@ export const Header = ({ cartCount }) => {
           setShowSignupModal(false);
           setShowLoginModal(true);
         }}
+      />
+      <AppDownloadModal
+        open={showAppDownloadModal}
+        onClose={() => setShowAppDownloadModal(false)}
+        brandColor={`var(--theme-primary, #0d5a3e)`}
       />
     </>
   );

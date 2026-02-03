@@ -4,6 +4,7 @@ import { User, Mail, UserPlus, Sparkles, X } from 'lucide-react';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { useTheme } from '../../config/ThemeContext';
+import { useStudent } from '@/config/StudentContext';
 
 const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
   const [tempSignupData, setTempSignupData] = useState(null);
   const { login } = useAuth();
   const { theme } = useTheme();
+  const { setStudentAuth } = useStudent();
 
   // Check for temporary signup data on component mount
   useEffect(() => {
@@ -104,15 +106,18 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
         const loginResponse = await Network.verifyLoginOtp(loginBody);
 
         if (loginResponse.status === true) {
-          // Login the user automatically
-          const result = login(tempSignupData?.phone, tempSignupData?.otp);
-          if (result.success || result) {
+          // Set student data in context
+          const success = setStudentAuth(loginResponse);
+
+          if (success) {
+            // Login the user automatically
+            login(tempSignupData?.phone, tempSignupData?.otp);
             // Clear temporary signup data
             localStorage.removeItem('tempSignup');
             // Close the signup form on successful signup/login
             handleClose();
           } else {
-            setErrors({ submit: result.error || 'Registration successful but login failed.' });
+            setErrors({ submit: 'Registration successful but failed to set user data.' });
           }
         } else {
           setErrors({ submit: loginResponse.message || 'Registration successful but login failed.' });

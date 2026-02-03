@@ -108,7 +108,6 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     .filter(item => item?.course?.id)
                     .map(item => item.course.id);
 
-                // Update enrolledCourses Set
                 setEnrolledCourses(new Set(courseIds));
                 console.log('Loaded enrolled courses:', courseIds);
             }
@@ -350,7 +349,6 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
     };
 
     const handleLoginWarningConfirm = () => {
-        console.log('aaaaa');
         if (!authToken && !isAuthenticated) {
             setShowLoginModal(true);
         }
@@ -475,9 +473,6 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
             console.log(error);
         }
     }
-
-    console.log('selectedSceduleList', selectedSceduleList);
-
 
     return (
         <>
@@ -682,7 +677,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                         <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
                             {/* Header */}
-                            <div className={`bg-gradient-to-r from-indigo-700 to-indigo-800 p-6 text-white`}>
+                            <div className={`${BRAND_GREEN_CLASS} p-6 text-white`}>
                                 <div className="text-center">
                                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <span className="text-3xl">🎓</span>
@@ -764,7 +759,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
                         <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
                             {/* Header */}
-                            <div className={`bg-gradient-to-r from-indigo-700 to-indigo-800 p-6 text-white`}>
+                            <div className={`${BRAND_GREEN_CLASS} p-6 text-white`}>
                                 <div className="text-center">
                                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <span className="text-3xl">🔐</span>
