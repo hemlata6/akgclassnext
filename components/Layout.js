@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import { Header, StickyMobileFooter } from '../components/Header/Header';
 
 export default function Layout({ children }) {
   const [cartCount, setCartCount] = useState(0);
+  const [shouldHideControls, setShouldHideControls] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     // Load initial cart count
@@ -21,6 +24,17 @@ export default function Layout({ children }) {
       window.removeEventListener('storage', handleCartUpdate);
     };
   }, []);
+
+  // Detect query parameters to hide Header and StickyMobileFooter
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isMobileParam = params.get('isMobile');
+      const tokenParam = params.get('token');
+      
+      setShouldHideControls(!!(isMobileParam || tokenParam));
+    }
+  }, [router.asPath]);
 
   const updateCartCount = () => {
     if (typeof window !== 'undefined') {
@@ -41,9 +55,9 @@ export default function Layout({ children }) {
 
   return (
     <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
-      <Header cartCount={cartCount} />
+      {!shouldHideControls && <Header cartCount={cartCount} />}
       {children}
-      <StickyMobileFooter cartCount={cartCount} />
+      {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}
     </div>
   );
 }

@@ -34,6 +34,62 @@ export default function CartPage() {
   const [successBarMessage, setSuccessBarMessage] = useState('');
   const [showMobilePaymentModal, setShowMobilePaymentModal] = useState(false);
   const [paymentUrl, setPaymentUrl] = useState('');
+  const [mobileStudentData, setMobileStudentData] = useState(null);
+  const [routeData, setRouteData] = useState(null);
+  const [tokenFromUrl, setTokenFromUrl] = useState(null);
+  
+  // Build query string from route params to preserve across navigation
+  const getQueryString = () => {
+    const params = new URLSearchParams();
+    if (routeData) params.append('isMobile', routeData);
+    if (tokenFromUrl) params.append('token', tokenFromUrl);
+    const queryStr = params.toString();
+    return queryStr ? `?${queryStr}` : '';
+  };
+  
+  // Check if we should hide global footer
+  const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
+  
+  // Detect query params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isMobileParam = params.get('isMobile');
+      const tokenParam = params.get('token');
+      
+      if (isMobileParam) setRouteData(isMobileParam);
+      if (tokenParam) setTokenFromUrl(tokenParam);
+    }
+  }, [router.asPath]);
+
+  // Fetch student details when mobile parameters are present
+  useEffect(() => {
+    fetchMobileStudentData();
+  }, [routeData, tokenFromUrl]);
+
+  const fetchMobileStudentData = async () => {
+    if (routeData && tokenFromUrl) {
+      try {
+        const response = await axios.get(
+          `${Endpoints.baseURL}student/fetch-details`,
+          { headers: { "X-Auth": tokenFromUrl } }
+        );
+
+        if (response.data?.student) {
+          const student = response.data.student;
+          setMobileStudentData({
+            firstName: student.firstName,
+            lastName: student.lastName,
+            fullName: student.firstName + ' ' + student.lastName,
+            contact: student.contact || student.phone,
+            email: student.email
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching mobile student data:', error);
+      }
+    }
+  };
 
   // Load cart from localStorage
   useEffect(() => {
@@ -415,6 +471,21 @@ export default function CartPage() {
   if (cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-white">
+        {shouldHideGlobalControls && (
+          <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+            <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+              <button
+                onClick={() => router.push(`/store${getQueryString()}`)}
+                className="flex items-center gap-2 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-semibold"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                Back to Store
+              </button>
+            </div>
+          </div>
+        )}
         <div className="flex flex-col items-center justify-center py-20 px-4">
           <div className="h-32 w-32 bg-slate-100 rounded-full flex items-center justify-center mb-6 text-slate-300">
             <svg className="w-16 h-16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -424,22 +495,40 @@ export default function CartPage() {
           <h2 className="text-2xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
           <p className="text-slate-500 mb-8">Looks like you haven't added any courses or books yet.</p>
           <button
-            onClick={() => router.push('/')}
+            onClick={() => {
+              const destination = routeData ? '/store' : '/';
+              router.push(destination + getQueryString());
+            }}
             className={`${BRAND_GREEN_CLASS} text-white px-8 py-3 rounded-xl font-bold hover:-translate-y-1 transition-all shadow-lg`}
           >
-            Start Shopping
+            {routeData ? 'Back to Store' : 'Start Shopping'}
           </button>
         </div>
-        <Footer />
+        {!shouldHideGlobalControls && <Footer />}
       </div>
     );
   }
 
-  console.log('cartItems', cartItems);
+  // console.log('cartItems', cartItems);
 
 
   return (
     <div className="bg-slate-50 min-h-screen md:pb-0">
+      {shouldHideGlobalControls && (
+        <div className="bg-white border-b border-gray-200 sticky top-0 z-40">
+          <div className="max-w-7xl mx-auto px-4 py-3 flex items-center gap-3">
+            <button
+              onClick={() => router.push(`/store${getQueryString()}`)}
+              className="flex items-center gap-2 px-4 py-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors font-semibold"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back to Store
+            </button>
+          </div>
+        </div>
+      )}
       <div className={`py-12 ${LAYOUT_PADDING}`}>
         <h1 className="text-2xl font-bold text-slate-900 mb-8">Shopping Cart ({cartItems.length})</h1>
         <div className="flex flex-col lg:flex-row gap-8">
@@ -576,7 +665,7 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-      <Footer />
+      {!shouldHideGlobalControls && <Footer />}
 
       {/* Checkout Modal */}
       <Dialog

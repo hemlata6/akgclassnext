@@ -584,15 +584,14 @@ function MobilePriceCard({ title, price, features, rec, url }) {
                     </div>
                 ))}
             </div>
-            <a 
-                href={url} 
-                target="_blank" 
-                rel="noreferrer" 
-                className={`block w-full text-center px-4 py-3 font-bold text-sm rounded-lg transition-all shadow-lg ${
-                    rec 
-                        ? 'bg-[#154734] hover:bg-green-700 text-white border border-green-800' 
+            <a
+                href={url}
+                target="_blank"
+                rel="noreferrer"
+                className={`block w-full text-center px-4 py-3 font-bold text-sm rounded-lg transition-all shadow-lg ${rec
+                        ? 'bg-[#154734] hover:bg-green-700 text-white border border-green-800'
                         : 'bg-gray-800 hover:bg-gray-700 text-white border border-gray-700'
-                }`}
+                    }`}
             >
                 Enroll Now
             </a>

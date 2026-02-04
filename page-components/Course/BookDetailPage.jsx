@@ -15,6 +15,29 @@ const BookDetailPage = ({ bookData, onBack }) => {
     const [suggestedCourses, setSuggestedCourses] = useState([]);
     const [selectedBook, setSelectedBook] = useState(null);
     const [allCourses, setAllCourses] = useState([]);
+    const [routeData, setRouteData] = useState(null);
+    const [tokenFromUrl, setTokenFromUrl] = useState(null);
+
+    // Detect query params on mount
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const isMobileParam = params.get('isMobile');
+            const tokenParam = params.get('token');
+
+            if (isMobileParam) setRouteData(isMobileParam);
+            if (tokenParam) setTokenFromUrl(tokenParam);
+        }
+    }, [router.asPath]);
+
+    // Build query string from route params to preserve across navigation
+    const getQueryString = () => {
+        const params = new URLSearchParams();
+        if (routeData) params.append('isMobile', routeData);
+        if (tokenFromUrl) params.append('token', tokenFromUrl);
+        const queryStr = params.toString();
+        return queryStr ? `?${queryStr}` : '';
+    };
 
     useEffect(() => {
         const savedCart = localStorage.getItem('cartCourses');
@@ -182,7 +205,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                                 Remove from Cart
                                             </button>
                                             <button
-                                                onClick={() => router.push('/cart')}
+                                                onClick={() => router.push(`/cart${getQueryString()}`)}
                                                 className={`w-full ${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5`}
                                             >
                                                 <Icons.Cart size={14} />
@@ -422,8 +445,8 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                                     <button
                                                         onClick={() => handleSuggestedCourseAddToCart(suggestedCourse)}
                                                         className={`flex-1 font-semibold py-2 px-3 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 shadow-md ${cartCourses.some(item => item.id === suggestedCourse.id)
-                                                                ? 'bg-slate-600 hover:bg-slate-700 text-white'
-                                                                : `${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white`
+                                                            ? 'bg-slate-600 hover:bg-slate-700 text-white'
+                                                            : `${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white`
                                                             }`}
                                                     >
                                                         <ShoppingCart className="h-3.5 w-3.5" />

@@ -12,6 +12,22 @@ function BookDetailWrapper() {
   const { authToken } = useAuth();
   const [bookData, setBookData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [routeData, setRouteData] = useState(null);
+  const [tokenFromUrl, setTokenFromUrl] = useState(null);
+
+  // Detect query params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isMobileParam = params.get('isMobile');
+      const tokenParam = params.get('token');
+      
+      if (isMobileParam) setRouteData(isMobileParam);
+      if (tokenParam) setTokenFromUrl(tokenParam);
+    }
+  }, []);
+
+  const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
 
   useEffect(() => {
     if (!bookId) return;

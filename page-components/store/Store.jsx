@@ -23,19 +23,9 @@ const Store = () => {
     };
 
     const router = useRouter();
-    // Support query params from URL
-    const routeData = router.query?.isMobile;
-    const tokenFromUrl = router.query?.token;
     const [isMobile, setIsMobile] = useState(false);
-
-    useEffect(() => {
-        setIsMobile(window.innerWidth >= 600);
-        const handleResize = () => {
-            setIsMobile(window.innerWidth >= 600);
-        };
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    const [routeData, setRouteData] = useState(null);
+    const [tokenFromUrl, setTokenFromUrl] = useState(null);
     const { addPurchase } = useAuth();
     const [loading, setLoading] = useState(false)
     const [fullDes, setFullDes] = useState('');
@@ -79,7 +69,41 @@ const Store = () => {
     const primaryColorLight = theme.primary;
     const primaryColorDark = theme.primaryHover;
 
-    console.log('productTypes', productTypes, selectedProductType);
+    const getQueryString = () => {
+        const params = new URLSearchParams();
+        if (routeData) params.append('isMobile', routeData);
+        if (tokenFromUrl) params.append('token', tokenFromUrl);
+        const queryStr = params.toString();
+        return queryStr ? `?${queryStr}` : '';
+    };
+
+    // Check if we should hide global header/footer
+    const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
+
+    // console.log('shouldHideGlobalControls', shouldHideGlobalControls)
+
+    // Detect query params on mount and when router is ready
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const params = new URLSearchParams(window.location.search);
+            const isMobileParam = params.get('isMobile');
+            const tokenParam = params.get('token');
+
+            if (isMobileParam) setRouteData(isMobileParam);
+            if (tokenParam) setTokenFromUrl(tokenParam);
+        }
+    }, [router.asPath]);
+
+    useEffect(() => {
+        setIsMobile(window.innerWidth >= 600);
+        const handleResize = () => {
+            setIsMobile(window.innerWidth >= 600);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // console.log('productTypes', productTypes, selectedProductType);
 
 
     // Convert hex color to RGB
@@ -240,7 +264,7 @@ const Store = () => {
         let examTypeFromState = null;
         let examStageNameFromState = null;
         let productTypeFromState = null;
-        console.log('navigationState', navigationState);
+        // console.log('navigationState', navigationState);
         if (navigationState) {
 
 
@@ -346,7 +370,7 @@ const Store = () => {
                     }
                 }
             }
-            console.log('productTypeFromState', productTypeFromState);
+            // console.log('productTypeFromState', productTypeFromState);
 
             // Set product type if available
             if (productTypeFromState && productTypes.length > 0) {
@@ -845,11 +869,12 @@ const Store = () => {
 
     const handleCardClick = (course) => {
         console.log('course', course);
+        const queryString = getQueryString();
 
         if (course?.type === "books") {
-            router.push(`/book/${course.id}`);
+            router.push(`/book/${course.id}${queryString}`);
         } else {
-            router.push(`/course/${course.id}`);
+            router.push(`/course/${course.id}${queryString}`);
         }
     };
 
@@ -874,7 +899,8 @@ const Store = () => {
     };
 
     const handleShowCart = () => {
-        router.push('/cart');
+        const queryString = getQueryString();
+        router.push(`/cart${queryString}`);
     }
 
     // Get exam stages based on selected domain (only if selected domain has children)
@@ -963,23 +989,27 @@ const Store = () => {
     return (
         <div className="bg-gradient-to-br from-gray-50 via-indigo-50/30 to-indigo-50/30 lg:pt-4">
             {/* Main Store Content */}
-            {/* Header Section - Fixed on mobile only */}
+            {/* Header Section - Fixed on mobile only - Hidden when using routeData */}
+
             <div className="lg:relative lg:z-auto fixed top-15 left-0 right-0 z-30 lg:bg-white lg:border-0 border-b lg:shadow-md shadow-sm bg-white border-indigo-100 lg:rounded-xl lg:mx-4">
                 <div className="max-w-[1800px] mx-auto px-2 pt-2.5 md:px-3 md:py-2">
                     {/* Header Section - Course Store Title + Sort, Search, Cart */}
                     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-1">
                         {/* Left: Title */}
-                        <div className="flex items-center gap-1.5">
-                            <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-sm text-white" style={{ backgroundColor: primaryColor }}>
-                                <ShoppingCart className="h-3.5 w-3.5" />
+                        {!shouldHideGlobalControls && (
+                            <div className="flex items-center gap-1.5">
+                                <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-sm text-white" style={{ backgroundColor: primaryColor }}>
+                                    <ShoppingCart className="h-3.5 w-3.5" />
+                                </div>
+                                <div>
+                                    <h1 className="text-sm md:text-base font-bold" style={{ color: primaryColor }}>
+                                        Course Store
+                                    </h1>
+                                    <p className="text-[9px] text-gray-600 hidden md:block">Explore our premium courses</p>
+                                </div>
                             </div>
-                            <div>
-                                <h1 className="text-sm md:text-base font-bold" style={{ color: primaryColor }}>
-                                    Course Store
-                                </h1>
-                                <p className="text-[9px] text-gray-600 hidden md:block">Explore our premium courses</p>
-                            </div>
-                        </div>
+                        )}
+
                         {/* Right: Sort, Search, Cart in a row */}
                         <div className="flex flex-wrap items-start gap-1.5 w-full lg:w-auto">
                             {/* Mobile Filter Button */}
@@ -1002,7 +1032,7 @@ const Store = () => {
                             </button>
 
                             {/* View Cart Button - Desktop and Mobile */}
-                            {!routeData && cartCourses?.length > 0 && (
+                            {cartCourses?.length > 0 && (
                                 <button
                                     onClick={handleShowCart}
                                     className="flex text-white font-bold text-xs py-2 px-4 rounded-lg hover:shadow-lg transition-all shadow-lg items-center justify-center gap-2"
@@ -1041,201 +1071,201 @@ const Store = () => {
                     </div>
 
                     {/* Top Filters - Only Show When routeData Exists (Mobile Only) */}
-                    {routeData && (
-                        <div
-                            className="lg:hidden px-3 py-1.5 overflow-x-auto whitespace-nowrap"
-                            style={{
-                                WebkitOverflowScrolling: 'touch',
-                                backgroundColor: `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)`,
-                                borderColor: primaryColor
-                            }}
-                        >
-                            <div className="flex items-center gap-2 flex-nowrap w-max">
-                                {/* Exam Type Filter Pill */}
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('exam-type');
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: selectedDomain ? primaryColor : '#d1d5db',
-                                        backgroundColor: selectedDomain ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: selectedDomain ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {selectedDomain && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            1
-                                        </span>
-                                    )}
-                                    Exam Type
-                                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                    </svg>
-                                </button>
 
-                                {/* Exam Stage Filter Pill */}
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('exam-stage');
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: selectedExamStage ? primaryColor : '#d1d5db',
-                                        backgroundColor: selectedExamStage ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: selectedExamStage ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {selectedExamStage && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            1
-                                        </span>
-                                    )}
-                                    Exam Stage
-                                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                    </svg>
-                                </button>
-
-                                {/* Faculty Filter Pill */}
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('faculty');
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: selectedFaculties.length > 0 ? primaryColor : '#d1d5db',
-                                        backgroundColor: selectedFaculties.length > 0 ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: selectedFaculties.length > 0 ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {selectedFaculties.length > 0 && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            {selectedFaculties.length}
-                                        </span>
-                                    )}
-                                    Faculty
-                                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                    </svg>
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('paper');
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: paperCount > 0 ? primaryColor : '#d1d5db',
-                                        backgroundColor: paperCount > 0 ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: paperCount > 0 ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {paperCount > 0 && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            {paperCount}
-                                        </span>
-                                    )}
-                                    Paper
-                                    <ChevronDownIcon />
-                                </button>
-
-
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('product');
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: productCount ? primaryColor : '#d1d5db',
-                                        backgroundColor: productCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: productCount ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {productCount > 0 && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            1
-                                        </span>
-                                    )}
-                                    Product
-                                    <ChevronDownIcon />
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('batch'); // same tab as product
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: batchCount ? primaryColor : '#d1d5db',
-                                        backgroundColor: batchCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: batchCount ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {batchCount > 0 && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            1
-                                        </span>
-                                    )}
-                                    Batch
-                                    <ChevronDownIcon />
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setMobileFilterTab('price');
-                                        setMobileFiltersOpen(true);
-                                    }}
-                                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                    style={{
-                                        borderColor: priceCount ? primaryColor : '#d1d5db',
-                                        backgroundColor: priceCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                        color: priceCount ? primaryColor : '#374151'
-                                    }}
-                                >
-                                    {priceCount > 0 && (
-                                        <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                            1
-                                        </span>
-                                    )}
-                                    Price
-                                    <ChevronDownIcon />
-                                </button>
-
-                                {/* Reset Button - Shows when filters are selected */}
-                                {(selectedDomain || selectedExamStage || selectedFaculties.length > 0 || selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting) && (
-                                    <button
-                                        onClick={() => {
-                                            setSelectedDomain(null);
-                                            setSelectedExamStage(null);
-                                            setSelectedFaculties([]);
-                                            setSelectedPapers([]);
-                                            setSelectedTag(null);
-                                            setSelectedProductType(null);
-                                            setPriceSorting('');
-                                        }}
-                                        className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0 ml-1 ${routeData
-                                            ? 'border-red-500 bg-red-50 text-red-500 hover:bg-red-100'
-                                            : 'border-red-500 bg-red-50 text-red-500 hover:bg-red-100'
-                                            }`}
-                                    >
-                                        <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                        </svg>
-                                        Reset
-                                    </button>
+                    <div
+                        className="lg:hidden px-3 py-1.5 overflow-x-auto whitespace-nowrap"
+                        style={{
+                            WebkitOverflowScrolling: 'touch',
+                            backgroundColor: `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)`,
+                            borderColor: primaryColor
+                        }}
+                    >
+                        <div className="flex items-center gap-2 flex-nowrap w-max">
+                            {/* Exam Type Filter Pill */}
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('exam-type');
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: selectedDomain ? primaryColor : '#d1d5db',
+                                    backgroundColor: selectedDomain ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: selectedDomain ? primaryColor : '#374151'
+                                }}
+                            >
+                                {selectedDomain && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        1
+                                    </span>
                                 )}
+                                Exam Type
+                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                            </button>
 
-                            </div>
+                            {/* Exam Stage Filter Pill */}
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('exam-stage');
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: selectedExamStage ? primaryColor : '#d1d5db',
+                                    backgroundColor: selectedExamStage ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: selectedExamStage ? primaryColor : '#374151'
+                                }}
+                            >
+                                {selectedExamStage && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        1
+                                    </span>
+                                )}
+                                Exam Stage
+                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                            </button>
+
+                            {/* Faculty Filter Pill */}
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('faculty');
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: selectedFaculties.length > 0 ? primaryColor : '#d1d5db',
+                                    backgroundColor: selectedFaculties.length > 0 ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: selectedFaculties.length > 0 ? primaryColor : '#374151'
+                                }}
+                            >
+                                {selectedFaculties.length > 0 && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        {selectedFaculties.length}
+                                    </span>
+                                )}
+                                Faculty
+                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                                </svg>
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('paper');
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: paperCount > 0 ? primaryColor : '#d1d5db',
+                                    backgroundColor: paperCount > 0 ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: paperCount > 0 ? primaryColor : '#374151'
+                                }}
+                            >
+                                {paperCount > 0 && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        {paperCount}
+                                    </span>
+                                )}
+                                Paper
+                                <ChevronDownIcon />
+                            </button>
+
+
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('product');
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: productCount ? primaryColor : '#d1d5db',
+                                    backgroundColor: productCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: productCount ? primaryColor : '#374151'
+                                }}
+                            >
+                                {productCount > 0 && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        1
+                                    </span>
+                                )}
+                                Product
+                                <ChevronDownIcon />
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('batch'); // same tab as product
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: batchCount ? primaryColor : '#d1d5db',
+                                    backgroundColor: batchCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: batchCount ? primaryColor : '#374151'
+                                }}
+                            >
+                                {batchCount > 0 && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        1
+                                    </span>
+                                )}
+                                Batch
+                                <ChevronDownIcon />
+                            </button>
+                            <button
+                                onClick={() => {
+                                    setMobileFilterTab('price');
+                                    setMobileFiltersOpen(true);
+                                }}
+                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
+                                style={{
+                                    borderColor: priceCount ? primaryColor : '#d1d5db',
+                                    backgroundColor: priceCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
+                                    color: priceCount ? primaryColor : '#374151'
+                                }}
+                            >
+                                {priceCount > 0 && (
+                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
+                                        1
+                                    </span>
+                                )}
+                                Price
+                                <ChevronDownIcon />
+                            </button>
+
+                            {/* Reset Button - Shows when filters are selected */}
+                            {(selectedDomain || selectedExamStage || selectedFaculties.length > 0 || selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting) && (
+                                <button
+                                    onClick={() => {
+                                        setSelectedDomain(null);
+                                        setSelectedExamStage(null);
+                                        setSelectedFaculties([]);
+                                        setSelectedPapers([]);
+                                        setSelectedTag(null);
+                                        setSelectedProductType(null);
+                                        setPriceSorting('');
+                                    }}
+                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0 ml-1 ${routeData
+                                        ? 'border-red-500 bg-red-50 text-red-500 hover:bg-red-100'
+                                        : 'border-red-500 bg-red-50 text-red-500 hover:bg-red-100'
+                                        }`}
+                                >
+                                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                    </svg>
+                                    Reset
+                                </button>
+                            )}
+
                         </div>
-                    )}
+                    </div>
+
 
                     {/* View Cart Button */}
-                    {routeData && cartCourses?.length > 0 && (
-                        <div className="bg-white px-3 py-2">
+                    {/* {routeData && cartCourses?.length > 0 && (
+                        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white px-3 py-2 border-t border-gray-200 shadow-lg z-30">
                             <button
                                 onClick={handleShowCart}
                                 className="w-full text-white font-bold text-xs py-2 px-4 rounded-lg hover:shadow-lg transition-all shadow-lg flex items-center justify-center gap-2"
@@ -1245,12 +1275,13 @@ const Store = () => {
                                 View Cart ({cartCourses.length})
                             </button>
                         </div>
-                    )}
+                    )} */}
                 </div>
             </div>
 
+
             {/* Main Content - padding top only on mobile */}
-            <div className="lg:pt-4 lg:border-gray-200" style={{ paddingTop: !isMobile ? "8.5rem" : "1rem" }}>
+            <div className="lg:pt-4 lg:border-gray-200" style={{ paddingTop: !isMobile ? "10rem" : "1rem" }}>
                 <div className="max-w-[1800px] mx-auto px-4 md:px-4">
                     {/* Main Layout - Sidebar + Content */}
                     <div className="flex flex-col lg:flex-row gap-3">
@@ -2291,8 +2322,8 @@ const Store = () => {
                 </div>
             )}
 
-            {/* Global Footer */}
-            <Footer />
+            {/* Global Footer - Hidden when using routeData */}
+            {!shouldHideGlobalControls && <Footer />}
         </div>
     );
 };

@@ -14,6 +14,22 @@ function CourseDetailWrapper() {
   const [showNotification, setShowNotification] = useState(false);
   const [courseData, setCourseData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [routeData, setRouteData] = useState(null);
+  const [tokenFromUrl, setTokenFromUrl] = useState(null);
+
+  // Detect query params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isMobileParam = params.get('isMobile');
+      const tokenParam = params.get('token');
+      
+      if (isMobileParam) setRouteData(isMobileParam);
+      if (tokenParam) setTokenFromUrl(tokenParam);
+    }
+  }, []);
+
+  const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
 
   useEffect(() => {
     if (!courseId) return;
@@ -68,7 +84,7 @@ function CourseDetailWrapper() {
         onBack={() => router.push('/')}
         onAddToCart={addToCart}
       />
-      <Footer />
+      {!shouldHideGlobalControls && <Footer />}
     </>
   );
 }
