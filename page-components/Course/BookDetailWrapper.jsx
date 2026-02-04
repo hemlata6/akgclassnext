@@ -21,7 +21,7 @@ function BookDetailWrapper() {
       const params = new URLSearchParams(window.location.search);
       const isMobileParam = params.get('isMobile');
       const tokenParam = params.get('token');
-      
+
       if (isMobileParam) setRouteData(isMobileParam);
       if (tokenParam) setTokenFromUrl(tokenParam);
     }
@@ -36,12 +36,24 @@ function BookDetailWrapper() {
     const fetchBookDetail = async () => {
       try {
         setLoading(true);
-        const response = authToken 
-          ? await Network.getStudentAuthCourse(authToken) 
+        const response = authToken
+          ? await Network.getStudentAuthCourse(authToken)
           : await Network.getFreeCourseList(instId);
-        const courses = response?.courses || response || [];
-        // Convert bookId to number for comparison
-        const book = courses.find(c => c.id === parseInt(bookId) && c.type === "books");
+
+        // Safely extract courses array
+        let courses = [];
+        if (response?.courses && Array.isArray(response.courses)) {
+          courses = response.courses;
+        } else if (Array.isArray(response)) {
+          courses = response;
+        } else {
+          courses = [];
+        }
+
+
+        // Convert bookId to number for comparison and find book
+        const book = courses.find(c => c && c.id === parseInt(bookId) && c.type === "books");
+        console.log('coursescourses', book);
         setBookData(book || null);
       } catch (err) {
         console.error('Error fetching book:', err);
@@ -63,8 +75,8 @@ function BookDetailWrapper() {
           <div className="text-6xl mb-4">📚</div>
           <h1 className="text-4xl font-bold text-slate-900 mb-4">Book Not Found</h1>
           <p className="text-slate-600 mb-6">The book you're looking for doesn't exist or has been removed.</p>
-          <button 
-            onClick={() => router.push('/')} 
+          <button
+            onClick={() => router.push('/')}
             className="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-bold shadow-lg transition-all active:scale-95"
           >
             Back to Home
