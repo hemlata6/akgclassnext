@@ -286,7 +286,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       if (course.onlineContentAccess) modes.push("Recorded");
       if (course.offlineContentAccess) modes.push("Pendrive");
       if (course.faceToFaceAccess) modes.push("Face to Face");
-      if (course.quizAccess) modes.push("Quiz Access");
+      if (course.quizAccess) modes.push("Test-Series");
       if (modes.length) {
         modeSet.add(modes.join(" + "));
       }
@@ -306,7 +306,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
         (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
         (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Quiz Access") ? pricing.quizAccess === true : pricing.quizAccess === null)
+        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
       );
 
       return matchesSelection;
@@ -380,7 +380,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
         (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
         (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Quiz Access") ? pricing.quizAccess === true : pricing.quizAccess === null)
+        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
       );
 
       // Match validity
@@ -418,9 +418,6 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       setShowConfigModal(true);
     }
   };
-
-  console.log('suggestedCourses', suggestedCourses);
-
 
   return (
     <section className="py-12 bg-white relative">

@@ -170,7 +170,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
       if (course.onlineContentAccess) modes.push("Recorded");
       if (course.offlineContentAccess) modes.push("Pendrive");
       if (course.faceToFaceAccess) modes.push("Face to Face");
-      if (course.quizAccess) modes.push("Quiz Access");
+      if (course.quizAccess) modes.push("Test-Series");
       if (modes.length) {
         modeSet.add(modes.join(" + "));
       }
@@ -189,7 +189,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
           (selectedModes.includes("Live Access") ? course.liveAccess === true : course.liveAccess === null) &&
           (selectedModes.includes("Recorded") ? course.onlineContentAccess === true : course.onlineContentAccess === null) &&
           (selectedModes.includes("Pendrive") ? course.offlineContentAccess === true : course.offlineContentAccess === null) &&
-          (selectedModes.includes("Quiz Access") ? course.quizAccess === true : course.quizAccess === null) &&
+          (selectedModes.includes("Test-Series") ? course.quizAccess === true : course.quizAccess === null) &&
           (selectedModes.includes("Face to Face") ? course.faceToFaceAccess === true : course.faceToFaceAccess === null)
         );
 

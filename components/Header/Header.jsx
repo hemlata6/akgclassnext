@@ -220,6 +220,7 @@ export const Header = ({ cartCount }) => {
       setCurrentLevel('second');
     } else if (domain.child && domain.child.length > 0) {
       sessionStorage.setItem('storeNavigationState', JSON.stringify({
+        source: 'header',
         selectedDomainId: domain.id,
         selectedDomainName: domain.name,
         isMobile: false,
@@ -232,6 +233,7 @@ export const Header = ({ cartCount }) => {
   // Handle second level domain click for Lectures
   const handleSecondLevelDomainClick = (domain) => {
     sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      source: 'header',
       selectedDomainId: selectedParentDomain?.id,
       selectedDomainName: selectedParentDomain?.name,
       selectedExamStageId: domain.id,
@@ -250,6 +252,7 @@ export const Header = ({ cartCount }) => {
       setBooksCurrentLevel('second');
     } else if (domain.child && domain.child.length > 0) {
       sessionStorage.setItem('storeNavigationState', JSON.stringify({
+        source: 'header',
         selectedDomainId: domain.id,
         selectedDomainName: domain.name,
         isMobile: false,
@@ -262,6 +265,7 @@ export const Header = ({ cartCount }) => {
   // Handle second level domain click for Books
   const handleBooksSecondLevelDomainClick = (domain) => {
     sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      source: 'header',
       selectedDomainId: booksSelectedParentDomain?.id,
       selectedDomainName: booksSelectedParentDomain?.name,
       selectedExamStageId: domain.id,

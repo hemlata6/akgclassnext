@@ -59,6 +59,7 @@ const Store = () => {
     const [isProcessingSubmenu, setIsProcessingSubmenu] = useState(false); // Track if we're processing a sidebar submenu selection
     const [courseExpandedDescriptions, setCourseExpandedDescriptions] = useState(null);
     const [purchaseSuccess, setPurchaseSuccess] = useState(null);
+    const [navigationStateChanged, setNavigationStateChanged] = useState(0); // Trigger navigation handler when header navigation happens
     const paperCount = selectedPapers.length;
     const productCount = selectedProductType ? 1 : 0;
     const batchCount = selectedTag ? 1 : 0;
@@ -255,83 +256,147 @@ const Store = () => {
 
     }, [])
 
-    // Handle domain selection from Header navigation (when domains are loaded)
+    // Monitor for storeNavigationState changes from Header (even if already on /store)
     useEffect(() => {
-        // First check sessionStorage for navigation state from Header
+        let lastNavState = sessionStorage.getItem('storeNavigationState');
+
+        const checkForNavStateChange = setInterval(() => {
+            const currentNavState = sessionStorage.getItem('storeNavigationState');
+            if (currentNavState !== lastNavState) {
+                lastNavState = currentNavState;
+                setNavigationStateChanged(prev => prev + 1); // Trigger navigation handler
+            }
+        }, 100); // Check every 100ms for changes
+
+        return () => clearInterval(checkForNavStateChange);
+    }, []);
+
+    // Handle domain selection from Header/Footer/CoursesSection/BookStore navigation
+    useEffect(() => {
+        // First check sessionStorage for navigation state
         const navigationState = sessionStorage.getItem('storeNavigationState');
+        if (!navigationState) {
+            console.log('No storeNavigationState found, returning');
+            return; // No navigation state to process
+        }
+
+        let state = null;
+        let sourceFromState = null;
         let selectedDomainIdFromState = null;
         let selectedExamStageIdFromState = null;
         let examTypeFromState = null;
         let examStageNameFromState = null;
         let productTypeFromState = null;
-        // console.log('navigationState', navigationState);
-        if (navigationState) {
 
-
-            try {
-                const state = JSON.parse(navigationState);
-                selectedDomainIdFromState = state.selectedDomainId;
-                selectedExamStageIdFromState = state.selectedExamStageId;
-                examTypeFromState = state.selectedDomainName;
-                examStageNameFromState = state.selectedExamStageName;
-                productTypeFromState = state.productType;
-            } catch (error) {
-                console.error('Error parsing navigation state:', error);
-            }
-        }
-
-        // Fallback to URL query params for backward compatibility
-        if (!selectedDomainIdFromState) {
-            selectedDomainIdFromState = router.query?.selectedDomainId;
-            selectedExamStageIdFromState = router.query?.selectedExamStageId;
-            examTypeFromState = router.query?.examType;
-            examStageNameFromState = router.query?.examStage;
-            productTypeFromState = router.query?.productType;
-        }
-
-        // Handle navigation from footer (examType and examStage as names)
-        if (examTypeFromState && examStageNameFromState && domains.length > 0) {
-            // Find the exam type (parent domain) by name
-            const parentDomain = domains.find(d =>
-                d.parentId === 0 &&
-                d.name.toLowerCase() === examTypeFromState.toLowerCase()
-            );
-
-            if (parentDomain) {
-                setSelectedDomain(parentDomain);
-
-                // Find the exam stage (child domain) by name
-                if (parentDomain.child && parentDomain.child.length > 0) {
-                    const examStage = parentDomain.child.find(child =>
-                        child.name.toLowerCase().includes(examStageNameFromState.toLowerCase())
-                    );
-                    if (examStage) {
-                        setSelectedExamStage(examStage);
-                    }
-                }
-
-                // Set product type if available
-                if (productTypeFromState && productTypes.length > 0) {
-                    // Try to find a matching product type (case-insensitive)
-                    const matchedType = productTypes.find(type =>
-                        type.toLowerCase() === productTypeFromState.toLowerCase()
-                    );
-                    if (matchedType) {
-                        setSelectedProductType(matchedType);
-                    }
-                }
-
-                // Mark filters as initialized
-                if (!filtersInitialized) {
-                    setFiltersInitialized(true);
-                }
-            }
+        try {
+            state = JSON.parse(navigationState);
+            sourceFromState = state.source; // 'header', 'footer', 'lecture', 'books'
+            selectedDomainIdFromState = state.selectedDomainId;
+            selectedExamStageIdFromState = state.selectedExamStageId;
+            examTypeFromState = state.selectedDomainName;
+            examStageNameFromState = state.selectedExamStageName;
+            productTypeFromState = state.productType;
+        } catch (error) {
+            console.error('Error parsing navigation state:', error);
+            sessionStorage.removeItem('storeNavigationState');
             return;
         }
 
-        // Only process if coming from header navigation with domain ID
-        if (selectedDomainIdFromState && domains.length > 0) {
-            // Find if selectedDomainId is a parent domain (exam type) or child domain (exam stage)
+        // CASE 1: From CoursesSection "Explore Store" (lecture) or BookStore "Explore Store" (books)
+        // Only set product type, reset other filters
+        if ((sourceFromState === 'lecture' || sourceFromState === 'books') && productTypeFromState) {
+            // Reset exam type and exam stage (unselect them)
+            setSelectedDomain(null);
+            setSelectedExamStage(null);
+            setSelectedFaculties([]);
+
+            // Set only product type
+            if (productTypes.length > 0) {
+                const matchedType = productTypes.find(type =>
+                    type.toLowerCase() === productTypeFromState.toLowerCase()
+                );
+                if (matchedType) {
+                    setSelectedProductType(matchedType);
+                }
+            } else {
+                // ProductTypes not loaded yet, try again on next render
+                return;
+            }
+
+            setFiltersInitialized(true);
+            sessionStorage.removeItem('storeNavigationState');
+            return;
+        }
+
+        // CASE 2: From Footer (Courses menu)
+        // Only set exam stage based on selected exam stage name (do not change other filters)
+        if (sourceFromState === 'footer' && examStageNameFromState) {
+            if (domains.length === 0) {
+                // Domains not loaded yet, try again on next render
+                return;
+            }
+
+            // Find the exam stage (child domain) by name across all domains
+            const normalizeName = (value) => (value || '')
+                .toLowerCase()
+                .replace(/\s+/g, ' ')
+                .trim();
+
+            const targetStageName = normalizeName(examStageNameFromState);
+
+            let matchedExamStage = null;
+            let matchedParentDomain = null;
+
+            // First try to match within currently selected domain (preferred, avoids changing exam type)
+            if (selectedDomain && selectedDomain.child && selectedDomain.child.length > 0) {
+                const examStage = selectedDomain.child.find(child => {
+                    const childName = normalizeName(child.name);
+                    return childName.includes(targetStageName) || targetStageName.includes(childName);
+                });
+                if (examStage) {
+                    matchedExamStage = examStage;
+                    matchedParentDomain = selectedDomain;
+                }
+            }
+
+            // Fallback: search across all domains to find the stage
+            if (!matchedExamStage) {
+                for (const domain of domains) {
+                    if (domain.child && domain.child.length > 0) {
+                        const examStage = domain.child.find(child => {
+                            const childName = normalizeName(child.name);
+                            return childName.includes(targetStageName) || targetStageName.includes(childName);
+                        });
+                        if (examStage) {
+                            matchedExamStage = examStage;
+                            matchedParentDomain = domain;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            if (matchedExamStage) {
+                setIsProcessingSubmenu(true);
+                if (matchedParentDomain && (!selectedDomain || selectedDomain.id !== matchedParentDomain.id)) {
+                    setSelectedDomain(matchedParentDomain);
+                }
+                setSelectedExamStage(matchedExamStage);
+            }
+
+            setFiltersInitialized(true);
+            sessionStorage.removeItem('storeNavigationState');
+            return;
+        }
+
+        // CASE 3: From Header (Lectures/Books menu with exam type/stage selection)
+        // Set exam type, exam stage, product type - faculty can be selected but not preset
+        if ((sourceFromState === 'header' || !sourceFromState) && selectedDomainIdFromState) {
+            if (domains.length === 0) {
+                // Domains not loaded yet, try again on next render
+                return;
+            }
+
             let parentDomain = null;
             let examStage = null;
 
@@ -370,30 +435,26 @@ const Store = () => {
                     }
                 }
             }
-            // console.log('productTypeFromState', productTypeFromState);
 
-            // Set product type if available
-            if (productTypeFromState && productTypes.length > 0) {
-                // Try to find a matching product type (case-insensitive)
-                const matchedType = productTypes.find(type =>
-                    type.toLowerCase() === productTypeFromState.toLowerCase()
-                );
-                if (matchedType) {
-                    setSelectedProductType(matchedType);
+            // Set product type if available (header navigation includes product type)
+            if (productTypeFromState) {
+                if (productTypes.length > 0) {
+                    const matchedType = productTypes.find(type =>
+                        type.toLowerCase() === productTypeFromState.toLowerCase()
+                    );
+                    if (matchedType) {
+                        setSelectedProductType(matchedType);
+                    }
+                } else {
+                    // ProductTypes not loaded yet, try again on next render
+                    return;
                 }
             }
 
-            // Mark filters as initialized to prevent default selection from overriding
-            if (!filtersInitialized) {
-                setFiltersInitialized(true);
-            }
-
-            // Clear sessionStorage after processing
-            if (navigationState) {
-                sessionStorage.removeItem('storeNavigationState');
-            }
+            setFiltersInitialized(true);
+            sessionStorage.removeItem('storeNavigationState');
         }
-    }, [domains, productTypes, router.query])
+    }, [domains, productTypes, navigationStateChanged])
 
     // Handle pending exam stage selection (when coming from sidebar submenu)
     useEffect(() => {
@@ -447,7 +508,8 @@ const Store = () => {
         }
     }, [domains, router.query, isProcessingSubmenu]);
 
-    // Auto-select exam stage based on selected domain (when coming from VideoLecturePage)
+    // Auto-select exam stage based on selected domain (when user selects a different exam type in sidebar)
+    // This should NOT override user's manual selection in the sidebar
     useEffect(() => {
         const facultyFilter = router.query?.facultyFilter;
         const fromCoursesTag = router.query?.fromCoursesTag;
@@ -457,13 +519,19 @@ const Store = () => {
             return;
         }
 
-        // Skip auto-selection if we're processing a submenu selection (it was already set by pending handler)
-        if (isProcessingSubmenu && selectedExamStage) {
-            // Clear the flag now that exam stage is set
-            setIsProcessingSubmenu(false);
+        // Skip auto-selection while processing a submenu/footer selection
+        if (isProcessingSubmenu) {
+            if (selectedExamStage) {
+                // Clear the flag now that exam stage is set
+                setIsProcessingSubmenu(false);
+            }
             return;
         }
 
+        // Only auto-select exam stage if:
+        // 1. There's a selected domain
+        // 2. There's NO selected exam stage yet (user hasn't chosen one)
+        // 3. The domain has children (exam stages)
         if (selectedDomain && !selectedExamStage && domains.length > 0) {
             // Find the parent domain to get its children (exam stages)
             const parentDomain = domains.find(d => d.id === selectedDomain.parentId);
@@ -478,7 +546,7 @@ const Store = () => {
                 }
             }
         }
-    }, [selectedDomain, domains, router.query, isProcessingSubmenu, selectedExamStage]);
+    }, [selectedDomain, domains, isProcessingSubmenu])
 
     // Select all faculties by default or specific faculty if coming from faculty click
     useEffect(() => {
@@ -568,9 +636,16 @@ const Store = () => {
 
     // Filter courses based on selected filters
     useEffect(() => {
-        filterCourses();
+
+        // Only filter if we have courses to filter from
+        if (allCourses && allCourses.length > 0) {
+            filterCourses();
+        }
+
         // Save current filter state whenever filters change (but only if we have data loaded)
-        if (domains.length > 0 || faculties.length > 0) {
+        // Only save to storeFilters if we're NOT currently processing storeNavigationState
+        const navigationState = sessionStorage.getItem('storeNavigationState');
+        if (!navigationState && (domains.length > 0 || faculties.length > 0)) {
             const filterState = {
                 selectedDomain,
                 selectedExamStage,
@@ -586,7 +661,6 @@ const Store = () => {
     }, [selectedDomain, selectedExamStage, selectedFaculties, selectedPapers, selectedTag, selectedProductType, priceSorting, searchTerm, allCourses]);
 
     const filterCourses = () => {
-
         let filtered = [...allCourses];
 
         // Helper function to get all child domain IDs recursively
@@ -868,7 +942,6 @@ const Store = () => {
     };
 
     const handleCardClick = (course) => {
-        console.log('course', course);
         const queryString = getQueryString();
 
         if (course?.type === "books") {
@@ -907,6 +980,7 @@ const Store = () => {
     const getExamStages = () => {
         // If a domain is selected and it has children, return its children as exam stages
         if (selectedDomain && selectedDomain.child && selectedDomain.child.length > 0) {
+
             return selectedDomain.child;
         }
         // Otherwise return empty array (no exam stages to show)
@@ -1312,10 +1386,13 @@ const Store = () => {
                                         {domains.filter(d => d.parentId === 0).map(domain => (
                                             <div
                                                 key={domain.id}
-                                                onClick={() => {
-                                                    // Don't allow deselection, only switching between exam types
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
                                                     if (selectedDomain?.id !== domain.id) {
                                                         setSelectedDomain(domain);
+                                                        // Reset exam stage when changing domain
+                                                        setSelectedExamStage(null);
                                                     }
                                                 }}
                                                 className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
@@ -1347,7 +1424,9 @@ const Store = () => {
                                             {getExamStages().map(stage => (
                                                 <div
                                                     key={stage.id}
-                                                    onClick={() => {
+                                                    onClick={(e) => {
+                                                        e.preventDefault();
+                                                        e.stopPropagation();
                                                         setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
                                                     }}
                                                     className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"

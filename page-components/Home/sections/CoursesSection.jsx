@@ -116,7 +116,6 @@ export const CoursesSection = ({ onAddToCart }) => {
                     // && c.tags.some(tag => tag.tag === "Featured Course")
                 )
                 : [];
-            console.log('activeCourses', activeCourses);
 
             setCoursesData(activeCourses);
             setError(null);
@@ -176,6 +175,15 @@ export const CoursesSection = ({ onAddToCart }) => {
         window.dispatchEvent(new Event('cartUpdated'));
     };
 
+    const handleExploreMoreClick = (type) => {
+        sessionStorage.setItem('storeNavigationState', JSON.stringify({
+            source: 'lecture',
+            isMobile: false,
+            productType: type
+        }));
+        router.push('/store');
+    }
+
     return (
         <section id="fr-courses" className="py-12 bg-slate-50 relative overflow-hidden">
             <div className={LAYOUT_PADDING}>
@@ -187,7 +195,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                         </div>
                         {/* Mobile: Explore Store button next to title */}
                         <button
-                            onClick={() => router.push('/store?productType=lecture')}
+                            onClick={() => handleExploreMoreClick('lecture')}
                             className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
                         >
                             Explore Store <Icons.ChevronRight size={16} />
@@ -197,7 +205,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                         <div className="flex items-center gap-4 w-full md:w-auto">
                             {/* Desktop: Explore Store button with filters */}
                             <button
-                                onClick={() => router.push('/store?productType=lecture')}
+                                onClick={() => handleExploreMoreClick('lecture')}
                                 className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
                             >
                                 Explore Store <Icons.ChevronRight size={16} />
@@ -338,7 +346,6 @@ export const CoursesSection = ({ onAddToCart }) => {
                                                             } else {
                                                                 // Add to cart via modal
                                                                 if (!course.coursePricing || course.coursePricing.length === 0) {
-                                                                    console.error('No pricing available for this course');
                                                                     return;
                                                                 }
                                                                 setSelectedCourse(course);

@@ -37,7 +37,25 @@ export default function CartPage() {
   const [mobileStudentData, setMobileStudentData] = useState(null);
   const [routeData, setRouteData] = useState(null);
   const [tokenFromUrl, setTokenFromUrl] = useState(null);
-  
+
+  const LOGOUT_ERROR_CODES = new Set([100, 101, 102, 103, 104, 401]);
+
+  const handleLogoutError = (errorCode, errorDescription) => {
+    if (!LOGOUT_ERROR_CODES.has(errorCode)) return false;
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('studentAuth');
+    localStorage.removeItem('studentData');
+    const message = `You have been logged out. ${errorDescription || 'Session expired'}`;
+    setErrorBarMessage(message);
+    setShowErrorBar(true);
+    setShowCheckoutModal(false);
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+    return true;
+  };
+
   // Build query string from route params to preserve across navigation
   const getQueryString = () => {
     const params = new URLSearchParams();
@@ -46,17 +64,19 @@ export default function CartPage() {
     const queryStr = params.toString();
     return queryStr ? `?${queryStr}` : '';
   };
-  
+
+  const queryString = getQueryString();
+
   // Check if we should hide global footer
   const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
-  
+
   // Detect query params on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const isMobileParam = params.get('isMobile');
       const tokenParam = params.get('token');
-      
+
       if (isMobileParam) setRouteData(isMobileParam);
       if (tokenParam) setTokenFromUrl(tokenParam);
     }
@@ -242,6 +262,7 @@ export default function CartPage() {
         }
         setErrorMessage("");
       } else {
+        if (handleLogoutError(response.data?.errorCode, response.data?.errorDescription)) return;
         setIsCouponValid(response.data?.valid === null ? false : response.data?.valid);
         const msg = response.data?.message ? response.data?.message : "Invalid Coupon Code";
         setErrorMessage(msg);
@@ -251,6 +272,7 @@ export default function CartPage() {
       }
     } catch (err) {
       console.log(err);
+      if (handleLogoutError(err?.response?.data?.errorCode, err?.response?.data?.errorDescription)) return;
       setIsCouponValid(false);
       setErrorMessage("Failed to verify coupon");
       setShowErrorBar(true);
@@ -367,6 +389,7 @@ export default function CartPage() {
         //   }, 500);
         // }
       } else {
+        if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
         const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
         setErrorBarMessage(errorMsg);
         setShowErrorBar(true);
@@ -374,6 +397,7 @@ export default function CartPage() {
       }
     } catch (error) {
       console.error('Public checkout error:', error);
+      if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
       const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
       setErrorBarMessage(errorMsg);
       setShowErrorBar(true);
@@ -383,6 +407,71 @@ export default function CartPage() {
 
 
   const handleProceedToCheckout = async () => {
+    if (queryString) {
+      // Mobile mode (query params) - always call API with tokenParam
+      setIsProcessing(true);
+      try {
+        const entityModals = cartItems.map(item => ({
+          purchaseType: item.isDripCourse ? "courseContent" : "course",
+          entityId: item.id,
+          campusId: 0,
+          courseId: 0,
+          coursePricingId: item.coursePricingId || item.pricingId || 0
+        }));
+
+        const mobileBody = {
+          "getCheckoutUrls": entityModals,
+          "coupon": isCouponValid ? couponNumber : ""
+        };
+
+        const response = await axios.post(
+          `${BASE_URL}payment/get-checkout-url`,
+          mobileBody,
+          { headers: { "X-Auth": tokenFromUrl } }
+        );
+
+        if (response?.data?.status === true && response?.data?.url) {
+          setCheckoutResponse(response?.data);
+
+          const isMobile = window.innerWidth <= 768;
+
+          if (isMobile) {
+            setPaymentUrl(response.data.url);
+            setShowMobilePaymentModal(true);
+            setPaymentDrawerOpen(true);
+            window.dispatchEvent(new Event('hideFooter'));
+          } else {
+            const width = 480;
+            const height = 1080;
+            const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+            const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+            window.open(
+              response.data.url,
+              'payment',
+              `location=no,width=${width},height=${height},top=${top},left=${left}`
+            );
+
+            setPaymentDrawerOpen(true);
+          }
+        } else {
+          if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
+          const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+          setErrorBarMessage(errorMsg);
+          setShowErrorBar(true);
+        }
+      } catch (error) {
+        console.error('Mobile checkout error:', error);
+        if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
+        const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'Token expired or invalid. Please login again from the app.';
+        setErrorBarMessage(errorMsg);
+        setShowErrorBar(true);
+      } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
+
     if (isAuthenticated && authToken) {
       // User is logged in - call API directly
       setIsProcessing(true);
@@ -450,12 +539,14 @@ export default function CartPage() {
 
           // Don't clear cart here - will be cleared after successful payment
         } else {
+          if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
           const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
           setErrorBarMessage(errorMsg);
           setShowErrorBar(true);
         }
       } catch (error) {
         console.error('Checkout error:', error);
+        if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
         const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
         setErrorBarMessage(errorMsg);
         setShowErrorBar(true);

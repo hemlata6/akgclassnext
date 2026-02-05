@@ -10,15 +10,18 @@ export const Footer = () => {
   const { institute } = useAuth();
   // console.log('institute', institute?.logo);
 
-
   const handleCourseClick = (examStage) => {
-    router.push({
-      pathname: '/store',
-      query: {
-        examType: 'CA',
-        examStage: examStage
-      }
-    });
+    const isMobile = sessionStorage.getItem('isMobile');
+    const token = sessionStorage.getItem('token');
+
+    sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      source: 'footer',
+      selectedDomainName: 'CA',
+      selectedExamStageName: examStage,
+      isMobile: isMobile ? true : false,
+      token: token || null
+    }));
+    router.push('/store');
   };
 
 
@@ -79,7 +82,7 @@ export const Footer = () => {
               >
                 Refund Policy
               </li>
-               <li
+              <li
                 onClick={() => router.push('/contact-us')}
                 className="cursor-pointer hover:text-emerald-400 transition-colors"
               >

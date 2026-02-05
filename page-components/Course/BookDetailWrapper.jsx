@@ -49,11 +49,8 @@ function BookDetailWrapper() {
         } else {
           courses = [];
         }
-
-        console.log('coursescourses===', courses);
         // Convert bookId to number for comparison and find book
         const book = courses.find(c => c && c.id === parseInt(bookId) && c.type === "books");
-        console.log('coursescourses', book);
         setBookData(book || null);
       } catch (err) {
         console.error('Error fetching book:', err);

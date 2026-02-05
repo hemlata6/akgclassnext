@@ -69,7 +69,7 @@ export const BlogListPage = () => {
       const response = await Network.fetchAllContentFromCourse(body);
       if (response?.errorCode === 0 && response?.contentList) {
         // Display all blogs from this API
-        const blogs = response.contentList.filter(item => item.entityType === 'blog');
+        const blogs = response.contentList.filter(item => item.entityType === 'blog' && item?.active === true);
 
         // Sort blogs by date (latest first)
         const sortedBlogs = blogs.sort((a, b) => {
@@ -123,8 +123,8 @@ export const BlogListPage = () => {
 
       if (response?.contentList) {
         const content = response.contentList;
-        const blogs = content.filter(item => item.entityType === 'blog');
-        const foldersData = content.filter(item => item.entityType === 'folder' && item?.drip === false);
+        const blogs = content.filter(item => item.entityType === 'blog' && item?.active === true);
+        const foldersData = content.filter(item => item.entityType === 'folder' && item?.drip === false && item?.active === true);
 
         // Sort blogs by date (latest first)
         const sortedBlogs = blogs.sort((a, b) => {
