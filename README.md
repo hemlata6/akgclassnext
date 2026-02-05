@@ -1,6 +1,6 @@
-# iWision - Next.js Application
+# VG STUDY HUB - Next.js Application
 
-This is a Next.js conversion of the original React app for iWision - iWision | iWision - CA Vipul Dhall.
+This is a Next.js conversion of the original React app for VG STUDY HUB - VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA.
 
 ## Getting Started
 

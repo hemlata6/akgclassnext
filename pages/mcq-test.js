@@ -7,7 +7,7 @@ export default function McqTestPage() {
   return (
     <>
       <Head>
-        <title>MCQ Test - iWision</title>
+        <title>MCQ Test - VG STUDY HUB</title>
         <meta name="description" content="Test your knowledge with MCQ tests" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

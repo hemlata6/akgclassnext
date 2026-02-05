@@ -7,7 +7,7 @@ export default function Cart() {
   return (
     <>
       <Head>
-        <title>Shopping Cart - iWision</title>
+        <title>Shopping Cart - VG STUDY HUB</title>
         <meta name="description" content="Review your cart and proceed to checkout" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

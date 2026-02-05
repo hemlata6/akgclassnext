@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'CA Class',
+    title = 'VG STUDY HUB',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
     image = 'https://caclassestest.netlify.app/logo.png',
     url = 'https://caclassestest.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'CA Class',
-    keywords = 'CA Class, CA Final, Financial Reporting, Ind AS',
+    author = 'VG STUDY HUB',
+    keywords = 'VG STUDY HUB, CA Final, Financial Reporting, Ind AS',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'CA Class',
+      site_name: 'VG STUDY HUB',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -108,7 +108,7 @@ export const generateBlogStructuredData = (blog, url) => {
     image = 'https://caclassestest.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'CA Class',
+    author = 'VG STUDY HUB',
   } = blog;
 
   return {
@@ -130,7 +130,7 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'CA Class',
+      name: 'VG STUDY HUB',
       url: 'https://caclassestest.netlify.app',
       logo: {
         '@type': 'ImageObject',
@@ -152,10 +152,10 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'CA Class',
+    name: 'VG STUDY HUB',
     url: 'https://caclassestest.netlify.app',
     logo: 'https://caclassestest.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Vipul Dhall',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA VIVEK GABA',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/caclass',
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: iWision)
+ * @param {string} siteName - Site name (default: VG STUDY HUB)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'iWision') => {
+export const generatePageTitle = (pageTitle, siteName = 'VG STUDY HUB') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

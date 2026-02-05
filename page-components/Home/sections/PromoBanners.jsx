@@ -10,14 +10,32 @@ export const PromoBanners = () => {
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Vipul Dhall",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Vipul Dhall",
+            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA VIVEK GABA",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA VIVEK GABA",
             alt: "Live Batch",
             bg: "bg-indigo-900"
         },
         {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA ARUN SETIA",
+            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA ARUN SETIA",
+            alt: "Combo Offer",
+            bg: "bg-slate-900"
+        },
+        {
+            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CS ANKUSH BANSAL",
+            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CS ANKUSH BANSAL",
+            alt: "Combo Offer",
+            bg: "bg-slate-900"
+        },
+        {
+            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA CS HARSH GUPTA",
+            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA CS HARSH GUPTA",
+            alt: "Combo Offer",
+            bg: "bg-slate-900"
+        },
+        {
+            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CS GD SALUJA",
+            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CS GD SALUJA",
             alt: "Combo Offer",
             bg: "bg-slate-900"
         }
@@ -43,7 +61,7 @@ export const PromoBanners = () => {
                         alt: banner.title || 'Banner',
                         bg: 'bg-slate-900'
                     }));
-                    setSlides(bannerSlides);
+                    // setSlides(bannerSlides);
                 }
             }
         } catch (error) {
@@ -113,7 +131,7 @@ export const PromoBanners = () => {
                     className="flex overflow-x-auto gap-3 md:gap-6 pb-0 snap-x snap-mandatory scroll-smooth"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                    {slides.map((slide, index) => (
+                    {slides?.length > 0 && slides.map((slide, index) => (
                         <div
                             key={index}
                             className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer ${slide.bg}`}

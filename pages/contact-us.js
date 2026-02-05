@@ -230,10 +230,10 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <a href="tel:9310226047" className="font-semibold" style={{color: '#154734'}}
+                                <a href="tel:7703880232" className="font-semibold" style={{color: '#154734'}}
                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    9310226047
+                                    7703880232
                                 </a>
                             </div>
 
@@ -243,10 +243,10 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:admin@iwision.com" className="font-semibold" style={{color: '#154734'}}
+                                <a href="mailto:info.vgsh@gmail.com" className="font-semibold" style={{color: '#154734'}}
                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    admin@iwision.com
+                                    info.vgsh@gmail.com
                                 </a>
                             </div>
 
@@ -256,7 +256,7 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
                                 <p className="text-sm" style={{color: '#e8f3ee'}}>
-                                    New Delhi, India
+                                    D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092, India
                                 </p>
                             </div>
                         </div>
@@ -313,7 +313,7 @@ export default function ContactUsPage() {
                                             name="phone"
                                             value={formData.phone}
                                             onChange={handleInputChange}
-                                            placeholder="+91 98765 43210"
+                                            placeholder="+91 7703880232"
                                             className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
                                             onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}

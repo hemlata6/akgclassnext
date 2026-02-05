@@ -29,7 +29,7 @@ const RefundPolicy = () => {
             
             <section className="mb-8">
               <p className="text-slate-700 leading-relaxed mb-4">
-                Thank you for shopping at www.iWision.com
+                Thank you for shopping at www.VG STUDY HUB.com
               </p>
             </section>
 
@@ -49,7 +49,7 @@ const RefundPolicy = () => {
                 If you have any questions about our Returns and Refunds Policy, please contact us:
               </p>
               <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-slate-700"><strong>By email:</strong> admin@iWision.com</p>
+                <p className="text-slate-700"><strong>By email:</strong> info.vgsh@gmail.com</p>
               </div>
             </section>
 

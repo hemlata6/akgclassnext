@@ -12,6 +12,14 @@ export const StudentGallery = () => {
     const [canGoPrev, setCanGoPrev] = useState(false);
     const [canGoNext, setCanGoNext] = useState(true);
 
+    const fallbackGallery = [
+        '/vghub/student.jpg',
+        '/vghub/6745-4887-6.jpg',
+        '/vghub/6619-4887-6.jpg',
+        '/vghub/4782-2760-5.jpg',
+        '/vghub/4276-7635-9.jpg'
+    ];
+
     useEffect(() => {
         fetchGallery();
         handleResize();
@@ -33,9 +41,15 @@ export const StudentGallery = () => {
         }
     };
 
+    const getEffectiveGallery = () => {
+        if (gallery.length > 0) return gallery;
+        return fallbackGallery.map((img, index) => ({ id: `fallback-${index}`, img }));
+    };
+
     const updateNavigationButtons = () => {
+        const effectiveLength = getEffectiveGallery().length;
         setCanGoPrev(currentIndex > 0);
-        setCanGoNext(currentIndex < gallery.length - itemsPerView);
+        setCanGoNext(currentIndex < effectiveLength - itemsPerView);
     };
 
     const handlePrev = () => {
@@ -45,7 +59,8 @@ export const StudentGallery = () => {
     };
 
     const handleNext = () => {
-        if (currentIndex < gallery.length - itemsPerView) {
+        const effectiveLength = getEffectiveGallery().length;
+        if (currentIndex < effectiveLength - itemsPerView) {
             setCurrentIndex(currentIndex + 1);
         }
     };
@@ -84,10 +99,6 @@ export const StudentGallery = () => {
                     <div className="flex justify-center py-8">
                         <p className="text-slate-500">Loading gallery...</p>
                     </div>
-                ) : gallery.length === 0 ? (
-                    <div className="text-center py-8">
-                        <p className="text-slate-500">No images available</p>
-                    </div>
                 ) : (
                     <div>
                         {/* Carousel Container */}
@@ -98,7 +109,7 @@ export const StudentGallery = () => {
                                     transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
                                 }}
                             >
-                                {gallery.map((item) => (
+                                {getEffectiveGallery().map((item, idx) => (
                                     <div
                                         key={item.id}
                                         className="flex-shrink-0"
@@ -106,13 +117,12 @@ export const StudentGallery = () => {
                                             width: `calc((100% - ${(itemsPerView - 1) * 1}rem) / ${itemsPerView})`
                                         }}
                                     >
-                                        <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-2 hover:shadow-lg transition-shadow">
-                                            <div className="bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center" style={{ minHeight: '200px' }}>
+                                        <div className="gallery-card bg-white shadow-md border border-slate-200 rounded-2xl p-2 hover:shadow-lg transition-shadow">
+                                            <div className={`bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center ${gallery.length === 0 ? 'aspect-[3/4]' : ''}`} style={{ minHeight: '200px' }}>
                                                 <img
                                                     src={item.img}
-                                                    className="block hover:opacity-95 transition-all duration-500 rounded-lg"
-                                                    alt={item.title || 'Student photo'}
-                                                    style={{ maxHeight: '350px', maxWidth: '100%', height: 'auto', width: 'auto', objectFit: 'contain' }}
+                                                    className="gallery-image w-full h-full object-contain hover:opacity-95 transition-all duration-500"
+                                                    alt={item.title || `Student feedback ${idx + 1}`}
                                                     onError={(e) => {
                                                         e.target.style.display = 'none';
                                                         e.target.parentElement.innerHTML = '<div class="flex items-center justify-center text-slate-400 p-8">No Image</div>';
@@ -128,7 +138,7 @@ export const StudentGallery = () => {
                         </div>
 
                         {/* Navigation Buttons */}
-                        {gallery.length > itemsPerView && (
+                        {getEffectiveGallery().length > itemsPerView && (
                             <div className="flex justify-center items-center gap-4 mt-6">
                                 <button
                                     onClick={handlePrev}
@@ -151,6 +161,42 @@ export const StudentGallery = () => {
                     </div>
                 )}
             </div>
+            <style jsx>{`
+                .gallery-card {
+                    animation: galleryFloat 4.5s ease-in-out infinite;
+                    will-change: transform;
+                }
+
+                .gallery-card:nth-child(odd) {
+                    animation-duration: 5.2s;
+                }
+
+                .gallery-card:nth-child(even) {
+                    animation-duration: 4.3s;
+                }
+
+                .gallery-card:hover {
+                    animation: galleryZoom 900ms ease-in-out infinite;
+                }
+
+                @keyframes galleryFloat {
+                    0%, 100% {
+                        transform: translateY(0);
+                    }
+                    50% {
+                        transform: translateY(-8px);
+                    }
+                }
+
+                @keyframes galleryZoom {
+                    0%, 100% {
+                        transform: scale(1);
+                    }
+                    50% {
+                        transform: scale(1.05);
+                    }
+                }
+            `}</style>
         </section>
     );
 };

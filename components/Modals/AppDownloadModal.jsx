@@ -61,7 +61,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
           <Box sx={{ px: 4, pb: 4, space: 2 }}>
             {/* Google Play Store */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.iwision"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.VG STUDY HUB"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}

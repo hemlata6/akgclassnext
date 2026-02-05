@@ -205,7 +205,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                 alt="Faculty"
               />
               <div>
-                <p className="text-sm font-bold text-slate-900">CA Vipul Dhall</p>
+                <p className="text-sm font-bold text-slate-900">CA VIVEK GABA</p>
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
               </div>
               <button
@@ -545,7 +545,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                 </div>
                 <div>
                   <p className="text-xs font-bold text-slate-900">Have queries?</p>
-                  <p className="text-[10px] text-slate-600">Call us at +91 98765 43210</p>
+                  <p className="text-[10px] text-slate-600">Call us at +91 7703880232</p>
                 </div>
               </div> */}
             </div>

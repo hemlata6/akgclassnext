@@ -1,53 +1,155 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import CheckIcon from '@mui/icons-material/Check';
 import { Icons, LAYOUT_PADDING } from '../constants/Icons';
 import { Footer } from '../components/Shared/SharedComponents';
+import { Header, StickyMobileFooter } from '../components/Header/Header';
 
 const FacultyProfile = () => {
     const router = useRouter();
+    const [cartCount, setCartCount] = useState(0);
+
+    const facultyCards = [
+        { title: 'CA Arun Setia', url: '/vghub/Arun Setia.png' },
+        { title: 'CA Vivek Gaba', url: '/vghub/Vivek gaba.png' },
+        { title: 'CA Ankush Bansal', url: '/vghub/Ankush Bansal.png' },
+        { title: 'CA GD Saluja', url: '/vghub/GD Saluja.png' },
+        { title: 'CA Harsh Gupta', url: '/vghub/harsh gupta.jpg' }
+    ];
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
+    useEffect(() => {
+        const updateCartCount = () => {
+            if (typeof window !== 'undefined') {
+                const savedCart = localStorage.getItem('cartCourses');
+                if (savedCart) {
+                    try {
+                        const cart = JSON.parse(savedCart);
+                        setCartCount(Array.isArray(cart) ? cart.length : 0);
+                    } catch (error) {
+                        console.error('Error parsing cart:', error);
+                        setCartCount(0);
+                    }
+                } else {
+                    setCartCount(0);
+                }
+            }
+        };
+
+        updateCartCount();
+        window.addEventListener('cartUpdated', updateCartCount);
+        window.addEventListener('storage', updateCartCount);
+
+        return () => {
+            window.removeEventListener('cartUpdated', updateCartCount);
+            window.removeEventListener('storage', updateCartCount);
+        };
+    }, []);
+
     return (
         <>
+            <Header cartCount={cartCount} />
             <div id="faculty-profile-container" data-page="faculty-profile" className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
                 {/* Hero Section */}
-                <section id="faculty-hero-section" data-section="faculty-hero" className="bg-white py-16" style={{ backgroundColor: '#ffffff' }}>
+                <section id="faculty-hero-section" data-section="faculty-hero" className="bg-slate-50 pt-28 pb-16">
                     <div className={LAYOUT_PADDING}>
-                        <button
-                            onClick={() => router.push('/')}
-                            className="back-button inline-flex items-center gap-2 text-emerald-700 hover:text-emerald-900 mb-8 transition-colors"
-                        >
-                            <Icons.ChevronLeft />
-                            Back to Home
-                        </button>
-
-                        <div className="flex flex-col md:flex-row items-center gap-12">
-                            <div className="w-full md:w-1/3">
-                                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square bg-slate-100">
-                                    <img
-                                        src="/sir image1.jpg"
-                                        alt="CA Vipul Dhall"
-                                        className="w-full h-full object-cover"
-                                    />
+                        <div className="bg-white rounded-3xl shadow-xl border border-slate-100 p-8 md:p-12">
+                            <div className="flex flex-col md:flex-row items-center gap-12">
+                                <div className="w-full md:w-1/3">
+                                    <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-slate-100">
+                                        <img
+                                            src="/vghub/vg.jpg"
+                                            alt="CA VIVEK GABA"
+                                            className="w-full h-full object-cover"
+                                        />
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div className="w-full md:w-2/3 space-y-6">
-                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">CA Vipul Dhall</h1>
-                                <p className="subtitle text-2xl text-emerald-700">All India Rank 43 | First Attempt Chartered Accountant</p>
-                                <p className="description text-lg text-slate-700 leading-relaxed">
-                                    CA Vipul Dhall is a first-attempt Chartered Accountant and All India Rank 43 holder, known for transforming the way thousands of students learn Accountancy across India. A graduate of the prestigious Hindu College, University of Delhi, Vipul blends corporate experience with a deep passion for teaching, empowering over 200,000 students through clarity, mentorship, and real-world financial insight.
-                                </p>
-                                <p className="journey-text text-slate-600">
-                                    His journey—from PwC to Bharti Airtel Ltd. to becoming a nationally trusted CA mentor—continues to inspire thousands of students to believe that the CA dream is not just achievable, but conquerable with the right guidance.
-                                </p>
+                                <div className="w-full md:w-2/3 space-y-6">
+                                    <h1 className="text-4xl md:text-5xl font-bold text-slate-900">CA VIVEK GABA</h1>
+                                    <p className="subtitle text-2xl text-emerald-700">All India Rank 43 | First Attempt Chartered Accountant</p>
+                                    <p className="description text-lg text-slate-700 leading-relaxed">
+                                        CA VIVEK GABA is a first-attempt Chartered Accountant and All India Rank 43 holder, known for transforming the way thousands of students learn Accountancy across India. A graduate of the prestigious Hindu College, University of Delhi, Vipul blends corporate experience with a deep passion for teaching, empowering over 200,000 students through clarity, mentorship, and real-world financial insight.
+                                    </p>
+                                    <p className="journey-text text-slate-600">
+                                        His journey—from PwC to Bharti Airtel Ltd. to becoming a nationally trusted CA mentor—continues to inspire thousands of students to believe that the CA dream is not just achievable, but conquerable with the right guidance.
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
+                </section>
+
+                {/* Faculty Cards Section */}
+                <section id="faculty-cards-section" data-section="faculty-cards" className="py-16 bg-slate-50">
+                    <div className={LAYOUT_PADDING}>
+                        <div className="text-center mb-10">
+                            <span className="text-emerald-700 font-bold tracking-widest text-xs uppercase">Meet the Mentors</span>
+                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">Our Faculty Panel</h2>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                            {facultyCards.map((card, index) => (
+                                <div
+                                    key={card.title}
+                                    className={`faculty-card bg-white rounded-2xl border border-slate-200 p-3 text-center shadow-lg ${
+                                        index % 2 === 0 ? 'md:-translate-y-2' : 'md:translate-y-3'
+                                    }`}
+                                >
+                                    <div className="faculty-image-wrap w-full aspect-[4/5] rounded-xl bg-slate-100 overflow-hidden">
+                                        <img
+                                            src={card.url}
+                                            alt={card.title}
+                                            className="faculty-image w-full h-full object-cover"
+                                        />
+                                    </div>
+                                    <p className="mt-3 text-sm font-bold text-slate-900">{card.title}</p>
+                                    <span className="text-[10px] text-slate-500 font-semibold tracking-wide">Faculty</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <style jsx>{`
+                        .faculty-card {
+                            transition: transform 250ms ease, box-shadow 250ms ease;
+                            animation: facultyFloat 5s ease-in-out infinite;
+                            will-change: transform;
+                        }
+
+                        .faculty-card:nth-child(odd) {
+                            animation-duration: 5.6s;
+                        }
+
+                        .faculty-card:nth-child(even) {
+                            animation-duration: 4.4s;
+                        }
+
+                        .faculty-card:hover {
+                            transform: translateY(-6px) scale(1.04);
+                            box-shadow: 0 18px 40px rgba(15, 23, 42, 0.18);
+                        }
+
+                        .faculty-image {
+                            transition: transform 400ms ease, filter 400ms ease;
+                            filter: grayscale(0.25);
+                        }
+
+                        .faculty-card:hover .faculty-image {
+                            transform: scale(1.05);
+                            filter: grayscale(0);
+                        }
+
+                        @keyframes facultyFloat {
+                            0%, 100% {
+                                transform: translateY(0);
+                            }
+                            50% {
+                                transform: translateY(-6px);
+                            }
+                        }
+                    `}</style>
                 </section>
 
                 {/* Key Highlights Section */}
@@ -191,7 +293,7 @@ const FacultyProfile = () => {
                     <div className={LAYOUT_PADDING}>
                         <div className="cta-box bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-12 text-center text-white shadow-2xl max-w-4xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your CA Journey?</h2>
-                            <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with CA Vipul Dhall</p>
+                            <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with CA VIVEK GABA</p>
                             <button
                                 onClick={() => router.push('/store')}
                                 className="inline-flex items-center gap-2 px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:-translate-y-1"
@@ -204,6 +306,7 @@ const FacultyProfile = () => {
                 </section>
 
             </div>
+            <StickyMobileFooter cartCount={cartCount} />
             <Footer />
         </>
     );

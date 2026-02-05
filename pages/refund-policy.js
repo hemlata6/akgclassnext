@@ -6,7 +6,7 @@ export default function Refund() {
   return (
     <>
       <Head>
-        <title>Refund Policy - iWision</title>
+        <title>Refund Policy - VG STUDY HUB</title>
         <meta name="description" content="Read our refund policy" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

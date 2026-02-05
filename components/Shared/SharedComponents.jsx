@@ -34,9 +34,9 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "iWision"}
+              {institute?.institue ? institute?.institue : "VG STUDY HUB"}
             </div>
-            <p>Best CA Classes for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
+            <p>Best VG STUDY HUB for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
@@ -93,14 +93,14 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: +91 9310226047</li>
-              <li>admin@iwision.com</li>
-              <li>New Delhi</li>
+              <li>Call: +91 7703880232</li>
+              <li>info.vgsh@gmail.com</li>
+              <li>D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 iWision Education. All rights reserved.
+          © 2026 VG STUDY HUB Education. All rights reserved.
           <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>
@@ -145,7 +145,7 @@ export const Loader = () => (
     }}>
       <img
         src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/caclass-logo-circle-white.webp"
-        alt="ca class Logo"
+        alt="VG STUDY HUB Logo"
         style={{
           height: '96px',
           width: 'auto',

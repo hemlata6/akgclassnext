@@ -52,7 +52,7 @@ export default function BlogDetail({ blogData, error }) {
     return (
         <>
             <Head>
-                <title>{blogTitle} | CA Class Blog</title>
+                <title>{blogTitle} | VG STUDY HUB Blog</title>
                 <meta name="description" content={blogDescription} />
 
                 {/* Open Graph / Facebook */}

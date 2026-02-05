@@ -205,13 +205,13 @@ export const Header = ({ cartCount }) => {
     }
   };
 
-    // Handle back button for Lectures
+  // Handle back button for Lectures
   const handleBackToFirstLevel = () => {
     setCurrentLevel('first');
     setSelectedParentDomain(null);
     setSelectedFirstLevelDomain(null);
   };
-  
+
   // Handle first level domain click for Lectures
   const handleFirstLevelDomainClick = (domain) => {
     if (domain.child && domain.child.length > 0 && !shouldShowSecondLevel) {
@@ -366,7 +366,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src={"/logoiwision.png"} alt="ca class Logo" className="h-16 md:h-16 object-contain" />
+                <img src={"/vghub/cropped-LOGON.jpeg"} alt="VG STUDY HUB Logo" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 
@@ -602,8 +602,8 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <img src={"logoiwision.png"} alt="Logo" className="h-20" />
-              {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "logoiwision.png"} alt="Logo" className="h-20" /> */}
+              <img src={"/vghub/cropped-LOGON.jpeg"} alt="Logo" className="h-20" />
+              {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "logoVG STUDY HUB.png"} alt="Logo" className="h-20" /> */}
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

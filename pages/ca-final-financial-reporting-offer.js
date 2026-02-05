@@ -10,10 +10,10 @@ export default function CAFinalFROfferPage() {
     return (
         <>
             <Head>
-                <title>CA Final FR Course - Financial Reporting by CA Vipul Dhall | iWision</title>
-                <meta name="description" content="Master CA Final Financial Reporting with 100% LIVE batch by CA Vipul Dhall (AIR 43). Concept clarity, Test Series, Mentorship & 24x7 Doubt Support included." />
+                <title>CA Final FR Course - Financial Reporting by CA VIVEK GABA | VG STUDY HUB</title>
+                <meta name="description" content="Master CA Final Financial Reporting with 100% LIVE batch by CA VIVEK GABA (AIR 43). Concept clarity, Test Series, Mentorship & 24x7 Doubt Support included." />
                 <meta property="og:title" content="CA Final FR Course - Master Financial Reporting" />
-                <meta property="og:description" content="Learn FR from CA Vipul Dhall - AIR 43. 100% LIVE Batch with 280 hours, Test Series & Career Mentorship." />
+                <meta property="og:description" content="Learn FR from CA VIVEK GABA - AIR 43. 100% LIVE Batch with 280 hours, Test Series & Career Mentorship." />
                 <meta name="robots" content="index, follow" />
                 <link rel="canonical" href="https://caclasses.in/ca-final-financial-reporting-offer" />
             </Head>
@@ -54,7 +54,7 @@ function FRCoursePage() {
                             {/* Text Content */}
                             <div className="text-center lg:text-left order-2 lg:order-1">
                                 <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 md:mb-6 bg-white/5 border border-white/10 rounded-full backdrop-blur-sm">
-                                    <span className="text-green-400 font-bold text-xs tracking-widest uppercase">CA Classes by iWision</span>
+                                    <span className="text-green-400 font-bold text-xs tracking-widest uppercase">VG STUDY HUB by VG STUDY HUB</span>
                                     <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
                                     <span className="text-gray-400 text-xs font-medium">CA Final FR</span>
                                 </div>
@@ -70,7 +70,7 @@ function FRCoursePage() {
                                     100% LIVE BATCH
                                 </p>
                                 <p className="text-sm md:text-lg text-gray-400 mb-6 md:mb-8 max-w-lg mx-auto lg:mx-0">
-                                    Taught by <strong>CA Vipul Dhall (AIR 43)</strong>.<br className="md:hidden" /> Ex-PwC (Big 4) & Ex-Bharti Airtel Ltd. (Manager).
+                                    Taught by <strong>CA VIVEK GABA (AIR 43)</strong>.<br className="md:hidden" /> Ex-PwC (Big 4) & Ex-Bharti Airtel Ltd. (Manager).
                                 </p>
 
                                 <div className="flex flex-col gap-3 justify-center lg:justify-start">
@@ -91,14 +91,14 @@ function FRCoursePage() {
 
                                         {/* Mentor Image */}
                                         <img
-                                            src="CA Vipul Dhall.jpeg"
-                                            alt="CA Vipul Dhall - AIR 43 CA Final Rank Holder"
+                                            src="CA VIVEK GABA.jpeg"
+                                            alt="CA VIVEK GABA - AIR 43 CA Final Rank Holder"
                                             className="w-full h-full object-cover"
                                         />
 
                                         {/* Floating Badge */}
                                         <div className="absolute bottom-2 left-2 right-2 md:bottom-4 md:left-4 md:right-4 bg-gray-900/90 backdrop-blur-md p-1.5 md:p-3 rounded-xl border border-gray-700 shadow-xl text-center">
-                                            <p className="text-green-400 font-black text-xs md:text-lg leading-tight"> CA Vipul Dhall</p>
+                                            <p className="text-green-400 font-black text-xs md:text-lg leading-tight"> CA VIVEK GABA</p>
                                             <p className="text-green-400 font-black text-xs md:text-lg leading-tight">AIR 43</p>
                                             <p className="text-[7px] md:text-[9px] uppercase text-gray-400 font-bold mt-0.5">CA Final Rank Holder</p>
                                         </div>
@@ -215,14 +215,14 @@ function FRCoursePage() {
                 <section className="py-12 md:py-16 bg-[#0f172a]">
                     <div className="max-w-6xl mx-auto px-4">
                         <div className="text-center mb-8 md:mb-12">
-                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">iWision FR Books</h2>
+                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">VG STUDY HUB FR Books</h2>
                             <p className="text-gray-400 text-xs md:text-sm mt-2">Hardcopy delivered to your doorstep</p>
                         </div>
 
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-6">
                             <BookCard
                                 title="Concept Book"
-                                desc="Handwritten Notes by CA Vipul Dhall"
+                                desc="Handwritten Notes by CA VIVEK GABA"
                                 tags={["Multi-Colored Book"]}
                                 image="2.png"
                             />
@@ -294,8 +294,8 @@ function FRCoursePage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-left">
                                     <DetailBox title="Live Doubt Sessions" desc="Interactive sessions conducted over Zoom / G-meet" />
                                     <DetailBox title="Private Telegram Group" desc="Dedicated group of enrolled CA Final students" />
-                                    <DetailBox title="WhatsApp Support" desc="Send doubts on +91-9310226047" />
-                                    <DetailBox title="Call Support" desc="Schedule a doubt call with CA Vipul Dhall" />
+                                    <DetailBox title="WhatsApp Support" desc="Send doubts on +91-7703880232" />
+                                    <DetailBox title="Call Support" desc="Schedule a doubt call with CA VIVEK GABA" />
                                 </div>
                             </div>
                         </div>
@@ -406,7 +406,7 @@ function FRCoursePage() {
                 <footer className="bg-black text-white pt-12 pb-28 md:pb-10 border-t border-gray-900 relative">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
-                        <h2 className="text-xl md:text-2xl font-bold mb-2 tracking-tight">CA Classes by iWision</h2>
+                        <h2 className="text-xl md:text-2xl font-bold mb-2 tracking-tight">VG STUDY HUB by VG STUDY HUB</h2>
                         <p className="text-gray-500 text-sm italic mb-8 max-w-md mx-auto">
                             "Together, we can achieve your career goals."
                         </p>
@@ -415,7 +415,7 @@ function FRCoursePage() {
                         <div className="flex justify-center gap-8 mb-10 items-center">
 
                             {/* YouTube - Official SVG */}
-                            <a href="https://youtube.com/@iwision" target="_blank" rel="noreferrer" className="hover:scale-110 transition-transform">
+                            <a href="https://youtube.com/@VG STUDY HUB" target="_blank" rel="noreferrer" className="hover:scale-110 transition-transform">
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="#FF0000">
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                 </svg>
@@ -451,7 +451,7 @@ function FRCoursePage() {
                                 <Globe size={14} className="text-green-500" />
                                 <span>caclasses.in</span>
                             </a>
-                            <a href="tel:+919310226047" className="flex items-center gap-2 px-4 py-2 bg-gray-900 rounded-full border border-gray-800 hover:border-gray-500 transition-all">
+                            <a href="tel:+917703880232" className="flex items-center gap-2 px-4 py-2 bg-gray-900 rounded-full border border-gray-800 hover:border-gray-500 transition-all">
                                 <Phone size={14} className="text-green-500" />
                                 <span>+91 93102 26047</span>
                             </a>
@@ -459,7 +459,7 @@ function FRCoursePage() {
 
                         {/* Bottom Legal Section */}
                         <div className="border-t border-gray-900 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-600 tracking-widest uppercase">
-                            <p>© 2026 iWision. All rights reserved.</p>
+                            <p>© 2026 VG STUDY HUB. All rights reserved.</p>
                             <div className="flex gap-6">
                                 <a href="https://caclasses.in/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
                                 <a href="https://caclasses.in/terms-of-use" className="hover:text-white transition-colors">Terms of Service</a>
@@ -469,7 +469,7 @@ function FRCoursePage() {
 
                     {/* WhatsApp Sticky Button */}
                     <a
-                        href="https://wa.me/919310226047?text=Hi%20iWision%2C%20I%20have%20a%20doubt%20regarding%20CA%20classes."
+                        href="https://wa.me/917703880232?text=Hi%20VG STUDY HUB%2C%20I%20have%20a%20doubt%20regarding%20CA%20classes."
                         target="_blank"
                         rel="noreferrer"
                         className="fixed bottom-20 md:bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-2xl z-50 hover:bg-[#128C7E] transition-all hover:scale-110 active:scale-95 flex items-center justify-center"

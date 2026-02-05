@@ -56,19 +56,19 @@ export const StudentSupportSection = () => {
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href="mailto:ca classidtclasses@gmail.com" className="text-slate-300 hover:text-white">ca classidtclasses@gmail.com</a>
+                                        <a href="mailto:VG STUDY HUBidtclasses@gmail.com" className="text-slate-300 hover:text-white">VG STUDY HUBidtclasses@gmail.com</a>
                                     </div>
                                 </div>
                             
                                 <div className="space-y-3">
                                     <a
-                                        href="tel:+9198765 43210"
+                                        href="tel:+917703880232"
                                         className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-md"
                                     >
-                                        <Phone /> Call: 98765 43210
+                                        <Phone /> Call: 7703880232
                                     </a>
                                     <a
-                                        href="https://wa.me/9198765 43210"
+                                        href="https://wa.me/917703880232"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-2 shadow-md border border-white/20"
