@@ -83,6 +83,21 @@ const Store = () => {
 
     // console.log('shouldHideGlobalControls', shouldHideGlobalControls)
 
+    useEffect(() => {
+        if (shouldHideGlobalControls) {
+            setSelectedDomain(null);
+            setSelectedExamStage(null);
+            setSelectedFaculties([]);
+            setSelectedPapers([]);
+            setSelectedTag(null);
+            setSelectedProductType(null);
+            setPriceSorting('');
+            setSearchTerm('');
+            setFiltersInitialized(true);
+            sessionStorage.removeItem('storeFilters');
+        }
+    }, [shouldHideGlobalControls]);
+
     // Detect query params on mount and when router is ready
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -273,6 +288,9 @@ const Store = () => {
 
     // Handle domain selection from Header/Footer/CoursesSection/BookStore navigation
     useEffect(() => {
+        if (shouldHideGlobalControls) {
+            return;
+        }
         // First check sessionStorage for navigation state
         const navigationState = sessionStorage.getItem('storeNavigationState');
         if (!navigationState) {
@@ -454,10 +472,13 @@ const Store = () => {
             setFiltersInitialized(true);
             sessionStorage.removeItem('storeNavigationState');
         }
-    }, [domains, productTypes, navigationStateChanged])
+    }, [domains, productTypes, navigationStateChanged, shouldHideGlobalControls])
 
     // Handle pending exam stage selection (when coming from sidebar submenu)
     useEffect(() => {
+        if (shouldHideGlobalControls) {
+            return;
+        }
         const pendingStage = sessionStorage.getItem('pendingExamStageSelection');
 
         if (pendingStage && isProcessingSubmenu && domains.length > 0) {
@@ -476,10 +497,13 @@ const Store = () => {
                 sessionStorage.removeItem('pendingExamStageSelection');
             }
         }
-    }, [domains, isProcessingSubmenu]);
+    }, [domains, isProcessingSubmenu, shouldHideGlobalControls]);
 
     // Set default selections when data is loaded
     useEffect(() => {
+        if (shouldHideGlobalControls) {
+            return;
+        }
         const facultyFilter = router.query?.facultyFilter;
         const fromCoursesTag = router.query?.fromCoursesTag;
         const selectedDomainIdFromState = router.query?.selectedDomainId;
@@ -506,11 +530,14 @@ const Store = () => {
                 }
             }
         }
-    }, [domains, router.query, isProcessingSubmenu]);
+    }, [domains, router.query, isProcessingSubmenu, shouldHideGlobalControls]);
 
     // Auto-select exam stage based on selected domain (when user selects a different exam type in sidebar)
     // This should NOT override user's manual selection in the sidebar
     useEffect(() => {
+        if (shouldHideGlobalControls) {
+            return;
+        }
         const facultyFilter = router.query?.facultyFilter;
         const fromCoursesTag = router.query?.fromCoursesTag;
 
@@ -546,10 +573,13 @@ const Store = () => {
                 }
             }
         }
-    }, [selectedDomain, domains, isProcessingSubmenu])
+    }, [selectedDomain, domains, isProcessingSubmenu, shouldHideGlobalControls])
 
     // Select all faculties by default or specific faculty if coming from faculty click
     useEffect(() => {
+        if (shouldHideGlobalControls) {
+            return;
+        }
         const facultyFilter = router.query?.facultyFilter;
 
         if (facultyFilter && faculties.length > 0) {
@@ -562,7 +592,7 @@ const Store = () => {
             // Default behavior - select all faculties
             setSelectedFaculties(faculties);
         }
-    }, [faculties, filtersInitialized, router.query]);
+    }, [faculties, filtersInitialized, router.query, shouldHideGlobalControls]);
 
     // Select 'lecture' product type by default
     // useEffect(() => {
@@ -645,7 +675,7 @@ const Store = () => {
         // Save current filter state whenever filters change (but only if we have data loaded)
         // Only save to storeFilters if we're NOT currently processing storeNavigationState
         const navigationState = sessionStorage.getItem('storeNavigationState');
-        if (!navigationState && (domains.length > 0 || faculties.length > 0)) {
+        if (!shouldHideGlobalControls && !navigationState && (domains.length > 0 || faculties.length > 0)) {
             const filterState = {
                 selectedDomain,
                 selectedExamStage,
@@ -658,7 +688,7 @@ const Store = () => {
             };
             sessionStorage.setItem('storeFilters', JSON.stringify(filterState));
         }
-    }, [selectedDomain, selectedExamStage, selectedFaculties, selectedPapers, selectedTag, selectedProductType, priceSorting, searchTerm, allCourses]);
+    }, [selectedDomain, selectedExamStage, selectedFaculties, selectedPapers, selectedTag, selectedProductType, priceSorting, searchTerm, allCourses, shouldHideGlobalControls]);
 
     const filterCourses = () => {
         let filtered = [...allCourses];

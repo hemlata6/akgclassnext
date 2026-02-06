@@ -10,7 +10,7 @@ Disallow: /_next/
 Disallow: /static/
 
 # Sitemaps
-Sitemap: https://caclassestest.netlify.app/sitemap.xml
+Sitemap: https://vgstudyhub.netlify.app/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1

@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://caclassestest.netlify.app/';
+  const siteUrl = 'https://vgstudyhub.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/VG STUDY HUB-logo-circle-white.webp';
   const title = 'VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';

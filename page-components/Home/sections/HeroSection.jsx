@@ -34,11 +34,9 @@ export const HeroSection = ({ onExploreClick }) => {
         try {
 
             const response = await Network.getBannersApi(instId);
-            console.log('activeBanners===', response);
             if (response && response.banners && response.banners.length > 0) {
                 // Filter only active banners
                 const activeBanners = response.banners.filter(banner => banner.active);
-                console.log('activeBanners', activeBanners);
 
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({
@@ -57,8 +55,6 @@ export const HeroSection = ({ onExploreClick }) => {
     const onDemoLecture = () => {
         router.push('/free-resources');
     }
-
-    console.log('slides', slides);
 
 
     return (
@@ -84,13 +80,12 @@ export const HeroSection = ({ onExploreClick }) => {
                         {facultyCards.map((card, index) => (
                             <div
                                 key={card.title}
-                                className={`bg-white p-4 rounded-2xl shadow-xl border border-slate-200 text-center transform hover:scale-105 transition-transform duration-300 ${
-                                    index === 0 ? 'md:col-start-1 md:row-start-1 md:-translate-y-2' :
-                                    index === 1 ? 'md:col-start-2 md:row-start-1 md:translate-y-6' :
-                                    index === 2 ? 'md:col-start-3 md:row-start-1 md:-translate-y-4' :
-                                    index === 3 ? 'md:col-start-1 md:row-start-2 md:translate-y-4' :
-                                    'md:col-start-3 md:row-start-2 md:-translate-y-1'
-                                }`}
+                                className={`bg-white p-4 rounded-2xl shadow-xl border border-slate-200 text-center transform hover:scale-105 transition-transform duration-300 ${index === 0 ? 'md:col-start-1 md:row-start-1 md:-translate-y-2' :
+                                        index === 1 ? 'md:col-start-2 md:row-start-1 md:translate-y-6' :
+                                            index === 2 ? 'md:col-start-3 md:row-start-1 md:-translate-y-4' :
+                                                index === 3 ? 'md:col-start-1 md:row-start-2 md:translate-y-4' :
+                                                    'md:col-start-3 md:row-start-2 md:-translate-y-1'
+                                    }`}
                             >
                                 <div className="w-full aspect-square bg-gradient-to-br from-slate-700 to-slate-900 rounded-xl mb-3 flex items-center justify-center overflow-hidden">
                                     <img

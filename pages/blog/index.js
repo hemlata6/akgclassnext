@@ -3,7 +3,7 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://caclassestest.netlify.app/blog/';
+  const siteUrl = 'https://vgstudyhub.netlify.app/blog/';
   const ogImage = 'logoVG STUDY HUB.png';
   const title = 'VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';

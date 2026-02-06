@@ -37,8 +37,8 @@ export const generateMetaTags = (options) => {
   const {
     title = 'VG STUDY HUB',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://caclassestest.netlify.app/logo.png',
-    url = 'https://caclassestest.netlify.app',
+    image = 'https://vgstudyhub.netlify.app/logo.png',
+    url = 'https://vgstudyhub.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
@@ -105,7 +105,7 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://caclassestest.netlify.app/logo.png',
+    image = 'https://vgstudyhub.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
     author = 'VG STUDY HUB',
@@ -131,10 +131,10 @@ export const generateBlogStructuredData = (blog, url) => {
     publisher: {
       '@type': 'Organization',
       name: 'VG STUDY HUB',
-      url: 'https://caclassestest.netlify.app',
+      url: 'https://vgstudyhub.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://caclassestest.netlify.app/logo.png',
+        url: 'https://vgstudyhub.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -153,8 +153,8 @@ export const generateOrganizationStructuredData = () => {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
     name: 'VG STUDY HUB',
-    url: 'https://caclassestest.netlify.app',
-    logo: 'https://caclassestest.netlify.app/logo.png',
+    url: 'https://vgstudyhub.netlify.app',
+    logo: 'https://vgstudyhub.netlify.app/logo.png',
     description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA VIVEK GABA',
     sameAs: [
       // Add your social media URLs
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://caclassestest.netlify.app/logo.png';
+  if (!blog) return 'https://vgstudyhub.netlify.app/logo.png';
 
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
 
   // Default fallback
-  return 'https://caclassestest.netlify.app/logo.png';
+  return 'https://vgstudyhub.netlify.app/logo.png';
 };
 
 /**

@@ -85,6 +85,8 @@ export const Header = ({ cartCount }) => {
   const [books, setBooks] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [announcements, setAnnouncements] = useState([]);
+  const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
+  const [announcementImage, setAnnouncementImage] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
@@ -107,8 +109,7 @@ export const Header = ({ cartCount }) => {
   const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
   const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
 
-  // console.log('institute', institute, instituteAppSettingsModals);
-
+  // console.log('announcements', announcements);
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -159,17 +160,25 @@ export const Header = ({ cartCount }) => {
     }
   };
 
-  // console.log('announcements', announcements);
-
-
   const fetchAnnouncements = async () => {
     try {
       const response = await Network.getAnnouncementList(instId);
       const announcementList = response?.announcement || response || [];
-      setAnnouncements(Array.isArray(announcementList) ? announcementList : []);
+      const announcementsData = Array.isArray(announcementList) ? announcementList : [];
+      setAnnouncements(announcementsData);
+
+      if (announcementsData.length > 0 && announcementsData[0]?.image) {
+        setAnnouncementImage(Endpoints.mediaBaseUrl + announcementsData[0].image);
+        setShowAnnouncementModal(true);
+      } else {
+        setAnnouncementImage(null);
+        setShowAnnouncementModal(false);
+      }
     } catch (error) {
       console.error('Error fetching announcements:', error);
       setAnnouncements([]);
+      setAnnouncementImage(null);
+      setShowAnnouncementModal(false);
     }
   };
 
@@ -335,6 +344,26 @@ export const Header = ({ cartCount }) => {
 
   return (
     <>
+      {showAnnouncementModal && announcementImage && (
+        <div className="fixed inset-0 z-[999] bg-black/70 flex items-center justify-center p-4">
+          <div className="relative max-w-3xl w-full">
+            <button
+              onClick={() => setShowAnnouncementModal(false)}
+              className="absolute -top-3 -right-3 bg-white text-slate-700 rounded-full w-10 h-10 shadow-lg flex items-center justify-center hover:bg-slate-100 transition"
+              aria-label="Close announcement"
+            >
+              ×
+            </button>
+            <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
+              <img
+                src={announcementImage}
+                alt="Announcement"
+                className="w-full h-auto object-contain"
+              />
+            </div>
+          </div>
+        </div>
+      )}
       <div className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative">
         <div className="whitespace-nowrap animate-marquee">
           {announcements.length > 0 && announcements[0]?.title ? (

@@ -52,7 +52,7 @@ async function getAllBlogs() {
 }
 
 function generateSiteMap(blogs) {
-  const baseUrl = 'https://caclassestest.netlify.app';
+  const baseUrl = 'https://vgstudyhub.netlify.app';
   
   return `<?xml version="1.0" encoding="UTF-8"?>
    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
