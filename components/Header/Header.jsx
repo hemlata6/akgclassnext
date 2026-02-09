@@ -90,6 +90,7 @@ export const Header = ({ cartCount }) => {
   const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
   const [openMobileSubmenu, setOpenMobileSubmenu] = useState(null);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [isMarqueeHovered, setIsMarqueeHovered] = useState(false);
 
   // Domain states for Lectures
   const [domains, setDomains] = useState([]);
@@ -335,8 +336,13 @@ export const Header = ({ cartCount }) => {
 
   return (
     <>
-      <div className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative">
-        <div className="whitespace-nowrap animate-marquee">
+      <button 
+        onClick={() => router.push('/announcements')}
+        className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
+        onMouseEnter={() => setIsMarqueeHovered(true)}
+        onMouseLeave={() => setIsMarqueeHovered(false)}
+      >
+        <div className={`whitespace-nowrap animate-marquee ${isMarqueeHovered ? 'animation-pause' : ''}`} style={{ animationPlayState: isMarqueeHovered ? 'paused' : 'running' }}>
           {announcements.length > 0 && announcements[0]?.title ? (
             <span className="inline-block">
               📢 {announcements[0].title}
@@ -357,7 +363,7 @@ export const Header = ({ cartCount }) => {
             </span>
           )}
         </div>
-      </div>
+      </button>
       <nav className={`sticky top-6 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-1 border-slate-100' : 'bg-white py-1'}`}>
         <div className={LAYOUT_PADDING}>
           <div className="flex justify-between items-center">

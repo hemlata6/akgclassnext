@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import CheckIcon from '@mui/icons-material/Check';
 import { Icons, LAYOUT_PADDING } from '../constants/Icons';
-import { Footer } from '../components/Shared/SharedComponents';
+import Layout from '../components/Layout';
 
 const FacultyProfile = () => {
     const router = useRouter();
@@ -12,10 +12,10 @@ const FacultyProfile = () => {
     }, []);
 
     return (
-        <>
-            <div id="faculty-profile-container" data-page="faculty-profile" className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <Layout>
+            <div id="faculty-profile-container" data-page="faculty-profile" className="bg-gradient-to-b from-slate-50 to-white">
                 {/* Hero Section */}
-                <section id="faculty-hero-section" data-section="faculty-hero" className="bg-white py-16" style={{ backgroundColor: '#ffffff' }}>
+                <section id="faculty-hero-section" data-section="faculty-hero" className="bg-gradient-to-r from-emerald-50 via-blue-50 to-emerald-50 py-16 border-t border-emerald-200">
                     <div className={LAYOUT_PADDING}>
                         <button
                             onClick={() => router.push('/')}
@@ -204,8 +204,7 @@ const FacultyProfile = () => {
                 </section>
 
             </div>
-            <Footer />
-        </>
+        </Layout>
     );
 };
 
