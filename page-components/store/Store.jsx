@@ -8,7 +8,6 @@ import CourseConfigModal from '../Home/sections/CourseConfigModal';
 import Endpoints from '../../config/endpoints';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Footer } from '../../components/Shared/SharedComponents';
 import { useTheme } from '../../config/ThemeContext';
 
 const Store = () => {
@@ -2432,8 +2431,6 @@ const Store = () => {
                 </div>
             )}
 
-            {/* Global Footer - Hidden when using routeData */}
-            {!shouldHideGlobalControls && <Footer />}
         </div>
     );
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
-import { Footer } from '../../components/Shared/SharedComponents';
 
 const RefundPolicy = () => {
   const router = useRouter();
@@ -29,7 +28,7 @@ const RefundPolicy = () => {
             
             <section className="mb-8">
               <p className="text-slate-700 leading-relaxed mb-4">
-                Thank you for shopping at www.iWision.com
+                Thank you for shopping at www.CA Pankaj Aswani.com
               </p>
             </section>
 
@@ -49,14 +48,13 @@ const RefundPolicy = () => {
                 If you have any questions about our Returns and Refunds Policy, please contact us:
               </p>
               <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-slate-700"><strong>By email:</strong> admin@iWision.com</p>
+                <p className="text-slate-700"><strong>By email:</strong> admin@CA Pankaj Aswani.com</p>
               </div>
             </section>
 
           </div>
         </div>
       </div>
-      <Footer />
     </div>
     </div>
   );

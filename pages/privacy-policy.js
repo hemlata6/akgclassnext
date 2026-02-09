@@ -6,7 +6,7 @@ export default function Privacy() {
   return (
     <>
       <Head>
-        <title>Privacy Policy - iWision</title>
+        <title>Privacy Policy - CA Pankaj Aswani</title>
         <meta name="description" content="Read our privacy policy" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

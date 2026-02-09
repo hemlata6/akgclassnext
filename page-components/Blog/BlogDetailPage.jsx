@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import { BRAND_GREEN, Icons } from '../../constants/Icons';
-import { Footer } from '../../components/Shared/SharedComponents';
 import { ShareButtons } from '../../components/Shared/ShareButtons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
@@ -615,7 +614,6 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                 }}
             />
 
-            <Footer />
         </div>
     );
 };

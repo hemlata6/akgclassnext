@@ -5,9 +5,11 @@ import Network from '../config/Network';
 import instId from '../config/instituteId';
 import Endpoints from '../config/endpoints';
 import Layout from '../components/Layout';
+import { useTheme } from '../config/ThemeContext';
 
 const AnnouncementPage = () => {
   const router = useRouter();
+  const { theme } = useTheme();
   const [announcementList, setAnnouncementList] = useState([]);
   const [selectedAnnouncement, setSelectedAnnouncement] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -77,7 +79,7 @@ const AnnouncementPage = () => {
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
               <div className="text-3xl sm:text-4xl">📢</div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-emerald-700 to-emerald-900 bg-clip-text text-transparent">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold" style={{ backgroundImage: `linear-gradient(to right, ${theme.primary}, ${theme.primaryHover})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Announcements
               </h1>
             </div>
@@ -91,7 +93,10 @@ const AnnouncementPage = () => {
             <button
               onClick={fetchAnnouncements}
               disabled={loading}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              className="flex items-center gap-2 px-4 py-2 text-white rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm sm:text-base"
+              style={{ backgroundColor: theme.primary }}
+              onMouseEnter={(e) => e.target.style.backgroundColor = theme.primaryHover}
+              onMouseLeave={(e) => e.target.style.backgroundColor = theme.primary}
             >
               <span className={`${loading ? 'animate-spin' : ''}`}>🔄</span>
               Refresh
@@ -101,10 +106,10 @@ const AnnouncementPage = () => {
           {/* Main Content */}
           <div className="bg-white rounded-2xl shadow-lg border border-slate-100 overflow-hidden">
             {/* Header */}
-            <div className="bg-gradient-to-r from-emerald-700 to-emerald-900 p-6 sm:p-8">
+            <div className="p-6 sm:p-8 text-white" style={{ backgroundImage: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryHover})` }}>
               <div className="flex items-center gap-3 sm:gap-4">
                 <div className="text-2xl sm:text-3xl">📢</div>
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Latest Announcements</h2>
+                <h2 className="text-xl sm:text-2xl font-bold">Latest Announcements</h2>
                 <div className="ml-auto bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                   {announcementList.length} {announcementList.length === 1 ? 'announcement' : 'announcements'}
                 </div>
@@ -147,11 +152,12 @@ const AnnouncementPage = () => {
                       <div
                         key={announcement.id || index}
                         onClick={() => handleAnnouncementClick(announcement)}
-                        className="bg-gradient-to-r from-emerald-50 to-emerald-25 border border-emerald-200 rounded-xl p-4 sm:p-5 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5 hover:border-emerald-400"
+                        className="border rounded-xl p-4 sm:p-5 cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                        style={{ backgroundColor: `${theme.primary}08`, borderColor: `${theme.primary}40` }}
                       >
                         <div className="flex items-start gap-3 sm:gap-4">
                           {/* Icon */}
-                          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-700 to-emerald-900 rounded-full flex items-center justify-center flex-shrink-0 text-lg">
+                          <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 text-lg" style={{ backgroundColor: theme.primary, color: 'white' }}>
                             📢
                           </div>
 
@@ -165,7 +171,7 @@ const AnnouncementPage = () => {
                             </p>
                             <div className="flex items-center gap-2 mt-2">
                               <span className="text-lg">📅</span>
-                              <span className="text-emerald-700 font-medium text-xs">
+                              <span className="font-medium text-xs" style={{ color: theme.primary }}>
                                 {formatDate(announcement.createdAt)}
                               </span>
                             </div>
@@ -196,10 +202,10 @@ const AnnouncementPage = () => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4 animate-in fade-in duration-300">
           <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-96 sm:max-h-[80vh] overflow-y-auto">
             {/* Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-emerald-700 to-emerald-900 p-6 sm:p-8 flex items-center justify-between">
+            <div className="sticky top-0 p-6 sm:p-8 flex items-center justify-between text-white" style={{ backgroundImage: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryHover})` }}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📢</span>
-                <h2 className="text-xl sm:text-2xl font-bold text-white">Announcement Details</h2>
+                <h2 className="text-xl sm:text-2xl font-bold">Announcement Details</h2>
               </div>
               <button
                 onClick={closeDialog}
@@ -218,7 +224,7 @@ const AnnouncementPage = () => {
               {/* Date */}
               <div className="flex items-center gap-2 mb-6">
                 <span className="text-lg">📅</span>
-                <span className="text-emerald-700 font-medium text-sm">
+                <span className="font-medium text-sm" style={{ color: theme.primary }}>
                   {formatDetailDate(selectedAnnouncement.createdAt)}
                 </span>
               </div>
@@ -255,7 +261,10 @@ const AnnouncementPage = () => {
             <div className="sticky bottom-0 bg-slate-50 p-6 sm:p-8 border-t flex justify-end">
               <button
                 onClick={closeDialog}
-                className="px-6 py-2 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
+                className="px-6 py-2 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
+                style={{ backgroundColor: theme.primary }}
+                onMouseEnter={(e) => e.target.style.backgroundColor = theme.primaryHover}
+                onMouseLeave={(e) => e.target.style.backgroundColor = theme.primary}
               >
                 Close
               </button>

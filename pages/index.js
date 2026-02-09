@@ -3,16 +3,16 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://caclassestest.netlify.app/';
+  const siteUrl = 'https://pankajaswani.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
-  const title = 'iWision | iWision - CA Vipul Dhall';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA Vipul Dhall';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, iWision, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const title = 'CA Pankaj Aswani | CA Pankaj Aswani - CA Pankaj Aswani';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Pankaj Aswani';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, CA Pankaj Aswani, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "iWision",
+    "name": "CA Pankaj Aswani",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="iWision" />
+        <meta property="og:site_name" content="CA Pankaj Aswani" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="iWision" />
+        <meta name="author" content="CA Pankaj Aswani" />
 
         {/* JSON-LD Structured Data */}
         <script

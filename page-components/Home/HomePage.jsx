@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { Footer } from '../../components/Shared/SharedComponents';
 import { useAuth } from '../../config/AuthContext';
 import { HeroSection } from './sections/HeroSection';
 import { WhyChooseUs } from './sections/WhyChooseUs';
@@ -48,7 +47,6 @@ export default function HomePage() {
       <StudentHub />
       <AppDownload />
       <CounsellingStrip />
-      <Footer />
       <a href="#" className="fixed z-40 right-4 bottom-24 md:bottom-12 group">
         <div className="bg-[#25D366] text-white p-3 rounded-full shadow-xl hover:scale-110 transition-transform">
           <svg className="w-7 h-7 fill-current" viewBox="0 0 24 24">

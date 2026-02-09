@@ -23,7 +23,6 @@ import { useRouter } from 'next/router';
 import { BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS } from '../../constants/Icons';
 import LoginModal from '../../components/Auth/LoginModal';
 import SignupModal from '../../components/Auth/SignupModal';
-import { Footer } from '../../components/Shared/SharedComponents';
 
 const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => {
 
@@ -875,7 +874,6 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     }}
                 />
             </div>
-            <Footer />
         </>
     )
 }

@@ -34,7 +34,7 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "iWision"}
+              {institute?.institue ? institute?.institue : "CA Pankaj Aswani"}
             </div>
             <p>Best CA Classes for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
@@ -94,13 +94,13 @@ export const Footer = () => {
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
               <li>Call: +91 9310226047</li>
-              <li>admin@iwision.com</li>
+              <li>admin@CA Pankaj Aswani.com</li>
               <li>New Delhi</li>
             </ul>
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 iWision Education. All rights reserved.
+          © 2026 CA Pankaj Aswani Education. All rights reserved.
           <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>

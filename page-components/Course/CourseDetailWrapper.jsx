@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { useAuth } from '../../config/AuthContext';
-import { SuccessNotification, Loader, Footer } from '../../components/Shared/SharedComponents';
+import { SuccessNotification, Loader } from '../../components/Shared/SharedComponents';
 import CourseDetailPage from './CourseDetailPage';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
@@ -84,7 +84,6 @@ function CourseDetailWrapper() {
         onBack={() => router.push('/')}
         onAddToCart={addToCart}
       />
-      {!shouldHideGlobalControls && <Footer />}
     </>
   );
 }

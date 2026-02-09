@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, TEXT_GREEN } from '../../constants/Icons';
-import { Footer } from '../../components/Shared/SharedComponents';
 import { useAuth } from '../../config/AuthContext';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
@@ -508,7 +507,6 @@ export const BlogListPage = () => {
           </div>
         )}
       </div>
-      <Footer />
     </div>
   );
 };

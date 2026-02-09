@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Head from 'next/head';
+import Layout from '../components/Layout';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../constants/Icons';
-import { Footer } from '../components/Shared/SharedComponents';
-import { Header } from '../components/Header/Header';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
 
-export default function ContactUsPage() {
+function ContactUsPageContent() {
     const router = useRouter();
     const [formData, setFormData] = useState({
         firstName: '',
@@ -166,7 +166,6 @@ export default function ContactUsPage() {
     if (showThankYou) {
         return (
             <div className="bg-white min-h-screen flex flex-col">
-                <Header />
                 <div className="flex-1 flex items-center justify-center py-20 px-4">
                     <div className="text-center max-w-xl">
                         <div className="mb-8 relative">
@@ -195,14 +194,12 @@ export default function ContactUsPage() {
                         </button>
                     </div>
                 </div>
-                <Footer />
             </div>
         );
     }
 
     return (
         <div className="bg-slate-50 min-h-screen flex flex-col">
-            <Header />
             <div className="flex-1">
                 <div className={`py-16 ${LAYOUT_PADDING}`}>
                     {/* Header */}
@@ -243,10 +240,10 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:admin@iwision.com" className="font-semibold" style={{color: '#154734'}}
+                                <a href="mailto:admin@CA Pankaj Aswani.com" className="font-semibold" style={{color: '#154734'}}
                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    admin@iwision.com
+                                    admin@CA Pankaj Aswani.com
                                 </a>
                             </div>
 
@@ -425,7 +422,21 @@ export default function ContactUsPage() {
                     </div>
                 </div>
             </div>
-            <Footer />
         </div>
+    );
+}
+
+export default function ContactUsPage() {
+    return (
+        <>
+            <Head>
+                <title>Contact Us - CA Pankaj Aswani</title>
+                <meta name="description" content="Get in touch with CA Pankaj Aswani" />
+                <meta name="viewport" content="width=device-width, initial-scale=1" />
+            </Head>
+            <Layout>
+                <ContactUsPageContent />
+            </Layout>
+        </>
     );
 }

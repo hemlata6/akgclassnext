@@ -1,13 +1,12 @@
 import Head from 'next/head';
 import Layout from '../components/Layout';
 import Result from '../page-components/FreeResources/ResultPage';
-import { Footer } from '../components/Shared/SharedComponents';
 
 export default function QuizResult() {
   return (
     <>
       <Head>
-        <title>Quiz Result - iWision</title>
+        <title>Quiz Result - CA Pankaj Aswani</title>
         <meta name="description" content="View your quiz results" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

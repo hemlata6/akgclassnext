@@ -3,10 +3,10 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://caclassestest.netlify.app/blog/';
-  const ogImage = 'logoiwision.png';
-  const title = 'iWision | iWision - CA Vipul Dhall';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA Vipul Dhall';
+  const siteUrl = 'https://pankajaswani.netlify.app/blog/';
+  const ogImage = 'logoCA Pankaj Aswani.png';
+  const title = 'CA Pankaj Aswani | CA Pankaj Aswani - CA Pankaj Aswani';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Pankaj Aswani';
 
   return (
     <>

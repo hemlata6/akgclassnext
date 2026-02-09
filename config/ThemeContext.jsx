@@ -37,7 +37,7 @@ export const THEMES = {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState('darkGreen');
+  const [currentTheme, setCurrentTheme] = useState('purple');
 
   // Load theme from localStorage on mount
   useEffect(() => {
@@ -45,8 +45,8 @@ export const ThemeProvider = ({ children }) => {
     if (savedTheme && THEMES[savedTheme]) {
       setCurrentTheme(savedTheme);
     } else {
-      // Set dark green as default
-      setCurrentTheme('darkGreen');
+      // Set purple as default
+      setCurrentTheme('purple');
     }
   }, []);
 

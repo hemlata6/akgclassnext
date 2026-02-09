@@ -43,7 +43,7 @@ export const FreeResources = () => {
                     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 md:p-8 text-center md:text-left relative overflow-hidden text-white shadow-2xl shadow-slate-900/20 sticky top-24">
                         <div className="relative z-10">
                             <h2 className="text-2xl font-bold mb-2">Study on the Go!</h2>
-                            <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the iWision App for offline viewing, live classes, and unlimited access to study materials.</p>
+                            <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the CA Pankaj Aswani App for offline viewing, live classes, and unlimited access to study materials.</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                 <a
                                     href="https://play.google.com/store/apps/details?id=com.caclasses.store"

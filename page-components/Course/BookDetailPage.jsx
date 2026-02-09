@@ -272,7 +272,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                         CA
                                     </div>
                                     <div>
-                                        <p className="font-bold text-slate-900 text-xs">CA Vipul Dhall</p>
+                                        <p className="font-bold text-slate-900 text-xs">CA Pankaj Aswani</p>
                                         <p className="text-[10px] text-emerald-600">Author</p>
                                     </div>
                                 </div>

@@ -9,7 +9,20 @@ export const HeroSection = ({ onExploreClick }) => {
 
     const router = useRouter();
     const [currentSlide, setCurrentSlide] = useState(0);
-    const [slides, setSlides] = useState([]);
+    const [slides, setSlides] = useState([
+        {
+            url: "https://placehold.co/800x1200/312e81/FFF?text=Pankaj Aswani",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=Pankaj Aswani",
+            title: "Live Batch",
+            bg: "bg-indigo-900"
+        },
+        // {
+        //     url: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+        //     desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+        //     title: "Combo Offer",
+        //     bg: "bg-slate-900"
+        // }
+    ]);
 
     useEffect(() => {
         fetchBanners();
@@ -58,7 +71,7 @@ export const HeroSection = ({ onExploreClick }) => {
                     </div>
                     <h1 className="text-3xl lg:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
                         Master Accounting & <span className={TEXT_GREEN}>Financial Reporting </span>
-                        <br />with <span className="text-slate-800">CA Vipul Dhall</span>
+                        <br />with <span className="text-slate-800">CA Pankaj Aswani</span>
                     </h1>
                     <p className="text-slate-600 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
                         Simplified concepts, strong AS & Ind AS foundation, and a comprehensive, exam-oriented approach for <b> CA Foundation (Accounts), CA Inter (Advanced Accounting), and CA Final (Financial Reporting) </b> aspirants.

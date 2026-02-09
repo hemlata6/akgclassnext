@@ -7,7 +7,6 @@ import instId from '../../config/instituteId';
 import YouTubePlayer from './YouTubePlayer';
 import { useStudent } from '../../config/StudentContext';
 import { useRouter } from 'next/router';
-import { Footer } from '../../components/Shared/SharedComponents';
 
 const MyPurchases = () => {
   const router = useRouter();
@@ -280,7 +279,6 @@ const MyPurchases = () => {
             </button>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
@@ -691,7 +689,6 @@ const MyPurchases = () => {
         </div>
       )}
 
-      <Footer />
     </div>
   );
 };

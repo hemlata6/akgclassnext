@@ -1,6 +1,6 @@
-# iWision - Next.js Application
+# CA Pankaj Aswani - Next.js Application
 
-This is a Next.js conversion of the original React app for iWision - iWision | iWision - CA Vipul Dhall.
+This is a Next.js conversion of the original React app for CA Pankaj Aswani - CA Pankaj Aswani | CA Pankaj Aswani - CA Pankaj Aswani.
 
 ## Getting Started
 
@@ -27,7 +27,7 @@ yarn install
 ```
 NEXT_PUBLIC_BUTTER_CMS_API_KEY=your_buttercms_api_key
 NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com
-NEXT_PUBLIC_MEDIA_BASE_URL=https://classiocafinal.in-maa-1.linodeobjects.com
+NEXT_PUBLIC_MEDIA_BASE_URL=https://classioaswani.in-maa-1.linodeobjects.com
 NEXT_PUBLIC_SITE_URL=https://caclassestest.netlify.app
 ```
 

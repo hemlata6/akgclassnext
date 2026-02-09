@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, TEXT_GREEN } from '../../constants/Icons';
-import { Footer } from '../../components/Shared/SharedComponents';
 import { useAuth } from '../../config/AuthContext';
 import ProceedToCheckoutForm from './ProceedToCheckoutForm';
 import LoginModal from '../../components/Auth/LoginModal';
@@ -595,7 +594,6 @@ export default function CartPage() {
             {routeData ? 'Back to Store' : 'Start Shopping'}
           </button>
         </div>
-        {!shouldHideGlobalControls && <Footer />}
       </div>
     );
   }
@@ -756,7 +754,6 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-      {!shouldHideGlobalControls && <Footer />}
 
       {/* Checkout Modal */}
       <Dialog

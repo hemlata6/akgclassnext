@@ -6,10 +6,13 @@ export const AboutSection = () => (
     <div className={LAYOUT_PADDING}>
       <div className="flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-4/12 relative">
-          <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-slate-100">
-            <img src="sir image1.jpg" alt="CA Vipul Dhall" className="w-full object-cover" />
+          <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-6xl mb-4">👤</div>
+              <p className="text-slate-700 font-bold text-lg">CA Pankaj Aswani</p>
+            </div>
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-              <p className="font-bold text-lg">CA Vipul Dhall</p>
+              <p className="font-bold text-lg">CA Pankaj Aswani</p>
               <p className="text-emerald-300 text-[10px] uppercase tracking-widest">Founder & FR Expert</p>
             </div>
           </div>
@@ -20,7 +23,7 @@ export const AboutSection = () => (
             </span>
           </h2>
           <p className="text-slate-600 text-sm leading-relaxed max-w-2xl">
-            <strong>At iWision , we don’t just teach Accounting & Financial Reporting; we decode it.</strong>, CA Vipul Dhall brings practical industry experience into the classroom, transforming complex accounting concepts and Ind AS into logical, easy-to-retain frameworks. Our goal is simple: to make you <strong>exam-ready and industry-ready</strong>at every stage of the CA journey.
+            <strong>At CA Pankaj Aswani , we don’t just teach Accounting & Financial Reporting; we decode it.</strong>, CA Pankaj Aswani brings practical industry experience into the classroom, transforming complex accounting concepts and Ind AS into logical, easy-to-retain frameworks. Our goal is simple: to make you <strong>exam-ready and industry-ready</strong>at every stage of the CA journey.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             {["CA Foundation to CA Final Focus", "Concept-driven, Practical Learning", "Complete PYQ, RTP & MTP Coverage"].map((tag, i) => (
