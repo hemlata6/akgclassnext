@@ -380,7 +380,7 @@ export const Header = ({ cartCount }) => {
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: 900,
-                    letterSpacing: '-0.5px'
+                    letterSpacing: '-0.5px' 
                   }}
                 >
                   CA Pankaj Aswani

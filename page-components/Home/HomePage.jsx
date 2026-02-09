@@ -41,7 +41,7 @@ export default function HomePage() {
       <BookStore />
       {/* <MarathonGallery /> */}
       <StudentGallery />
-      <BlogSection />
+      {/* <BlogSection /> */}
       {/* <FreeResources /> */}
       {/* <StudentSupportSection /> */}
       <StudentHub />
