@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icons, LAYOUT_PADDING } from '../../../constants/Icons';
+import { BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, Icons, LAYOUT_PADDING, TEXT_GREEN } from '../../../constants/Icons';
 
 export const AboutSection = () => (
   <section className="py-10 bg-white">
@@ -18,20 +18,25 @@ export const AboutSection = () => (
           </div>
         </div>
         <div className="w-full md:w-8/12 space-y-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
-            Founder, Accounts & <span className="text-slate-400">FR Expert
-            </span>
-          </h2>
-          <p className="text-slate-600 text-sm leading-relaxed max-w-2xl">
-            <strong>At CA Pankaj Aswani , we don’t just teach Accounting & Financial Reporting; we decode it.</strong>, CA Pankaj Aswani brings practical industry experience into the classroom, transforming complex accounting concepts and Ind AS into logical, easy-to-retain frameworks. Our goal is simple: to make you <strong>exam-ready and industry-ready</strong>at every stage of the CA journey.
-          </p>
-          <div className="flex flex-wrap gap-4 pt-2">
+          <div className="flex-1 text-center lg:text-left">
+            {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-widest mb-4">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Admissions Open: Enroll Now
+            </div> */}
+            <h1 className="text-3xl lg:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
+              Master Accounting & <span className={TEXT_GREEN}>Financial Reporting </span>
+              <br />with <span className="text-slate-800">CA Pankaj Aswani</span>
+            </h1>
+            <p className="text-slate-600 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
+              Simplified concepts, strong AS & Ind AS foundation, and a comprehensive, exam-oriented approach for <b> CA Foundation (Accounts), CA Inter (Advanced Accounting), and CA Final (Financial Reporting) </b> aspirants.
+            </p>
+          </div>
+          {/* <div className="flex flex-wrap gap-4 pt-2">
             {["CA Foundation to CA Final Focus", "Concept-driven, Practical Learning", "Complete PYQ, RTP & MTP Coverage"].map((tag, i) => (
               <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100">
                 <Icons.Check /> {tag}
               </div>
             ))}
-          </div>
+          </div> */}
           <div className="pt-4">
             <a
               href="/faculty"

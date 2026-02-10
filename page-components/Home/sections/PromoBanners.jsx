@@ -15,12 +15,12 @@ export const PromoBanners = () => {
             alt: "Live Batch",
             bg: "bg-indigo-900"
         },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        }
+        // {
+        //     mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+        //     desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+        //     alt: "Combo Offer",
+        //     bg: "bg-slate-900"
+        // }
     ]);
 
     const totalSlides = slides.length;

@@ -306,7 +306,7 @@ export const Header = ({ cartCount }) => {
     >
       <button
         onClick={onClick}
-        className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+        className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
       >
         {label} {hasSub && <Icons.ChevronDown />}
       </button>
@@ -374,13 +374,13 @@ export const Header = ({ cartCount }) => {
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
                 {/* <img src={"/logoCA Pankaj Aswani.png"} alt="CA Pankaj Aswani" className="h-16 md:h-16 object-contain" /> */}
-                <Typography 
-                  variant="h5" 
+                <Typography
+                  variant="h5"
                   className="font-black bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent hover:from-indigo-700 hover:to-blue-600 transition-all duration-300 cursor-pointer tracking-tight"
                   style={{
                     fontSize: '1.5rem',
                     fontWeight: 900,
-                    letterSpacing: '-0.5px' 
+                    letterSpacing: '-0.5px'
                   }}
                 >
                   CA Pankaj Aswani
@@ -402,7 +402,7 @@ export const Header = ({ cartCount }) => {
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button
-                  className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+                  className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
                 >
                   Lectures <Icons.ChevronDown />
                 </button>
@@ -460,7 +460,7 @@ export const Header = ({ cartCount }) => {
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button
-                  className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+                  className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
                 >
                   Books <Icons.ChevronDown />
                 </button>
@@ -509,7 +509,7 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
-              <NavItem label="Blog" onClick={() => router.push('/blog')} />
+              <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
             </div>
@@ -562,7 +562,7 @@ export const Header = ({ cartCount }) => {
 
               {user ? (
                 <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2`}>
+                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
                     <Icons.User size={16} />
                     {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
                   </button>
@@ -620,8 +620,8 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <Typography 
-                variant="h6" 
+              <Typography
+                variant="h6"
                 className="font-black bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent tracking-tight"
                 style={{
                   fontSize: '1.25rem',
@@ -828,12 +828,12 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
 
-                {/* Blog */}
+                {/* Announcements */}
                 <button
-                  onClick={() => { router.push('/blog'); setMobileMenuOpen(false); }}
+                  onClick={() => { router.push('/announcements'); setMobileMenuOpen(false); }}
                   className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                 >
-                  Blog
+                  Announcement
                 </button>
 
                 {/* Free Resources */}
