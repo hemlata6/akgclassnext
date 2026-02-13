@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/feviconCA Pankaj Aswani.png" />
-        <link rel="apple-touch-icon" href="/feviconCA Pankaj Aswani.png" />
+        <link rel="icon" href="/pankajaswani/pankajaswanilogo.png" />
+        <link rel="apple-touch-icon" href="/pankajaswani/pankajaswanilogo.png" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />
