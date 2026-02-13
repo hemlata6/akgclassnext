@@ -3,17 +3,26 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
+import { useTheme } from '../../../config/ThemeContext';
 
 export const PromoBanners = () => {
+    const { theme } = useTheme();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
+
+    // Convert hex color to remove # for placeholder URL
+    const getThemeColorForPlaceholder = () => {
+        const hexColor = theme.primary.replace('#', '');
+        return hexColor;
+    };
+
     const [slides, setSlides] = useState([
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Pankaj Aswani",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Pankaj Aswani",
+            mobileSrc: `https://placehold.co/800x1200/${getThemeColorForPlaceholder()}/FFF?text=CA Pankaj Aswani`,
+            desktopSrc: `https://placehold.co/1200x500/${getThemeColorForPlaceholder()}/FFF?text=CA Pankaj Aswani`,
             alt: "Live Batch",
-            bg: "bg-indigo-900"
+            bg: ""
         },
         // {
         //     mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
@@ -28,7 +37,7 @@ export const PromoBanners = () => {
     // Fetch banners from API
     useEffect(() => {
         fetchBanners();
-    }, []);
+    }, [theme]); // Update when theme changes
 
     const fetchBanners = async () => {
         try {
@@ -41,13 +50,30 @@ export const PromoBanners = () => {
                         mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
                         desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
                         alt: banner.title || 'Banner',
-                        bg: 'bg-slate-900'
+                        bg: ''
                     }));
                     setSlides(bannerSlides);
+                } else {
+                    // Show placeholder with theme color if no active banners
+                    const themeColorHex = theme.primary.replace('#', '');
+                    setSlides([{
+                        mobileSrc: `https://placehold.co/800x1200/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
+                        desktopSrc: `https://placehold.co/1200x500/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
+                        alt: "Live Batch",
+                        bg: ''
+                    }]);
                 }
             }
         } catch (error) {
             console.error('Error fetching banners:', error);
+            // Show placeholder with theme color on error
+            const themeColorHex = theme.primary.replace('#', '');
+            setSlides([{
+                mobileSrc: `https://placehold.co/800x1200/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
+                desktopSrc: `https://placehold.co/1200x500/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
+                alt: "Live Batch",
+                bg: ''
+            }]);
         }
     };
 
@@ -116,7 +142,8 @@ export const PromoBanners = () => {
                     {slides.map((slide, index) => (
                         <div
                             key={index}
-                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer ${slide.bg}`}
+                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl group cursor-pointer ${theme.primaryClass}`}
+                            style={{ boxShadow: `0 0 20px ${theme.primary}20` }}
                         >
                             <img
                                 src={slide.mobileSrc}

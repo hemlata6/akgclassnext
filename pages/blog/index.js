@@ -4,7 +4,7 @@ import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
   const siteUrl = 'https://pankajaswani.netlify.app/blog/';
-  const ogImage = 'pankajaswani/pankajaswanilogo.png';
+  const ogImage = 'pankajaswani/logo.png';
   const title = 'CA Pankaj Aswani | CA Pankaj Aswani - CA Pankaj Aswani';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA Pankaj Aswani';
 

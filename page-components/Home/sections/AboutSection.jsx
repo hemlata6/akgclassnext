@@ -8,7 +8,7 @@ export const AboutSection = () => (
         <div className="w-full md:w-4/12 relative">
           <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400">
             <img 
-              src="/pankajaswani/enhanced_Preferred%20copy.png" 
+              src="/pankajaswani/sirimage.png" 
               alt="CA Pankaj Aswani" 
               className="w-full h-full object-contain bg-white"
             />

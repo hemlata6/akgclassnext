@@ -335,6 +335,9 @@ export const Header = ({ cartCount }) => {
     </div>
   );
 
+  // console.log('instituteAppSettingsModals', instituteAppSettingsModals, Endpoints?.mediaBaseUrl);
+  
+
   return (
     <>
       <button
@@ -373,7 +376,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src={"pankajaswani/pankajaswanilogo.png"} alt="CA Pankaj Aswani" className="h-16 md:h-16 object-contain" />
+                <img src="/pankajaswani/logo.png" alt="CA Pankaj Aswani" className="h-16 md:h-16 object-contain" />
                 {/* <Typography
                   variant="h5"
                   className="font-black bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent hover:from-indigo-700 hover:to-blue-600 transition-all duration-300 cursor-pointer tracking-tight"
@@ -631,7 +634,7 @@ export const Header = ({ cartCount }) => {
               >
                 CA Pankaj Aswani
               </Typography> */}
-              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "pankajaswani/pankajaswanilogo.png"} alt="Logo" className="h-20" />
+              <img src={"/pankajaswani/logo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

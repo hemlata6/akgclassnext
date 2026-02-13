@@ -32,7 +32,7 @@ const FacultyProfile = () => {
                             <div className="w-full md:w-1/3">
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square" style={{ backgroundColor: `${theme.primary}20` }}>
                                     <img
-                                        src="/pankajaswani/enhanced_Preferred%20copy.png"
+                                        src="/pankajaswani/sirimage.png"
                                         alt="CA Pankaj Aswani"
                                         className="w-full h-full object-contain bg-white"
                                     />
