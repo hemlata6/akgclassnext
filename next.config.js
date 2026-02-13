@@ -3,16 +3,16 @@ const nextConfig = {
   reactStrictMode: true,
   // Dynamic deployment for SSR/ISR
   images: {
-    domains: ['classiocafinal.in-maa-1.linodeobjects.com', 'lecturedekho.in'],
+    domains: ['classionextgen.in-maa-1.linodeobjects.com', 'https://pankajaswani.netlify.app'],
     unoptimized: false,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'classiocafinal.in-maa-1.linodeobjects.com',
+        hostname: 'classionextgen.in-maa-1.linodeobjects.com',
       },
       {
         protocol: 'https',
-        hostname: 'lecturedekho.in',
+        hostname: 'https://pankajaswani.netlify.app',
       },
     ],
   },

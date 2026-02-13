@@ -10,7 +10,7 @@ Disallow: /_next/
 Disallow: /static/
 
 # Sitemaps
-Sitemap: https://pankajaswani.netlify.app/sitemap.xml
+Sitemap: https://nextgencaclass.netlify.app/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1

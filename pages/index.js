@@ -3,16 +3,16 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://pankajaswani.netlify.app/';
+  const siteUrl = 'https://nextgencaclass.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
-  const title = 'CA Pankaj Aswani | CA Pankaj Aswani - CA Pankaj Aswani';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA Pankaj Aswani';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, CA Pankaj Aswani, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const title = 'Next Gen CA | Next Gen CA - Next Gen CA';
+  const description = 'Get Conceptual Clarity of CA Final IDT - Next Gen CA';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, Next Gen CA, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "CA Pankaj Aswani",
+    "name": "Next Gen CA",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="CA Pankaj Aswani" />
+        <meta property="og:site_name" content="Next Gen CA" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="CA Pankaj Aswani" />
+        <meta name="author" content="Next Gen CA" />
 
         {/* JSON-LD Structured Data */}
         <script

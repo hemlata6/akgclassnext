@@ -6,7 +6,7 @@ export default function StorePage() {
   return (
     <>
       <Head>
-        <title>Store - CA Pankaj Aswani</title>
+        <title>Store - Next Gen CA</title>
         <meta name="description" content="Browse our collection of courses and books" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

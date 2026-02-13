@@ -20,12 +20,12 @@ export default function BlogDetail({ blogData, error }) {
 
 
     const getBlogImage = () => {
-        if (!blogData) return 'https://pankajaswani.netlify.app/logo.png';
+        if (!blogData) return 'https://nextgencaclass.netlify.app/logo.png';
 
         // Helper to fix old CDN URLs
         const fixCdnUrl = (url) => {
             if (!url) return url;
-            return url.replace('classiocafinal.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
+            return url.replace('classionextgen.in-maa-1.linodeobjects.com', 'classionextgen.in-maa-1.linodeobjects.com');
         };
 
         // Check for blog.thumb first (nested structure)
@@ -37,7 +37,7 @@ export default function BlogDetail({ blogData, error }) {
         if (blogData.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.logo);
         if (blogData.img) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.img);
 
-        return 'https://pankajaswani.netlify.app/logo.png';
+        return 'https://nextgencaclass.netlify.app/logo.png';
     };
 
     const blogImage = getBlogImage();
@@ -47,7 +47,7 @@ export default function BlogDetail({ blogData, error }) {
         'Read our latest blog post',
         50
     );
-    const blogUrl = `https://pankajaswani.netlify.app/blog/${cId}/${slug}`;
+    const blogUrl = `https://nextgencaclass.netlify.app/blog/${cId}/${slug}`;
 
     return (
         <>

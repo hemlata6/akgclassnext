@@ -6,7 +6,7 @@ export default function Terms() {
   return (
     <>
       <Head>
-        <title>Terms of Use - CA Pankaj Aswani</title>
+        <title>Terms of Use - Next Gen CA</title>
         <meta name="description" content="Read our terms of use" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

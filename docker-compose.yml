@@ -12,7 +12,7 @@ services:
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com/
-      - NEXT_PUBLIC_MEDIA_BASE_URL=https://classioaswani.in-maa-1.linodeobjects.com/
+      - NEXT_PUBLIC_MEDIA_BASE_URL=https://classionextgen.in-maa-1.linodeobjects.com/
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/health"]

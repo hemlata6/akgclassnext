@@ -5,19 +5,19 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/feviconCA Pankaj Aswani.png" />
-        <link rel="apple-touch-icon" href="/feviconCA Pankaj Aswani.png" />
+        <link rel="icon" href="/feviconNext Gen CA.png" />
+        <link rel="apple-touch-icon" href="/feviconNext Gen CA.png" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />
         
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://classioaswani.in-maa-1.linodeobjects.com" />
+        <link rel="preconnect" href="https://classionextgen.in-maa-1.linodeobjects.com" />
         
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://classioaswani.in-maa-1.linodeobjects.com" />
+        <link rel="dns-prefetch" href="https://classionextgen.in-maa-1.linodeobjects.com" />
         
         {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />

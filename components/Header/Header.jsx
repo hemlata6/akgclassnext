@@ -335,6 +335,9 @@ export const Header = ({ cartCount }) => {
     </div>
   );
 
+  console.log('instituteAppSettingsModals', instituteAppSettingsModals);
+  
+
   return (
     <>
       <button
@@ -373,18 +376,8 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                {/* <img src={"/logoCA Pankaj Aswani.png"} alt="CA Pankaj Aswani" className="h-16 md:h-16 object-contain" /> */}
-                <Typography
-                  variant="h5"
-                  className="font-black bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent hover:from-indigo-700 hover:to-blue-600 transition-all duration-300 cursor-pointer tracking-tight"
-                  style={{
-                    fontSize: '1.5rem',
-                    fontWeight: 900,
-                    letterSpacing: '-0.5px'
-                  }}
-                >
-                  CA Pankaj Aswani
-                </Typography>
+                <img src="/nextgen/nextgenlogo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" />
+
               </Link>
             </div>
 
@@ -620,7 +613,7 @@ export const Header = ({ cartCount }) => {
           <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
             {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <Typography
+              {/* <Typography
                 variant="h6"
                 className="font-black bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent tracking-tight"
                 style={{
@@ -629,9 +622,9 @@ export const Header = ({ cartCount }) => {
                   letterSpacing: '-0.5px'
                 }}
               >
-                CA Pankaj Aswani
-              </Typography>
-              {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "logoCA Pankaj Aswani.png"} alt="Logo" className="h-20" /> */}
+                Next Gen CA
+              </Typography> */}
+              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "public/nextgen/nextgenlogo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

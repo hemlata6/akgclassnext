@@ -37,7 +37,7 @@ export const generateMetaTags = (options) => {
   const {
     title = 'CA Class',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://pankajaswani.netlify.app/logo.png',
+    image = 'https://nextgencaclass.netlify.app/logo.png',
     url = 'https://caclassestest.netlify.app',
     type = 'website',
     publishedTime = null,
@@ -105,7 +105,7 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://pankajaswani.netlify.app/logo.png',
+    image = 'https://nextgencaclass.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
     author = 'CA Class',
@@ -134,7 +134,7 @@ export const generateBlogStructuredData = (blog, url) => {
       url: 'https://caclassestest.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://pankajaswani.netlify.app/logo.png',
+        url: 'https://nextgencaclass.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -154,8 +154,8 @@ export const generateOrganizationStructuredData = () => {
     '@type': 'EducationalOrganization',
     name: 'CA Class',
     url: 'https://caclassestest.netlify.app',
-    logo: 'https://pankajaswani.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Pankaj Aswani',
+    logo: 'https://nextgencaclass.netlify.app/logo.png',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by Next Gen CA',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/caclass',
@@ -167,7 +167,7 @@ export const generateOrganizationStructuredData = () => {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
-      email: 'contact@lecturedekho.in',
+      email: 'contact@https://pankajaswani.netlify.app',
     },
   };
 };
@@ -197,12 +197,12 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://pankajaswani.netlify.app/logo.png';
+  if (!blog) return 'https://nextgencaclass.netlify.app/logo.png';
 
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
     if (!url) return url;
-    return url.replace('classiocafinal.in-maa-1.linodeobjects.com', 'classiocafinal.in-maa-1.linodeobjects.com');
+    return url.replace('classionextgen.in-maa-1.linodeobjects.com', 'classionextgen.in-maa-1.linodeobjects.com');
   };
 
   // Check nested blog.thumb
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
 
   // Default fallback
-  return 'https://pankajaswani.netlify.app/logo.png';
+  return 'https://nextgencaclass.netlify.app/logo.png';
 };
 
 /**
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: CA Pankaj Aswani)
+ * @param {string} siteName - Site name (default: Next Gen CA)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'CA Pankaj Aswani') => {
+export const generatePageTitle = (pageTitle, siteName = 'Next Gen CA') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

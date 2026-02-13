@@ -10,8 +10,8 @@ export const PromoBanners = () => {
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Pankaj Aswani",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Pankaj Aswani",
+            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=Next Gen CA",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=Next Gen CA",
             alt: "Live Batch",
             bg: "bg-indigo-900"
         },
