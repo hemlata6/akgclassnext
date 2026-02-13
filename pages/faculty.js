@@ -30,11 +30,12 @@ const FacultyProfile = () => {
 
                         <div className="flex flex-col md:flex-row items-center gap-12">
                             <div className="w-full md:w-1/3">
-                                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square flex items-center justify-center" style={{ backgroundColor: `${theme.primary}20` }}>
-                                    <div className="text-center">
-                                        <div className="text-6xl mb-4">👤</div>
-                                        <p className="font-bold text-lg" style={{ color: theme.primary }}>CA Pankaj Aswani</p>
-                                    </div>
+                                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square" style={{ backgroundColor: `${theme.primary}20` }}>
+                                    <img
+                                        src="/pankajaswani/enhanced_Preferred%20copy.png"
+                                        alt="CA Pankaj Aswani"
+                                        className="w-full h-full object-contain bg-white"
+                                    />
                                 </div>
                             </div>
 
