@@ -8,6 +8,23 @@ export default function Document() {
         <link rel="icon" href="/pankajaswani/pankajaswanilogo.png" />
         <link rel="apple-touch-icon" href="/pankajaswani/pankajaswanilogo.png" />
         
+        {/* Open Graph for Social Media Sharing */}
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="CA Pankaj Aswani - Accounting & Financial Reporting Mastery" />
+        <meta property="og:description" content="Master CA Foundation, CA Inter, and CA Final with CA Pankaj Aswani. Simplified concepts, strong fundamentals, and exam-oriented approach trusted by 200,000+ students." />
+        <meta property="og:image" content="/pankajaswani/pankajaswanilogo.png" />
+        <meta property="og:url" content="https://capankajaswani.com" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="CA Pankaj Aswani - Accounting & Financial Reporting Mastery" />
+        <meta name="twitter:description" content="Master CA Foundation, CA Inter, and CA Final with CA Pankaj Aswani. Simplified concepts, strong fundamentals, and exam-oriented approach." />
+        <meta name="twitter:image" content="/pankajaswani/pankajaswanilogo.png" />
+        
+        {/* General Meta Tags */}
+        <meta name="description" content="Learn Accounting & Financial Reporting from CA Pankaj Aswani. Expert guidance for CA Foundation, Inter, and Final with clarity and mentorship." />
+        <meta name="keywords" content="CA Pankaj Aswani, Chartered Accountant, CA Coaching, Financial Reporting, Accounting, CA Foundation, CA Inter, CA Final" />
+        
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />
         
