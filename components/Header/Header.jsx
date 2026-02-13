@@ -624,7 +624,7 @@ export const Header = ({ cartCount }) => {
               >
                 Next Gen CA
               </Typography> */}
-              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "public/nextgen/nextgenlogo.png"} alt="Logo" className="h-20" />
+              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "/nextgen/nextgenlogo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>
