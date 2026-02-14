@@ -196,7 +196,10 @@ export const CoursesSection = ({ onAddToCart }) => {
                         {/* Mobile: Explore Store button next to title */}
                         <button
                             onClick={() => handleExploreMoreClick('lecture')}
-                            className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
+                            className="md:hidden text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0"
+                            style={{ backgroundColor: theme.primary }}
+                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                         >
                             Explore Store <Icons.ChevronRight size={16} />
                         </button>
@@ -206,7 +209,10 @@ export const CoursesSection = ({ onAddToCart }) => {
                             {/* Desktop: Explore Store button with filters */}
                             <button
                                 onClick={() => handleExploreMoreClick('lecture')}
-                                className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                className="hidden md:flex text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2"
+                                style={{ backgroundColor: theme.primary }}
+                                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                             >
                                 Explore Store <Icons.ChevronRight size={16} />
                             </button>
@@ -214,7 +220,18 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button
                                     onClick={() => setActiveDomain(null)}
-                                    className={`ml-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === null ? `${theme.primaryClass} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
+                                    className="ml-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap"
+                                    style={{
+                                        backgroundColor: activeDomain === null ? theme.primary : 'transparent',
+                                        color: activeDomain === null ? 'white' : '#64748b',
+                                        boxShadow: activeDomain === null ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        if (activeDomain === null) e.currentTarget.style.backgroundColor = theme.primaryHover;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        if (activeDomain === null) e.currentTarget.style.backgroundColor = theme.primary;
+                                    }}
                                 >
                                     All
                                 </button>
@@ -222,7 +239,18 @@ export const CoursesSection = ({ onAddToCart }) => {
                                     <button
                                         key={domain.id}
                                         onClick={() => setActiveDomain(domain.id)}
-                                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === domain.id ? `${theme.primaryClass} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
+                                        className="px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap"
+                                        style={{
+                                            backgroundColor: activeDomain === domain.id ? theme.primary : 'transparent',
+                                            color: activeDomain === domain.id ? 'white' : '#64748b',
+                                            boxShadow: activeDomain === domain.id ? '0 4px 6px -1px rgba(0, 0, 0, 0.1)' : 'none'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                            if (activeDomain === domain.id) e.currentTarget.style.backgroundColor = theme.primaryHover;
+                                        }}
+                                        onMouseLeave={(e) => {
+                                            if (activeDomain === domain.id) e.currentTarget.style.backgroundColor = theme.primary;
+                                        }}
                                     >
                                         {domain.name}
                                     </button>
@@ -283,8 +311,11 @@ export const CoursesSection = ({ onAddToCart }) => {
                                         >
                                             <div
                                                 onClick={() => router.push(`/course/${course.id}`)}
-                                                className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
-                                                style={{ aspectRatio: '16/9' }}
+                                                className="rounded-xl relative overflow-hidden flex items-end p-3 cursor-pointer"
+                                                style={{
+                                                    aspectRatio: '16/9',
+                                                    backgroundColor: theme.primary
+                                                }}
                                             >
                                                 {course.logo && (
                                                     <img
@@ -374,16 +405,28 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <button
                                 onClick={handlePrev}
                                 disabled={!canGoPrev}
-                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                    }`}
+                                className="text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all"
+                                style={{
+                                    backgroundColor: theme.primary,
+                                    opacity: canGoPrev ? 1 : 0.3,
+                                    cursor: canGoPrev ? 'pointer' : 'not-allowed'
+                                }}
+                                onMouseEnter={(e) => canGoPrev && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                             >
                                 <Icons.ChevronLeft />
                             </button>
                             <button
                                 onClick={handleNext}
                                 disabled={!canGoNext}
-                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                    }`}
+                                className="text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all"
+                                style={{
+                                    backgroundColor: theme.primary,
+                                    opacity: canGoNext ? 1 : 0.3,
+                                    cursor: canGoNext ? 'pointer' : 'not-allowed'
+                                }}
+                                onMouseEnter={(e) => canGoNext && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+                                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                             >
                                 <Icons.ChevronRight />
                             </button>

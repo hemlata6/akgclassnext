@@ -1091,11 +1091,21 @@ const Store = () => {
 
 
     return (
-        <div className="bg-gradient-to-br from-gray-50 via-indigo-50/30 to-indigo-50/30 lg:pt-4">
+        <div
+            style={{
+                background: `linear-gradient(to bottom right, rgb(249, 250, 251), ${theme.primary}08, ${theme.primary}08)`
+            }}
+            className="lg:pt-4"
+        >
             {/* Main Store Content */}
             {/* Header Section - Fixed on mobile only - Hidden when using routeData */}
 
-            <div className="lg:relative lg:z-auto fixed top-15 left-0 right-0 z-30 lg:bg-white lg:border-0 border-b lg:shadow-md shadow-sm bg-white border-indigo-100 lg:rounded-xl lg:mx-4">
+            <div
+                className="lg:relative lg:z-auto fixed top-15 left-0 right-0 z-30 lg:bg-white lg:border-0 border-b lg:shadow-md shadow-sm bg-white lg:rounded-xl lg:mx-4"
+                style={{
+                    borderColor: `${theme.primary}15`
+                }}
+            >
                 <div className="max-w-[1800px] mx-auto px-2 pt-2.5 md:px-3 md:py-2">
                     {/* Header Section - Course Store Title + Sort, Search, Cart */}
                     <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-1">
@@ -1392,7 +1402,13 @@ const Store = () => {
 
                         {/* Left Sidebar - Filters (Desktop Only) */}
                         <div className="hidden lg:block w-full lg:w-72 flex-shrink-0">
-                            <div className="bg-white rounded-2xl shadow-lg p-5 border-2 border-indigo-100 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ borderLeft: `5px solid ${primaryColor}` }}>
+                            <div
+                                className="bg-white rounded-2xl shadow-lg p-5 border-2 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto"
+                                style={{
+                                    borderColor: `${theme.primary}20`,
+                                    borderLeft: `5px solid ${primaryColor}`
+                                }}
+                            >
                                 {(selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting || searchTerm) && (
                                     <div className="mb-4 pb-4 border-b-2" style={{ borderColor: `${primaryColor}40` }}>
                                         <button
@@ -1526,10 +1542,19 @@ const Store = () => {
                                                         onClick={() => toggleFaculty(faculty)}
                                                         className="w-full text-left px-2 py-1.5 rounded-md text-xs transition-all cursor-pointer flex items-center gap-2 hover:bg-gray-50 group"
                                                     >
-                                                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${isSelected
-                                                            ? 'border-indigo-600 bg-indigo-600 shadow-sm'
-                                                            : 'border-gray-300 group-hover:border-indigo-400'
-                                                            }`}>
+                                                        <div
+                                                            className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all`}
+                                                            style={{
+                                                                borderColor: isSelected ? theme.primary : '#d1d5db',
+                                                                backgroundColor: isSelected ? theme.primary : 'transparent'
+                                                            }}
+                                                            onMouseEnter={(e) => {
+                                                                if (!isSelected) e.currentTarget.style.borderColor = '#6b7280';
+                                                            }}
+                                                            onMouseLeave={(e) => {
+                                                                if (!isSelected) e.currentTarget.style.borderColor = '#d1d5db';
+                                                            }}
+                                                        >
                                                             {isSelected && (
                                                                 <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -1603,9 +1628,27 @@ const Store = () => {
                                                                     <button
                                                                         onClick={() => togglePaper(paper)}
                                                                         className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${isSelected
-                                                                            ? 'bg-indigo-600 text-white shadow-lg'
-                                                                            : 'border-2 border-indigo-200 text-indigo-700 hover:border-indigo-700'
+                                                                            ? 'text-white shadow-lg'
+                                                                            : 'border-2 text-white'
                                                                             }`}
+                                                                        style={isSelected ? { 
+                                                                            backgroundColor: theme.primary 
+                                                                        } : { 
+                                                                            borderColor: theme.primary, 
+                                                                            color: theme.primary 
+                                                                        }}
+                                                                        onMouseEnter={(e) => {
+                                                                            if (!isSelected) {
+                                                                                e.currentTarget.style.borderColor = theme.primaryHover;
+                                                                                e.currentTarget.style.color = theme.primaryHover;
+                                                                            }
+                                                                        }}
+                                                                        onMouseLeave={(e) => {
+                                                                            if (!isSelected) {
+                                                                                e.currentTarget.style.borderColor = theme.primary;
+                                                                                e.currentTarget.style.color = theme.primary;
+                                                                            }
+                                                                        }}
                                                                     >
                                                                         {paper.name}
                                                                     </button>
@@ -1640,7 +1683,13 @@ const Store = () => {
                                             <select
                                                 value={selectedProductType || ''}
                                                 onChange={(e) => setSelectedProductType(e.target.value || null)}
-                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-emerald-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                                style={{
+                                                    '--tw-ring-color': `${theme.primary}30`,
+                                                    borderColor: 'rgb(209, 213, 219)'
+                                                }}
+                                                onFocus={(e) => e.currentTarget.style.borderColor = theme.primary}
+                                                onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(209, 213, 219)'}
                                             >
                                                 <option value="">All Types</option>
                                                 {productTypes.map(type => (
@@ -1667,7 +1716,13 @@ const Store = () => {
                                                         setSelectedTag(tag || null);
                                                     }
                                                 }}
-                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-indigo-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                                style={{
+                                                    '--tw-ring-color': `${theme.primary}30`,
+                                                    borderColor: 'rgb(209, 213, 219)'
+                                                }}
+                                                onFocus={(e) => e.currentTarget.style.borderColor = theme.primary}
+                                                onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(209, 213, 219)'}
                                             >
                                                 <option value="">All Tags</option>
                                                 {tags.map(tag => (
@@ -1685,7 +1740,13 @@ const Store = () => {
                                         <select
                                             value={priceSorting}
                                             onChange={(e) => setPriceSorting(e.target.value)}
-                                            className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-indigo-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                            className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium outline-none focus:ring-0 transition-colors hover:border-gray-400"
+                                            style={{
+                                                '--tw-ring-color': `${theme.primary}30`,
+                                                borderColor: 'rgb(209, 213, 219)'
+                                            }}
+                                            onFocus={(e) => e.currentTarget.style.borderColor = theme.primary}
+                                            onBlur={(e) => e.currentTarget.style.borderColor = 'rgb(209, 213, 219)'}
                                         >
                                             <option value="">All Prices</option>
                                             <option value="low-to-high">Price: Low to High</option>
@@ -1758,7 +1819,12 @@ const Store = () => {
                                                                         e.stopPropagation();
                                                                         toggleExpandDescription(item?.shortDescription);
                                                                     }}
-                                                                    className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
+                                                                    className={`font-medium ml-1 underline transition-colors`}
+                                                                    style={{
+                                                                        color: theme.primary
+                                                                    }}
+                                                                    onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                                                                    onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                                                                 >
                                                                     more
                                                                 </button>
@@ -1903,8 +1969,13 @@ const Store = () => {
                                 {filteredCourses?.length === 0 && !loading && (
                                     <div className="text-center py-8">
                                         <div className="bg-white rounded-3xl shadow-xl p-4 max-w-md mx-auto border border-gray-100">
-                                            <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner bg-gradient-to-br from-emerald-100 to-green-100">
-                                                <ShoppingCart className="h-16 w-16 text-emerald-600" />
+                                            <div
+                                                className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner"
+                                                style={{
+                                                    background: `linear-gradient(to bottom right, ${theme.primary}15, ${theme.primary}20)`
+                                                }}
+                                            >
+                                                <ShoppingCart style={{ height: 64, width: 64, color: theme.primary }} />
                                             </div>
                                             <h3 className="text-2xl font-bold text-gray-800 mb-3">No Courses Found</h3>
                                             <p className="text-gray-600 mb-4">Try adjusting your filters to see more courses!</p>
@@ -1937,7 +2008,10 @@ const Store = () => {
                     <div className="fixed bottom-0 left-0 right-0 rounded-t-3xl bg-white shadow-2xl max-h-[55vh] overflow-y-auto z-50">
                         <div className="flex flex-col h-full bg-white">
                             {/* Header */}
-                            <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm border-b border-emerald-600/20 sticky top-0">
+                            <div
+                                className="bg-white px-4 py-3 flex items-center justify-between shadow-sm border-b sticky top-0"
+                                style={{ borderColor: `${theme.primary}30` }}
+                            >
                                 <h2 className="text-base font-black text-black">Refine Filters</h2>
                                 {(selectedDomain || selectedExamStage || selectedFaculties.length > 0) && (
                                     <button
@@ -1946,7 +2020,12 @@ const Store = () => {
                                             setSelectedExamStage(null);
                                             setSelectedFaculties([]);
                                         }}
-                                        className="font-black text-xs text-indigo-700 hover:text-indigo-800 transition-colors"
+                                        className="font-black text-xs transition-colors"
+                                        style={{
+                                            color: theme.primary
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.opacity = '0.8'}
+                                        onMouseLeave={(e) => e.currentTarget.style.opacity = '1'}
                                     >
                                         Reset
                                     </button>
@@ -2064,18 +2143,19 @@ const Store = () => {
                                                                 setSelectedDomain(domain);
                                                             }
                                                         }}
-                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedDomain?.id === domain.id
-                                                            ? 'bg-emerald-50'
-                                                            : ''
-                                                            }`}
+                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                        style={selectedDomain?.id === domain.id ? { backgroundColor: `${theme.primary}15` } : {}}
                                                     >
                                                         <span className="font-medium line-clamp-1 text-gray-700"
                                                         // style={{ color: selectedDomain?.id === domain.id ? primaryColor : (isDarkMode ? '#fff' : '#111827') }}
                                                         >{domain.name}</span>
-                                                        <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${selectedDomain?.id === domain.id
-                                                            ? 'border-emerald-600 bg-emerald-600'
-                                                            : 'border-gray-300'
-                                                            }`}>
+                                                        <div
+                                                            className="w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all"
+                                                            style={{
+                                                                borderColor: selectedDomain?.id === domain.id ? theme.primary : '#d1d5db',
+                                                                backgroundColor: selectedDomain?.id === domain.id ? theme.primary : 'transparent'
+                                                            }}
+                                                        >
                                                             {selectedDomain?.id === domain.id && (
                                                                 <div className="w-full h-full rounded-full flex items-center justify-center">
                                                                     <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -2100,18 +2180,19 @@ const Store = () => {
                                                         onClick={() => {
                                                             setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
                                                         }}
-                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedExamStage?.id === stage.id
-                                                            ? 'bg-emerald-50'
-                                                            : ''
-                                                            }`}
+                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                        style={selectedExamStage?.id === stage.id ? { backgroundColor: `${theme.primary}15` } : {}}
                                                     >
                                                         <span className="font-medium line-clamp-1 text-gray-700"
                                                         // style={{ color: selectedExamStage?.id === stage.id ? primaryColor : (isDarkMode ? '#fff' : '#111827') }}
                                                         >{stage.name}</span>
-                                                        <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${selectedExamStage?.id === stage.id
-                                                            ? 'border-emerald-600 bg-emerald-600'
-                                                            : 'border-gray-300'
-                                                            }`}>
+                                                        <div
+                                                            className="w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all"
+                                                            style={{
+                                                                borderColor: selectedExamStage?.id === stage.id ? theme.primary : '#d1d5db',
+                                                                backgroundColor: selectedExamStage?.id === stage.id ? theme.primary : 'transparent'
+                                                            }}
+                                                        >
                                                             {selectedExamStage?.id === stage.id && (
                                                                 <div className="w-full h-full rounded-full flex items-center justify-center">
                                                                     <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -2135,13 +2216,8 @@ const Store = () => {
                                                     <div
                                                         key={paper.id}
                                                         onClick={() => togglePaper(paper)}
-                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs cursor-pointer
-            flex items-center justify-between hover:bg-gray-50
-            ${isSelected
-                                                                ? 'bg-emerald-50'
-                                                                : ''
-                                                            }
-          `}
+                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs cursor-pointer flex items-center justify-between hover:bg-gray-50`}
+                                                        style={isSelected ? { backgroundColor: `${theme.primary}15` } : {}}
                                                     >
                                                         <span className="font-medium line-clamp-1 text-gray-700">
                                                             {paper.name}
@@ -2149,12 +2225,11 @@ const Store = () => {
 
                                                         {/* Custom checkbox UI */}
                                                         <div
-                                                            className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all
-   ${isSelected
-                                                                    ? 'border-emerald-600 bg-emerald-600'
-                                                                    : 'border-gray-300'
-                                                                }
-  `}
+                                                            className="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all"
+                                                            style={{
+                                                                borderColor: isSelected ? theme.primary : '#d1d5db',
+                                                                backgroundColor: isSelected ? theme.primary : 'transparent'
+                                                            }}
                                                         >
                                                             {isSelected && (
                                                                 <div className="w-2.5 h-2.5 bg-white rounded-full"></div>
@@ -2180,24 +2255,25 @@ const Store = () => {
                                                                 setSelectedFaculties([...faculties]);
                                                             }
                                                         }}
-                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 border-b border-gray-200 mb-2 ${selectedFaculties.length > 0
-                                                            ? 'bg-emerald-50'
-                                                            : ''
-                                                            }`}
+                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 border-b border-gray-200 mb-2`}
+                                                        style={selectedFaculties.length > 0 ? { backgroundColor: `${theme.primary}15` } : {}}
                                                     >
                                                         <span className="font-semibold text-gray-800">
                                                             {selectedFaculties.length === faculties.length ? 'Deselect All' : 'Select All'}
                                                         </span>
-                                                        <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${selectedFaculties.length > 0
-                                                            ? 'border-emerald-600 bg-emerald-600'
-                                                            : 'border-gray-300'
-                                                            }`}>
+                                                        <div
+                                                            className="w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all"
+                                                            style={{
+                                                                borderColor: selectedFaculties.length > 0 ? theme.primary : '#d1d5db',
+                                                                backgroundColor: selectedFaculties.length > 0 ? theme.primary : 'transparent'
+                                                            }}
+                                                        >
                                                             {selectedFaculties.length === faculties.length ? (
                                                                 <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                                                                 </svg>
                                                             ) : selectedFaculties.length > 0 ? (
-                                                                <div className="w-1.5 h-1.5 bg-emerald-600 rounded-full"></div>
+                                                                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: theme.primary }}></div>
                                                             ) : null}
                                                         </div>
                                                     </div>
@@ -2209,10 +2285,8 @@ const Store = () => {
                                                             <div
                                                                 key={faculty.id}
                                                                 onClick={() => toggleFaculty(faculty)}
-                                                                className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${isSelected
-                                                                    ? 'bg-emerald-50'
-                                                                    : ''
-                                                                    }`}
+                                                                className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                                style={isSelected ? { backgroundColor: `${theme.primary}15` } : {}}
                                                             >
                                                                 <div className="flex items-center gap-2.5 flex-1 min-w-0">
                                                                     {faculty.profile && (
@@ -2224,10 +2298,13 @@ const Store = () => {
                                                                     )}
                                                                     <span className="font-medium text-gray-700 line-clamp-1">{faculty.firstName} {faculty.lastName}</span>
                                                                 </div>
-                                                                <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${isSelected
-                                                                    ? 'border-emerald-600 bg-emerald-600'
-                                                                    : 'border-gray-300'
-                                                                    }`}>
+                                                                <div
+                                                                    className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all`}
+                                                                    style={{
+                                                                        borderColor: isSelected ? theme.primary : '#d1d5db',
+                                                                        backgroundColor: isSelected ? theme.primary : 'transparent'
+                                                                    }}
+                                                                >
                                                                     {isSelected && (
                                                                         <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                                                                     )}
@@ -2247,16 +2324,17 @@ const Store = () => {
                                             {/* ALL PRODUCT TYPES */}
                                             <div
                                                 onClick={() => setSelectedProductType(null)}
-                                                className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${!selectedProductType
-                                                    ? 'bg-emerald-50'
-                                                    : ''
-                                                    }`}
+                                                className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                style={!selectedProductType ? { backgroundColor: `${theme.primary}15` } : {}}
                                             >
                                                 <span className="font-medium text-gray-700 line-clamp-1">All Types</span>
-                                                <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${!selectedProductType
-                                                    ? 'border-emerald-600 bg-emerald-600'
-                                                    : 'border-gray-300'
-                                                    }`}>
+                                                <div
+                                                    className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all`}
+                                                    style={{
+                                                        borderColor: !selectedProductType ? theme.primary : '#d1d5db',
+                                                        backgroundColor: !selectedProductType ? theme.primary : 'transparent'
+                                                    }}
+                                                >
                                                     {!selectedProductType && (
                                                         <div className="w-full h-full rounded-full flex items-center justify-center">
                                                             <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -2269,16 +2347,17 @@ const Store = () => {
                                                 <div
                                                     key={type}
                                                     onClick={() => setSelectedProductType(type)}
-                                                    className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedProductType === type
-                                                        ? 'bg-emerald-50'
-                                                        : ''
-                                                        }`}
+                                                    className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                    style={selectedProductType === type ? { backgroundColor: `${theme.primary}15` } : {}}
                                                 >
                                                     <span className="font-medium text-gray-700 line-clamp-1">{type}</span>
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${selectedProductType === type
-                                                        ? 'border-emerald-600 bg-emerald-600'
-                                                        : 'border-gray-300'
-                                                        }`}>
+                                                    <div
+                                                        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all`}
+                                                        style={{
+                                                            borderColor: selectedProductType === type ? theme.primary : '#d1d5db',
+                                                            backgroundColor: selectedProductType === type ? theme.primary : 'transparent'
+                                                        }}
+                                                    >
                                                         {selectedProductType === type && (
                                                             <div className="w-full h-full rounded-full flex items-center justify-center">
                                                                 <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -2295,16 +2374,17 @@ const Store = () => {
                                             {/* ALL BATCHES */}
                                             <div
                                                 onClick={() => setSelectedTag(null)}
-                                                className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${!selectedTag
-                                                    ? 'bg-emerald-50'
-                                                    : ''
-                                                    }`}
+                                                className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                style={!selectedTag ? { backgroundColor: `${theme.primary}15` } : {}}
                                             >
                                                 <span className="font-medium text-gray-700 line-clamp-1">All Batches</span>
-                                                <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${!selectedTag
-                                                    ? 'border-emerald-600 bg-emerald-600'
-                                                    : 'border-gray-300'
-                                                    }`}>
+                                                <div
+                                                    className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all`}
+                                                    style={{
+                                                        borderColor: !selectedTag ? theme.primary : '#d1d5db',
+                                                        backgroundColor: !selectedTag ? theme.primary : 'transparent'
+                                                    }}
+                                                >
                                                     {!selectedTag && (
                                                         <div className="w-full h-full rounded-full flex items-center justify-center">
                                                             <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -2317,16 +2397,17 @@ const Store = () => {
                                                 <div
                                                     key={tag.id}
                                                     onClick={() => setSelectedTag(tag)}
-                                                    className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedTag?.id === tag.id
-                                                        ? 'bg-emerald-50'
-                                                        : ''
-                                                        }`}
+                                                    className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                    style={selectedTag?.id === tag.id ? { backgroundColor: `${theme.primary}15` } : {}}
                                                 >
                                                     <span className="font-medium text-gray-700 line-clamp-1">{tag.tag}</span>
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${selectedTag?.id === tag.id
-                                                        ? 'border-emerald-600 bg-emerald-600'
-                                                        : 'border-gray-300'
-                                                        }`}>
+                                                    <div
+                                                        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all`}
+                                                        style={{
+                                                            borderColor: selectedTag?.id === tag.id ? theme.primary : '#d1d5db',
+                                                            backgroundColor: selectedTag?.id === tag.id ? theme.primary : 'transparent'
+                                                        }}
+                                                    >
                                                         {selectedTag?.id === tag.id && (
                                                             <div className="w-full h-full rounded-full flex items-center justify-center">
                                                                 <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -2349,16 +2430,17 @@ const Store = () => {
                                                 <div
                                                     key={p.value}
                                                     onClick={() => setPriceSorting(p.value)}
-                                                    className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${priceSorting === p.value
-                                                        ? 'bg-emerald-50'
-                                                        : ''
-                                                        }`}
+                                                    className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50`}
+                                                    style={priceSorting === p.value ? { backgroundColor: `${theme.primary}15` } : {}}
                                                 >
                                                     <span className="font-medium text-gray-700 line-clamp-1">{p.label}</span>
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${priceSorting === p.value
-                                                        ? 'border-emerald-600 bg-emerald-600'
-                                                        : 'border-gray-300'
-                                                        }`}>
+                                                    <div
+                                                        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all`}
+                                                        style={{
+                                                            borderColor: priceSorting === p.value ? theme.primary : '#d1d5db',
+                                                            backgroundColor: priceSorting === p.value ? theme.primary : 'transparent'
+                                                        }}
+                                                    >
                                                         {priceSorting === p.value && (
                                                             <div className="w-full h-full rounded-full flex items-center justify-center">
                                                                 <div className="w-2 h-2 bg-white rounded-full"></div>

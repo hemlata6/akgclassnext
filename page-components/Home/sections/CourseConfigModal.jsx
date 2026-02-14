@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Icons, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS } from '../../../constants/Icons';
+import { useTheme } from '../../../config/ThemeContext';
 
 const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
+  const { theme } = useTheme();
   const [selectedMode, setSelectedMode] = useState('');
   const [selectedVariation, setSelectedVariation] = useState('');
   const [selectedValidity, setSelectedValidity] = useState(null);
@@ -173,8 +175,22 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
                   onClick={() => setSelectedMode(mode)}
                   className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${selectedMode === mode
                       ? `${BRAND_GREEN_CLASS} text-white`
-                      : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                      : 'border border-slate-200 text-slate-600'
                     }`}
+                  onMouseEnter={(e) => {
+                    if (selectedMode !== mode) {
+                      e.currentTarget.style.borderColor = theme.primary;
+                      e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                      e.currentTarget.style.color = theme.primary;
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (selectedMode !== mode) {
+                      e.currentTarget.style.borderColor = '#cbd5e1';
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#475569';
+                    }
+                  }}
                 >
                   {mode}
                 </button>
@@ -194,8 +210,22 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
                     onClick={() => setSelectedVariation(variation)}
                     className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${selectedVariation === variation
                         ? `${BRAND_GREEN_CLASS} text-white`
-                        : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                        : 'border border-slate-200 text-slate-600'
                       }`}
+                    onMouseEnter={(e) => {
+                      if (selectedVariation !== variation) {
+                        e.currentTarget.style.borderColor = theme.primary;
+                        e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                        e.currentTarget.style.color = theme.primary;
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (selectedVariation !== variation) {
+                        e.currentTarget.style.borderColor = '#cbd5e1';
+                        e.currentTarget.style.backgroundColor = 'transparent';
+                        e.currentTarget.style.color = '#475569';
+                      }
+                    }}
                   >
                     {variation}
                   </button>
@@ -209,7 +239,19 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-3">Select Validity</label>
               <select
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-emerald-600"
+                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold outline-none"
+                style={{
+                  borderColor: theme.primary,
+                  '--tw-border-opacity': '0.3',
+                }}
+                onFocus={(e) => {
+                  e.currentTarget.style.boxShadow = `0 0 0 3px ${theme.primary}20`;
+                  e.currentTarget.style.borderColor = theme.primary;
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.boxShadow = 'none';
+                  e.currentTarget.style.borderColor = `${theme.primary}4D`;
+                }}
                 value={selectedValidity ? JSON.stringify(selectedValidity) : ''}
                 onChange={(e) => setSelectedValidity(JSON.parse(e.target.value))}
               >

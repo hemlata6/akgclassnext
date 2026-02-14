@@ -1690,7 +1690,10 @@ const MCQTest = () => {
                     <button
                       onClick={handleConfirmSubmit}
                       disabled={isSubmitting}
-                      className="flex-1 px-6 py-3 bg-indigo-700 text-white rounded-lg font-semibold hover:bg-indigo-800 transition-colors duration-200 disabled:opacity-50 flex items-center justify-center"
+                      className="flex-1 px-6 py-3 text-white rounded-lg font-semibold transition-colors duration-200 disabled:opacity-50 flex items-center justify-center"
+                      style={{ backgroundColor: theme.primary, borderColor: theme.primary }}
+                      onMouseEnter={(e) => !isSubmitting && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = theme.primary)}
                     >
                       {isSubmitting ? (
                         <>

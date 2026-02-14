@@ -4,6 +4,16 @@ const ThemeContext = createContext();
 
 // Theme configurations
 export const THEMES = {
+  royalBlue: {
+    name: 'Royal Blue',
+    primary: '#0F5BE0',
+    primaryHover: '#0D4FB8',
+    primaryClass: 'bg-blue-700',
+    primaryHoverClass: 'hover:bg-blue-800',
+    textClass: 'text-blue-700',
+    borderClass: 'border-blue-700',
+    bgGradient: 'from-blue-700 to-blue-800',
+  },
   darkGreen: {
     name: 'Dark Green',
     primary: '#0d5a3e',
@@ -37,7 +47,7 @@ export const THEMES = {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState('blue');
+  const [currentTheme, setCurrentTheme] = useState('royalBlue');
 
   // Load theme from localStorage on mount
   useEffect(() => {
@@ -45,8 +55,8 @@ export const ThemeProvider = ({ children }) => {
     if (savedTheme && THEMES[savedTheme]) {
       setCurrentTheme(savedTheme);
     } else {
-      // Set blue as default
-      setCurrentTheme('blue');
+      // Set royalBlue as default
+      setCurrentTheme('royalBlue');
     }
   }, []);
 

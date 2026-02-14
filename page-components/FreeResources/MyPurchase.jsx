@@ -7,10 +7,12 @@ import instId from '../../config/instituteId';
 import YouTubePlayer from './YouTubePlayer';
 import { useStudent } from '../../config/StudentContext';
 import { useRouter } from 'next/router';
+import { useTheme } from '../../config/ThemeContext';
 
 const MyPurchases = () => {
   const router = useRouter();
   const { user, authToken } = useAuth();
+  const { theme } = useTheme();
   const { isAuthenticated } = useStudent();
   const purchases = user?.purchases || [];
   const [mycourseList, setMyCourseList] = useState([]);
@@ -273,7 +275,12 @@ const MyPurchases = () => {
             </p>
             <button
               onClick={() => router.push('/')}
-              className="bg-indigo-700 hover:bg-indigo-800 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg"
+              className="text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg"
+              style={{
+                backgroundColor: theme.primary
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
             >
               Explore Courses
             </button>
@@ -304,7 +311,12 @@ const MyPurchases = () => {
           <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-2 sm:gap-3">
             <button
               onClick={goBackToCourses}
-              className="bg-indigo-700 hover:bg-indigo-800 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center font-semibold shadow-md"
+              className="text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center font-semibold shadow-md"
+              style={{
+                backgroundColor: theme.primary
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
             >
               ← Back to My Purchases
             </button>

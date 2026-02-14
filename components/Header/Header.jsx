@@ -420,7 +420,15 @@ export const Header = ({ cartCount }) => {
                   ) : (
                     <>
                       {currentLevel === 'second' && (
-                        <button onClick={handleBackToFirstLevel} className={`w-full text-left px-4 py-2.5 text-xs font-semibold text-white ${theme.primaryClass} ${theme.primaryHoverClass} mb-1 flex items-center gap-2 transition-all`}>
+                        <button
+                          onClick={handleBackToFirstLevel}
+                          className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white mb-1 flex items-center gap-2 transition-all rounded-lg"
+                          style={{
+                            backgroundColor: theme.primary
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
+                        >
                           <Icons.ChevronLeft size={14} />
                           Back to Categories
                         </button>
@@ -478,7 +486,15 @@ export const Header = ({ cartCount }) => {
                   ) : (
                     <>
                       {booksCurrentLevel === 'second' && (
-                        <button onClick={handleBooksBackToFirstLevel} className={`w-full text-left px-4 py-2.5 text-xs font-semibold text-white ${theme.primaryClass} ${theme.primaryHoverClass} mb-1 flex items-center gap-2 transition-all`}>
+                        <button
+                          onClick={handleBooksBackToFirstLevel}
+                          className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white mb-1 flex items-center gap-2 transition-all rounded-lg"
+                          style={{
+                            backgroundColor: theme.primary
+                          }}
+                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
+                        >
                           <Icons.ChevronLeft size={14} />
                           Back to Categories
                         </button>
@@ -565,7 +581,14 @@ export const Header = ({ cartCount }) => {
 
               {user ? (
                 <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
+                  <button
+                    className="text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap"
+                    style={{
+                      backgroundColor: theme.primary
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
+                  >
                     <Icons.User size={16} />
                     {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
                   </button>
@@ -600,7 +623,12 @@ export const Header = ({ cartCount }) => {
               ) : (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
+                  className="hidden md:block px-4 py-2 rounded-lg text-sm font-bold transition-colors"
+                  style={{
+                    color: theme.primary
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = `${theme.primary}10`}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >
                   Login
                 </button>
@@ -608,7 +636,13 @@ export const Header = ({ cartCount }) => {
 
               <button
                 onClick={() => setShowAppDownloadModal(true)}
-                className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
+                className="hidden md:block text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all"
+                style={{
+                  backgroundColor: theme.primary
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
+              >
                 Download App
               </button>
             </div>
@@ -646,7 +680,16 @@ export const Header = ({ cartCount }) => {
                 {/* Home */}
                 <button
                   onClick={() => { router.push('/'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
+                  style={{ backgroundColor: 'transparent' }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                    e.currentTarget.style.color = theme.primary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = '#0f172a';
+                  }}
                 >
                   Home
                 </button>
@@ -664,7 +707,16 @@ export const Header = ({ cartCount }) => {
                         fetchDomainsForMenu();
                       }
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
+                    style={{ backgroundColor: 'transparent' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                      e.currentTarget.style.color = theme.primary;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#0f172a';
+                    }}
                   >
                     <span>Lectures</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'courses' ? 'rotate-180' : ''}`} />
@@ -673,7 +725,7 @@ export const Header = ({ cartCount }) => {
                     <div className="space-y-1 mt-1 pl-2">
                       {domainLoading ? (
                         <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
+                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: theme.primary }}></div>
                           <span>Loading...</span>
                         </div>
                       ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
@@ -683,7 +735,10 @@ export const Header = ({ cartCount }) => {
                           {currentLevel === 'second' && (
                             <button
                               onClick={handleBackToFirstLevel}
-                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg flex items-center gap-2 transition-all"
+                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white rounded-lg flex items-center gap-2 transition-all"
+                              style={{ backgroundColor: theme.primary }}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                             >
                               <Icons.ChevronLeft size={14} />
                               Back to Categories
@@ -701,10 +756,24 @@ export const Header = ({ cartCount }) => {
                                   setSelectedParentDomain(null);
                                 }
                               }}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${selectedFirstLevelDomain?.id === domain.id
-                                ? 'bg-indigo-100 text-indigo-700 font-semibold'
-                                : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                                }`}
+                              style={selectedFirstLevelDomain?.id === domain.id ? { backgroundColor: theme.primary, color: 'white' } : {}}
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${
+                                selectedFirstLevelDomain?.id === domain.id
+                                  ? 'font-semibold'
+                                  : 'text-slate-600'
+                              }`}
+                              onMouseEnter={(e) => {
+                                if (selectedFirstLevelDomain?.id !== domain.id) {
+                                  e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                                  e.currentTarget.style.color = theme.primary;
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (selectedFirstLevelDomain?.id !== domain.id) {
+                                  e.currentTarget.style.backgroundColor = 'transparent';
+                                  e.currentTarget.style.color = '#475569';
+                                }
+                              }}
                             >
                               <span className="truncate">{domain.name}</span>
                               {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
@@ -714,7 +783,10 @@ export const Header = ({ cartCount }) => {
                           ))}
                           {currentLevel === 'second' && selectedParentDomain && (
                             <>
-                              <div className="px-4 py-2 text-xs font-bold text-indigo-700 bg-indigo-50 rounded-lg mb-1">
+                              <div
+                                className="px-4 py-2 text-xs font-bold rounded-lg mb-1"
+                                style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
+                              >
                                 {selectedParentDomain.name}
                               </div>
                               {secondLevelDomains.map((domain) => (
@@ -727,9 +799,20 @@ export const Header = ({ cartCount }) => {
                                     setCurrentLevel('first');
                                     setSelectedParentDomain(null);
                                   }}
-                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600"
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                                    e.currentTarget.style.color = theme.primary;
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                    e.currentTarget.style.color = '#475569';
+                                  }}
                                 >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
+                                  <span
+                                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                    style={{ backgroundColor: theme.primary }}
+                                  ></span>
                                   <span className="truncate">{domain.name}</span>
                                 </button>
                               ))}
@@ -754,7 +837,16 @@ export const Header = ({ cartCount }) => {
                         fetchBooksDomainsForMenu();
                       }
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
+                    style={{}}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                      e.currentTarget.style.color = theme.primary;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#111827';
+                    }}
                   >
                     <span>Books</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'books' ? 'rotate-180' : ''}`} />
@@ -773,7 +865,10 @@ export const Header = ({ cartCount }) => {
                           {booksCurrentLevel === 'second' && (
                             <button
                               onClick={handleBooksBackToFirstLevel}
-                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-lg flex items-center gap-2 transition-all"
+                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white rounded-lg flex items-center gap-2 transition-all"
+                              style={{ backgroundColor: theme.primary }}
+                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                             >
                               <Icons.ChevronLeft size={14} />
                               Back to Categories
@@ -791,10 +886,24 @@ export const Header = ({ cartCount }) => {
                                   setBooksSelectedParentDomain(null);
                                 }
                               }}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${booksSelectedFirstLevelDomain?.id === domain.id
-                                ? 'bg-amber-100 text-amber-700 font-semibold'
-                                : 'text-slate-600 hover:bg-amber-50 hover:text-amber-700'
-                                }`}
+                              style={booksSelectedFirstLevelDomain?.id === domain.id ? { backgroundColor: theme.primary, color: 'white' } : {}}
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${
+                                booksSelectedFirstLevelDomain?.id === domain.id
+                                  ? 'font-semibold'
+                                  : 'text-slate-600'
+                              }`}
+                              onMouseEnter={(e) => {
+                                if (booksSelectedFirstLevelDomain?.id !== domain.id) {
+                                  e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                                  e.currentTarget.style.color = theme.primary;
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (booksSelectedFirstLevelDomain?.id !== domain.id) {
+                                  e.currentTarget.style.backgroundColor = 'transparent';
+                                  e.currentTarget.style.color = '#475569';
+                                }
+                              }}
                             >
                               <span className="truncate">{domain.name}</span>
                               {!booksShowSecondLevel && domain.child && domain.child.length > 0 && (
@@ -804,7 +913,10 @@ export const Header = ({ cartCount }) => {
                           ))}
                           {booksCurrentLevel === 'second' && booksSelectedParentDomain && (
                             <>
-                              <div className="px-4 py-2 text-xs font-bold text-amber-700 bg-amber-50 rounded-lg mb-1">
+                              <div
+                                className="px-4 py-2 text-xs font-bold rounded-lg mb-1"
+                                style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
+                              >
                                 {booksSelectedParentDomain.name}
                               </div>
                               {booksSecondLevelDomains.map((domain) => (
@@ -817,9 +929,20 @@ export const Header = ({ cartCount }) => {
                                     setBooksCurrentLevel('first');
                                     setBooksSelectedParentDomain(null);
                                   }}
-                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-amber-50 hover:text-amber-700"
+                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600"
+                                  onMouseEnter={(e) => {
+                                    e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                                    e.currentTarget.style.color = theme.primary;
+                                  }}
+                                  onMouseLeave={(e) => {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                    e.currentTarget.style.color = '#475569';
+                                  }}
                                 >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
+                                  <span
+                                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                                    style={{ backgroundColor: theme.primary }}
+                                  ></span>
                                   <span className="truncate">{domain.name}</span>
                                 </button>
                               ))}
@@ -834,7 +957,15 @@ export const Header = ({ cartCount }) => {
                 {/* Announcements */}
                 <button
                   onClick={() => { router.push('/announcements'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                    e.currentTarget.style.color = theme.primary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = '#111827';
+                  }}
                 >
                   Announcement
                 </button>
@@ -842,7 +973,15 @@ export const Header = ({ cartCount }) => {
                 {/* Free Resources */}
                 <button
                   onClick={() => { router.push('/free-resources'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                    e.currentTarget.style.color = theme.primary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = '#111827';
+                  }}
                 >
                   Free Resources
                 </button>
@@ -851,7 +990,15 @@ export const Header = ({ cartCount }) => {
                 {user && (
                   <button
                     onClick={() => { router.push('/my-purchases'); setMobileMenuOpen(false); }}
-                    className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                    className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = `${theme.primary}10`;
+                      e.currentTarget.style.color = theme.primary;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#111827';
+                    }}
                   >
                     My Purchases
                   </button>

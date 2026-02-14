@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, TEXT_GREEN } from '../../constants/Icons';
 import { useAuth } from '../../config/AuthContext';
+import { useTheme } from '../../config/ThemeContext';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import Endpoints from '../../config/endpoints';
@@ -9,6 +10,7 @@ import Endpoints from '../../config/endpoints';
 export const BlogListPage = () => {
   const router = useRouter();
   const { authToken } = useAuth();
+  const { theme } = useTheme();
   const [coursesList, setCoursesList] = useState([]);
   const [selectedScheduleList, setSelectedScheduleList] = useState([]);
   const [folders, setFolders] = useState([]);
@@ -487,7 +489,10 @@ export const BlogListPage = () => {
             <button
               onClick={handleLoadMore}
               disabled={isLoadingMore}
-              className="inline-flex items-center gap-2 px-8 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg"
+              className="inline-flex items-center gap-2 px-8 py-3 text-white font-bold rounded-xl transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg"
+              style={{ backgroundColor: theme.primary }}
+              onMouseEnter={(e) => !isLoadingMore && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = theme.primary)}
             >
               {isLoadingMore ? (
                 <>

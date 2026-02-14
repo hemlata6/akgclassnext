@@ -4,9 +4,11 @@ import { Icons, LAYOUT_PADDING } from '../../../constants/Icons';
 import Network from '../../../config/Network';
 import instId from '../../../config/instituteId';
 import Endpoints from '../../../config/endpoints';
+import { useTheme } from '../../../config/ThemeContext';
 
 export const BlogSection = () => {
     const router = useRouter();
+    const { theme } = useTheme();
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
     const [courseId, setCourseId] = useState(null);
@@ -157,7 +159,12 @@ export const BlogSection = () => {
                 <div className="text-center">
                     <button
                         onClick={handleExploreBlog}
-                        className="inline-flex items-center gap-2 px-8 py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                        className="inline-flex items-center gap-2 px-8 py-3 text-white font-bold rounded-xl transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+                        style={{
+                            backgroundColor: theme.primary
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+                        onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
                     >
                         Explore All Blogs
                         <Icons.ChevronRight className="w-4 h-4" />

@@ -205,7 +205,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               First Name
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:" style={{ color: 'inherit' }}>
                 <User className="h-5 w-5" />
               </div>
               <input
@@ -215,8 +215,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 autoComplete="given-name"
                 className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.firstname
                   ? 'border-red-300 focus:border-red-500'
-                  : `border-gray-300 focus:border-indigo-700`
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : `border-gray-300`
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                style={!errors.firstname ? { '--tw-border-opacity': '1', '--tw-ring-color': `${theme.primary}30`, borderColor: `${theme.primary}40` } : {}}
                 placeholder="Enter your first name"
                 value={formData.firstname}
                 onChange={handleChange}
@@ -236,7 +237,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               Last Name
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:" style={{ color: 'inherit' }}>
                 <User className="h-5 w-5" />
               </div>
               <input
@@ -246,8 +247,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 autoComplete="family-name"
                 className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.lastname
                   ? 'border-red-300 focus:border-red-500'
-                  : 'border-gray-300 focus:border-indigo-700'
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : 'border-gray-300'
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                style={!errors.lastname ? { '--tw-border-opacity': '1', '--tw-ring-color': `${theme.primary}30`, borderColor: `${theme.primary}40` } : {}}
                 placeholder="Enter your last name"
                 value={formData.lastname}
                 onChange={handleChange}
@@ -267,7 +269,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               Email Address
             </label>
             <div className="relative group">
-              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:" style={{ color: 'inherit' }}>
                 <Mail className="h-5 w-5" />
               </div>
               <input
@@ -277,8 +279,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
                 autoComplete="email"
                 className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.email
                   ? 'border-red-300 focus:border-red-500'
-                  : `border-gray-300 focus:border-indigo-700`
-                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                  : `border-gray-300`
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                style={!errors.email ? { '--tw-border-opacity': '1', '--tw-ring-color': `${theme.primary}30`, borderColor: `${theme.primary}40` } : {}}
                 placeholder="Enter your email address"
                 value={formData.email}
                 onChange={handleChange}
@@ -311,7 +314,13 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
+              className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg"
+              style={{
+                backgroundColor: theme.primary,
+                opacity: isLoading ? 0.9 : 1
+              }}
+              onMouseEnter={(e) => !isLoading && (e.currentTarget.style.backgroundColor = theme.primaryHover)}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
             >
               {isLoading ? (
                 <>

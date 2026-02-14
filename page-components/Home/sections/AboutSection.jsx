@@ -1,8 +1,11 @@
 import React from 'react';
 import { BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, Icons, LAYOUT_PADDING, TEXT_GREEN } from '../../../constants/Icons';
+import { useTheme } from '../../../config/ThemeContext';
 
-export const AboutSection = () => (
-  <section className="py-10 bg-white">
+export const AboutSection = () => {
+  const { theme } = useTheme();
+  return (
+    <section className="py-10 bg-white">
     <div className={LAYOUT_PADDING}>
       <div className="flex flex-col md:flex-row items-center gap-8">
         <div className="w-full md:w-4/12 relative">
@@ -41,7 +44,10 @@ export const AboutSection = () => (
           <div className="pt-4">
             <a
               href="/faculty"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-800 text-white font-semibold rounded-lg hover:bg-emerald-900 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-colors cursor-pointer"
+              style={{ backgroundColor: theme.primary }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
             >
               Know More about your Faculty
               <Icons.ChevronRight />
@@ -51,5 +57,6 @@ export const AboutSection = () => (
       </div>
     </div>
   </section>
-);
+  );
+};
 
