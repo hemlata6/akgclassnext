@@ -227,10 +227,10 @@ function ContactUsPageContent() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <a href="tel:9310226047" className="font-semibold" style={{color: '#154734'}}
+                                <a href="tel:8949190985" className="font-semibold" style={{color: '#154734'}}
                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    9310226047
+                                    8949190985
                                 </a>
                             </div>
 

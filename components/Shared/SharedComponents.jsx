@@ -93,7 +93,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: +91 9310226047</li>
+              <li>Call: +91 8949190985</li>
               <li>admin@CA Pankaj Aswani.com</li>
               <li>New Delhi</li>
             </ul>

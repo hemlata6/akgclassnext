@@ -93,7 +93,7 @@ const TermsOfUse = () => {
               </p>
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <p className="text-slate-700 mb-2"><strong>Email:</strong> admin@CA Pankaj Aswani.com</p>
-                <p className="text-slate-700 mb-2"><strong>Phone:</strong> 9310226047</p>
+                <p className="text-slate-700 mb-2"><strong>Phone:</strong> 8949190985</p>
                 <p className="text-slate-700"><strong>Location:</strong> New Delhi, India</p>
               </div>
             </section>

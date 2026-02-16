@@ -294,7 +294,7 @@ function FRCoursePage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-left">
                                     <DetailBox title="Live Doubt Sessions" desc="Interactive sessions conducted over Zoom / G-meet" />
                                     <DetailBox title="Private Telegram Group" desc="Dedicated group of enrolled CA Final students" />
-                                    <DetailBox title="WhatsApp Support" desc="Send doubts on +91-9310226047" />
+                                    <DetailBox title="WhatsApp Support" desc="Send doubts on +91-8949190985" />
                                     <DetailBox title="Call Support" desc="Schedule a doubt call with CA Pankaj Aswani" />
                                 </div>
                             </div>
@@ -451,7 +451,7 @@ function FRCoursePage() {
                                 <Globe size={14} className="text-green-500" />
                                 <span>caclasses.in</span>
                             </a>
-                            <a href="tel:+919310226047" className="flex items-center gap-2 px-4 py-2 bg-gray-900 rounded-full border border-gray-800 hover:border-gray-500 transition-all">
+                            <a href="tel:+918949190985" className="flex items-center gap-2 px-4 py-2 bg-gray-900 rounded-full border border-gray-800 hover:border-gray-500 transition-all">
                                 <Phone size={14} className="text-green-500" />
                                 <span>+91 93102 26047</span>
                             </a>
@@ -469,7 +469,7 @@ function FRCoursePage() {
 
                     {/* WhatsApp Sticky Button */}
                     <a
-                        href="https://wa.me/919310226047?text=Hi%20CA Pankaj Aswani%2C%20I%20have%20a%20doubt%20regarding%20CA%20classes."
+                        href="https://wa.me/918949190985?text=Hi%20CA Pankaj Aswani%2C%20I%20have%20a%20doubt%20regarding%20CA%20classes."
                         target="_blank"
                         rel="noreferrer"
                         className="fixed bottom-20 md:bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-2xl z-50 hover:bg-[#128C7E] transition-all hover:scale-110 active:scale-95 flex items-center justify-center"
