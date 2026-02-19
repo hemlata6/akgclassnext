@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/vghub/cropped-LOGON.jpeg" />
-        <link rel="apple-touch-icon" href="/vghub/cropped-LOGON.jpeg" />
+        <link rel="icon" href="/vghub/bghublogo.jpeg" />
+        <link rel="apple-touch-icon" href="/vghub/bghublogo.jpeg" />
 
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />

@@ -11,6 +11,7 @@ import LoginModal from '../Auth/LoginModal';
 import SignupModal from '../Auth/SignupModal';
 import AppDownloadModal from '../Modals/AppDownloadModal';
 import Endpoints from '@/config/endpoints';
+import { Typography } from '@mui/material';
 
 export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
@@ -85,13 +86,12 @@ export const Header = ({ cartCount }) => {
   const [books, setBooks] = useState([]);
   const [loadingCourses, setLoadingCourses] = useState(true);
   const [announcements, setAnnouncements] = useState([]);
-  const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
-  const [announcementImage, setAnnouncementImage] = useState(null);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
   const [openMobileSubmenu, setOpenMobileSubmenu] = useState(null);
   const [showThemeMenu, setShowThemeMenu] = useState(false);
+  const [isMarqueeHovered, setIsMarqueeHovered] = useState(false);
 
   // Domain states for Lectures
   const [domains, setDomains] = useState([]);
@@ -109,7 +109,14 @@ export const Header = ({ cartCount }) => {
   const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
   const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
 
-  // console.log('announcements', announcements);
+  const [expandedLecture, setExpandedLecture] = useState(null);
+  const [expandedBook, setExpandedBook] = useState(null);
+
+
+
+
+  console.log('domains', domains, booksDomains);
+
 
   useEffect(() => {
     const handler = () => setScrolled(window.scrollY > 20);
@@ -160,25 +167,17 @@ export const Header = ({ cartCount }) => {
     }
   };
 
+  // console.log('announcements', announcements);
+
+
   const fetchAnnouncements = async () => {
     try {
       const response = await Network.getAnnouncementList(instId);
       const announcementList = response?.announcement || response || [];
-      const announcementsData = Array.isArray(announcementList) ? announcementList : [];
-      setAnnouncements(announcementsData);
-
-      if (announcementsData.length > 0 && announcementsData[0]?.image) {
-        setAnnouncementImage(Endpoints.mediaBaseUrl + announcementsData[0].image);
-        setShowAnnouncementModal(true);
-      } else {
-        setAnnouncementImage(null);
-        setShowAnnouncementModal(false);
-      }
+      setAnnouncements(Array.isArray(announcementList) ? announcementList : []);
     } catch (error) {
       console.error('Error fetching announcements:', error);
       setAnnouncements([]);
-      setAnnouncementImage(null);
-      setShowAnnouncementModal(false);
     }
   };
 
@@ -188,6 +187,7 @@ export const Header = ({ cartCount }) => {
       setDomainLoading(true);
       const response = await Network.fetchDomain(instId);
       const availableDomains = response?.domains || [];
+      console.log('availableDomains', availableDomains);
       setDomains(availableDomains);
       setCurrentLevel('first');
       setSelectedParentDomain(null);
@@ -223,11 +223,11 @@ export const Header = ({ cartCount }) => {
 
   // Handle first level domain click for Lectures
   const handleFirstLevelDomainClick = (domain) => {
-    if (domain.child && domain.child.length > 0 && !shouldShowSecondLevel) {
+    if (domain.child && domain.child?.length > 0 && !shouldShowSecondLevel) {
       setSelectedParentDomain(domain);
       setSelectedFirstLevelDomain(domain);
       setCurrentLevel('second');
-    } else if (domain.child && domain.child.length > 0) {
+    } else if (domain.child && domain.child?.length > 0) {
       sessionStorage.setItem('storeNavigationState', JSON.stringify({
         source: 'header',
         selectedDomainId: domain.id,
@@ -255,7 +255,7 @@ export const Header = ({ cartCount }) => {
 
   // Handle first level domain click for Books
   const handleBooksFirstLevelDomainClick = (domain) => {
-    if (domain.child && domain.child.length > 0 && !booksShowSecondLevel) {
+    if (domain.child && domain.child?.length > 0 && !booksShowSecondLevel) {
       setBooksSelectedParentDomain(domain);
       setBooksSelectedFirstLevelDomain(domain);
       setBooksCurrentLevel('second');
@@ -293,12 +293,12 @@ export const Header = ({ cartCount }) => {
   };
 
   // Domain hierarchy logic
-  const shouldShowSecondLevel = domains.length === 1;
+  const shouldShowSecondLevel = domains?.length === 1;
   const firstLevelDomains = shouldShowSecondLevel ? domains[0].child || [] : domains;
   const secondLevelDomains = selectedParentDomain?.child || [];
 
   // Books domain hierarchy logic
-  const booksShowSecondLevel = booksDomains.length === 1;
+  const booksShowSecondLevel = booksDomains?.length === 1;
   const booksFirstLevelDomains = booksShowSecondLevel ? booksDomains[0].child || [] : booksDomains;
   const booksSecondLevelDomains = booksSelectedParentDomain?.child || [];
 
@@ -313,13 +313,13 @@ export const Header = ({ cartCount }) => {
     >
       <button
         onClick={onClick}
-        className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+        className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
       >
         {label} {hasSub && <Icons.ChevronDown />}
       </button>
       {hasSub && (
         <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === label ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-          {subItems && subItems.length > 0 ? (
+          {subItems && subItems?.length > 0 ? (
             subItems.map((sub, i) => (
               <div
                 key={i}
@@ -342,238 +342,50 @@ export const Header = ({ cartCount }) => {
     </div>
   );
 
+  // console.log('firstLevelDomains', firstLevelDomains, secondLevelDomains, shouldShowSecondLevel);
+
+  const MENU_DATA = {
+    lectures: ["CA Foundation", "CA Inter", "CA Final", "CS Executive", "CMA Inter"],
+    books: ["Textbooks", "Scanner", "Chart Book", "Combos"]
+  };
+
+  const navigateTo = (view, data = null) => {
+    window.scrollTo(0, 0);
+    if (view === 'home' && data) {
+      setActiveCategory(data);
+      setCurrentView('home');
+      setTimeout(() => { const el = document.getElementById('courses'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100);
+    } else {
+      setCurrentView(view);
+      if (data) setSelectedItem(data);
+    }
+  };
+
   return (
     <>
-      {showAnnouncementModal && announcementImage && (
-        <div className="fixed inset-0 z-[999] bg-black/70 flex items-center justify-center p-4">
-          <div className="relative max-w-3xl w-full">
-            <button
-              onClick={() => setShowAnnouncementModal(false)}
-              className="absolute -top-3 -right-3 bg-white text-slate-700 rounded-full w-10 h-10 shadow-lg flex items-center justify-center hover:bg-slate-100 transition"
-              aria-label="Close announcement"
-            >
-              ×
-            </button>
-            <div className="bg-white rounded-2xl overflow-hidden shadow-2xl">
-              <img
-                src={announcementImage}
-                alt="Announcement"
-                className="w-full h-auto object-contain"
-              />
-            </div>
-          </div>
-        </div>
-      )}
-      <div className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative">
-        <div className="whitespace-nowrap animate-marquee">
-          {announcements.length > 0 && announcements[0]?.title ? (
-            <span className="inline-block">
-              📢 {announcements[0].title}
-            </span>
-          ) : (
-            <span className="inline-block">
-              📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              📚 Ind AS Brahmastra Books Now Available.
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              🎓 100% Concepts + Exam Oriented Approach.
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              📚 Ind AS Brahmastra Books Now Available.
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              🎓 100% Concepts + Exam Oriented Approach.
-            </span>
-          )}
-        </div>
-      </div>
-      <nav className={`sticky top-6 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-1 border-slate-100' : 'bg-white py-1'}`}>
-        <div className={LAYOUT_PADDING}>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-4">
-              <button className="lg:hidden text-slate-600" onClick={() => setMobileMenuOpen(true)}>
-                <Icons.Menu />
-              </button>
-              <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src={"/vghub/cropped-LOGON.jpeg"} alt="VG STUDY HUB Logo" className="h-16 md:h-16 object-contain" />
-              </Link>
+      <header className="sticky top-0 z-50 font-sans shadow-lg shadow-slate-200/50">
+        <div className="relative bg-white">
+
+          {/* --- A. TOP ANNOUNCEMENT STRIP --- */}
+          <div className="bg-slate-900 text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-slate-800">
+            <div className="flex-1 overflow-hidden relative mx-4">
+              <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium">
+                <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Admissions Open for CA Inter Nov 2026</span>
+                <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Flat 20% Off on Pre-Booking Books</span>
+              </div>
             </div>
 
-            <div className="hidden lg:flex items-center gap-8 h-full">
-              <NavItem
-                label="Home"
-                onClick={() => router.push('/')}
-              />
-              <div
-                className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('Lectures');
-                  fetchDomainsForMenu();
-                }}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <button
-                  className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
-                >
-                  Lectures <Icons.ChevronDown />
-                </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                  {domainLoading ? (
-                    <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
-                      <div className={`w-1.5 h-1.5 rounded-full ${theme.primaryClass} animate-bounce`}></div>
-                      <span>Loading...</span>
-                    </div>
-                  ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
-                    <div className="px-4 py-3 text-xs text-slate-500">No categories available</div>
-                  ) : (
-                    <>
-                      {currentLevel === 'second' && (
-                        <button onClick={handleBackToFirstLevel} className={`w-full text-left px-4 py-2.5 text-xs font-semibold text-white ${theme.primaryClass} ${theme.primaryHoverClass} mb-1 flex items-center gap-2 transition-all`}>
-                          <Icons.ChevronLeft size={14} />
-                          Back to Categories
-                        </button>
-                      )}
-                      {currentLevel === 'first' && firstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                          <span className="truncate">{domain.name}</span>
-                          {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
-                            <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${selectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
-                              <span className="text-[10px] font-semibold">{domain.child.length}</span>
-                              <Icons.ChevronRight size={12} />
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                      {currentLevel === 'second' && selectedParentDomain && (
-                        <>
-                          <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>
-                            <div className="w-2 h-4 rounded-full bg-white opacity-80"></div>
-                            <span>{selectedParentDomain.name}</span>
-                          </div>
-                          {secondLevelDomains.map((domain) => (
-                            <button key={domain.id} onClick={() => handleSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${selectedSecondLevelDomain?.id === domain.id ? `${theme.primaryClass} opacity-60 text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${selectedSecondLevelDomain?.id === domain.id ? 'bg-white' : theme.primaryClass}`}></span>
-                              <span className="truncate">{domain.name}</span>
-                            </button>
-                          ))}
-                        </>
-                      )}
-                    </>
-                  )}
-                </div>
+            {/* Socials & Login */}
+            <div className="flex items-center h-full">
+              <div className="hidden md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
+                <a href="#" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
+                <a href="#" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
+                <a href="#" className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
+                <a href="#" className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
               </div>
-              <div
-                className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('Books');
-                  fetchBooksDomainsForMenu();
-                }}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <button
-                  className={`hover:${theme.textClass} transition-colors uppercase text-xs tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
-                >
-                  Books <Icons.ChevronDown />
-                </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Books' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                  {booksLoading ? (
-                    <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
-                      <div className={`w-1.5 h-1.5 rounded-full ${theme.primaryClass} animate-bounce`}></div>
-                      <span>Loading...</span>
-                    </div>
-                  ) : booksCurrentLevel === 'first' && booksFirstLevelDomains.length === 0 ? (
-                    <div className="px-4 py-3 text-xs text-slate-500">No categories available</div>
-                  ) : (
-                    <>
-                      {booksCurrentLevel === 'second' && (
-                        <button onClick={handleBooksBackToFirstLevel} className={`w-full text-left px-4 py-2.5 text-xs font-semibold text-white ${theme.primaryClass} ${theme.primaryHoverClass} mb-1 flex items-center gap-2 transition-all`}>
-                          <Icons.ChevronLeft size={14} />
-                          Back to Categories
-                        </button>
-                      )}
-                      {booksCurrentLevel === 'first' && booksFirstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleBooksFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${booksSelectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                          <span className="truncate">{domain.name}</span>
-                          {!booksShowSecondLevel && domain.child && domain.child.length > 0 && (
-                            <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${booksSelectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
-                              <span className="text-[10px] font-semibold">{domain.child.length}</span>
-                              <Icons.ChevronRight size={12} />
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                      {booksCurrentLevel === 'second' && booksSelectedParentDomain && (
-                        <>
-                          <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>
-                            <div className="w-2 h-4 rounded-full bg-white opacity-80"></div>
-                            <span>{booksSelectedParentDomain.name}</span>
-                          </div>
-                          {booksSecondLevelDomains.map((domain) => (
-                            <button key={domain.id} onClick={() => handleBooksSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${booksSelectedSecondLevelDomain?.id === domain.id ? `${theme.primaryClass} opacity-60 text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${booksSelectedSecondLevelDomain?.id === domain.id ? 'bg-white' : theme.primaryClass}`}></span>
-                              <span className="truncate">{domain.name}</span>
-                            </button>
-                          ))}
-                        </>
-                      )}
-                    </>
-                  )}
-                </div>
-              </div>
-              <NavItem label="Blog" onClick={() => router.push('/blog')} />
-              <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
-              {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
-            </div>
-
-            <div className="flex items-center gap-3">
-              {/* Theme Switcher - Hidden by default */}
-              <div className="relative hidden">
-                <button
-                  onClick={() => setShowThemeMenu(!showThemeMenu)}
-                  className="p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
-                  </svg>
-                </button>
-
-                {/* Theme Dropdown */}
-                {showThemeMenu && (
-                  <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
-                    <div className="py-1">
-                      <button
-                        onClick={() => {
-                          changeTheme('purple');
-                          setShowThemeMenu(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
-                      >
-                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'rgb(55, 48, 163)' }}></div>
-                        <span>Purple</span>
-                      </button>
-                      <button
-                        onClick={() => {
-                          changeTheme('blue');
-                          setShowThemeMenu(false);
-                        }}
-                        className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
-                      >
-                        <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#2196F3' }}></div>
-                        <span>Blue</span>
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <button onClick={() => router.push('/cart')} className={`p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors`}>
-                <Icons.Cart />
-                {cartCount > 0 && <span className="absolute top-0 right-0 h-4 w-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-in zoom-in">{cartCount}</span>}
-              </button>
-
               {user ? (
                 <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2`}>
+                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
                     <Icons.User size={16} />
                     {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
                   </button>
@@ -582,18 +394,6 @@ export const Header = ({ cartCount }) => {
                       <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
                       {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
                     </div>
-                    {/* <button 
-                      onClick={() => router.push('/profile')}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition"
-                    >
-                      My Profile
-                    </button>
-                    <button 
-                      onClick={() => router.push('/orders')}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition border-b border-gray-100"
-                    >
-                      My Orders
-                    </button> */}
                     <button
                       onClick={async () => {
                         await logout();
@@ -606,50 +406,240 @@ export const Header = ({ cartCount }) => {
                   </div>
                 </div>
               ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
-                >
-                  Login
+                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex items-center gap-2 text-white hover:text-indigo-400 transition-colors font-semibold">
+                  <Icons.User /> Login
                 </button>
               )}
 
+            </div>
+          </div>
+
+          {/* --- B. MAIN MENU BAR --- */}
+          <div className={`h-18 bg-white flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 md:pr-8 transition-all duration-300 ${scrolled ? 'py-0' : 'py-1'}`}>
+
+            <nav className="hidden xl:flex items-center gap-8 h-full">
+              <button onClick={() => router.push('/')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors relative group">Home</button>
+
+              <div
+                className="relative group h-full flex items-center"
+                onMouseEnter={() => {
+                  setHoveredMenu('Lectures');
+                  fetchDomainsForMenu();
+                }}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
+                  Lectures <Icons.ChevronDown />
+                </button>
+
+                <div
+                  className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg 
+    transition-all duration-200 transform origin-top
+    ${hoveredMenu === 'Lectures'
+                      ? 'opacity-100 visible translate-y-0'
+                      : 'opacity-0 invisible translate-y-2'
+                    } p-2`}
+                >
+                  {domainLoading ? (
+                    <div className="px-4 py-3 text-sm text-slate-400">
+                      Loading...
+                    </div>
+                  ) : (
+                    <>
+                      {/* BACK BUTTON */}
+                      {currentLevel === 'second' && (
+                        <button
+                          onClick={handleBackToFirstLevel}
+                          className="w-full text-left px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-slate-50 rounded-md"
+                        >
+                          ← Back
+                        </button>
+                      )}
+
+                      {/* FIRST LEVEL */}
+                      {currentLevel === 'first' &&
+                        firstLevelDomains.map((domain) => (
+                          <button
+                            key={domain.id}
+                            onClick={() => handleFirstLevelDomainClick(domain)}
+                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                          >
+                            {domain.name}
+                          </button>
+                        ))}
+
+                      {/* SECOND LEVEL */}
+                      {currentLevel === 'second' &&
+                        secondLevelDomains.map((domain) => (
+                          <button
+                            key={domain.id}
+                            onClick={() => handleSecondLevelDomainClick(domain)}
+                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                          >
+                            {domain.name}
+                          </button>
+                        ))}
+                    </>
+                  )}
+                </div>
+              </div>
+
+
+              <div
+                className="relative group h-full flex items-center"
+                onMouseEnter={() => {
+                  setHoveredMenu('Books');
+                  fetchBooksDomainsForMenu();
+                }}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
+                  Books <Icons.ChevronDown />
+                </button>
+
+                <div
+                  className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg
+    transition-all duration-200 transform origin-top
+    ${hoveredMenu === 'Books'
+                      ? 'opacity-100 visible translate-y-0'
+                      : 'opacity-0 invisible translate-y-2'
+                    } p-2`}
+                >
+                  {booksLoading ? (
+                    <div className="px-4 py-3 text-sm text-slate-400">
+                      Loading...
+                    </div>
+                  ) : (
+                    <>
+                      {/* BACK */}
+                      {booksCurrentLevel === 'second' && (
+                        <button
+                          onClick={handleBooksBackToFirstLevel}
+                          className="w-full text-left px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-slate-50 rounded-md"
+                        >
+                          ← Back
+                        </button>
+                      )}
+
+                      {/* FIRST LEVEL */}
+                      {booksCurrentLevel === 'first' &&
+                        booksFirstLevelDomains.map((domain) => (
+                          <button
+                            key={domain.id}
+                            onClick={() => handleBooksFirstLevelDomainClick(domain)}
+                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                          >
+                            {domain.name}
+                          </button>
+                        ))}
+
+                      {/* SECOND LEVEL */}
+                      {booksCurrentLevel === 'second' &&
+                        booksSecondLevelDomains.map((domain) => (
+                          <button
+                            key={domain.id}
+                            onClick={() => handleBooksSecondLevelDomainClick(domain)}
+                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                          >
+                            {domain.name}
+                          </button>
+                        ))}
+                    </>
+                  )}
+                </div>
+              </div>
+
+
+              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
+              <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Free Resources</button>
+              {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
+            </nav>
+
+            <div className="relative hidden">
               <button
-                onClick={() => setShowAppDownloadModal(true)}
-                className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
-                Download App
+                onClick={() => setShowThemeMenu(!showThemeMenu)}
+                className="p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
+                </svg>
+              </button>
+
+              {showThemeMenu && (
+                <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        changeTheme('purple');
+                        setShowThemeMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
+                    >
+                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'rgb(55, 48, 163)' }}></div>
+                      <span>Purple</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        changeTheme('blue');
+                        setShowThemeMenu(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
+                    >
+                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#2196F3' }}></div>
+                      <span>Blue</span>
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="flex items-center gap-5 ml-auto">
+              <button className="hidden lg:flex items-center gap-2 bg-rose-50 text-rose-700 border border-rose-100 px-3 py-1.5 rounded-md text-[11px] font-bold hover:bg-rose-100 transition-colors animate-pulse">
+                <Icons.Gift /> Birthday Offer
+              </button>
+
+              <button
+                onClick={() => router.push('/cart')}
+                className="relative text-slate-600 hover:text-indigo-700 transition-colors">
+                <Icons.Cart />
+                {cartCount > 0 && <span className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-indigo-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">{cartCount}</span>}
+              </button>
+
+              <button onClick={() => setShowAppDownloadModal(true)} className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-6 py-3 rounded-lg text-xs font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`}>
+                <Icons.Download /> Download Our App
+              </button>
+
+              <button className="xl:hidden text-slate-700 p-1" onClick={() => setMobileMenuOpen(true)}>
+                <Icons.Menu />
               </button>
             </div>
           </div>
-        </div>
-      </nav>
 
-      {/* Mobile Menu Overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-[60] lg:hidden">
-          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
-          <div className="absolute top-0 left-0 bottom-0 w-[85%] max-w-sm bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-left duration-300 flex flex-col">
-            {/* Header */}
-            <div className="flex justify-between items-center p-4 border-b border-slate-100 bg-white sticky top-0 z-10">
-              <img src={"/vghub/cropped-LOGON.jpeg"} alt="Logo" className="h-20" />
-              {/* <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "logoVG STUDY HUB.png"} alt="Logo" className="h-20" /> */}
-              <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
-                <Icons.X />
-              </button>
+          {/* --- C. FLOATING LOGO --- */}
+          <div className="absolute top-0 left-0 h-full z-50 flex flex-col justify-center pl-4 md:pl-12 cursor-pointer" onClick={() => router.push('/')}>
+            <div className="bg-white shadow-xl h-[calc(100%+16px)] flex items-center px-6 rounded-b-lg border-b-[3px] border-indigo-600 transform transition-transform hover:translate-y-1 duration-300 origin-top">
+              <div className="flex flex-col items-center">
+                <Link href="/" className="flex items-center gap-2 cursor-pointer">
+                  <img src="/vghub/bghublogo.jpeg" alt="Next Gen CA" className="h-16 md:h-16 object-contain" />
+
+                </Link>
+              </div>
             </div>
+          </div>
+        </div>
 
-            {/* Menu Content */}
-            <div className="flex-1 overflow-y-auto">
-              <div className="p-4 space-y-1">
-                {/* Home */}
-                <button
-                  onClick={() => { router.push('/'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
-                >
-                  Home
-                </button>
-
-                {/* Lectures */}
+        {/* Mobile Menu Drawer */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 z-[100] xl:hidden">
+            <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
+            <div className="absolute top-0 right-0 bottom-0 w-[280px] bg-white shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300">
+              <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
+                <h3 className="font-bold text-lg text-slate-900">Menu</h3>
+                <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900"><Icons.X /></button>
+              </div>
+              <div className="flex flex-col gap-1">
+                <button onClick={() => router.push('/')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Home</button>
+                <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button>
                 <div className="">
                   <button
                     onClick={() => {
@@ -662,7 +652,7 @@ export const Header = ({ cartCount }) => {
                         fetchDomainsForMenu();
                       }
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
                   >
                     <span>Lectures</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'courses' ? 'rotate-180' : ''}`} />
@@ -739,7 +729,6 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
 
-                {/* Books */}
                 <div className="">
                   <button
                     onClick={() => {
@@ -752,7 +741,7 @@ export const Header = ({ cartCount }) => {
                         fetchBooksDomainsForMenu();
                       }
                     }}
-                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
                   >
                     <span>Books</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'books' ? 'rotate-180' : ''}`} />
@@ -829,82 +818,58 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
 
-                {/* Blog */}
-                <button
-                  onClick={() => { router.push('/blog'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
-                >
-                  Blog
-                </button>
+                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+                <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
 
-                {/* Free Resources */}
-                <button
-                  onClick={() => { router.push('/free-resources'); setMobileMenuOpen(false); }}
-                  className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
-                >
-                  Free Resources
-                </button>
+                {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 
-                {/* My Purchases (only if logged in) */}
-                {user && (
+                {/* Mobile Socials */}
+                <div className="flex gap-4 mt-4 px-2">
+                  <a href="#" className="text-slate-400 hover:text-red-500"><Icons.Youtube /></a>
+                  <a href="#" className="text-slate-400 hover:text-pink-500"><Icons.Instagram /></a>
+                  <a href="#" className="text-slate-400 hover:text-sky-400"><Icons.Telegram /></a>
+                  <a href="#" className="text-slate-400 hover:text-green-500"><Icons.Whatsapp /></a>
+                </div>
+
+                <button onClick={() => setShowAppDownloadModal(true)} className={`bg-slate-900 ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-3.5 rounded-lg font-bold text-sm mt-6 w-full flex items-center justify-center gap-2`}>
+                  <Icons.Download /> Download App
+                </button>
+              </div>
+              <div className="border-t border-slate-100 bg-slate-50 py-4 space-y-2">
+                {user ? (
+                  <>
+                    <div className="bg-white p-3 rounded-lg border border-slate-100 mb-3">
+                      <p className="font-semibold text-slate-900 text-sm">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
+                      {studentData?.email && <p className="text-xs text-slate-500 mt-0.5">{studentData.email}</p>}
+                    </div>
+                    <button
+                      onClick={async () => {
+                        await logout();
+                        setMobileMenuOpen(false);
+                        router.push('/');
+                      }}
+                      className="w-full text-left px-4 py-2.5 font-bold text-white text-sm bg-red-600 hover:bg-red-700 rounded-lg transition flex items-center justify-center gap-2"
+                    >
+                      <Icons.X size={16} />
+                      Logout
+                    </button>
+                  </>
+                ) : (
                   <button
-                    onClick={() => { router.push('/my-purchases'); setMobileMenuOpen(false); }}
-                    className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                    onClick={() => { setShowLoginModal(true); setMobileMenuOpen(false); }}
+                    className={`w-full px-4 py-3 font-bold text-white text-sm ${theme.primaryClass} ${theme.primaryHoverClass} rounded-lg transition flex items-center justify-center gap-2`}
                   >
-                    My Purchases
+                    <Icons.User size={16} />
+                    Login / Signup
                   </button>
                 )}
               </div>
             </div>
 
-            {/* User Section / Footer */}
-            <div className="border-t border-slate-100 bg-slate-50 p-4 space-y-2">
-              {user ? (
-                <>
-                  <div className="bg-white p-3 rounded-lg border border-slate-100 mb-3">
-                    <p className="font-semibold text-slate-900 text-sm">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                    {studentData?.email && <p className="text-xs text-slate-500 mt-0.5">{studentData.email}</p>}
-                  </div>
-                  {/* <button
-                    onClick={() => { router.push('/profile'); setMobileMenuOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 font-semibold text-slate-900 text-sm hover:bg-white rounded-lg transition flex items-center gap-2"
-                  >
-                    <Icons.User size={16} />
-                    My Profile
-                  </button>
-                  <button
-                    onClick={() => { router.push('/orders'); setMobileMenuOpen(false); }}
-                    className="w-full text-left px-4 py-2.5 font-semibold text-slate-900 text-sm hover:bg-white rounded-lg transition flex items-center gap-2"
-                  >
-                    <Icons.Cart size={16} />
-                    My Orders
-                  </button> */}
-                  <button
-                    onClick={async () => {
-                      await logout();
-                      setMobileMenuOpen(false);
-                      router.push('/');
-                    }}
-                    className="w-full text-left px-4 py-2.5 font-bold text-white text-sm bg-red-600 hover:bg-red-700 rounded-lg transition flex items-center justify-center gap-2"
-                  >
-                    <Icons.X size={16} />
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => { setShowLoginModal(true); setMobileMenuOpen(false); }}
-                  className={`w-full px-4 py-3 font-bold text-white text-sm ${theme.primaryClass} ${theme.primaryHoverClass} rounded-lg transition flex items-center justify-center gap-2`}
-                >
-                  <Icons.User size={16} />
-                  Login / Signup
-                </button>
-              )}
-            </div>
           </div>
-        </div>
-      )}
-
+        )}
+        <style>{`@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } } .animate-marquee { animation: marquee 30s linear infinite; }`}</style>
+      </header>
       {/* Login and Signup Modals */}
       <LoginModal
         isOpen={showLoginModal}

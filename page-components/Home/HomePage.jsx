@@ -16,6 +16,7 @@ import { AppDownload } from './sections/AppDownload';
 import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
+import FacultyAndStatsSection from './sections/FacultySection';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -35,9 +36,10 @@ export default function HomePage() {
     <>
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
       <PromoBanners />
-      <HeroSection onExploreClick={handleScrollToCourses} />
-      <WhyChooseUs />
-      <AboutSection />
+      {/* <HeroSection onExploreClick={handleScrollToCourses} /> */}
+      <FacultyAndStatsSection />
+      {/* <WhyChooseUs /> */}
+      {/* <AboutSection /> */}
       <CoursesSection />
       <BookStore />
       <MarathonGallery />

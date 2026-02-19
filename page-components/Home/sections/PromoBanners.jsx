@@ -61,7 +61,7 @@ export const PromoBanners = () => {
                         alt: banner.title || 'Banner',
                         bg: 'bg-slate-900'
                     }));
-                    // setSlides(bannerSlides);
+                    setSlides(bannerSlides);
                 }
             }
         } catch (error) {
@@ -109,62 +109,89 @@ export const PromoBanners = () => {
         setTimeout(() => setIsAutoPlaying(true), 10000);
     };
 
+    console.log('slidesslides', slides);
+    
+
     return (
-        <section className="py-4 md:py-6 px-3 sm:px-4 md:px-0 overflow-hidden bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
-            <div className="w-full md:max-w-7xl md:mx-auto relative md:px-4 lg:px-8">
-                {/* Navigation Buttons - Desktop */}
+        <section className="relative w-full group bg-slate-900 overflow-hidden">
+
+            <div className="w-full aspect-[2/1] md:aspect-[3/1] relative overflow-hidden">
+
+                {slides?.map((slide, index) => (
+                    <div
+                        key={index}
+                        className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === currentSlide
+                            ? 'opacity-100 z-10'
+                            : 'opacity-0 z-0'
+                            }`}
+                    >
+                        {/* Mobile */}
+                        <img
+                            src={slide.mobileSrc}
+                            alt={slide.alt}
+                            className="md:hidden w-full h-full object-cover opacity-60"
+                        />
+
+                        {/* Desktop */}
+                        <img
+                            src={slide.desktopSrc}
+                            alt={slide.alt}
+                            className="hidden md:block w-full h-full object-cover opacity-60"
+                        />
+
+                        {/* Content Overlay */}
+                        <div className="absolute inset-0 flex items-center justify-start pl-6 md:pl-20 lg:pl-32 bg-gradient-to-r from-slate-900 via-slate-900/60 to-transparent">
+                            <div
+                                className="max-w-xl text-white opacity-0 animate-in slide-in-from-left-10 duration-700"
+                                style={{
+                                    animationDelay: '100ms',
+                                    animationFillMode: 'forwards'
+                                }}
+                            >
+                                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 tracking-tight">
+                                    {slide.alt}
+                                </h2>
+
+                                <button className="bg-white text-slate-900 hover:bg-indigo-50 px-8 py-3.5 rounded-lg font-bold text-sm md:text-base transition-all hover:translate-x-1 flex items-center gap-2">
+                                    Explore Now
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+
+                {/* Prev Button */}
                 <button
                     onClick={prevSlide}
-                    className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-slate-900 w-12 h-12 rounded-full items-center justify-center shadow-lg transition-all hover:scale-110"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white p-3 border border-white/10 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300"
                 >
-                    <ChevronLeft className="w-6 h-6" />
+                    <ChevronLeft />
                 </button>
+
+                {/* Next Button */}
                 <button
                     onClick={nextSlide}
-                    className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-slate-900 w-12 h-12 rounded-full items-center justify-center shadow-lg transition-all hover:scale-110"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white p-3 border border-white/10 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300"
                 >
-                    <ChevronRight className="w-6 h-6" />
+                    <ChevronRight />
                 </button>
 
-                <div
-                    ref={scrollContainerRef}
-                    className="flex overflow-x-auto gap-3 md:gap-6 pb-0 snap-x snap-mandatory scroll-smooth"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                >
-                    {slides?.length > 0 && slides.map((slide, index) => (
-                        <div
-                            key={index}
-                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer ${slide.bg}`}
-                        >
-                            <img
-                                src={slide.mobileSrc}
-                                className="md:hidden w-full h-full object-cover"
-                                alt={`${slide.alt} Mobile`}
-                            />
-                            <img
-                                src={slide.desktopSrc}
-                                className="hidden md:block w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                alt={`${slide.alt} Desktop`}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {/* Pagination Dots */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
-                    {slides.map((_, index) => (
+                {/* Dots */}
+                <div className="absolute bottom-8 left-6 md:left-20 lg:left-32 flex gap-2 z-30">
+                    {slides.map((_, idx) => (
                         <button
-                            key={index}
-                            onClick={() => goToSlide(index)}
-                            className={`w-2 h-2 rounded-full shadow-md transition-all duration-300 ${currentSlide === index
-                                ? 'bg-white w-6'
-                                : 'bg-white/40 hover:bg-white/60'
+                            key={idx}
+                            onClick={() => goToSlide(idx)}
+                            className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx
+                                ? 'w-8 bg-indigo-500'
+                                : 'w-2 bg-white/30 hover:bg-white/60'
                                 }`}
-                            aria-label={`Go to slide ${index + 1}`}
                         />
                     ))}
                 </div>
+
             </div>
         </section>
     );
+
 };
