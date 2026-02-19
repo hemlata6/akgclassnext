@@ -205,7 +205,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                 alt="Faculty"
               />
               <div>
-                <p className="text-sm font-bold text-slate-900">Next Gen CA</p>
+                <p className="text-sm font-bold text-slate-900">NextGenCA</p>
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
               </div>
               <button

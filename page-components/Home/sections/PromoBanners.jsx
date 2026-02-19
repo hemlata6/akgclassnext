@@ -3,17 +3,18 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
+import { useTheme } from '../../../config/ThemeContext';
 
 export const PromoBanners = () => {
+    const { theme } = useTheme();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=Next Gen CA",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=Next Gen CA",
-            alt: "Live Batch",
-            bg: "bg-indigo-900"
+            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=NextGenCA",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=NextGenCA",
+            alt: "Live Batch"
         },
         // {
         //     mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
@@ -40,8 +41,7 @@ export const PromoBanners = () => {
                     const bannerSlides = activeBanners.map(banner => ({
                         mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
                         desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
-                        alt: banner.title || 'Banner',
-                        bg: 'bg-slate-900'
+                        alt: banner.title || 'Banner'
                     }));
                     setSlides(bannerSlides);
                 }
@@ -91,6 +91,9 @@ export const PromoBanners = () => {
         setTimeout(() => setIsAutoPlaying(true), 10000);
     };
 
+    console.log('theme?.primaryClass', theme?.primaryClass);
+    
+
     return (
         <section className="py-4 md:py-6 px-3 sm:px-4 md:px-0 overflow-hidden bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
             <div className="w-full md:max-w-7xl md:mx-auto relative md:px-4 lg:px-8">
@@ -116,7 +119,7 @@ export const PromoBanners = () => {
                     {slides.map((slide, index) => (
                         <div
                             key={index}
-                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer ${slide.bg}`}
+                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer `}
                         >
                             <img
                                 src={slide.mobileSrc}

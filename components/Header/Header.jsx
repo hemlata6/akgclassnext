@@ -109,7 +109,7 @@ export const Header = ({ cartCount }) => {
   const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
   const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
 
-  // console.log('institute', institute, instituteAppSettingsModals);
+  console.log('domains', domains, booksDomains);
 
 
   useEffect(() => {
@@ -181,6 +181,7 @@ export const Header = ({ cartCount }) => {
       setDomainLoading(true);
       const response = await Network.fetchDomain(instId);
       const availableDomains = response?.domains || [];
+      console.log('availableDomains', availableDomains);
       setDomains(availableDomains);
       setCurrentLevel('first');
       setSelectedParentDomain(null);
@@ -335,8 +336,8 @@ export const Header = ({ cartCount }) => {
     </div>
   );
 
-  console.log('instituteAppSettingsModals', instituteAppSettingsModals);
-  
+  // console.log('firstLevelDomains', firstLevelDomains, secondLevelDomains, shouldShowSecondLevel);
+
 
   return (
     <>
@@ -376,7 +377,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src="/nextgen/nextgenlogo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" />
+                <img src="/nextgen/nextgenlogo.png" alt="NextGenCA" className="h-16 md:h-16 object-contain" />
 
               </Link>
             </div>
@@ -547,6 +548,26 @@ export const Header = ({ cartCount }) => {
                   </div>
                 )}
               </div>
+              <div className="flex items-center gap-3 block sm:hidden">
+                {user ? (
+                  <div className="relative group block">
+                    <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
+                      <Icons.User size={16} />
+                      {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
+                    </button>
+                    <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                      {/* ...dropdown... */}
+                    </div>
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setShowLoginModal(true)}
+                    className={`block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
+                  >
+                    Login
+                  </button>
+                )}
+              </div>
 
               <button onClick={() => router.push('/cart')} className={`p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors`}>
                 <Icons.Cart />
@@ -622,7 +643,7 @@ export const Header = ({ cartCount }) => {
                   letterSpacing: '-0.5px'
                 }}
               >
-                Next Gen CA
+                NextGenCA
               </Typography> */}
               <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "/nextgen/nextgenlogo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">

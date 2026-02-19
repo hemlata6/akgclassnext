@@ -5,8 +5,8 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/feviconNext Gen CA.png" />
-        <link rel="apple-touch-icon" href="/feviconNext Gen CA.png" />
+        <link rel="icon" href="/feviconNextGenCA.png" />
+        <link rel="apple-touch-icon" href="/feviconNextGenCA.png" />
         
         {/* Theme Color */}
         <meta name="theme-color" content="#164e33" />

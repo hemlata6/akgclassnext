@@ -71,7 +71,7 @@ export const HeroSection = ({ onExploreClick }) => {
                     </div>
                     <h1 className="text-3xl lg:text-5xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
                         Master Accounting & <span className={TEXT_GREEN}>Financial Reporting </span>
-                        <br />with <span className="text-slate-800">Next Gen CA</span>
+                        <br />with <span className="text-slate-800">NextGenCA</span>
                     </h1>
                     <p className="text-slate-600 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
                         Simplified concepts, strong AS & Ind AS foundation, and a comprehensive, exam-oriented approach for <b> CA Foundation (Accounts), CA Inter (Advanced Accounting), and CA Final (Financial Reporting) </b> aspirants.

@@ -1,6 +1,6 @@
-# Next Gen CA - Next.js Application
+# NextGenCA - Next.js Application
 
-This is a Next.js conversion of the original React app for Next Gen CA - Next Gen CA | Next Gen CA - Next Gen CA.
+This is a Next.js conversion of the original React app for NextGenCA - NextGenCA | NextGenCA - NextGenCA.
 
 ## Getting Started
 

@@ -155,7 +155,7 @@ export const generateOrganizationStructuredData = () => {
     name: 'CA Class',
     url: 'https://caclassestest.netlify.app',
     logo: 'https://nextgencaclass.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by Next Gen CA',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by NextGenCA',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/caclass',
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: Next Gen CA)
+ * @param {string} siteName - Site name (default: NextGenCA)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'Next Gen CA') => {
+export const generatePageTitle = (pageTitle, siteName = 'NextGenCA') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

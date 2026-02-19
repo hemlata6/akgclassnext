@@ -39,7 +39,7 @@ export default function CourseDetail() {
   return (
     <>
       <Head>
-        <title>Course Details - Next Gen CA</title>
+        <title>Course Details - NextGenCA</title>
         <meta name="description" content="View course details and enroll" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

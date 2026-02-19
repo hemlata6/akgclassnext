@@ -240,10 +240,10 @@ function ContactUsPageContent() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:admin@Next Gen CA.com" className="font-semibold" style={{color: '#154734'}}
+                                <a href="mailto:admin@NextGenCA.com" className="font-semibold" style={{color: '#154734'}}
                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    admin@Next Gen CA.com
+                                    admin@NextGenCA.com
                                 </a>
                             </div>
 
@@ -430,8 +430,8 @@ export default function ContactUsPage() {
     return (
         <>
             <Head>
-                <title>Contact Us - Next Gen CA</title>
-                <meta name="description" content="Get in touch with Next Gen CA" />
+                <title>Contact Us - NextGenCA</title>
+                <meta name="description" content="Get in touch with NextGenCA" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />
             </Head>
             <Layout>
