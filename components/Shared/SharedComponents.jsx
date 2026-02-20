@@ -84,7 +84,7 @@ export const Footer = () => {
               </li>
               <li
                 onClick={() => router.push('/contact-us')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
+                className="cursor-pointer hover:text-emerald-400 transition-colors"
               >
                 Contact us
               </li>
