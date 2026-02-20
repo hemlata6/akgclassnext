@@ -13,7 +13,7 @@ export const AboutSection = () => {
               {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-widest mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Admissions Open: Enroll Now
             </div> */}
-              <h1 className="text-3xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
+              <h1 className="text-2xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
                 Master Accounting & <span className={TEXT_GREEN}>Financial Reporting </span>
                 <br />with <span className="text-slate-800">CA Pankaj Aswani</span>
               </h1>
@@ -28,7 +28,7 @@ export const AboutSection = () => {
               </div>
             ))}
           </div> */}
-            <div className="pt-1">
+            <div className="pt-1 text-center lg:text-left">
               <a
                 href="/faculty"
                 className="inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-colors cursor-pointer"
@@ -41,16 +41,39 @@ export const AboutSection = () => {
               </a>
             </div>
           </div>
-          <div className="w-full md:w-3/12 relative">
-            <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400">
+          <div className="w-8/12 mx-auto md:w-3/12 relative">
+            <div className="
+      relative 
+      rounded-2xl 
+      overflow-hidden 
+      shadow-lg 
+      aspect-[3/3] 
+      md:aspect-[4/4]
+      bg-gradient-to-br 
+      from-slate-300 
+      to-slate-400
+    "
+            >
               <img
                 src="/pankajaswani/sirimage.png"
                 alt="CA Pankaj Aswani"
-                className="w-full h-full object-contain bg-white"
+                className="
+        w-full 
+        h-full 
+        object-contain 
+        bg-white
+        p-2
+        md:p-0
+      "
               />
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-                <p className="font-bold text-lg">CA Pankaj Aswani</p>
-                <p className={`text-[10px] uppercase tracking-widest`}>Founder & FR Expert</p>
+
+              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+                <p className="font-bold text-sm md:text-lg">
+                  CA Pankaj Aswani
+                </p>
+                <p className="text-[9px] md:text-[10px] uppercase tracking-widest">
+                  Founder & FR Expert
+                </p>
               </div>
             </div>
           </div>
