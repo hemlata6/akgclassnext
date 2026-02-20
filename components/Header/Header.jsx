@@ -353,7 +353,7 @@ export const Header = ({ cartCount }) => {
 
         {/* Socials & Login */}
         <div className="flex items-center h-full">
-          <div className="hidden md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
+          <div className="flex md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
             <a href="https://wa.me/91 8949190985" className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
             <a href="https://t.me/capankajinter" className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
             <a href="https://youtube.com/@capankajaswaniair10" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
