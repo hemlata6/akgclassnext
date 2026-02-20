@@ -200,7 +200,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
             </div>
             <div className="flex items-center gap-3">
               <img
-                src="https://placehold.co/100x100/164e33/FFF?text=VD"
+                src="https://placehold.co/100x100/0f5be0/FFF?text=PA"
                 className="h-12 w-12 rounded-full object-cover border-2 border-white shadow-sm"
                 alt="Faculty"
               />

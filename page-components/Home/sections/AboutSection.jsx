@@ -17,7 +17,7 @@ export const AboutSection = () => {
             />
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
               <p className="font-bold text-lg">CA Pankaj Aswani</p>
-              <p className="text-emerald-300 text-[10px] uppercase tracking-widest">Founder & FR Expert</p>
+              <p className={`text-[10px] uppercase tracking-widest`}>Founder & FR Expert</p>
             </div>
           </div>
         </div>

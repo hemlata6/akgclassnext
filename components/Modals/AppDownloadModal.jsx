@@ -6,11 +6,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
-      fullWidth 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
+      fullWidth
       sx={{ zIndex: 1300 }}
     >
       <DialogContent sx={{ p: 0 }}>
@@ -35,16 +35,16 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
             >
               <CloseIcon sx={{ fontSize: 18, color: '#64748b' }} />
             </IconButton>
-            <Box 
-              sx={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                width: 56, 
-                height: 56, 
-                backgroundColor: brandColor, 
-                borderRadius: '50%', 
-                mb: 1.5 
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 56,
+                height: 56,
+                backgroundColor: brandColor,
+                borderRadius: '50%',
+                mb: 1.5
               }}
             >
               <DownloadIcon sx={{ fontSize: 20, color: 'white' }} />
@@ -61,7 +61,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
           <Box sx={{ px: 4, pb: 4, space: 2 }}>
             {/* Google Play Store */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.CA Pankaj Aswani"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.capankajaswani"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -134,10 +134,10 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* Microsoft Store */}
             <a
-              href="https://apps.microsoft.com/detail/9NXGR6JTHCKH?hl=en-us&gl=IN&ocid=pdpshare"
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={onClose}
+              // href="#"
+              // target="_blank"
+              // rel="noopener noreferrer"
+              // onClick={onClose}
               style={{
                 display: 'flex',
                 alignItems: 'center',

@@ -135,8 +135,6 @@ export const CoursesSection = ({ onAddToCart }) => {
         return domainMatch;
     });
 
-    // console.log('filtered', filtered, activeDomain);
-
 
     // Reset currentIndex when filtering changes
     useEffect(() => {

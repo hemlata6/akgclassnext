@@ -43,7 +43,7 @@ export const StudentHub = () => {
             <div className="relative z-10">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">Demo Lectures</h3>
-                <span className="text-[10px] text-emerald-400 font-bold uppercase cursor-pointer">Watch All</span>
+                <span className="text-[10px] ttext-white font-bold uppercase cursor-pointer">Watch All</span>
               </div>
               <div className="space-y-3 mb-4">
                 {[1, 2].map((i) => (

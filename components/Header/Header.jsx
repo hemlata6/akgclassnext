@@ -336,11 +336,14 @@ export const Header = ({ cartCount }) => {
   );
 
   // console.log('instituteAppSettingsModals', instituteAppSettingsModals, Endpoints?.mediaBaseUrl);
-  
+
 
   return (
     <>
       <button
+        style={{
+          backgroundColor: theme.primary
+        }}
         onClick={() => router.push('/announcements')}
         className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
         onMouseEnter={() => setIsMarqueeHovered(true)}
@@ -757,11 +760,10 @@ export const Header = ({ cartCount }) => {
                                 }
                               }}
                               style={selectedFirstLevelDomain?.id === domain.id ? { backgroundColor: theme.primary, color: 'white' } : {}}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${
-                                selectedFirstLevelDomain?.id === domain.id
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${selectedFirstLevelDomain?.id === domain.id
                                   ? 'font-semibold'
                                   : 'text-slate-600'
-                              }`}
+                                }`}
                               onMouseEnter={(e) => {
                                 if (selectedFirstLevelDomain?.id !== domain.id) {
                                   e.currentTarget.style.backgroundColor = `${theme.primary}10`;
@@ -887,11 +889,10 @@ export const Header = ({ cartCount }) => {
                                 }
                               }}
                               style={booksSelectedFirstLevelDomain?.id === domain.id ? { backgroundColor: theme.primary, color: 'white' } : {}}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${
-                                booksSelectedFirstLevelDomain?.id === domain.id
+                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${booksSelectedFirstLevelDomain?.id === domain.id
                                   ? 'font-semibold'
                                   : 'text-slate-600'
-                              }`}
+                                }`}
                               onMouseEnter={(e) => {
                                 if (booksSelectedFirstLevelDomain?.id !== domain.id) {
                                   e.currentTarget.style.backgroundColor = `${theme.primary}10`;

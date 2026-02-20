@@ -23,7 +23,7 @@ function CourseDetailWrapper() {
       const params = new URLSearchParams(window.location.search);
       const isMobileParam = params.get('isMobile');
       const tokenParam = params.get('token');
-      
+
       if (isMobileParam) setRouteData(isMobileParam);
       if (tokenParam) setTokenFromUrl(tokenParam);
     }
@@ -39,7 +39,7 @@ function CourseDetailWrapper() {
       try {
         setLoading(true);
         const response = await Network.getFreeCourseList(instId);
-        
+
         const courses = response?.courses || response || [];
         // Convert courseId to number for comparison
         const course = courses.find(c => c.id === parseInt(courseId));

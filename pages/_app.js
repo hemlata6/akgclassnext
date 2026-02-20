@@ -13,8 +13,6 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [announcements, setAnnouncements] = useState([]);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
-
-  console.log('announcements', announcements);
   
   // Fetch announcements on app load
   const fetchAnnouncements = async () => {
@@ -60,7 +58,7 @@ function MyApp({ Component, pageProps }) {
 
           {/* Announcement Modal */}
           {showAnnouncementModal && announcements.length > 0 && announcements[0]?.image && (
-            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"  onClick={() => setShowAnnouncementModal(false)}>
               <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in duration-300">
                 <div className="relative">
                   {/* Close Button */}
