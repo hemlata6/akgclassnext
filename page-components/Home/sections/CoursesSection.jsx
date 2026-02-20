@@ -183,7 +183,7 @@ export const CoursesSection = ({ onAddToCart }) => {
     }
 
     return (
-        <section id="fr-courses" className="py-12 bg-slate-50 relative overflow-hidden">
+        <section id="fr-courses" className="py-10 bg-slate-50 relative overflow-hidden">
             <div className={LAYOUT_PADDING}>
                 <div className="mb-8">
                     <div className="flex items-center justify-between mb-4 gap-2">

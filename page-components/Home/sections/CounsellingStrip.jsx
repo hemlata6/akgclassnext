@@ -52,6 +52,16 @@ export const CounsellingStrip = () => {
               <WhatsAppIcon color="info" sx={{ ...ICON_STYLE }} className="text-indigo-600" />
             </a>
 
+            {/* TELEGRAM */}
+            <a
+              href="https://t.me/capankajinter"
+              target="_blank"
+              rel="noopener noreferrer"
+              className={ICON_BOX}
+            >
+              <TelegramIcon color="info" sx={{ ...ICON_STYLE }} className="text-indigo-600" />
+            </a>
+
             {/* YOUTUBE */}
             <a
               href="https://youtube.com/@capankajaswaniair10"
@@ -71,17 +81,6 @@ export const CounsellingStrip = () => {
             >
               <InstagramIcon color="info" sx={{ ...ICON_STYLE }} className="text-indigo-600" />
             </a>
-
-            {/* FACEBOOK */}
-            <a
-              href="https://facebook.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={ICON_BOX}
-            >
-              <FacebookIcon color="info" sx={{ ...ICON_STYLE }} className="text-indigo-600" />
-            </a>
-
             {/* LINKEDIN */}
             <a
               href="https://linkedin.com"
@@ -90,16 +89,6 @@ export const CounsellingStrip = () => {
               className={ICON_BOX}
             >
               <LinkedInIcon color="info" sx={{ ...ICON_STYLE }} className="text-indigo-600" />
-            </a>
-
-            {/* TELEGRAM */}
-            <a
-              href="https://t.me/capankajinter"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={ICON_BOX}
-            >
-              <TelegramIcon color="info" sx={{ ...ICON_STYLE }} className="text-indigo-600" />
             </a>
 
           </div>
