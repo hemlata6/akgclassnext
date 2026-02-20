@@ -340,7 +340,46 @@ export const Header = ({ cartCount }) => {
 
   return (
     <>
-      <button
+      <div style={{
+        backgroundColor: "#02154c"
+      }} className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer flex">
+        <div className="flex-1 overflow-hidden relative mx-4">
+          <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium">
+            {announcements.length > 0 && announcements[0]?.title ? (
+              <span className="inline-block">
+                📢 {announcements[0].title}
+              </span>
+            ) : (
+              <span className="inline-block">
+                📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                📚 Ind AS Brahmastra Books Now Available.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                🎓 100% Concepts + Exam Oriented Approach.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                📚 Ind AS Brahmastra Books Now Available.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                🎓 100% Concepts + Exam Oriented Approach.
+              </span>
+            )}
+          </div>
+        </div>
+
+        {/* Socials & Login */}
+        <div className="flex items-center h-full">
+          <div className="hidden md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
+            <a href="https://wa.me/91 8949190985" className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
+            <a href="https://t.me/capankajinter" className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
+            <a href="https://youtube.com/@capankajaswaniair10" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
+            <a href="https://www.instagram.com/pankajaswani_0109?igsh=MWVwcjBhbGt5ZmFhNw==" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
+            <a href="https://www.linkedin.com/in/pankaj52/" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Linkedin /></a>
+          </div>
+
+        </div>
+      </div>
+      {/* <button
         style={{
           backgroundColor: "#02154c"
         }}
@@ -370,8 +409,8 @@ export const Header = ({ cartCount }) => {
             </span>
           )}
         </div>
-      </button>
-      <nav className={`sticky top-6 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-1 border-slate-100' : 'bg-white py-1'}`}>
+      </button> */}
+      <nav className={`sticky top-8 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-1 border-slate-100' : 'bg-white py-1'}`}>
         <div className={LAYOUT_PADDING}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">

@@ -74,7 +74,7 @@ export const CounsellingStrip = () => {
 
             {/* INSTAGRAM */}
             <a
-              href="https://instagram.com"
+              href="https://www.instagram.com/pankajaswani_0109?igsh=MWVwcjBhbGt5ZmFhNw=="
               target="_blank"
               rel="noopener noreferrer"
               className={ICON_BOX}
@@ -83,7 +83,7 @@ export const CounsellingStrip = () => {
             </a>
             {/* LINKEDIN */}
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/pankaj52/"
               target="_blank"
               rel="noopener noreferrer"
               className={ICON_BOX}
