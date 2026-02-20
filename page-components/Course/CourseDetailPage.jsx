@@ -226,7 +226,6 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
-  const [selectedVariation, setSelectedVariation] = useState(null);
   const [selectedValidity, setSelectedValidity] = useState(null);
   const [cartCourses, setCartCourses] = useState([]);
   const [showConfigModal, setShowConfigModal] = useState(false);
@@ -287,7 +286,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       if (course.onlineContentAccess) modes.push("Recorded");
       if (course.offlineContentAccess) modes.push("Pendrive");
       if (course.faceToFaceAccess) modes.push("Face to Face");
-      if (course.quizAccess) modes.push("Test-Series");
+      if (course.quizAccess) modes.push("Quiz Access");
       if (modes.length) {
         modeSet.add(modes.join(" + "));
       }
@@ -297,7 +296,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   };
 
   const getValidityOptions = () => {
-    if (!selectedMode || !selectedVariation) return [];
+    if (!selectedMode) return [];
 
     const selectedModes = selectedMode.split(" + ");
 
@@ -307,12 +306,10 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
         (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
         (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
+        (selectedModes.includes("Quiz Access") ? pricing.quizAccess === true : pricing.quizAccess === null)
       );
 
-      const variationMatch = pricing.variation === selectedVariation;
-
-      return matchesSelection && variationMatch;
+      return matchesSelection;
     }) || [];
   };
 
@@ -354,31 +351,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     return "N/A";
   };
 
-  const getVariations = () => {
-    if (!selectedMode) return [];
-
-    const selectedModes = selectedMode.split(" + ");
-    const variationSet = new Set();
-
-    courseData?.coursePricing?.forEach(pricing => {
-      const matchesSelection = (
-        (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
-        (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
-        (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
-        (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
-      );
-
-      if (matchesSelection && pricing.variation) {
-        variationSet.add(pricing.variation);
-      }
-    });
-
-    return Array.from(variationSet);
-  };
-
   const modes = getUniqueLearningModes();
-  const variations = getVariations();
   const validityOptions = getValidityOptions();
 
   // Set default selections
@@ -387,24 +360,6 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       setSelectedMode(modes[0]);
     }
   }, [modes]);
-
-  // Reset variation and validity when mode changes
-  React.useEffect(() => {
-    setSelectedVariation(null);
-    setSelectedValidity(null);
-  }, [selectedMode]);
-
-  // Set default variation selection
-  React.useEffect(() => {
-    if (variations.length > 0 && !selectedVariation) {
-      setSelectedVariation(variations[0]);
-    }
-  }, [variations]);
-
-  // Reset validity when variation changes (for user selection)
-  React.useEffect(() => {
-    setSelectedValidity(null);
-  }, [selectedVariation]);
 
   React.useEffect(() => {
     if (validityOptions.length > 0 && !selectedValidity) {
@@ -425,16 +380,13 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
         (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
         (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
+        (selectedModes.includes("Quiz Access") ? pricing.quizAccess === true : pricing.quizAccess === null)
       );
 
       // Match validity
       const validityMatch = formatValidity(pricing) === formatValidity(selectedValidity);
 
-      // Match variation
-      const variationMatch = pricing.variation === selectedVariation;
-
-      return modeMatch && validityMatch && variationMatch;
+      return modeMatch && validityMatch;
     });
 
     if (selectedPricing) {
@@ -457,69 +409,18 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     const isAlreadyInCart = cartCourses.some(item => item.id === suggestedCourse.id);
 
     if (isAlreadyInCart) {
-      // Remove from cart
       const updatedCart = cartCourses.filter(item => item.id !== suggestedCourse.id);
       setCartCourses(updatedCart);
       localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
       window.dispatchEvent(new Event('cartUpdated'));
     } else {
-      // Add to cart directly with first pricing option (no modal)
-      const pricingToUse = suggestedCourse?.coursePricing && suggestedCourse.coursePricing.length > 0
-        ? suggestedCourse.coursePricing[0]
-        : null;
-
-      if (!pricingToUse) return;
-
-      // Get mode for suggested course
-      const suggestedModeSet = new Set();
-      suggestedCourse?.coursePricing?.forEach(pricing => {
-        let modes = [];
-        if (pricing.liveAccess) modes.push("Live Access");
-        if (pricing.onlineContentAccess) modes.push("Recorded");
-        if (pricing.offlineContentAccess) modes.push("Pendrive");
-        if (pricing.faceToFaceAccess) modes.push("Face to Face");
-        if (pricing.quizAccess) modes.push("Test-Series");
-        if (modes.length) {
-          suggestedModeSet.add(modes.join(" + "));
-        }
-      });
-
-      const suggestedModes = Array.from(suggestedModeSet);
-      const suggestedMode = suggestedModes.length > 0 ? suggestedModes[0] : '';
-
-      const cartItem = {
-        ...suggestedCourse,
-        pricingId: pricingToUse.id,
-        coursePricingId: pricingToUse.id,
-        selectedMode: suggestedMode,
-        selectedVariation: pricingToUse.variation || '',
-        selectedValidity: formatValidity(pricingToUse),
-        finalPrice: pricingToUse.price - (pricingToUse.price * (pricingToUse.discount || 0) / 100),
-        originalPrice: pricingToUse.price,
-        discount: pricingToUse.discount || 0,
-        type: "Course"
-      };
-
-      // Check if already in cart
-      const existingCartIndex = cartCourses.findIndex(
-        item => item.coursePricingId === cartItem.coursePricingId
-      );
-
-      let updatedCart;
-      if (existingCartIndex !== -1) {
-        // Update existing item
-        updatedCart = [...cartCourses];
-        updatedCart[existingCartIndex] = cartItem;
-      } else {
-        // Add new item
-        updatedCart = [...cartCourses, cartItem];
-      }
-
-      setCartCourses(updatedCart);
-      localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-      window.dispatchEvent(new Event('cartUpdated'));
+      setSelectedCourse(suggestedCourse);
+      setShowConfigModal(true);
     }
   };
+
+  console.log('suggestedCourses', suggestedCourses);
+
 
   return (
     <section className="py-12 bg-white relative">
@@ -581,7 +482,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                           onClick={() => setSelectedMode(mode)}
                           className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedMode === mode
                             ? `border-2 ${BRAND_GREEN_CLASS} text-white`
-                            : 'border border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-slate-50'
+                            : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
                             }`}
                         >
                           {mode}
@@ -589,25 +490,6 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       ))}
                     </div>
                   </div>
-                  {variations.length > 0 && (
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Variation</label>
-                      <div className="flex flex-wrap gap-2">
-                        {variations.map((variation) => (
-                          <button
-                            key={variation}
-                            onClick={() => setSelectedVariation(variation)}
-                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedVariation === variation
-                              ? `border-2 ${BRAND_GREEN_CLASS} text-white`
-                              : 'border border-slate-200 text-slate-600 hover:border-emerald-300 hover:bg-slate-50'
-                              }`}
-                          >
-                            {variation}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
                     <select
@@ -634,57 +516,16 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
                       window.dispatchEvent(new Event('cartUpdated'));
                     } else {
-                      // Add to cart directly with selected mode and validity (no modal)
-                      if (!selectedMode || !selectedValidity || !selectedVariation) return;
-
-                      const selectedModes = selectedMode.split(" + ");
-                      const selectedPricing = courseData?.coursePricing?.find(pricing => {
-                        const modeMatch = (
-                          (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
-                          (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
-                          (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
-                          (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-                          (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
-                        );
-                        const validityMatch = formatValidity(pricing) === formatValidity(selectedValidity);
-                        const variationMatch = pricing.variation === selectedVariation;
-                        return modeMatch && validityMatch && variationMatch;
-                      });
-
-                      if (!selectedPricing) return;
-
-                      const cartItem = {
-                        ...courseData,
-                        pricingId: selectedPricing.id,
-                        coursePricingId: selectedPricing.id,
-                        selectedMode: selectedMode,
-                        selectedVariation: selectedPricing.variation || '',
-                        selectedValidity: formatValidity(selectedValidity),
-                        finalPrice: selectedPricing.price - (selectedPricing.price * (selectedPricing.discount || 0) / 100),
-                        originalPrice: selectedPricing.price,
-                        discount: selectedPricing.discount || 0,
-                        type: "Course"
-                      };
-
-                      const existingCartIndex = cartCourses.findIndex(
-                        item => item.coursePricingId === cartItem.coursePricingId
-                      );
-
-                      let updatedCart;
-                      if (existingCartIndex !== -1) {
-                        updatedCart = [...cartCourses];
-                        updatedCart[existingCartIndex] = cartItem;
-                      } else {
-                        updatedCart = [...cartCourses, cartItem];
+                      // Add to cart via modal
+                      if (!courseData?.coursePricing || courseData.coursePricing.length === 0) {
+                        console.error('No pricing available for this course');
+                        return;
                       }
-
-                      setCartCourses(updatedCart);
-                      localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                      window.dispatchEvent(new Event('cartUpdated'));
+                      setShowConfigModal(true);
                     }
                   }}
-                  disabled={!selectedMode || !selectedValidity || !selectedVariation || !priceInfo}
-                  className={`w-full py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !selectedVariation || !priceInfo
+                  disabled={!selectedMode || !selectedValidity || !priceInfo}
+                  className={`w-full py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
                     ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                     : cartCourses.some(item => item.id === courseData?.id)
                       ? 'bg-slate-700 hover:bg-slate-800 text-white'
