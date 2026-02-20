@@ -7,12 +7,15 @@ import { useRouter } from 'next/router';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
 import { Icons } from '../constants/Icons';
+import Endpoints from '@/config/endpoints';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [announcements, setAnnouncements] = useState([]);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
 
+  console.log('announcements', announcements);
+  
   // Fetch announcements on app load
   const fetchAnnouncements = async () => {
     try {
@@ -70,7 +73,7 @@ function MyApp({ Component, pageProps }) {
 
                   {/* Image */}
                   <img
-                    src={`${require('../config/endpoints').default?.mediaBaseUrl}${announcements[0]?.image}`}
+                    src={`${Endpoints?.mediaBaseUrl}${announcements[0]?.image}`}
                     alt="Announcement"
                     className="w-full h-auto object-cover"
                   />
