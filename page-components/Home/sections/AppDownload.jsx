@@ -44,7 +44,7 @@ export const AppDownload = () => {
                 <path d="M 10 110 L 190 110 L 195 120 L 5 120 Z" fill="#334155" stroke="#475569" strokeWidth="2" />
                 <rect x="85" y="115" width="30" height="3" rx="1.5" fill="#64748b" />
                 {/* Screen Content */}
-                <circle cx="100" cy="60" r="15" fill="#10b981" opacity="0.3" />
+                <circle cx="100" cy="60" r="15" fill="#0f5be0" opacity="0.3" />
                 <rect x="35" y="75" width="60" height="4" rx="2" fill="#64748b" />
                 <rect x="35" y="85" width="40" height="4" rx="2" fill="#64748b" />
               </svg>
@@ -59,7 +59,7 @@ export const AppDownload = () => {
                 {/* Home Button */}
                 <circle cx="40" cy="125" r="6" fill="#334155" stroke="#475569" strokeWidth="1.5" />
                 {/* Screen Content */}
-                <circle cx="40" cy="50" r="12" fill="#10b981" opacity="0.3" />
+                <circle cx="40" cy="50" r="12" fill="#0f5be0" opacity="0.3" />
                 <rect x="20" y="70" width="40" height="3" rx="1.5" fill="#64748b" />
                 <rect x="20" y="78" width="30" height="3" rx="1.5" fill="#64748b" />
                 <rect x="20" y="86" width="35" height="3" rx="1.5" fill="#64748b" />
