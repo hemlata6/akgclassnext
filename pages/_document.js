@@ -26,7 +26,7 @@ export default function Document() {
         <meta name="keywords" content="CA Pankaj Aswani, Chartered Accountant, CA Coaching, Financial Reporting, Accounting, CA Foundation, CA Inter, CA Final" />
         
         {/* Theme Color */}
-        <meta name="theme-color" content="#164e33" />
+        {/* <meta name="theme-color" content="#164e33" /> */}
         
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
