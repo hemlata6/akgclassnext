@@ -340,30 +340,14 @@ export const Header = ({ cartCount }) => {
 
   return (
     <>
-      <div style={{
+      <div 
+      style={{
         backgroundColor: "#02154c"
-      }} className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer flex">
+      }} 
+      className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer flex">
         <div className="flex-1 overflow-hidden relative mx-4">
           <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium">
-            {announcements.length > 0 && announcements[0]?.title ? (
-              <span className="inline-block">
-                📢 {announcements[0].title}
-              </span>
-            ) : (
-              <span className="inline-block">
-                📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                📚 Ind AS Brahmastra Books Now Available.
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                🎓 100% Concepts + Exam Oriented Approach.
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                📚 Ind AS Brahmastra Books Now Available.
-                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                🎓 100% Concepts + Exam Oriented Approach.
-              </span>
-            )}
+         
           </div>
         </div>
 
