@@ -4,48 +4,7 @@ import { useEffect, useState } from "react";
 
 const FacultyAndStatsSection = () => {
 
-    const [faculties, setFaculties] = useState([
-        {
-            id: 1,
-            firstName: "CA Vipul",
-            lastName: "Dhall",
-            designation: "Director & Lead Faculty",
-            profile: "https://placehold.co/300x400/312e81/FFF?text=VD",
-            domains: [{ name: "Accounts & Finance" }]
-        },
-        {
-            id: 2,
-            firstName: "CS Neha",
-            lastName: "Gupta",
-            designation: "Senior Faculty",
-            profile: 'https://placehold.co/300x400/831843/FFF?text=NG',
-            domains: [{ name: "Corporate Law" }]
-        },
-        {
-            id: 3,
-            firstName: "CMA Rahul",
-            lastName: "Sen",
-            designation: "Subject Expert",
-            profile: 'https://placehold.co/300x400/1e3a8a/FFF?text=RS',
-            domains: [{ name: "Costing & FM" }]
-        },
-        {
-            id: 4,
-            firstName: "CA Amit",
-            lastName: "Jain",
-            designation: "Tax Guru",
-            profile: "https://placehold.co/300x400/0f766e/FFF?text=AJ",
-            domains: [{ name: "Direct Taxation" }]
-        },
-        {
-            id: 5,
-            firstName: "Prof. Priya",
-            lastName: "Singh",
-            designation: "Senior Faculty",
-            profile: "https://placehold.co/300x400/7c2d12/FFF?text=PS",
-            domains: [{ name: "Audit & Assurance" }]
-        }
-    ]);
+    const [faculties, setFaculties] = useState([]);
 
     console.log('faculties', faculties);
     useEffect(() => {
@@ -56,8 +15,51 @@ const FacultyAndStatsSection = () => {
         try {
             const response = await fetch(`${Endpoints.baseURL}admin/employee/fetch-public-employee/${instId}`);
             const data = await response.json();
-            if (data.status && data.employees) {
+            if (data.status && data.employees?.length > 0) {
                 setFaculties(data.employees);
+            } else {
+                setFaculties([
+                    {
+                        id: 1,
+                        firstName: "CA Vipul",
+                        lastName: "Dhall",
+                        designation: "Director & Lead Faculty",
+                        profile: "https://placehold.co/300x400/312e81/FFF?text=VD",
+                        domains: [{ name: "Accounts & Finance" }]
+                    },
+                    {
+                        id: 2,
+                        firstName: "CS Neha",
+                        lastName: "Gupta",
+                        designation: "Senior Faculty",
+                        profile: 'https://placehold.co/300x400/831843/FFF?text=NG',
+                        domains: [{ name: "Corporate Law" }]
+                    },
+                    {
+                        id: 3,
+                        firstName: "CMA Rahul",
+                        lastName: "Sen",
+                        designation: "Subject Expert",
+                        profile: 'https://placehold.co/300x400/1e3a8a/FFF?text=RS',
+                        domains: [{ name: "Costing & FM" }]
+                    },
+                    {
+                        id: 4,
+                        firstName: "CA Amit",
+                        lastName: "Jain",
+                        designation: "Tax Guru",
+                        profile: "https://placehold.co/300x400/0f766e/FFF?text=AJ",
+                        domains: [{ name: "Direct Taxation" }]
+                    },
+                    {
+                        id: 5,
+                        firstName: "Prof. Priya",
+                        lastName: "Singh",
+                        designation: "Senior Faculty",
+                        profile: "https://placehold.co/300x400/7c2d12/FFF?text=PS",
+                        domains: [{ name: "Audit & Assurance" }]
+                    }
+                ])
             }
         } catch (error) {
             console.error('Error fetching faculties:', error);

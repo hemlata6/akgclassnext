@@ -56,6 +56,7 @@ export const PromoBanners = () => {
 
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({
+                        ...banner,
                         mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
                         desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
                         alt: banner.title || 'Banner',
@@ -110,7 +111,7 @@ export const PromoBanners = () => {
     };
 
     console.log('slidesslides', slides);
-    
+
 
     return (
         <section className="relative w-full group bg-slate-900 overflow-hidden">
