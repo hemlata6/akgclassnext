@@ -110,6 +110,11 @@ export const PromoBanners = () => {
         setTimeout(() => setIsAutoPlaying(true), 10000);
     };
 
+    const handleLinkClick = (slide) => {
+        if (slide?.contentLink) {
+            window.open(slide?.contentLink, '_blank');
+        }
+    }
     console.log('slidesslides', slides);
 
 
@@ -120,6 +125,7 @@ export const PromoBanners = () => {
 
                 {slides?.map((slide, index) => (
                     <div
+                        onClick={() => handleLinkClick(slide)}
                         key={index}
                         className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === currentSlide
                             ? 'opacity-100 z-10'
