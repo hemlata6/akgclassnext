@@ -96,6 +96,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
       console.error('Error sharing:', err);
     }
   };
+  
 
   return (
     <div className="bg-slate-50 pt-8 pb-12 border-b border-slate-200">
