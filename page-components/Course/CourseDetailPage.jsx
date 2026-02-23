@@ -222,17 +222,20 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 }
 
 const CourseContent = ({ courseData, onAddToCart }) => {
-  const router = useRouter();
 
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
-  const [selectedVariation, setSelectedVariation] = useState(null);
+  const [selectedVariation, setSelectedVariation] = useState('');
   const [selectedValidity, setSelectedValidity] = useState(null);
+  const [modes, setModes] = useState([]);
+  const [variations, setVariations] = useState([]);
+  const [validityOptions, setValidityOptions] = useState([]);
   const [cartCourses, setCartCourses] = useState([]);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
+
 
   // Load cart from localStorage
   useEffect(() => {
@@ -296,12 +299,36 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     return Array.from(modeSet);
   };
 
-  const getValidityOptions = () => {
-    if (!selectedMode || !selectedVariation) return [];
+  // Set modes from coursePricing
+  useEffect(() => {
+    if (!courseData?.coursePricing) return;
+
+    const modeSet = new Set();
+    courseData.coursePricing.forEach(pricing => {
+      let modes = [];
+      if (pricing.liveAccess) modes.push("Live Access");
+      if (pricing.onlineContentAccess) modes.push("Recorded");
+      if (pricing.offlineContentAccess) modes.push("Pendrive");
+      if (pricing.faceToFaceAccess) modes.push("Face to Face");
+      if (pricing.quizAccess) modes.push("Test-Series");
+      if (modes.length) {
+        modeSet.add(modes.join(" + "));
+      }
+    });
+
+    const uniqueModes = Array.from(modeSet);
+    setModes(uniqueModes);
+    if (uniqueModes.length > 0) {
+      setSelectedMode(uniqueModes[0]);
+    }
+  }, [courseData]);
+
+  // Get variations based on selected mode - with useEffect to set state
+  useEffect(() => {
+    if (!selectedMode || !courseData?.coursePricing) return;
 
     const selectedModes = selectedMode.split(" + ");
-
-    return courseData?.coursePricing?.filter(pricing => {
+    const filtered = courseData.coursePricing.filter(pricing => {
       const matchesSelection = (
         (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
         (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
@@ -309,12 +336,47 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
         (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
       );
+      return matchesSelection;
+    });
 
-      const variationMatch = pricing.variation === selectedVariation;
+    const variationSet = new Set();
+    filtered.forEach(pricing => {
+      if (pricing.variation) {
+        variationSet.add(pricing.variation);
+      }
+    });
 
-      return matchesSelection && variationMatch;
-    }) || [];
-  };
+    const uniqueVariations = Array.from(variationSet);
+    setVariations(uniqueVariations);
+    if (uniqueVariations.length > 0) {
+      setSelectedVariation(uniqueVariations[0]);
+    } else {
+      setSelectedVariation('');
+    }
+  }, [selectedMode, courseData]);
+
+  // Get validity options based on selected mode and variation
+  useEffect(() => {
+    if (!selectedMode || !courseData?.coursePricing) return;
+
+    const selectedModes = selectedMode.split(" + ");
+    const filtered = courseData.coursePricing.filter(pricing => {
+      const matchesSelection = (
+        (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
+        (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
+        (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
+        (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
+        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
+      );
+      const matchesVariation = selectedVariation ? pricing.variation === selectedVariation : true;
+      return matchesSelection && matchesVariation;
+    });
+
+    setValidityOptions(filtered);
+    if (filtered.length > 0) {
+      setSelectedValidity(filtered[0]);
+    }
+  }, [selectedMode, selectedVariation, courseData]);
 
   const formatValidity = (pricing) => {
     if (pricing.validityType === "expiry" && pricing.expiry) {
@@ -354,101 +416,23 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     return "N/A";
   };
 
-  const getVariations = () => {
-    if (!selectedMode) return [];
-
-    const selectedModes = selectedMode.split(" + ");
-    const variationSet = new Set();
-
-    courseData?.coursePricing?.forEach(pricing => {
-      const matchesSelection = (
-        (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
-        (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
-        (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
-        (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
-      );
-
-      if (matchesSelection && pricing.variation) {
-        variationSet.add(pricing.variation);
-      }
-    });
-
-    return Array.from(variationSet);
-  };
-
-  const modes = getUniqueLearningModes();
-  const variations = getVariations();
-  const validityOptions = getValidityOptions();
-
-  // Set default selections
-  React.useEffect(() => {
-    if (modes.length > 0 && !selectedMode) {
-      setSelectedMode(modes[0]);
-    }
-  }, [modes]);
-
-  // Reset variation and validity when mode changes
-  React.useEffect(() => {
-    setSelectedVariation(null);
-    setSelectedValidity(null);
-  }, [selectedMode]);
-
-  // Set default variation selection
-  React.useEffect(() => {
-    if (variations.length > 0 && !selectedVariation) {
-      setSelectedVariation(variations[0]);
-    }
-  }, [variations]);
-
-  // Reset validity when variation changes (for user selection)
-  React.useEffect(() => {
-    setSelectedValidity(null);
-  }, [selectedVariation]);
-
-  React.useEffect(() => {
-    if (validityOptions.length > 0 && !selectedValidity) {
-      setSelectedValidity(validityOptions[0]);
-    }
-  }, [validityOptions]);
-
-  // Calculate price based on selected mode and validity
+  // Calculate price based on selected validity (aligned with CourseConfigModal)
   const getSelectedPrice = () => {
-    if (!selectedMode || !selectedValidity) return null;
+    const pricingToUse = selectedValidity || (courseData?.coursePricing && courseData.coursePricing.length > 0
+      ? courseData.coursePricing[0]
+      : null);
 
-    const selectedModes = selectedMode.split(" + ");
+    if (!pricingToUse) return null;
 
-    const selectedPricing = courseData?.coursePricing?.find(pricing => {
-      // Match mode
-      const modeMatch = (
-        (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
-        (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
-        (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
-        (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
-      );
+    const originalPrice = pricingToUse.price || 0;
+    const discount = pricingToUse.discount || 0;
+    const discountedPrice = Math.round(originalPrice - (originalPrice * discount / 100));
 
-      // Match validity
-      const validityMatch = formatValidity(pricing) === formatValidity(selectedValidity);
-
-      // Match variation
-      const variationMatch = pricing.variation === selectedVariation;
-
-      return modeMatch && validityMatch && variationMatch;
-    });
-
-    if (selectedPricing) {
-      const originalPrice = selectedPricing.price || 0;
-      const discount = selectedPricing.discount || 0;
-      const discountedPrice = originalPrice - (originalPrice * discount / 100);
-      return {
-        originalPrice,
-        discountedPrice,
-        discount
-      };
-    }
-
-    return null;
+    return {
+      originalPrice,
+      discountedPrice,
+      discount
+    };
   };
 
   const priceInfo = getSelectedPrice();
@@ -457,69 +441,16 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     const isAlreadyInCart = cartCourses.some(item => item.id === suggestedCourse.id);
 
     if (isAlreadyInCart) {
-      // Remove from cart
       const updatedCart = cartCourses.filter(item => item.id !== suggestedCourse.id);
       setCartCourses(updatedCart);
       localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
       window.dispatchEvent(new Event('cartUpdated'));
     } else {
-      // Add to cart directly with first pricing option (no modal)
-      const pricingToUse = suggestedCourse?.coursePricing && suggestedCourse.coursePricing.length > 0
-        ? suggestedCourse.coursePricing[0]
-        : null;
-
-      if (!pricingToUse) return;
-
-      // Get mode for suggested course
-      const suggestedModeSet = new Set();
-      suggestedCourse?.coursePricing?.forEach(pricing => {
-        let modes = [];
-        if (pricing.liveAccess) modes.push("Live Access");
-        if (pricing.onlineContentAccess) modes.push("Recorded");
-        if (pricing.offlineContentAccess) modes.push("Pendrive");
-        if (pricing.faceToFaceAccess) modes.push("Face to Face");
-        if (pricing.quizAccess) modes.push("Test-Series");
-        if (modes.length) {
-          suggestedModeSet.add(modes.join(" + "));
-        }
-      });
-
-      const suggestedModes = Array.from(suggestedModeSet);
-      const suggestedMode = suggestedModes.length > 0 ? suggestedModes[0] : '';
-
-      const cartItem = {
-        ...suggestedCourse,
-        pricingId: pricingToUse.id,
-        coursePricingId: pricingToUse.id,
-        selectedMode: suggestedMode,
-        selectedVariation: pricingToUse.variation || '',
-        selectedValidity: formatValidity(pricingToUse),
-        finalPrice: pricingToUse.price - (pricingToUse.price * (pricingToUse.discount || 0) / 100),
-        originalPrice: pricingToUse.price,
-        discount: pricingToUse.discount || 0,
-        type: "Course"
-      };
-
-      // Check if already in cart
-      const existingCartIndex = cartCourses.findIndex(
-        item => item.coursePricingId === cartItem.coursePricingId
-      );
-
-      let updatedCart;
-      if (existingCartIndex !== -1) {
-        // Update existing item
-        updatedCart = [...cartCourses];
-        updatedCart[existingCartIndex] = cartItem;
-      } else {
-        // Add new item
-        updatedCart = [...cartCourses, cartItem];
-      }
-
-      setCartCourses(updatedCart);
-      localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-      window.dispatchEvent(new Event('cartUpdated'));
+      setSelectedCourse(suggestedCourse);
+      setShowConfigModal(true);
     }
   };
+
 
   return (
     <section className="py-12 bg-white relative">
@@ -623,6 +554,23 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                     </select>
                   </div>
                 </div>
+                {/* Pricing Summary - Same as CourseConfigModal */}
+                {priceInfo && (
+                  <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mb-6">
+                    <div className="space-y-2">
+                      {priceInfo.discount > 0 && (
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-slate-600 line-through">₹{priceInfo.originalPrice.toLocaleString('en-IN')}</span>
+                          <span className="text-xs font-bold text-emerald-600">{priceInfo.discount}% OFF</span>
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-slate-700">Total Price</span>
+                        <span className="text-2xl font-bold text-emerald-700">₹{priceInfo.discountedPrice.toLocaleString('en-IN')}</span>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <button
                   onClick={() => {
                     const isInCart = cartCourses.some(item => item.id === courseData?.id);
@@ -634,47 +582,36 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
                       window.dispatchEvent(new Event('cartUpdated'));
                     } else {
-                      // Add to cart directly with selected mode and validity (no modal)
-                      if (!selectedMode || !selectedValidity || !selectedVariation) return;
+                      // Add to cart directly with selected options (no modal)
+                      const pricingToUse = selectedValidity || (courseData?.coursePricing && courseData.coursePricing.length > 0 ? courseData.coursePricing[0] : null);
 
-                      const selectedModes = selectedMode.split(" + ");
-                      const selectedPricing = courseData?.coursePricing?.find(pricing => {
-                        const modeMatch = (
-                          (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
-                          (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
-                          (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
-                          (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-                          (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
-                        );
-                        const validityMatch = formatValidity(pricing) === formatValidity(selectedValidity);
-                        const variationMatch = pricing.variation === selectedVariation;
-                        return modeMatch && validityMatch && variationMatch;
-                      });
-
-                      if (!selectedPricing) return;
+                      if (!pricingToUse) return;
 
                       const cartItem = {
                         ...courseData,
-                        pricingId: selectedPricing.id,
-                        coursePricingId: selectedPricing.id,
-                        selectedMode: selectedMode,
-                        selectedVariation: selectedPricing.variation || '',
-                        selectedValidity: formatValidity(selectedValidity),
-                        finalPrice: selectedPricing.price - (selectedPricing.price * (selectedPricing.discount || 0) / 100),
-                        originalPrice: selectedPricing.price,
-                        discount: selectedPricing.discount || 0,
+                        pricingId: pricingToUse.id,
+                        coursePricingId: pricingToUse.id,
+                        selectedMode: selectedMode || '',
+                        selectedVariation: selectedVariation || '',
+                        selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
+                        finalPrice: Math.round(pricingToUse.price - (pricingToUse.price * (pricingToUse.discount || 0) / 100)),
+                        originalPrice: pricingToUse.price,
+                        discount: pricingToUse.discount || 0,
                         type: "Course"
                       };
 
+                      // Check if already in cart
                       const existingCartIndex = cartCourses.findIndex(
                         item => item.coursePricingId === cartItem.coursePricingId
                       );
 
                       let updatedCart;
                       if (existingCartIndex !== -1) {
+                        // Update existing item
                         updatedCart = [...cartCourses];
                         updatedCart[existingCartIndex] = cartItem;
                       } else {
+                        // Add new item
                         updatedCart = [...cartCourses, cartItem];
                       }
 
@@ -683,8 +620,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       window.dispatchEvent(new Event('cartUpdated'));
                     }
                   }}
-                  disabled={!selectedMode || !selectedValidity || !selectedVariation || !priceInfo}
-                  className={`w-full py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !selectedVariation || !priceInfo
+                  disabled={!selectedMode || !selectedValidity || !priceInfo}
+                  className={`w-full py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
                     ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                     : cartCourses.some(item => item.id === courseData?.id)
                       ? 'bg-slate-700 hover:bg-slate-800 text-white'
@@ -697,9 +634,9 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                     <>Enroll Now <Icons.Cart /></>
                   )}
                 </button>
-                <p className="text-[10px] text-slate-400 text-center mt-3">
+                {/* <p className="text-[10px] text-slate-400 text-center mt-3">
                   30-Day Money Back Guarantee • Secure Payment
-                </p>
+                </p> */}
               </div>
               {/* <div className="mt-6 bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-center gap-4">
                 <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center shadow-sm text-emerald-700">
@@ -724,7 +661,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                 {suggestedCourses.map((suggestedCourse) => (
                   <div
                     key={suggestedCourse.id}
-                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-indigo-400 overflow-hidden flex flex-col group max-w-sm"
+                    className="bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-slate-100 hover:border-emerald-400 overflow-hidden flex flex-col group max-w-sm"
                   >
                     {/* Green Header with Badge and Hours */}
                     <div className={`${BRAND_GREEN_CLASS} p-0 relative h-48 flex items-end justify-start overflow-hidden`}>

@@ -128,7 +128,10 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
       selectedMode: selectedMode || '',
       selectedVariation: selectedVariation || '',
       selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
-      finalPrice: pricingToUse.price - (pricingToUse.price * (pricingToUse.discount || 0) / 100),
+      finalPrice: Math.round(
+        pricingToUse.price -
+        (pricingToUse.price * (pricingToUse.discount || 0) / 100)
+      ),
       originalPrice: pricingToUse.price,
       discount: pricingToUse.discount || 0,
       type: "Course"
@@ -142,7 +145,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
   const pricingToDisplay = selectedValidity || (course?.coursePricing && course.coursePricing.length > 0 ? course.coursePricing[0] : null);
   const originalPrice = pricingToDisplay?.price || 0;
   const discount = pricingToDisplay?.discount || 0;
-  const discountedPrice = originalPrice - (originalPrice * discount / 100);
+  const discountedPrice = Math.round(originalPrice - (originalPrice * discount / 100));
   const hasPricing = originalPrice > 0;
 
   return (
@@ -172,8 +175,8 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
                   type="button"
                   onClick={() => setSelectedMode(mode)}
                   className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${selectedMode === mode
-                      ? `${BRAND_GREEN_CLASS} text-white`
-                      : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                    ? `${BRAND_GREEN_CLASS} text-white`
+                    : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
                     }`}
                 >
                   {mode}
@@ -193,8 +196,8 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
                     type="button"
                     onClick={() => setSelectedVariation(variation)}
                     className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${selectedVariation === variation
-                        ? `${BRAND_GREEN_CLASS} text-white`
-                        : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                      ? `${BRAND_GREEN_CLASS} text-white`
+                      : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
                       }`}
                   >
                     {variation}

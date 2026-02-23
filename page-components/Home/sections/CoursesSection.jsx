@@ -111,6 +111,7 @@ export const CoursesSection = ({ onAddToCart }) => {
             const activeCourses = Array.isArray(courses)
                 ? courses.filter(c =>
                     c.active && c.paid === true
+                    && c.type === 'lecture'
                     // && c.tags &&
                     // Array.isArray(c.tags)
                     // && c.tags.some(tag => tag.tag === "Featured Course")
