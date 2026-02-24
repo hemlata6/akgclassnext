@@ -115,8 +115,6 @@ export const PromoBanners = () => {
             window.open(slide?.contentLink, '_blank');
         }
     }
-    console.log('slidesslides', slides);
-
 
     return (
         <section className="relative w-full group bg-slate-900 overflow-hidden">
