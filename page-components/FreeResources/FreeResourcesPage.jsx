@@ -128,6 +128,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                 setActiveCoursesList(ActivefilteredCourses);
 
                 const filteredCourses = course.filter(course =>
+                    course.paid === false &&
                     course?.active === true &&
                     course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
                 );
@@ -166,6 +167,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
             setActiveCoursesList(ActivefilteredCourses);
 
             const filteredCourses = course.filter(course =>
+                course.paid === false &&
                 course?.active === true &&
                 course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
             );
