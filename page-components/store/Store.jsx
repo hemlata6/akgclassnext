@@ -1459,7 +1459,7 @@ const Store = () => {
                                                         e.stopPropagation();
                                                         setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
                                                     }}
-                                                    className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
+                                                    className="w-full text-left px-3 py-0.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
                                                     style={{
                                                         backgroundColor: selectedExamStage?.id === stage.id ? `${primaryColor}15` : 'transparent',
                                                         border: `2px solid ${selectedExamStage?.id === stage.id ? primaryColor : 'transparent'}`,
@@ -2100,7 +2100,7 @@ const Store = () => {
                                                         onClick={() => {
                                                             setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
                                                         }}
-                                                        className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedExamStage?.id === stage.id
+                                                        className={`w-full text-left px-4 py-1 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedExamStage?.id === stage.id
                                                             ? 'bg-emerald-50'
                                                             : ''
                                                             }`}

@@ -170,9 +170,9 @@ export default function ContactUsPage() {
                 <div className="flex-1 flex items-center justify-center py-20 px-4">
                     <div className="text-center max-w-xl">
                         <div className="mb-8 relative">
-                            <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative" style={{backgroundColor: '#e8f3ee'}} >
-                                <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{backgroundColor: '#154734'}}></div>
-                                <svg className="w-20 h-20 relative z-10" style={{color: '#154734'}} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative" style={{ backgroundColor: '#e8f3ee' }} >
+                                <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ backgroundColor: '#154734' }}></div>
+                                <svg className="w-20 h-20 relative z-10" style={{ color: '#154734' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
@@ -186,7 +186,7 @@ export default function ContactUsPage() {
                                 router.push('/');
                             }}
                             className="inline-flex items-center gap-3 px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                            style={{backgroundColor: '#154734'}}
+                            style={{ backgroundColor: '#154734' }}
                             onMouseEnter={(e) => e.target.style.backgroundColor = '#0d3221'}
                             onMouseLeave={(e) => e.target.style.backgroundColor = '#154734'}
                         >
@@ -225,38 +225,50 @@ export default function ContactUsPage() {
                         {/* Contact Info Cards */}
                         <div className="lg:col-span-1 space-y-6">
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{backgroundColor: '#e8f3ee'}}>
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#e8f3ee' }}>
                                     <Icons.Phone />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <a href="tel:7703880232" className="font-semibold" style={{color: '#154734'}}
-                                   onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                   onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    7703880232
-                                </a>
+                                <p><a href="tel:7703880232" className="font-semibold" style={{ color: '#154734' }}
+                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
+                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                    +91-7703880232
+                                </a></p>
+                                <p>
+                                    <a href="tel:8882090148" className="font-semibold" style={{ color: '#154734' }}
+                                        onMouseEnter={(e) => e.target.style.color = '#0d3221'}
+                                        onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                        +91-8882090148
+                                    </a>
+                                </p>
+                                <p> <a href="tel:9318492718" className="font-semibold" style={{ color: '#154734' }}
+                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
+                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                    +91-9318492718
+                                </a></p>
                             </div>
 
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{backgroundColor: '#e8f3ee'}}>
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#e8f3ee' }}>
                                     <Icons.Mail />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:info.vgsh@gmail.com" className="font-semibold" style={{color: '#154734'}}
-                                   onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                   onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                <a href="mailto:info.vgsh@gmail.com" className="font-semibold" style={{ color: '#154734' }}
+                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
+                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
                                     info.vgsh@gmail.com
                                 </a>
                             </div>
 
-                            <div className="rounded-2xl p-6 shadow-md text-white" style={{backgroundColor: '#154734'}}>
+                            <div className="rounded-2xl p-6 shadow-md text-white" style={{ backgroundColor: '#154734' }}>
                                 <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                                     <Icons.BookOpen />
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
-                                <p className="text-sm" style={{color: '#e8f3ee'}}>
-                                    D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092, India
+                                <p className="text-sm" style={{ color: '#e8f3ee' }}>
+                                    D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092
                                 </p>
                             </div>
                         </div>
@@ -269,16 +281,16 @@ export default function ContactUsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            First Name <span style={{color: '#154734'}}>*</span>
+                                            First Name <span style={{ color: '#154734' }}>*</span>
                                         </label>
                                         <input
                                             type="text"
                                             name="firstName"
                                             value={formData.firstName}
                                             onChange={handleInputChange}
-                                            placeholder="John"
+                                            placeholder="First Name"
                                             className={`w-full px-4 py-3 border ${errors.firstName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            style={{'--tw-ring-color': '#154734'}}
+                                            style={{ '--tw-ring-color': '#154734' }}
                                             onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
                                         />
@@ -287,14 +299,14 @@ export default function ContactUsPage() {
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Last Name <span style={{color: '#154734'}}>*</span>
+                                            Last Name <span style={{ color: '#154734' }}>*</span>
                                         </label>
                                         <input
                                             type="text"
                                             name="lastName"
                                             value={formData.lastName}
                                             onChange={handleInputChange}
-                                            placeholder="Doe"
+                                            placeholder="Last Name"
                                             className={`w-full px-4 py-3 border ${errors.lastName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
                                             onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
@@ -306,7 +318,7 @@ export default function ContactUsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Phone <span style={{color: '#154734'}}>*</span>
+                                            Phone <span style={{ color: '#154734' }}>*</span>
                                         </label>
                                         <input
                                             type="tel"
@@ -323,14 +335,14 @@ export default function ContactUsPage() {
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Email <span style={{color: '#154734'}}>*</span>
+                                            Email <span style={{ color: '#154734' }}>*</span>
                                         </label>
                                         <input
                                             type="email"
                                             name="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
-                                            placeholder="john@example.com"
+                                            placeholder=" info.vgsh@gmail.com"
                                             className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
                                             onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
@@ -341,7 +353,7 @@ export default function ContactUsPage() {
 
                                 <div className="mb-5">
                                     <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        Type <span style={{color: '#154734'}}>*</span>
+                                        Type <span style={{ color: '#154734' }}>*</span>
                                     </label>
                                     <select
                                         name="type"
@@ -361,7 +373,7 @@ export default function ContactUsPage() {
                                 {formData.type && (
                                     <div className="mb-5 animate-in slide-in-from-top duration-300">
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span style={{color: '#154734'}}>*</span>
+                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span style={{ color: '#154734' }}>*</span>
                                         </label>
                                         <select
                                             value={formData.selectedContent?.id || ''}
@@ -401,7 +413,7 @@ export default function ContactUsPage() {
                                     type="submit"
                                     disabled={loading}
                                     className="w-full py-4 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-                                    style={{backgroundColor: loading ? '#154734' : '#154734'}}
+                                    style={{ backgroundColor: loading ? '#154734' : '#154734' }}
                                     onMouseEnter={(e) => !loading && (e.target.style.backgroundColor = '#0d3221')}
                                     onMouseLeave={(e) => !loading && (e.target.style.backgroundColor = '#154734')}
                                 >

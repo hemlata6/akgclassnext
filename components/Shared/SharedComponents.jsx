@@ -42,22 +42,22 @@ export const Footer = () => {
             <h4 className="text-white font-bold mb-3">Courses</h4>
             <ul className="space-y-1.5">
               <li
-                onClick={() => handleCourseClick('CA Foundation')}
+                onClick={() => handleCourseClick('CSEET')}
                 className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
-                CA Foundation
+                CSEET
               </li>
               <li
-                onClick={() => handleCourseClick('CA Inter')}
+                onClick={() => handleCourseClick('CS Executive')}
                 className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
-                CA Inter
+                CS Executive
               </li>
               <li
-                onClick={() => handleCourseClick('CA Final')}
+                onClick={() => handleCourseClick('CS Professional')}
                 className="cursor-pointer hover:text-indigo-400 transition-colors"
               >
-                CA Final
+                CS Professional
               </li>
             </ul>
           </div>
@@ -93,7 +93,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: +91 7703880232</li>
+              <li>Call: 9318492718, 7703880232, 8882090148</li>
               <li>info.vgsh@gmail.com</li>
               <li>D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</li>
             </ul>

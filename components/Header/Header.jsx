@@ -145,8 +145,6 @@ export const Header = ({ cartCount }) => {
       // Filter active courses and separate by domain
       const activeCourses = Array.isArray(allCourses) ? allCourses.filter(c => c.active === true) : [];
 
-
-
       const courseList = Array.isArray(activeCourses)
         ? activeCourses.filter(c => c.type !== "books")
         : [];
@@ -370,8 +368,16 @@ export const Header = ({ cartCount }) => {
           <div className="bg-slate-900 text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-slate-800">
             <div className="flex-1 overflow-hidden relative mx-4">
               <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium">
-                <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Admissions Open for CA Inter Nov 2026</span>
-                <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Flat 20% Off on Pre-Booking Books</span>
+                {announcements.length > 0 && announcements[0]?.title ? (
+                  <span className="inline-block">
+                    📢 {announcements[0].title}
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-2"><span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Admissions Open for CA Inter Nov 2026
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    Flat 20% Off on Pre-Booking Books
+                  </span>
+                )}
               </div>
             </div>
 

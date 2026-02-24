@@ -125,11 +125,11 @@ const FacultyAndStatsSection = () => {
             <div className="py-16 text-center border-b border-slate-200/60 bg-white">
                 <div className="max-w-4xl mx-auto px-4">
                     <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
-                        India ke Best Faculty? <br />
+                        India ke Best Faculty! <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Hum nahi, Humara RESULT bolta hai.</span>
                     </h2>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10">
-                        {[{ l: "AIR 43", s: "CA Finals" }, { l: "200k+", s: "Students" }, { l: "97/100", s: "Highest Marks" }, { l: "5 Star", s: "Rating" }].map((s, i) => (
+                        {[{ l: "50000+", s: "Students" }, { l: "180K+", s: "Youtube Subscribers" }, { l: "40+", s: "Courses" }, { l: "5", s: "Renowned Faculty" }].map((s, i) => (
                             <div key={i} className="p-4 bg-slate-50 rounded-xl border border-slate-100">
                                 <p className="text-3xl font-black text-slate-800">{s.l}</p>
                                 <p className="text-xs font-bold text-slate-500 uppercase tracking-wider mt-1">{s.s}</p>

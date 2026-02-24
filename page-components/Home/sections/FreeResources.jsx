@@ -46,7 +46,7 @@ export const FreeResources = () => {
                             <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the VG STUDY HUB App for offline viewing, live classes, and unlimited access to study materials.</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                 <a
-                                    href="https://play.google.com/store/apps/details?id=com.caclasses.store"
+                                    href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-white text-black px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-gray-100 transition-colors shadow-md"
@@ -54,12 +54,20 @@ export const FreeResources = () => {
                                     <Download /> Google Play
                                 </a>
                                 <a
-                                    href="https://apps.apple.com/us/app/edportal/id6566180781"
+                                    href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition-colors shadow-md"
                                 >
                                     <Download /> App Store
+                                </a>
+                                <a
+                                    href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition-colors shadow-md"
+                                >
+                                    <Download /> Window Store
                                 </a>
                             </div>
                         </div>
