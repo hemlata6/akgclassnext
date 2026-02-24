@@ -35,6 +35,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     const [errorBarMessage, setErrorBarMessage] = useState('');
     const [showSuccessBar, setShowSuccessBar] = useState(false);
     const [successBarMessage, setSuccessBarMessage] = useState('');
+    const [discountAmount, setDiscountAmount] = useState(0);
 
     useEffect(() => {
         // Extract URL parameters
@@ -218,10 +219,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 `${Endpoints.baseURL}payment/check-payment-status/${checkoutResponse?.transactionId}`,
                 { headers: { "Authorization": `Bearer ${authToken}` } }
             );
-            console.log('💳 Payment Status Response:', response);
-
             if (response?.data?.paymentStatus === "successful") {
-                console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
                 setShowSuccessBar(true);
                 setSuccessBarMessage('Payment successful! Thank you for your purchase.');
                 handleClearCart();
@@ -264,11 +262,13 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
             if (response.data.errorCode === 0) {
                 setIsCouponValid(response.data?.valid);
                 if (response.data?.valid) {
+                    setDiscountAmount(response.data.discount);
                     setShowSuccessBar(true);
                     setSuccessBarMessage("✓ Coupon applied successfully!");
                 } else {
                     setShowErrorBar(true);
                     setErrorBarMessage("Invalid coupon code");
+                    setDiscountAmount(0);
                 }
                 setErrorMessage("");
             } else {
@@ -277,6 +277,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 setErrorMessage(msg);
                 setShowErrorBar(true);
                 setErrorBarMessage(msg);
+                setDiscountAmount(0);
             }
         } catch (err) {
             console.log(err);
@@ -306,7 +307,6 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         }
     };
 
-    console.log('payloadCart', payloadCart, cartCourses);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -332,7 +332,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
 
             // Pass data back to CartPage for API call
             await onSubmitCheckout(checkoutData);
-            
+
             // Clear form
             setFormData({ fullName: '', email: '', phone: '' });
         } catch (error) {
@@ -473,12 +473,28 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                             </div>
                         )}
                     </div>
+                    {
+                        isCouponValid === true && (
+                            <div className="space-y-2 mb-3">
+                                <div className="flex justify-between text-slate-600 text-sm">
+                                    <span>Subtotal</span>
+                                    <span>₹{(finalAmounts || totalAmount).toLocaleString()}</span>
+                                </div>
+                                {discountAmount > 0 && (
+                                    <div className="flex justify-between text-green-600 font-semibold text-sm">
+                                        <span>Coupon Discount</span>
+                                        <span>- ₹{discountAmount.toLocaleString()}</span>
+                                    </div>
+                                )}
+                            </div>
+                        )
+                    }
 
                     {/* Total Amount */}
                     <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mt-6">
                         <div className="flex justify-between items-center">
                             <span className="text-sm font-bold text-slate-700">Total Amount</span>
-                            <span className="text-2xl font-bold text-emerald-700">₹{(finalAmounts || totalAmount).toLocaleString()}</span>
+                            <span className="text-2xl font-bold text-emerald-700">₹{((finalAmounts || totalAmount) - discountAmount).toLocaleString()}</span>
                         </div>
                     </div>
 

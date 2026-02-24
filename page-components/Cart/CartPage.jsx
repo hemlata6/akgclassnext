@@ -679,7 +679,7 @@ export default function CartPage() {
                 )}
               </div>
 
-              <div className="mb-6">
+              {/* <div className="mb-6">
                 <button
                   onClick={handleReedemCode}
                   className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
@@ -726,7 +726,7 @@ export default function CartPage() {
                     )}
                   </div>
                 )}
-              </div>
+              </div> */}
 
 
               <div className="flex justify-between items-center mb-6">

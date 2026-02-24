@@ -39,6 +39,7 @@ export const PromoBanners = () => {
 
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({
+                        ...banner,
                         mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
                         desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
                         alt: banner.title || 'Banner'
@@ -91,8 +92,11 @@ export const PromoBanners = () => {
         setTimeout(() => setIsAutoPlaying(true), 10000);
     };
 
-    console.log('theme?.primaryClass', theme?.primaryClass);
-    
+    const handleClickOnImage = (slide) => {
+        if (slide.contentLink) {
+            window.open(slide.contentLink, '_blank');
+        }
+    };
 
     return (
         <section className="py-4 md:py-6 px-3 sm:px-4 md:px-0 overflow-hidden bg-gradient-to-b from-white to-slate-50 dark:from-slate-950 dark:to-slate-900 border-b border-slate-200 dark:border-slate-800">
@@ -118,6 +122,7 @@ export const PromoBanners = () => {
                 >
                     {slides.map((slide, index) => (
                         <div
+                            onClick={() => handleClickOnImage(slide)}
                             key={index}
                             className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer `}
                         >
