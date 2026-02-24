@@ -367,7 +367,7 @@ export const Header = ({ cartCount }) => {
           {/* --- A. TOP ANNOUNCEMENT STRIP --- */}
           <div className="bg-slate-900 text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-slate-800">
             <div className="flex-1 overflow-hidden relative mx-4">
-              <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium">
+              <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium" onMouseEnter={() => setIsMarqueeHovered(true)} onMouseLeave={() => setIsMarqueeHovered(false)} style={{ animationPlayState: isMarqueeHovered ? 'paused' : 'running', cursor: 'pointer' }} onClick={() => router.push('/announcements')}>
                 {announcements.length > 0 && announcements[0]?.title ? (
                   <span className="inline-block">
                     📢 {announcements[0].title}
