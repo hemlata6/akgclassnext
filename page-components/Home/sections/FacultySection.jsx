@@ -24,7 +24,7 @@ const FacultyAndStatsSection = () => {
                         firstName: "CA Vipul",
                         lastName: "Dhall",
                         designation: "Director & Lead Faculty",
-                        profile: "https://placehold.co/300x400/312e81/FFF?text=VD",
+                        image: "https://placehold.co/300x400/312e81/FFF?text=VD",
                         domains: [{ name: "Accounts & Finance" }]
                     },
                     {
@@ -32,7 +32,7 @@ const FacultyAndStatsSection = () => {
                         firstName: "CS Neha",
                         lastName: "Gupta",
                         designation: "Senior Faculty",
-                        profile: 'https://placehold.co/300x400/831843/FFF?text=NG',
+                        image: 'https://placehold.co/300x400/831843/FFF?text=NG',
                         domains: [{ name: "Corporate Law" }]
                     },
                     {
@@ -40,7 +40,7 @@ const FacultyAndStatsSection = () => {
                         firstName: "CMA Rahul",
                         lastName: "Sen",
                         designation: "Subject Expert",
-                        profile: 'https://placehold.co/300x400/1e3a8a/FFF?text=RS',
+                        image: 'https://placehold.co/300x400/1e3a8a/FFF?text=RS',
                         domains: [{ name: "Costing & FM" }]
                     },
                     {
@@ -48,7 +48,7 @@ const FacultyAndStatsSection = () => {
                         firstName: "CA Amit",
                         lastName: "Jain",
                         designation: "Tax Guru",
-                        profile: "https://placehold.co/300x400/0f766e/FFF?text=AJ",
+                        image: "https://placehold.co/300x400/0f766e/FFF?text=AJ",
                         domains: [{ name: "Direct Taxation" }]
                     },
                     {
@@ -56,7 +56,7 @@ const FacultyAndStatsSection = () => {
                         firstName: "Prof. Priya",
                         lastName: "Singh",
                         designation: "Senior Faculty",
-                        profile: "https://placehold.co/300x400/7c2d12/FFF?text=PS",
+                        image: "https://placehold.co/300x400/7c2d12/FFF?text=PS",
                         domains: [{ name: "Audit & Assurance" }]
                     }
                 ])
@@ -159,7 +159,7 @@ const FacultyAndStatsSection = () => {
                             >
                                 {/* Fixed Aspect Ratio 3:4 */}
                                 <div className="relative w-full aspect-[3/4] bg-slate-100">
-                                    <img src={f.profile} alt={f.firstName} className="w-full h-full object-cover" />
+                                    <img src={f.profile ? Endpoints.mediaBaseUrl + f.profile : f.image} alt={f.firstName} className="w-full h-full object-cover" />
 
                                     {/* Gradient Overlay for Text */}
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90"></div>
