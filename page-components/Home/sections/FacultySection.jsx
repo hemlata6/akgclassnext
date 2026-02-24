@@ -148,32 +148,87 @@ const FacultyAndStatsSection = () => {
 
                 {/* Infinite Marquee */}
                 <div className="relative w-full">
-                    {/* The track: flex-nowrap to keep in one line */}
-                    <div className="flex w-max animate-marquee-infinite group hover:[animation-play-state:paused]">
 
-                        {/* Repeat the list twice to create seamless loop */}
-                        {[...faculties, ...faculties].map((f, index) => (
-                            <div
-                                key={`${f.id}-${index}`}
-                                className="w-72 md:w-80 mx-4 flex-shrink-0 bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
-                            >
-                                {/* Fixed Aspect Ratio 3:4 */}
-                                <div className="relative w-full aspect-[3/4] bg-slate-100">
-                                    <img src={f.profile ? Endpoints.mediaBaseUrl + f.profile : f.image} alt={f.firstName} className="w-full h-full object-cover" />
+                    {/* ✅ MOBILE VIEW (NO SCROLL) */}
+                    <div className="grid grid-cols-2 gap-4 md:hidden px-2">
+                        {faculties?.length > 0 &&
+                            faculties.map((f, index) => (
+                                <div
+                                    key={`${f.id}-${index}`}
+                                    className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md"
+                                >
+                                    <div className="relative w-full aspect-[3/4] bg-slate-100">
+                                        <img
+                                            src={f.profile
+                                                ? Endpoints.mediaBaseUrl + f.profile
+                                                : f.image}
+                                            alt={f.firstName}
+                                            className="w-full h-full object-cover"
+                                        />
 
-                                    {/* Gradient Overlay for Text */}
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90"></div>
+                                        {/* Overlay */}
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
-                                    {/* Text Content */}
-                                    <div className="absolute bottom-0 left-0 p-5 text-white w-full">
-                                        <h3 className="text-xl font-bold leading-tight">{f.firstName} {f.lastName}</h3>
-                                        <p className="text-xs text-indigo-300 font-bold uppercase mt-1">{f.designation}</p>
-                                        <p className="text-[10px] text-slate-300 mt-2 line-clamp-2">{f.userRole}</p>
+                                        {/* Text */}
+                                        <div className="absolute bottom-0 left-0 p-3 text-white w-full">
+                                            <h3 className="text-sm font-bold leading-tight">
+                                                {f.firstName} {f.lastName}
+                                            </h3>
+
+                                            <p className="text-[10px] text-indigo-300 font-bold uppercase">
+                                                {f.designation}
+                                            </p>
+
+                                            <p className="text-[9px] text-slate-300 line-clamp-2">
+                                                {f.userRole}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
+
+                    {/* ✅ DESKTOP VIEW (SCROLLING MARQUEE) */}
+                    <div className="hidden md:block overflow-hidden">
+                        <div className="flex w-max animate-marquee-infinite group hover:[animation-play-state:paused]">
+
+                            {faculties?.length > 0 &&
+                                [...faculties, ...faculties].map((f, index) => (
+                                    <div
+                                        key={`${f.id}-${index}`}
+                                        className="w-72 md:w-80 mx-4 flex-shrink-0 bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
+                                    >
+                                        <div className="relative w-full aspect-[3/4] bg-slate-100">
+                                            <img
+                                                src={f.profile
+                                                    ? Endpoints.mediaBaseUrl + f.profile
+                                                    : f.image}
+                                                alt={f.firstName}
+                                                className="w-full h-full object-cover"
+                                            />
+
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-90"></div>
+
+                                            <div className="absolute bottom-0 left-0 p-5 text-white w-full">
+                                                <h3 className="text-xl font-bold">
+                                                    {f.firstName} {f.lastName}
+                                                </h3>
+
+                                                <p className="text-xs text-indigo-300 font-bold uppercase mt-1">
+                                                    {f.designation}
+                                                </p>
+
+                                                <p className="text-[10px] text-slate-300 mt-2 line-clamp-2">
+                                                    {f.userRole}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
