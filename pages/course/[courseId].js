@@ -39,7 +39,7 @@ export default function CourseDetail() {
   return (
     <>
       <Head>
-        <title>Course Details - CA Pankaj Aswani</title>
+        <title>Course Details - CA Wallah</title>
         <meta name="description" content="View course details and enroll" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

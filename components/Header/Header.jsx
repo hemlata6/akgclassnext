@@ -403,7 +403,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src="/pankajaswani/logo.png" alt="CA Pankaj Aswani" className="h-16 md:h-16 object-contain" />
+                <img src="/cawallah/cawallahlogo.png" alt="CA Wallah" className="h-16 md:h-16 object-contain" />
                 {/* <Typography
                   variant="h5"
                   className="font-black bg-gradient-to-r from-indigo-600 to-blue-500 bg-clip-text text-transparent hover:from-indigo-700 hover:to-blue-600 transition-all duration-300 cursor-pointer tracking-tight"
@@ -413,7 +413,7 @@ export const Header = ({ cartCount }) => {
                     letterSpacing: '-0.5px'
                   }}
                 >
-                  CA Pankaj Aswani
+                  CA Wallah
                 </Typography> */}
               </Link>
             </div>
@@ -555,6 +555,7 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
+               <NavItem label="Blog" onClick={() => router.push('/blog')} />
               <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
@@ -693,7 +694,7 @@ export const Header = ({ cartCount }) => {
                   letterSpacing: '-0.5px'
                 }}
               >
-                CA Pankaj Aswani
+                CA Wallah
               </Typography> */}
               <img src={"/pankajaswani/logo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">

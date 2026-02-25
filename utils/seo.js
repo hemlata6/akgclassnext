@@ -155,7 +155,7 @@ export const generateOrganizationStructuredData = () => {
     name: 'CA Class',
     url: 'https://caclassestest.netlify.app',
     logo: 'https://pankajaswani.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Pankaj Aswani',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Wallah',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/caclass',
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: CA Pankaj Aswani)
+ * @param {string} siteName - Site name (default: CA Wallah)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'CA Pankaj Aswani') => {
+export const generatePageTitle = (pageTitle, siteName = 'CA Wallah') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

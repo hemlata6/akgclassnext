@@ -6,7 +6,7 @@ export default function Cart() {
   return (
     <>
       <Head>
-        <title>Shopping Cart - CA Pankaj Aswani</title>
+        <title>Shopping Cart - CA Wallah</title>
         <meta name="description" content="Review your cart and proceed to checkout" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

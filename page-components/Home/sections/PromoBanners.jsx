@@ -19,8 +19,8 @@ export const PromoBanners = () => {
 
     const [slides, setSlides] = useState([
         {
-            mobileSrc: `https://placehold.co/800x1200/${getThemeColorForPlaceholder()}/FFF?text=CA Pankaj Aswani`,
-            desktopSrc: `https://placehold.co/1200x500/${getThemeColorForPlaceholder()}/FFF?text=CA Pankaj Aswani`,
+            mobileSrc: `https://placehold.co/800x1200/${getThemeColorForPlaceholder()}/FFF?text=CA Wallah`,
+            desktopSrc: `https://placehold.co/1200x500/${getThemeColorForPlaceholder()}/FFF?text=CA Wallah`,
             alt: "Live Batch",
             bg: ""
         },
@@ -58,8 +58,8 @@ export const PromoBanners = () => {
                     // Show placeholder with theme color if no active banners
                     const themeColorHex = theme.primary.replace('#', '');
                     setSlides([{
-                        mobileSrc: `https://placehold.co/800x1200/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
-                        desktopSrc: `https://placehold.co/1200x500/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
+                        mobileSrc: `https://placehold.co/800x1200/${themeColorHex}/FFF?text=CA Wallah`,
+                        desktopSrc: `https://placehold.co/1200x500/${themeColorHex}/FFF?text=CA Wallah`,
                         alt: "Live Batch",
                         bg: ''
                     }]);
@@ -70,8 +70,8 @@ export const PromoBanners = () => {
             // Show placeholder with theme color on error
             const themeColorHex = theme.primary.replace('#', '');
             setSlides([{
-                mobileSrc: `https://placehold.co/800x1200/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
-                desktopSrc: `https://placehold.co/1200x500/${themeColorHex}/FFF?text=CA Pankaj Aswani`,
+                mobileSrc: `https://placehold.co/800x1200/${themeColorHex}/FFF?text=CA Wallah`,
+                desktopSrc: `https://placehold.co/1200x500/${themeColorHex}/FFF?text=CA Wallah`,
                 alt: "Live Batch",
                 bg: ''
             }]);

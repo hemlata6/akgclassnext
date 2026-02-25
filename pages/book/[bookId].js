@@ -39,7 +39,7 @@ export default function BookDetail() {
   return (
     <>
       <Head>
-        <title>Book Details - CA Pankaj Aswani</title>
+        <title>Book Details - CA Wallah</title>
         <meta name="description" content="View book details and purchase" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

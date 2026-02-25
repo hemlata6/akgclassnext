@@ -29,6 +29,9 @@
 // const instId = 367;
 
 // pkj
-const instId = 445;
+// const instId = 445;
+
+// cawallah
+const instId = 446;
 
 export default instId;

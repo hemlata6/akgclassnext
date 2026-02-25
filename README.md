@@ -1,6 +1,6 @@
-# CA Pankaj Aswani - Next.js Application
+# CA Wallah - Next.js Application
 
-This is a Next.js conversion of the original React app for CA Pankaj Aswani - CA Pankaj Aswani | CA Pankaj Aswani - CA Pankaj Aswani.
+This is a Next.js conversion of the original React app for CA Wallah - CA Wallah | CA Wallah - CA Wallah.
 
 ## Getting Started
 

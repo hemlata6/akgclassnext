@@ -33,17 +33,17 @@ const FacultyProfile = () => {
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square" style={{ backgroundColor: `${theme.primary}20` }}>
                                     <img
                                         src="/pankajaswani/sirimage.png"
-                                        alt="CA Pankaj Aswani"
+                                        alt="CA Wallah"
                                         className="w-full h-full object-contain bg-white"
                                     />
                                 </div>
                             </div>
 
                             <div className="w-full md:w-2/3 space-y-6">
-                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">CA Pankaj Aswani</h1>
+                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">CA Wallah</h1>
                                 <p className="subtitle text-2xl" style={{ color: theme.primary }}>All India Rank 43 | First Attempt Chartered Accountant</p>
                                 <p className="description text-lg text-slate-700 leading-relaxed">
-                                    CA Pankaj Aswani is a first-attempt Chartered Accountant and All India Rank 43 holder, known for transforming the way thousands of students learn Accountancy across India. A graduate of the prestigious Hindu College, University of Delhi, Vipul blends corporate experience with a deep passion for teaching, empowering over 200,000 students through clarity, mentorship, and real-world financial insight.
+                                    CA Wallah is a first-attempt Chartered Accountant and All India Rank 43 holder, known for transforming the way thousands of students learn Accountancy across India. A graduate of the prestigious Hindu College, University of Delhi, Vipul blends corporate experience with a deep passion for teaching, empowering over 200,000 students through clarity, mentorship, and real-world financial insight.
                                 </p>
                                 <p className="journey-text text-slate-600">
                                     His journey—from PwC to Bharti Airtel Ltd. to becoming a nationally trusted CA mentor—continues to inspire thousands of students to believe that the CA dream is not just achievable, but conquerable with the right guidance.
@@ -194,7 +194,7 @@ const FacultyProfile = () => {
                     <div className={LAYOUT_PADDING}>
                         <div className="cta-box rounded-2xl p-12 text-center text-white shadow-2xl max-w-4xl mx-auto" style={{ backgroundImage: `linear-gradient(135deg, #1e293b, #334155)` }}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your CA Journey?</h2>
-                            <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with CA Pankaj Aswani</p>
+                            <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with CA Wallah</p>
                             <button
                                 onClick={() => router.push('/store')}
                                 className="inline-flex items-center gap-2 px-8 py-4 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:-translate-y-1"

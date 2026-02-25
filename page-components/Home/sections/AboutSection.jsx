@@ -15,7 +15,7 @@ export const AboutSection = () => {
             </div> */}
               <h1 className="text-2xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
                 Master Accounting & <span className={TEXT_GREEN}>Financial Reporting </span>
-                <br />with <span className="text-slate-800">CA Pankaj Aswani</span>
+                <br />with <span className="text-slate-800">CA Wallah</span>
               </h1>
               <p className="text-slate-600 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
                 Simplified concepts, strong AS & Ind AS foundation, and a comprehensive, exam-oriented approach for <b> CA Foundation (Accounts), CA Inter (Advanced Accounting), and CA Final (Financial Reporting) </b> aspirants.
@@ -56,7 +56,7 @@ export const AboutSection = () => {
             >
               <img
                 src="/pankajaswani/sirimage.png"
-                alt="CA Pankaj Aswani"
+                alt="CA Wallah"
                 className="
         w-full 
         h-full 
@@ -69,7 +69,7 @@ export const AboutSection = () => {
 
               <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
                 <p className="font-bold text-sm md:text-lg">
-                  CA Pankaj Aswani
+                  CA Wallah
                 </p>
                 <p className="text-[9px] md:text-[10px] uppercase tracking-widest">
                   Founder & FR Expert
