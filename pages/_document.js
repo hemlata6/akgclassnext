@@ -5,21 +5,21 @@ export default function Document() {
     <Html lang="en">
       <Head>
         {/* Favicon */}
-        <link rel="icon" href="/pankajaswani/pankajaswanilogo.png" />
-        <link rel="apple-touch-icon" href="/pankajaswani/pankajaswanilogo.png" />
+        <link rel="icon" href="/cawallah/cawallahlogo.png" />
+        <link rel="apple-touch-icon" href="/cawallah/cawallahlogo.png" />
         
         {/* Open Graph for Social Media Sharing */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="CA Wallah - Accounting & Financial Reporting Mastery" />
         <meta property="og:description" content="Master CA Foundation, CA Inter, and CA Final with CA Wallah. Simplified concepts, strong fundamentals, and exam-oriented approach trusted by 200,000+ students." />
-        <meta property="og:image" content="/pankajaswani/pankajaswanilogo.png" />
+        <meta property="og:image" content="/cawallah/cawallahlogo.png" />
         <meta property="og:url" content="https://capankajaswani.com" />
         
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="CA Wallah - Accounting & Financial Reporting Mastery" />
         <meta name="twitter:description" content="Master CA Foundation, CA Inter, and CA Final with CA Wallah. Simplified concepts, strong fundamentals, and exam-oriented approach." />
-        <meta name="twitter:image" content="/pankajaswani/pankajaswanilogo.png" />
+        <meta name="twitter:image" content="/cawallah/cawallahlogo.png" />
         
         {/* General Meta Tags */}
         <meta name="description" content="Learn Accounting & Financial Reporting from CA Wallah. Expert guidance for CA Foundation, Inter, and Final with clarity and mentorship." />

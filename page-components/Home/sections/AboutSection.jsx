@@ -41,43 +41,18 @@ export const AboutSection = () => {
               </a>
             </div>
           </div>
-          <div className="w-8/12 mx-auto md:w-3/12 relative">
-            <div className="
-      relative 
-      rounded-2xl 
-      overflow-hidden 
-      shadow-lg 
-      aspect-[3/3] 
-      md:aspect-[4/4]
-      bg-gradient-to-br 
-      from-slate-300 
-      to-slate-400
-    "
-            >
-              <img
-                src="/pankajaswani/sirimage.png"
-                alt="CA Wallah"
-                className="
-        w-full 
-        h-full 
-        object-contain 
-        bg-white
-        p-2
-        md:p-0
-      "
-              />
-
-              <div className="absolute bottom-0 left-0 right-0 p-3 md:p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-                <p className="font-bold text-sm md:text-lg">
-                  CA Wallah
-                </p>
-                <p className="text-[9px] md:text-[10px] uppercase tracking-widest">
-                  Founder & FR Expert
-                </p>
+          <div className="w-full md:w-4/12 relative">
+            <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-6xl mb-4">👤</div>
+                <p className="text-slate-700 font-bold text-lg">CA Wallah</p>
+              </div>
+              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+                <p className="font-bold text-lg">CA Wallah</p>
+                <p className="text-emerald-300 text-[10px] uppercase tracking-widest">Founder & FR Expert</p>
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
