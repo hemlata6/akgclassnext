@@ -3,7 +3,7 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://pankajaswani.netlify.app/';
+  const siteUrl = 'https://cawallah.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
   const title = 'CA Wallah | CA Wallah - CA Wallah';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA Wallah';

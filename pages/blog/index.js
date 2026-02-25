@@ -3,7 +3,7 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://pankajaswani.netlify.app/blog/';
+  const siteUrl = 'https://cawallah.netlify.app/blog/';
   const ogImage = 'pankajaswani/logo.png';
   const title = 'CA Wallah | CA Wallah - CA Wallah';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA Wallah';
