@@ -32,23 +32,37 @@ const FacultyProfile = () => {
                             <div className="w-full md:w-1/3">
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square flex items-center justify-center" style={{ backgroundColor: `${theme.primary}20` }}>
                                     <div className="text-center">
-                                        <div className="text-6xl mb-4">👤</div>
-                                        <p className="font-bold text-lg" style={{ color: theme.primary }}>NextGenCA</p>
+                                        <img src="/nextgen/sachin.jpg" alt="Sachin Raheja" className="w-full object-cover" />
                                     </div>
                                 </div>
                             </div>
 
                             <div className="w-full md:w-2/3 space-y-6">
-                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">NextGenCA</h1>
-                                <p className="subtitle text-2xl" style={{ color: theme.primary }}>All India Rank 43 | First Attempt Chartered Accountant</p>
+                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">CA Sachin Raheja</h1>
+                                <p className="subtitle text-2xl" style={{ color: theme.primary }}>GST & Economics Mentor</p>
                                 <p className="description text-lg text-slate-700 leading-relaxed">
-                                    NextGenCA is a first-attempt Chartered Accountant and All India Rank 43 holder, known for transforming the way thousands of students learn Accountancy across India. A graduate of the prestigious Hindu College, University of Delhi, Vipul blends corporate experience with a deep passion for teaching, empowering over 200,000 students through clarity, mentorship, and real-world financial insight.
+                                    A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery.
                                 </p>
                                 <p className="journey-text text-slate-600">
-                                    His journey—from PwC to Bharti Airtel Ltd. to becoming a nationally trusted CA mentor—continues to inspire thousands of students to believe that the CA dream is not just achievable, but conquerable with the right guidance.
+                                    With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.
                                 </p>
+                                <p className="journey-text text-slate-600">
+                                    Passionate about teaching, his mission is simple:
+                                    To help students build strong fundamentals, think analytically, and achieve success early — just like he did.
+                                </p>
+                                <div>
+                                    <b>Learn smart. Clear Fast. Achieve young.</b>
+                                </div>
+                                <div className="flex flex-wrap gap-4">
+                                    {["Complete PYQ, RTP & MTP Coverage", "Concept Clarity with Strong Application & Logic", "Practical Insights from Professional Experience", "Consistent Mentorship for Confidence & Clarity"].map((tag, i) => (
+                                        <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
+                                            <Icons.Check /> {tag}
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
                         </div>
+
                     </div>
                 </section>
 

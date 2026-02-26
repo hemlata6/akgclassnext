@@ -5,18 +5,7 @@ export const AboutSection = () => (
   <section className="py-10 bg-white">
     <div className={LAYOUT_PADDING}>
       <div className="flex flex-col md:flex-row items-center gap-8">
-        <div className="w-full md:w-4/12 relative">
-          <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-6xl mb-4">👤</div>
-              <p className="text-slate-700 font-bold text-lg">Sachin Raheja</p>
-            </div>
-            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
-              <p className="font-bold text-lg">CA Sachin Raheja</p>
-              <p className="text-emerald-300 text-[10px] uppercase tracking-widest">GST & Economics Mentor </p>
-            </div>
-          </div>
-        </div>
+
         <div className="w-full md:w-8/12 space-y-4">
           <div className="flex-1 text-center lg:text-left">
             {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-widest mb-4">
@@ -50,6 +39,25 @@ export const AboutSection = () => (
               Know More about your Faculty
               <Icons.ChevronRight />
             </a>
+          </div>
+        </div>
+        <div className="w-full md:w-4/12 relative">
+          {/* <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-6xl mb-4">👤</div>
+              <p className="text-slate-700 font-bold text-lg">Sachin Raheja</p>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p className="font-bold text-lg">CA Sachin Raheja</p>
+              <p className="text-emerald-300 text-[10px] uppercase tracking-widest">GST & Economics Mentor </p>
+            </div>
+          </div> */}
+          <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-slate-100">
+            <img src="/nextgen/sachin.jpg" alt="Sachin Raheja" className="w-full object-cover" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+              <p className="font-bold text-lg">CA Sachin Raheja</p>
+              <p className="text-emerald-300 text-[10px] uppercase tracking-widest">GST & Economics Mentor</p>
+            </div>
           </div>
         </div>
       </div>

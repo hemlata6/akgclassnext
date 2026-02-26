@@ -77,19 +77,19 @@ export const PromoBanners = () => {
     const goToSlide = (index) => {
         setCurrentSlide(index);
         setIsAutoPlaying(false);
-        setTimeout(() => setIsAutoPlaying(true), 10000); // Resume auto-play after 10 seconds
+        setTimeout(() => setIsAutoPlaying(true), 5000); // Resume auto-play after 10 seconds
     };
 
     const nextSlide = () => {
         setCurrentSlide((prev) => (prev + 1) % totalSlides);
         setIsAutoPlaying(false);
-        setTimeout(() => setIsAutoPlaying(true), 10000);
+        setTimeout(() => setIsAutoPlaying(true), 5000);
     };
 
     const prevSlide = () => {
         setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
         setIsAutoPlaying(false);
-        setTimeout(() => setIsAutoPlaying(true), 10000);
+        setTimeout(() => setIsAutoPlaying(true), 5000);
     };
 
     const handleClickOnImage = (slide) => {
@@ -117,27 +117,68 @@ export const PromoBanners = () => {
 
                 <div
                     ref={scrollContainerRef}
-                    className="flex overflow-x-auto gap-3 md:gap-6 pb-0 snap-x snap-mandatory scroll-smooth"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                    className="flex overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                    style={{ scrollbarWidth: "none" }}
                 >
-                    {slides.map((slide, index) => (
-                        <div
-                            onClick={() => handleClickOnImage(slide)}
-                            key={index}
-                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl md:shadow-indigo-500/10 group cursor-pointer `}
-                        >
-                            <img
-                                src={slide.mobileSrc}
-                                className="md:hidden w-full h-full object-cover"
-                                alt={`${slide.alt} Mobile`}
-                            />
-                            <img
-                                src={slide.desktopSrc}
-                                className="hidden md:block w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-                                alt={`${slide.alt} Desktop`}
-                            />
-                        </div>
-                    ))}
+                    {slides.map((slide, index) => {
+
+                        const active = index === currentSlide;
+
+                        return (
+                            <div
+                                key={index}
+                                className={`
+                flex-shrink-0
+                w-full
+                h-[220px] md:h-[350px]
+                snap-center
+                relative
+                overflow-hidden
+                rounded-2xl
+                transition-all duration-1000
+                ${active ? "z-10" : "z-0"}
+              `}
+                            >
+
+                                {/* IMAGE */}
+                                <img
+                                    src={slide.desktopSrc}
+                                    alt={slide.alt}
+                                    className={`
+                  w-full h-full object-cover
+                  transition-all duration-[1400ms]
+                  
+                  ${active
+                                            ? `
+                        scale-100
+                        blur-0
+                        rotate-y-0
+                        opacity-100
+                      `
+                                            : `
+                        scale-75
+                        blur-md
+                        opacity-60
+                      `
+                                        }
+                `}
+                                />
+
+                                {/* FLIP + ZOOM EFFECT */}
+                                <div
+                                    className={`
+                  absolute inset-0
+                  transition-all duration-[1400ms]
+                  ${active
+                                            ? "bg-transparent"
+                                            : "bg-black/20"
+                                        }
+                `}
+                                />
+
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* Pagination Dots */}

@@ -286,6 +286,10 @@ export const Header = ({ cartCount }) => {
     setBooksSelectedFirstLevelDomain(null);
   };
 
+  const handleFaculty = (faculty) => {
+    router.push(`/faculty`);
+  }
+
   // Domain hierarchy logic
   const shouldShowSecondLevel = domains.length === 1;
   const firstLevelDomains = shouldShowSecondLevel ? domains[0].child || [] : domains;
@@ -501,6 +505,39 @@ export const Header = ({ cartCount }) => {
                       )}
                     </>
                   )}
+                </div>
+              </div>
+              <div
+                className="relative group h-full flex items-center"
+                onMouseEnter={() => {
+                  setHoveredMenu('Faculty');
+                }}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button
+                  className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+                >
+                  Faculty <Icons.ChevronDown />
+                </button>
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Faculty' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                  <button
+                    onClick={() => handleFaculty("faculty one")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Sachin Raheja</span>
+
+                  </button>
+                  {/* <button
+                    onClick={() => handleFaculty("faculty two")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Sachin Raheja</span>
+
+                  </button>
+                  <button
+                    onClick={() => handleFaculty("faculty three")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Sachin Raheja</span>
+
+                  </button> */}
                 </div>
               </div>
               <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
@@ -838,6 +875,35 @@ export const Header = ({ cartCount }) => {
                           )}
                         </>
                       )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="">
+                  <button
+                    onClick={() => {
+                      if (openMobileSubmenu === 'faculty') {
+                        setOpenMobileSubmenu(null);
+                      } else {
+                        setOpenMobileSubmenu('faculty');
+                      }
+                    }}
+                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                  >
+                    <span>Faculty</span>
+                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'faculty' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {openMobileSubmenu === 'faculty' && (
+                    <div className="space-y-1 mt-1 pl-2">
+                      <button
+                        onClick={() => handleFaculty("faculty one")}
+                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
+                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          }`}
+                      >
+                        <span className="truncate">CA Sachin Raheja</span>
+                      </button>
                     </div>
                   )}
                 </div>
