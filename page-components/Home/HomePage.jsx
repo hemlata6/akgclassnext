@@ -35,7 +35,7 @@ export default function HomePage() {
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
       <PromoBanners />
       {/* <HeroSection onExploreClick={handleScrollToCourses} /> */}
-      <WhyChooseUs />
+      {/* <WhyChooseUs /> */}
       <AboutSection />
       <CoursesSection />
       <BookStore />

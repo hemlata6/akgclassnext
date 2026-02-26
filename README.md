@@ -27,7 +27,7 @@ yarn install
 ```
 NEXT_PUBLIC_BUTTER_CMS_API_KEY=your_buttercms_api_key
 NEXT_PUBLIC_API_BASE_URL=https://prodapi.classiolabs.com
-NEXT_PUBLIC_MEDIA_BASE_URL=https://classionextgen.in-maa-1.linodeobjects.com
+NEXT_PUBLIC_MEDIA_BASE_URL=https://classionextgenmedia.classiolabs.com
 NEXT_PUBLIC_SITE_URL=https://caclassestest.netlify.app
 ```
 
