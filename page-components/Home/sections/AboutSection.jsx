@@ -1,8 +1,14 @@
 import React from 'react';
 import { BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, Icons, LAYOUT_PADDING, TEXT_GREEN } from '../../../constants/Icons';
+import { useRouter } from 'next/router';
 
-export const AboutSection = () => (
-  <section className="py-10 bg-white">
+export const AboutSection = () => {
+
+  const router = useRouter();
+  const handleFaculty = () => {
+    router.push('/faculty/sachin-raheja');
+  }
+  return <section className="py-10 bg-white">
     <div className={LAYOUT_PADDING}>
       <div className="flex flex-col md:flex-row items-center gap-8">
 
@@ -32,13 +38,13 @@ export const AboutSection = () => (
             ))}
           </div>
           <div className="pt-2">
-            <a
-              href="/faculty"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-800 text-white font-semibold rounded-lg hover:bg-emerald-900 transition-colors"
+            <p
+              onClick={handleFaculty}
+              className="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-emerald-800 text-white font-semibold rounded-lg hover:bg-emerald-900 transition-colors"
             >
               Know More about your Faculty
               <Icons.ChevronRight />
-            </a>
+            </p>
           </div>
         </div>
         <div className="w-full md:w-4/12 relative">
@@ -63,5 +69,5 @@ export const AboutSection = () => (
       </div>
     </div>
   </section>
-);
+};
 

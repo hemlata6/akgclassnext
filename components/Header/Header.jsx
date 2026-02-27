@@ -297,8 +297,9 @@ export const Header = ({ cartCount }) => {
   const booksSecondLevelDomains = booksSelectedParentDomain?.child || [];
 
   const handleFaculty = (faculty) => {
-    router.push(`/faculty`);
-  }
+    let facultyName = faculty.toLowerCase().replace(/\s+/g, '-');
+    router.push(`/faculty/${facultyName}`);
+  };
 
   const NavItem = ({ label, hasSub, subItems, onClick, onSubItemClick, onMouseEnter }) => (
     <div
@@ -521,23 +522,23 @@ export const Header = ({ cartCount }) => {
                 </button>
                 <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Faculty' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                   <button
-                    onClick={() => handleFaculty("faculty one")}
-                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                    <span className="truncate">CA Sachin Raheja</span>
-
-                  </button>
-                  {/* <button
-                    onClick={() => handleFaculty("faculty two")}
+                    onClick={() => handleFaculty("Sachin Raheja")}
                     className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
                     <span className="truncate">CA Sachin Raheja</span>
 
                   </button>
                   <button
-                    onClick={() => handleFaculty("faculty three")}
+                    onClick={() => handleFaculty("Manas Arora")}
                     className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                    <span className="truncate">CA Sachin Raheja</span>
+                    <span className="truncate">CA Manas Arora</span>
 
-                  </button> */}
+                  </button>
+                  <button
+                    onClick={() => handleFaculty("Tejinder Pal Singh")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Tejinder Pal Singh</span>
+
+                  </button>
                 </div>
               </div>
               <NavItem label="Announcement" onClick={() => router.push('/announcements')} />

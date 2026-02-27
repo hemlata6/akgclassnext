@@ -1,17 +1,88 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import CheckIcon from '@mui/icons-material/Check';
-import { Icons, LAYOUT_PADDING } from '../constants/Icons';
-import Layout from '../components/Layout';
-import { useTheme } from '../config/ThemeContext';
+import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
+import Layout from '../../components/Layout';
+import { useTheme } from '../../config/ThemeContext';
 
 const FacultyProfile = () => {
+
     const router = useRouter();
     const { theme } = useTheme();
+    const { facultyname } = router?.query || {};
+    console.log('faculty name from URL:', router.query, facultyname);
 
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    const getFacultyData = (name) => {
+        switch (name) {
+
+            case "sachin-raheja":
+                return {
+                    name: "CA Sachin Raheja",
+                    subtitle: "GST & Economics Mentor",
+                    image: "/nextgen/sachin.jpg",
+                    description:
+                        "A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery.",
+                    journey:
+                        "WWith 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.",
+                    otherDes: "Passionate about teaching, his mission is simple: To help students build strong fundamentals, think analytically, and achieve success early — just like he did.",
+                    highlights: [
+                        "Complete PYQ, RTP & MTP Coverage",
+                        "Concept Clarity with Strong Application & Logic",
+                        "Practical Insights from Professional Experience",
+                        "Consistent Mentorship for Confidence & Clarity"
+                    ]
+                };
+
+            case "manas-arora":
+                return {
+                    name: "CA Manas Arora",
+                    subtitle: "GST & Economics Mentor",
+                    image: "/nextgen/manas.png",
+                    description:
+                        "He is May-23 qualified Chartered Accountant with AIR-47. He has 2 years of post qualification experience at HSBC as a Global Corporate Banker. He has done his Industrial training from Hindalco Industries Limited. He cleared both groups of CA Inter in November 2019 with 7 exemption out of 8 subjects and cleared CA Foundation with AIR-44 in November 2018. He was invited by ICAI branches of Mumbai and Pune and has delivered Leactures on various public forums.",
+                    journey:
+                        "He has been teaching Advanced Accounts and Financial Management to CA Inter Students. ",
+                    otherDes: "CA Manas Arora is of the view that today’s classroom students will be tomorrow’s board meeting attendees, so he teaches with the real life example and practical scenarios which he Learnt during his Banking Job.",
+                    highlights: [
+                        "Complete PYQ, RTP & MTP Coverage",
+                        "Concept Clarity with Strong Application & Logic",
+                        "Practical Insights from Professional Experience",
+                        "Consistent Mentorship for Confidence & Clarity"
+                    ]
+                };
+
+            case "tejinder-pal-singh":
+                return {
+                    name: "CA Tejinder Pal Singh",
+                    subtitle: "Law Faculty | CA Foundation & CA Inter",
+                    image: "/nextgen/tejinder.jpg",
+                    description:
+                        "CA Tejinder Pal Singh is a Chartered Accountant known for his strong academic record and disciplined approach to excellence. He secured exemptions in all subjects at the CA Final level and was ranked among the Top 3 in Ludhiana — reflecting his conceptual strength and exam-focused preparation.",
+                    journey:
+                        "With 3 years of post-qualification experience at a reputed CA firm and at HDFC Bank, he brings valuable practical exposure to the classroom. His professional background enables him to bridge the gap between theory and real-world application, helping students understand not just the “what” of law, but also the “why” and “how.”",
+                    otherDes: "His teaching philosophy is simple — make Law easy to understand, practical to relate to, and strategic to score in.",
+                    highlights: [
+                        "Learn Law with Logic.",
+                        "Write with Precision.",
+                        "Succeed with Confidence."
+                    ]
+                };
+
+            default:
+                return null;
+        }
+    };
+
+    const faculty = getFacultyData(facultyname);
+
+
+    if (!faculty) {
+        return <div className="p-10 text-center">Faculty Not Found</div>;
+    }
 
     return (
         <Layout>
@@ -32,29 +103,33 @@ const FacultyProfile = () => {
                             <div className="w-full md:w-1/3">
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square flex items-center justify-center" style={{ backgroundColor: `${theme.primary}20` }}>
                                     <div className="text-center">
-                                        <img src="/nextgen/sachin.jpg" alt="Sachin Raheja" className="w-full object-cover" />
+                                        <img src={faculty.image}
+                                            alt={faculty.name} className="w-full object-cover" />
                                     </div>
                                 </div>
                             </div>
 
                             <div className="w-full md:w-2/3 space-y-6">
-                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">CA Sachin Raheja</h1>
-                                <p className="subtitle text-2xl" style={{ color: theme.primary }}>GST & Economics Mentor</p>
+                                <h1 className="text-4xl md:text-5xl font-bold text-slate-900">{faculty.name}</h1>
+                                <p className="subtitle text-2xl" style={{ color: theme.primary }}>{faculty.subtitle}</p>
                                 <p className="description text-lg text-slate-700 leading-relaxed">
-                                    A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery.
+                                    {faculty.description}
+                                    {/* A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery. */}
                                 </p>
                                 <p className="journey-text text-slate-600">
-                                    With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.
+                                    {faculty.journey}
+                                    {/* With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity. */}
                                 </p>
                                 <p className="journey-text text-slate-600">
-                                    Passionate about teaching, his mission is simple:
-                                    To help students build strong fundamentals, think analytically, and achieve success early — just like he did.
+                                    {faculty.otherDes}
+                                    {/* Passionate about teaching, his mission is simple:
+                                    To help students build strong fundamentals, think analytically, and achieve success early — just like he did. */}
                                 </p>
                                 <div>
                                     <b>Learn smart. Clear Fast. Achieve young.</b>
                                 </div>
                                 <div className="flex flex-wrap gap-4">
-                                    {["Complete PYQ, RTP & MTP Coverage", "Concept Clarity with Strong Application & Logic", "Practical Insights from Professional Experience", "Consistent Mentorship for Confidence & Clarity"].map((tag, i) => (
+                                    {faculty.highlights.map((tag, i) => (
                                         <div key={i} className="flex items-center gap-2 text-xs font-bold text-slate-700 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100">
                                             <Icons.Check /> {tag}
                                         </div>
