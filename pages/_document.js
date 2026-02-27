@@ -30,11 +30,11 @@ export default function Document() {
         
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://classiocawallah.in-maa-1.linodeobjects.com" />
+        <link rel="preconnect" href="https://classiocawallah.classiolabs.com" />
         
         {/* DNS Prefetch */}
         <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-        <link rel="dns-prefetch" href="https://classiocawallah.in-maa-1.linodeobjects.com" />
+        <link rel="dns-prefetch" href="https://classiocawallah.classiolabs.com" />
         
         {/* Manifest */}
         <link rel="manifest" href="/manifest.json" />
