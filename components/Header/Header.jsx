@@ -503,10 +503,39 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
-               <NavItem
-                label="Faculty"
-                onClick={() => router.push('/faculty')}
-              />
+              <div
+                className="relative group h-full flex items-center"
+                onMouseEnter={() => {
+                  setHoveredMenu('Faculty');
+                }}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button
+                  className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
+                >
+                  Faculty <Icons.ChevronDown />
+                </button>
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Faculty' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                  <button
+                    onClick={() => handleFaculty("faculty one")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Sachin Raheja</span>
+
+                  </button>
+                  {/* <button
+                    onClick={() => handleFaculty("faculty two")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Sachin Raheja</span>
+
+                  </button>
+                  <button
+                    onClick={() => handleFaculty("faculty three")}
+                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
+                    <span className="truncate">CA Sachin Raheja</span>
+
+                  </button> */}
+                </div>
+              </div>
               <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
