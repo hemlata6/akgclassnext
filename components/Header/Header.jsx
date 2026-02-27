@@ -880,6 +880,53 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
 
+                <div className="">
+                  <button
+                    onClick={() => {
+                      if (openMobileSubmenu === 'faculty') {
+                        setOpenMobileSubmenu(null);
+                      } else {
+                        setOpenMobileSubmenu('faculty');
+                      }
+                    }}
+                    className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
+                  >
+                    <span>Faculty</span>
+                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'faculty' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {openMobileSubmenu === 'faculty' && (
+                    <div className="space-y-1 mt-1 pl-2">
+                      <button
+                        onClick={() => handleFaculty("Sachin Raheja")}
+                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
+                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          }`}
+                      >
+                        <span className="truncate">CA Sachin Raheja</span>
+                      </button>
+                      <button
+                        onClick={() => handleFaculty("Manas Arora")}
+                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
+                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          }`}
+                      >
+                        <span className="truncate">CA Manas Arora</span>
+                      </button>
+                      <button
+                        onClick={() => handleFaculty("Tejinder Pal Singh")}
+                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
+                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
+                          }`}
+                      >
+                        <span className="truncate">CA Tejinder Pal Singh</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
+
                 {/* Announcements */}
                 <button
                   onClick={() => { router.push('/announcements'); setMobileMenuOpen(false); }}
