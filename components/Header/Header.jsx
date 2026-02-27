@@ -296,6 +296,10 @@ export const Header = ({ cartCount }) => {
   const booksFirstLevelDomains = booksShowSecondLevel ? booksDomains[0].child || [] : booksDomains;
   const booksSecondLevelDomains = booksSelectedParentDomain?.child || [];
 
+  const handleFaculty = (faculty) => {
+    router.push(`/faculty`);
+  }
+
   const NavItem = ({ label, hasSub, subItems, onClick, onSubItemClick, onMouseEnter }) => (
     <div
       className="relative group h-full flex items-center"
