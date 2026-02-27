@@ -503,6 +503,10 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
+               <NavItem
+                label="Faculty"
+                onClick={() => router.push('/faculty')}
+              />
               <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
