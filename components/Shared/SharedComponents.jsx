@@ -99,9 +99,9 @@ export const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 CA Wallah Education. All rights reserved.
-          <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
+        <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[8px]">
+          Powered by Studycaller Edutech Private Limited.
+          <div>All rights reserved. || Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>
     </footer>
