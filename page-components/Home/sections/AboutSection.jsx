@@ -17,6 +17,15 @@ export const AboutSection = () => {
             {/* <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-800 text-[10px] font-bold uppercase tracking-widest mb-4">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Admissions Open: Enroll Now
             </div> */}
+            <div className="block md:hidden pt-1 pb-4">
+              <p
+                onClick={handleFaculty}
+                className="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-emerald-800 text-white font-semibold rounded-lg hover:bg-emerald-900 transition-colors"
+              >
+                Know More about your Faculty
+                <Icons.ChevronRight />
+              </p>
+            </div>
             <h5 className="text-1xl lg:text-1xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
               A Chartered Accountant <span className={TEXT_GREEN}>in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. </span>
               <span className="text-slate-800">He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery.</span>
@@ -37,7 +46,7 @@ export const AboutSection = () => {
               </div>
             ))}
           </div>
-          <div className="pt-2">
+          <div className="hidden lg:block pt-2">
             <p
               onClick={handleFaculty}
               className="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-emerald-800 text-white font-semibold rounded-lg hover:bg-emerald-900 transition-colors"
@@ -59,7 +68,7 @@ export const AboutSection = () => {
             </div>
           </div> */}
           <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-slate-100">
-            <img src="/nextgen/sachin.jpg" alt="Sachin Raheja" className="w-full object-cover" />
+            <img src="/nextgen/sachin-website-pic.jpg" alt="Sachin Raheja" className="w-full object-cover" />
             <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
               <p className="font-bold text-lg">CA Sachin Raheja</p>
               <p className="text-emerald-300 text-[10px] uppercase tracking-widest">GST & Economics Mentor</p>

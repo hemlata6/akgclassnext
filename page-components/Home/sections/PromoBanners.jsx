@@ -130,7 +130,6 @@ export const PromoBanners = () => {
                                 className={`
                 flex-shrink-0
                 w-full
-                h-[220px] md:h-[350px]
                 snap-center
                 relative
                 overflow-hidden
@@ -145,7 +144,9 @@ export const PromoBanners = () => {
                                     src={slide.desktopSrc}
                                     alt={slide.alt}
                                     className={`
-                  w-full h-full object-cover
+                               w-full
+      h-auto
+      object-contain
                   transition-all duration-[1400ms]
                   
                   ${active

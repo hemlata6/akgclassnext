@@ -590,7 +590,7 @@ const Store = () => {
             }
         } else if (faculties.length > 0 && selectedFaculties.length === 0 && !filtersInitialized) {
             // Default behavior - select all faculties
-            setSelectedFaculties(faculties);
+            // setSelectedFaculties(faculties);
         }
     }, [faculties, filtersInitialized, router.query, shouldHideGlobalControls]);
 

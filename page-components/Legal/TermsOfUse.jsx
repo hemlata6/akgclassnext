@@ -92,8 +92,8 @@ const TermsOfUse = () => {
                 If you have any questions about these Terms of Use, please contact us at:
               </p>
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <p className="text-slate-700 mb-2"><strong>Email:</strong> admin@NextGenCA.com</p>
-                <p className="text-slate-700 mb-2"><strong>Phone:</strong> 9310226047</p>
+                <p className="text-slate-700 mb-2"><strong>Email:</strong> nextgencaacademy1@gmail.com</p>
+                <p className="text-slate-700 mb-2"><strong>Phone:</strong> 9465829512</p>
                 <p className="text-slate-700"><strong>Location:</strong> New Delhi, India</p>
               </div>
             </section>

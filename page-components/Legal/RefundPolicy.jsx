@@ -48,7 +48,7 @@ const RefundPolicy = () => {
                 If you have any questions about our Returns and Refunds Policy, please contact us:
               </p>
               <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-slate-700"><strong>By email:</strong> admin@NextGenCA.com</p>
+                <p className="text-slate-700"><strong>By email:</strong> nextgencaacademy1@gmail.com</p>
               </div>
             </section>
 

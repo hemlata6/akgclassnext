@@ -211,7 +211,7 @@ const PrivacyPolicy = () => {
                         <section className="mb-8">
                             <h2 className="text-2xl font-bold text-slate-900 mb-4">GRIEVANCES:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                If you have any questions about this Policy, wish to exercise your rights, concerns about privacy or grievances, please write to us with a thorough description via email to <strong>admin@NextGenCA.com</strong>.
+                                If you have any questions about this Policy, wish to exercise your rights, concerns about privacy or grievances, please write to us with a thorough description via email to <strong>nextgencaacademy1@gmail.com</strong>.
                             </p>
                         </section>
 
@@ -279,7 +279,7 @@ const PrivacyPolicy = () => {
                             </div>
 
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                For complete details on CCPA data practices, consumer rights, and requests under the CCPA, please refer to the full policy document or contact us at <strong>admin@NextGenCA.com</strong>.
+                                For complete details on CCPA data practices, consumer rights, and requests under the CCPA, please refer to the full policy document or contact us at <strong>nextgencaacademy1@gmail.com</strong>.
                             </p>
                         </section>
                     </div>

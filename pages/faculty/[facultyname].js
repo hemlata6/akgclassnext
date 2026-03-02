@@ -23,11 +23,11 @@ const FacultyProfile = () => {
                 return {
                     name: "CA Sachin Raheja",
                     subtitle: "GST & Economics Mentor",
-                    image: "/nextgen/sachin.jpg",
+                    image: "/nextgen/sachin-website-pic.jpg",
                     description:
                         "A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery.",
                     journey:
-                        "WWith 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.",
+                        "With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.",
                     otherDes: "Passionate about teaching, his mission is simple: To help students build strong fundamentals, think analytically, and achieve success early — just like he did.",
                     highlights: [
                         "Complete PYQ, RTP & MTP Coverage",
@@ -59,7 +59,7 @@ const FacultyProfile = () => {
                 return {
                     name: "CA Tejinder Pal Singh",
                     subtitle: "Law Faculty | CA Foundation & CA Inter",
-                    image: "/nextgen/tejinder.jpg",
+                    image: "/nextgen/talwinder.jpeg",
                     description:
                         "CA Tejinder Pal Singh is a Chartered Accountant known for his strong academic record and disciplined approach to excellence. He secured exemptions in all subjects at the CA Final level and was ranked among the Top 3 in Ludhiana — reflecting his conceptual strength and exam-focused preparation.",
                     journey:
@@ -142,14 +142,13 @@ const FacultyProfile = () => {
                 </section>
 
                 {/* Key Highlights Section */}
-                <section id="faculty-highlights-section" data-section="faculty-highlights" className="py-16">
+                {/* <section id="faculty-highlights-section" data-section="faculty-highlights" className="py-16">
                     <div className={LAYOUT_PADDING}>
                         <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-12 text-center">
                             Key Highlights & <span style={{ color: theme.primary }}>Achievements</span>
                         </h2>
 
                         <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                            {/* Education & Qualification */}
                             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">📚</div>
@@ -173,7 +172,6 @@ const FacultyProfile = () => {
                                 </ul>
                             </div>
 
-                            {/* Corporate Experience */}
                             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">💼</div>
@@ -204,7 +202,6 @@ const FacultyProfile = () => {
                                 </ul>
                             </div>
 
-                            {/* Mentorship Impact */}
                             <div className="rounded-2xl shadow-lg border p-8 hover:shadow-xl transition-shadow" style={{ backgroundColor: `${theme.primary}08`, borderColor: `${theme.primary}40` }}>
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">👥</div>
@@ -226,7 +223,6 @@ const FacultyProfile = () => {
                                 </ul>
                             </div>
 
-                            {/* Student Achievements */}
                             <div className="bg-gradient-to-br from-amber-50 to-yellow-100 rounded-2xl shadow-lg border border-amber-200 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">🏆</div>
@@ -245,12 +241,12 @@ const FacultyProfile = () => {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
 
                 {/* Specializations Section */}
                 <section id="faculty-specializations-section" data-section="faculty-specializations" className="py-16 bg-slate-50">
                     <div className={LAYOUT_PADDING}>
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 text-center">
+                        {/* <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 text-center">
                             Areas of <span style={{ color: theme.primary }}>Specialization</span>
                         </h2>
 
@@ -265,9 +261,9 @@ const FacultyProfile = () => {
                                     <h3 className="text-lg font-bold text-slate-900">{spec.title}</h3>
                                 </div>
                             ))}
-                        </div>
+                        </div> */}
 
-                        <div className="mt-12 max-w-3xl mx-auto">
+                        <div className="mt-2 max-w-3xl mx-auto">
                             <div className="rounded-2xl p-8 text-white text-center shadow-xl" style={{ backgroundImage: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryHover})` }}>
                                 <p className="text-xl md:text-2xl font-semibold leading-relaxed">
                                     Known for simplifying complex concepts, building strong fundamentals & inspiring students to push beyond limitations
@@ -278,11 +274,11 @@ const FacultyProfile = () => {
                 </section>
 
                 {/* CTA Section */}
-                <section id="faculty-cta-section" data-section="faculty-cta" className="py-16">
+                <section id="faculty-cta-section" data-section="faculty-cta" className="pb-16">
                     <div className={LAYOUT_PADDING}>
                         <div className="cta-box rounded-2xl p-12 text-center text-white shadow-2xl max-w-4xl mx-auto" style={{ backgroundImage: `linear-gradient(135deg, #1e293b, #334155)` }}>
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your CA Journey?</h2>
-                            <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with NextGenCA</p>
+                            {/* <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with NextGenCA</p> */}
                             <button
                                 onClick={() => router.push('/store')}
                                 className="inline-flex items-center gap-2 px-8 py-4 text-white font-semibold rounded-lg transition-all hover:shadow-lg hover:-translate-y-1"

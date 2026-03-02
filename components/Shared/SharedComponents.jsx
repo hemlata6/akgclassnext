@@ -93,8 +93,8 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: +91 9310226047</li>
-              <li>admin@NextGenCA.com</li>
+              <li>Call: +91 9465829512</li>
+              <li>nextgencaacademy1@gmail.com</li>
               <li>New Delhi</li>
             </ul>
           </div>

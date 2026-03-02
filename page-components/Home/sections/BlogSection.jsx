@@ -77,6 +77,9 @@ export const BlogSection = () => {
         );
     }
 
+    console.log('blogs', blogs);
+    
+
     if (blogs.length === 0) {
         return null; // Don't show section if no blogs
     }

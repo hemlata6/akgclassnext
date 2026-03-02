@@ -541,7 +541,7 @@ export const Header = ({ cartCount }) => {
                   </button>
                 </div>
               </div>
-              <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
+              {/* <NavItem label="Announcement" onClick={() => router.push('/announcements')} /> */}
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
             </div>
@@ -928,12 +928,12 @@ export const Header = ({ cartCount }) => {
                 </div>
 
                 {/* Announcements */}
-                <button
+                {/* <button
                   onClick={() => { router.push('/announcements'); setMobileMenuOpen(false); }}
                   className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm hover:bg-indigo-50 hover:text-indigo-700 rounded-lg transition"
                 >
                   Announcement
-                </button>
+                </button> */}
 
                 {/* Free Resources */}
                 <button
