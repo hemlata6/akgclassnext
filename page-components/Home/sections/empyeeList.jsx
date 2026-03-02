@@ -58,9 +58,30 @@ const EmployeeList = () => {
         ]
     }
     ]);
-    const [currentPosition, setCurrentPosition] = useState(0);
+     const [currentPosition, setCurrentPosition] = useState(0);
+    const [itemsPerSlide, setItemsPerSlide] = useState(3);
 
-    const itemsPerSlide = 3;
+     useEffect(() => {
+
+        const updateItems = () => {
+            if (window.innerWidth < 640) {
+                setItemsPerSlide(1); // mobile
+            } else if (window.innerWidth < 1024) {
+                setItemsPerSlide(2); // tablet
+            } else {
+                setItemsPerSlide(3); // desktop
+            }
+        };
+
+        updateItems();
+        window.addEventListener("resize", updateItems);
+
+        return () =>
+            window.removeEventListener("resize", updateItems);
+
+    }, []);
+
+
     const maxPosition = Math.max(0, employees.length - itemsPerSlide);
 
     const nextSlide = () => {
@@ -123,62 +144,58 @@ const EmployeeList = () => {
 
                         {/* Employee Cards */}
                         <div className="overflow-hidden rounded-xl px-6 sm:px-8">
-                            <div
-                                className="flex gap-4 transition-transform duration-700 ease-in-out"
-                                style={{ transform: `translateX(-${currentPosition * (100 / itemsPerSlide)}%)` }}
-                            >
-                                {employees.map((employee, index) => (
-                                    <div key={index} className="group flex-shrink-0 w-1/3 px-2 sm:px-0">
-                                        <div
-                                            onClick={() => handleFaculty(employee.value)}
-                                            className="bg-white rounded-xl p-4 sm:p-6 text-center shadow-md hover:shadow-2xl transition-all duration-500 border border-gray-100 cursor-pointer hover:-translate-y-2 overflow-hidden group h-full"
-                                        >
-                                            {/* Background Glow Effect */}
-                                            <div className="absolute -top-12 -right-12 w-24 h-24 bg-blue-100 rounded-full opacity-0 group-hover:opacity-20 transition-opacity duration-500"></div>
+                            <div className="overflow-hidden rounded-xl">
 
-                                            {/* Profile Image */}
-                                            <div className="relative mb-4 sm:mb-5 z-10">
-                                                <div className="w-28 h-28 sm:w-36 sm:h-36 mx-auto rounded-full overflow-hidden bg-gradient-to-br from-blue-200 via-purple-200 to-blue-200 p-1 shadow-lg group-hover:shadow-2xl transition-all duration-500 group-hover:scale-110">
-                                                    <div className="w-full rounded-full overflow-hidden bg-white">
-                                                        {employee.image ? (
-                                                            <img
-                                                                src={employee.image}
-                                                                alt={`${employee.name}`}
-                                                                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                            />
-                                                        ) : (
-                                                            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-4xl">
-                                                                {employee.name}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </div>
-                                            </div>
+                        <div
+                            className="flex gap-4 transition-transform duration-700"
+                            style={{
+                                transform: `translateX(-${currentPosition * (100 / itemsPerSlide)}%)`
+                            }}
+                        >
 
-                                            {/* Employee Info */}
-                                            <div className="space-y-2.5 z-10 relative">
-                                                <h3 className="text-base sm:text-lg font-bold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors duration-300">
-                                                    {employee.name}
-                                                </h3>
+                            {employees.map((employee, index) => (
+                                <div
+                                    key={index}
+                                    className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2"
+                                >
 
-                                                <div className="flex items-center justify-center gap-1.5 text-blue-600 group-hover:text-purple-600 transition-colors duration-300">
-                                                    <Briefcase className="w-4 h-4" />
-                                                    <p className="font-semibold text-sm line-clamp-1">
-                                                        {employee.subtitle || 'Faculty'}
-                                                    </p>
-                                                </div>
+                                    <div
+                                        onClick={() =>
+                                            handleFaculty(employee.value)
+                                        }
+                                        className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-2xl transition-all cursor-pointer h-full"
+                                    >
 
-                                                {/* Course Count */}
-                                                {employee.courseIds && employee.courseIds.length > 0 && (
-                                                    <div className="inline-block px-3 py-1 bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 text-xs font-bold rounded-full mt-2 border border-blue-100 group-hover:border-purple-200 transition-all duration-300">
-                                                        <span className="font-semibold">{employee.courseIds.length}</span> Course{employee.courseIds.length > 1 ? 's' : ''}
-                                                    </div>
-                                                )}
+                                        {/* IMAGE */}
+                                        <div className="mb-5">
+                                            <div className="w-32 h-32 mx-auto rounded-full overflow-hidden">
+                                                <img
+                                                    src={employee.image}
+                                                    alt={employee.name}
+                                                    className="w-full h-full object-cover"
+                                                />
                                             </div>
                                         </div>
+
+                                        {/* INFO */}
+                                        <h3 className="font-bold text-lg">
+                                            {employee.name}
+                                        </h3>
+
+                                        <div className="flex justify-center gap-2 text-blue-600 mt-2">
+                                            <Briefcase size={16} />
+                                            <p className="text-sm">
+                                                {employee.subtitle}
+                                            </p>
+                                        </div>
+
                                     </div>
-                                ))}
-                            </div>
+                                </div>
+
+                            ))}
+                        </div>
+                        </div>
+
                         </div>
                     </div>
                 </div>
