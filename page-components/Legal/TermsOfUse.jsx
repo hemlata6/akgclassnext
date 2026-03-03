@@ -94,7 +94,7 @@ const TermsOfUse = () => {
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
                 <p className="text-slate-700 mb-2"><strong>Email:</strong> nextgencaacademy1@gmail.com</p>
                 <p className="text-slate-700 mb-2"><strong>Phone:</strong> 9465829512</p>
-                <p className="text-slate-700"><strong>Location:</strong> New Delhi, India</p>
+                <p className="text-slate-700"><strong>Location:</strong> LUDHIANA, India</p>
               </div>
             </section>
           </div>

@@ -156,13 +156,14 @@ const PrivacyPolicy = () => {
                             <ul className="list-disc pl-6 text-slate-700 space-y-2 mb-4">
                                 <li>our employees, contractors and affiliated organizations (if any) that (i) need to know that information in order to process it on our behalf or to provide services available on our Platform, and (ii) that have agreed not to disclose it to others.</li>
                                 <li>a response to a court order, or other governmental request. Without imitation to the foregoing, we reserve the right to disclose such information where we believe in good faith that such disclosure is necessary to:
-                                    <ul className="list-circle pl-6 mt-2 space-y-1">
-                                        <li>comply with applicable laws, regulations, court orders, government and law enforcement agencies' requests;</li>
-                                        <li>protect and defend a third party's or our rights and property, or the safety of our users, our employees, or others; or</li>
-                                        <li>prevent, detect, investigate and take measures against criminal activity, fraud and misuse or unauthorized use of our Platform and/or to enforce our Terms of Use or other agreements or policies.</li>
-                                    </ul>
+                                   
                                 </li>
                             </ul>
+                           <p className="text-slate-700 leading-relaxed mb-4 list-disc">
+                                        <span>comply with applicable laws, regulations, court orders, government and law enforcement agencies' requests;</span>
+                                        <span>protect and defend a third party's or our rights and property, or the safety of our users, our employees, or others; or</span>
+                                        <span>prevent, detect, investigate and take measures against criminal activity, fraud and misuse or unauthorized use of our Platform and/or to enforce our Terms of Use or other agreements or policies.</span>
+                                    </p>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 To the extent permitted by law, we will attempt to give You prior notice before disclosing Your information in response to such a request.
                             </p>

@@ -20,7 +20,7 @@ export const CoursesSection = ({ onAddToCart }) => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [itemsPerView, setItemsPerView] = useState(4);
+    const [itemsPerView, setItemsPerView] = useState(3);
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
@@ -36,7 +36,7 @@ export const CoursesSection = ({ onAddToCart }) => {
             } else if (window.innerWidth < 1024) {
                 setItemsPerView(2);
             } else {
-                setItemsPerView(4);
+                setItemsPerView(3);
             }
         };
 
@@ -277,9 +277,9 @@ export const CoursesSection = ({ onAddToCart }) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col"
+                                            className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0"
                                             style={{
-                                                minWidth: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
+                                                width: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
                                             }}
                                         >
                                             <div
@@ -291,7 +291,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                                                     <img
                                                         src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
                                                         alt={course.title}
-                                                        className="absolute inset-0 w-full h-full object-cover"
+                                                        className="absolute inset-0 object-cover"
                                                     />
                                                 )}
                                                 <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>

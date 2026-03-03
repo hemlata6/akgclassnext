@@ -253,7 +253,7 @@ function ContactUsPageContent() {
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
                                 <p className="text-sm" style={{color: '#e8f3ee'}}>
-                                    New Delhi, India
+                                    LUDHIANA, India
                                 </p>
                             </div>
                         </div>

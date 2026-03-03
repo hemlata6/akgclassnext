@@ -12,7 +12,7 @@ export const StudentHub = () => {
   return (
     <section id="free-resources" className="py-12 bg-slate-50 border-y border-slate-200">
       <div className={LAYOUT_PADDING}>
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-1 gap-6">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-xl font-bold text-slate-900">Free Resources</h3>
@@ -35,11 +35,11 @@ export const StudentHub = () => {
                 </div>
               ))}
             </div>
-            <button onClick={handleNavigateToResources} className={`w-full ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white py-2.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-2`}>
+            {/* <button onClick={handleNavigateToResources} className={`w-full ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white py-2.5 rounded-xl font-bold text-xs transition-colors flex items-center justify-center gap-2`}>
               <Icons.Download /> Download Now
-            </button>
+            </button> */}
           </div>
-          <div className="bg-slate-900 p-6 rounded-2xl text-white relative overflow-hidden">
+          {/* <div className="bg-slate-900 p-6 rounded-2xl text-white relative overflow-hidden">
             <div className="relative z-10">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">Demo Lectures</h3>
@@ -61,7 +61,7 @@ export const StudentHub = () => {
                 ))}
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </section>

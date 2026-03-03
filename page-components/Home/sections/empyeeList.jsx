@@ -27,7 +27,7 @@ const EmployeeList = () => {
     {
         value: "Manas Arora",
         name: "CA Manas Arora",
-        subtitle: "GST & Economics Mentor",
+        subtitle: "Accounts Faculty for All CA Levels",
         image: "/nextgen/manas.png",
         description:
             "He is May-23 qualified Chartered Accountant with AIR-47. He has 2 years of post qualification experience at HSBC as a Global Corporate Banker. He has done his Industrial training from Hindalco Industries Limited. He cleared both groups of CA Inter in November 2019 with 7 exemption out of 8 subjects and cleared CA Foundation with AIR-44 in November 2018. He was invited by ICAI branches of Mumbai and Pune and has delivered Leactures on various public forums.",
@@ -172,7 +172,7 @@ const EmployeeList = () => {
                                                 <img
                                                     src={employee.image}
                                                     alt={employee.name}
-                                                    className="w-full h-full object-cover"
+                                                    className="object-cover"
                                                 />
                                             </div>
                                         </div>

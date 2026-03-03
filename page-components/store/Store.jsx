@@ -9,6 +9,7 @@ import Endpoints from '../../config/endpoints';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { useTheme } from '../../config/ThemeContext';
+import { Tooltip } from '@mui/material';
 
 const Store = () => {
 
@@ -1010,6 +1011,7 @@ const Store = () => {
     const getExamStages = () => {
         // If a domain is selected and it has children, return its children as exam stages
         if (selectedDomain && selectedDomain.child && selectedDomain.child.length > 0) {
+            console.log('selectedDomain.child', selectedDomain.child);
 
             return selectedDomain.child;
         }
@@ -1451,32 +1453,63 @@ const Store = () => {
                                     <div className="mb-5">
                                         <h3 className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 flex items-center gap-2 pb-2" style={{ borderBottom: `2px solid ${primaryColor}` }}>Exam Stage</h3>
                                         <div className="space-y-2 max-h-56 overflow-y-auto pr-2">
-                                            {getExamStages().map(stage => (
-                                                <div
-                                                    key={stage.id}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-                                                        setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
-                                                    }}
-                                                    className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
-                                                    style={{
-                                                        backgroundColor: selectedExamStage?.id === stage.id ? `${primaryColor}15` : 'transparent',
-                                                        border: `2px solid ${selectedExamStage?.id === stage.id ? primaryColor : 'transparent'}`,
-                                                        color: selectedExamStage?.id === stage.id ? primaryColor : '#666'
-                                                    }}
-                                                >
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0`} style={{
-                                                        borderColor: selectedExamStage?.id === stage.id ? primaryColor : '#d1d5db',
-                                                        backgroundColor: selectedExamStage?.id === stage.id ? primaryColor : 'transparent'
-                                                    }}>
-                                                        {selectedExamStage?.id === stage.id && (
-                                                            <div className="w-2 h-2 bg-white rounded-full"></div>
-                                                        )}
+                                            {getExamStages().map(stage => {
+
+                                                const isSelected = selectedExamStage?.id === stage.id;
+                                                const isDisabled = !stage.child || stage.child.length === 0;
+
+                                                return (
+
+                                                    <div>
+                                                        <div
+                                                            onClick={(e) => {
+                                                                e.preventDefault();
+                                                                e.stopPropagation();
+
+                                                                if (isDisabled) return;
+
+                                                                setSelectedExamStage(isSelected ? null : stage);
+                                                            }}
+                                                            className={`w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all flex items-center gap-3 hover:shadow-sm ${isDisabled
+                                                                    ? 'opacity-60 cursor-not-allowed'
+                                                                    : 'cursor-pointer'
+                                                                }`}
+                                                            style={{
+                                                                backgroundColor: isSelected ? `${primaryColor}15` : 'transparent',
+                                                                border: `2px solid ${isSelected ? primaryColor : 'transparent'}`,
+                                                                color: isSelected ? primaryColor : '#666'
+                                                            }}
+                                                        >
+                                                            <div
+                                                                className="w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0"
+                                                                style={{
+                                                                    borderColor: isSelected ? primaryColor : '#d1d5db',
+                                                                    backgroundColor: isSelected ? primaryColor : 'transparent'
+                                                                }}
+                                                            >
+                                                                {isSelected && (
+                                                                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                                                                )}
+                                                            </div>
+                                                            <Tooltip
+                                                                key={stage.id}
+                                                                title={
+                                                                    isDisabled
+                                                                        ? "Final Chapter Dropping Soon – Stay Tuned ! ✌️"
+                                                                        : ""
+                                                                }
+                                                                arrow
+                                                                placement="right"
+                                                                disableHoverListener={!isDisabled}
+                                                                disableFocusListener={!isDisabled}
+                                                                disableTouchListener={!isDisabled}
+                                                            >
+                                                                <span>{stage.name}</span>
+                                                            </Tooltip>
+                                                        </div>
                                                     </div>
-                                                    <span>{stage.name}</span>
-                                                </div>
-                                            ))}
+                                                );
+                                            })}
                                         </div>
                                     </div>
                                 )}
@@ -2094,20 +2127,42 @@ const Store = () => {
                                     {mobileFilterTab === 'exam-stage' && (
                                         <div className="space-y-1">
                                             {getExamStages().length > 0 ? (
-                                                getExamStages().map(stage => (
-                                                    <div
+                                                getExamStages().map(stage => {
+                                                      const isSelected = selectedExamStage?.id === stage.id;
+                                                const isDisabled = !stage.child || stage.child.length === 0;
+                                                    return<div
                                                         key={stage.id}
-                                                        onClick={() => {
+                                                        onClick={(e) => {
+                                                             e.preventDefault();
+                                                                e.stopPropagation();
+                                                             if (isDisabled) return;
                                                             setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
                                                         }}
                                                         className={`w-full text-left px-4 py-2 rounded-lg text-xs transition-all duration-200 cursor-pointer flex items-center justify-between group hover:bg-gray-50 ${selectedExamStage?.id === stage.id
                                                             ? 'bg-emerald-50'
                                                             : ''
-                                                            }`}
+                                                            } ${isDisabled
+                                                                    ? 'opacity-60 cursor-not-allowed'
+                                                                    : 'cursor-pointer'
+                                                                }`}
                                                     >
+                                                     <Tooltip
+                                                                key={stage.id}
+                                                                title={
+                                                                    isDisabled
+                                                                        ? "Final Chapter Dropping Soon – Stay Tuned ! ✌️"
+                                                                        : ""
+                                                                }
+                                                                arrow
+                                                                placement="right"
+                                                                disableHoverListener={!isDisabled}
+                                                                disableFocusListener={!isDisabled}
+                                                                disableTouchListener={!isDisabled}
+                                                            >
                                                         <span className="font-medium line-clamp-1 text-gray-700"
                                                         // style={{ color: selectedExamStage?.id === stage.id ? primaryColor : (isDarkMode ? '#fff' : '#111827') }}
                                                         >{stage.name}</span>
+                                                        </Tooltip>
                                                         <div className={`w-5 h-5 rounded-full border-2 flex-shrink-0 transition-all ${selectedExamStage?.id === stage.id
                                                             ? 'border-emerald-600 bg-emerald-600'
                                                             : 'border-gray-300'
@@ -2119,7 +2174,7 @@ const Store = () => {
                                                             )}
                                                         </div>
                                                     </div>
-                                                ))
+                                            })
                                             ) : (
                                                 <p className="text-gray-500 text-center py-6 text-sm">No exam stages</p>
                                             )}

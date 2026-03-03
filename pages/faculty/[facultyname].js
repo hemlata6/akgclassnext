@@ -29,6 +29,7 @@ const FacultyProfile = () => {
                     journey:
                         "With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.",
                     otherDes: "Passionate about teaching, his mission is simple: To help students build strong fundamentals, think analytically, and achieve success early — just like he did.",
+                    tagLine: "Learn smart. Clear Fast. Achieve young.",
                     highlights: [
                         "Complete PYQ, RTP & MTP Coverage",
                         "Concept Clarity with Strong Application & Logic",
@@ -40,13 +41,14 @@ const FacultyProfile = () => {
             case "manas-arora":
                 return {
                     name: "CA Manas Arora",
-                    subtitle: "GST & Economics Mentor",
+                    subtitle: "Accounts Faculty for All CA Levels (AIR-47, 44)(Ex-Hsbc, Aditya Birla Group)",
                     image: "/nextgen/manas.png",
                     description:
                         "He is May-23 qualified Chartered Accountant with AIR-47. He has 2 years of post qualification experience at HSBC as a Global Corporate Banker. He has done his Industrial training from Hindalco Industries Limited. He cleared both groups of CA Inter in November 2019 with 7 exemption out of 8 subjects and cleared CA Foundation with AIR-44 in November 2018. He was invited by ICAI branches of Mumbai and Pune and has delivered Leactures on various public forums.",
                     journey:
                         "He has been teaching Advanced Accounts and Financial Management to CA Inter Students. ",
                     otherDes: "CA Manas Arora is of the view that today’s classroom students will be tomorrow’s board meeting attendees, so he teaches with the real life example and practical scenarios which he Learnt during his Banking Job.",
+                     tagLine: "#CAwithMA ✨  #HO JAEGA😉",
                     highlights: [
                         "Complete PYQ, RTP & MTP Coverage",
                         "Concept Clarity with Strong Application & Logic",
@@ -65,6 +67,7 @@ const FacultyProfile = () => {
                     journey:
                         "With 3 years of post-qualification experience at a reputed CA firm and at HDFC Bank, he brings valuable practical exposure to the classroom. His professional background enables him to bridge the gap between theory and real-world application, helping students understand not just the “what” of law, but also the “why” and “how.”",
                     otherDes: "His teaching philosophy is simple — make Law easy to understand, practical to relate to, and strategic to score in.",
+                     tagLine: "",
                     highlights: [
                         "Learn Law with Logic.",
                         "Write with Precision.",
@@ -101,10 +104,10 @@ const FacultyProfile = () => {
 
                         <div className="flex flex-col md:flex-row items-center gap-12">
                             <div className="w-full md:w-1/3">
-                                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square flex items-center justify-center" style={{ backgroundColor: `${theme.primary}20` }}>
+                                <div className="relative rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center" style={{ backgroundColor: `${theme.primary}20` }}>
                                     <div className="text-center">
                                         <img src={faculty.image}
-                                            alt={faculty.name} className="w-full object-cover" />
+                                            alt={faculty.name} className="w-full h-full object-cover" />
                                     </div>
                                 </div>
                             </div>
@@ -116,17 +119,17 @@ const FacultyProfile = () => {
                                     {faculty.description}
                                     {/* A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery. */}
                                 </p>
-                                <p className="journey-text text-slate-600">
+                                <p className="description text-lg text-slate-700 leading-relaxed">
                                     {faculty.journey}
                                     {/* With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity. */}
                                 </p>
-                                <p className="journey-text text-slate-600">
+                                <p className="description text-lg text-slate-700 leading-relaxed">
                                     {faculty.otherDes}
                                     {/* Passionate about teaching, his mission is simple:
                                     To help students build strong fundamentals, think analytically, and achieve success early — just like he did. */}
                                 </p>
                                 <div>
-                                    <b>Learn smart. Clear Fast. Achieve young.</b>
+                                    <b>{faculty.tagLine}</b>
                                 </div>
                                 <div className="flex flex-wrap gap-4">
                                     {faculty.highlights.map((tag, i) => (

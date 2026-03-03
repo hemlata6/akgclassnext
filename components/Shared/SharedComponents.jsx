@@ -24,6 +24,9 @@ export const Footer = () => {
     router.push('/store');
   };
 
+  console.log('institute', institute);
+
+
 
   return (
     <footer className="bg-slate-950 text-slate-500 pt-10 pb-24 md:pb-10 border-t border-slate-900">
@@ -34,9 +37,10 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "NextGenCA"}
+              {"NextGenCA"}
             </div>
-            <p>Best CA Classes for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
+            <p>NextGenCA is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
+              Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “Learn Smart, Clear Fast”</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
@@ -95,7 +99,7 @@ export const Footer = () => {
             <ul className="space-y-1.5">
               <li>Call: +91 9465829512</li>
               <li>nextgencaacademy1@gmail.com</li>
-              <li>New Delhi</li>
+              <li>LUDHIANA</li>
             </ul>
           </div>
         </div>

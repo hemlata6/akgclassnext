@@ -11,7 +11,7 @@ import LoginModal from '../Auth/LoginModal';
 import SignupModal from '../Auth/SignupModal';
 import AppDownloadModal from '../Modals/AppDownloadModal';
 import Endpoints from '@/config/endpoints';
-import { Typography } from '@mui/material';
+import { Tooltip, Typography } from '@mui/material';
 
 export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
@@ -348,7 +348,7 @@ export const Header = ({ cartCount }) => {
     <>
       <button
         onClick={() => router.push('/announcements')}
-        className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
+        className="sticky top-0 z-50 bg-slate-900 text-white text-[14px] md:text-md font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
         onMouseEnter={() => setIsMarqueeHovered(true)}
         onMouseLeave={() => setIsMarqueeHovered(false)}
       >
@@ -421,9 +421,38 @@ export const Header = ({ cartCount }) => {
                           Back to Categories
                         </button>
                       )}
-                      {currentLevel === 'first' && firstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                          <span className="truncate">{domain.name}</span>
+                      {currentLevel === 'first' && firstLevelDomains.map((domain) => {
+                        const isSelected = selectedFirstLevelDomain?.id === domain.id;
+                        const isDisabled = !domain.child || domain.child.length === 0;
+                        return <button key={domain.id}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            if (isDisabled) return;
+
+                            handleFirstLevelDomainClick(domain);
+                          }}
+                          className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${isSelected
+                            ? `${theme.primaryClass} text-white font-bold`
+                            : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`
+                            } ${isDisabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+                            }`}>
+                          <Tooltip
+                            key={domain.id}
+                            title={
+                              isDisabled
+                                ? "Final Chapter Dropping Soon – Stay Tuned ! ✌️"
+                                : ""
+                            }
+                            arrow
+                            placement="right"
+                            disableHoverListener={!isDisabled}
+                            disableFocusListener={!isDisabled}
+                            disableTouchListener={!isDisabled}
+                          >
+                            <span className="truncate">{domain.name}</span>
+                          </Tooltip>
                           {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
                             <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${selectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
                               <span className="text-[10px] font-semibold">{domain.child.length}</span>
@@ -431,7 +460,7 @@ export const Header = ({ cartCount }) => {
                             </div>
                           )}
                         </button>
-                      ))}
+                      })}
                       {currentLevel === 'second' && selectedParentDomain && (
                         <>
                           <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>
@@ -479,17 +508,50 @@ export const Header = ({ cartCount }) => {
                           Back to Categories
                         </button>
                       )}
-                      {booksCurrentLevel === 'first' && booksFirstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleBooksFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${booksSelectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                          <span className="truncate">{domain.name}</span>
-                          {!booksShowSecondLevel && domain.child && domain.child.length > 0 && (
-                            <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${booksSelectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
-                              <span className="text-[10px] font-semibold">{domain.child.length}</span>
-                              <Icons.ChevronRight size={12} />
-                            </div>
-                          )}
-                        </button>
-                      ))}
+                      {booksCurrentLevel === 'first' &&
+                        booksFirstLevelDomains.map((domain) => {
+                          const isSelected = selectedFirstLevelDomain?.id === domain.id;
+                          const isDisabled = !domain.child || domain.child.length === 0;
+                          return <button key={domain.id}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+
+                              if (isDisabled) return;
+
+                              handleBooksFirstLevelDomainClick(domain);
+                            }}
+                            className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${isSelected
+                              ? `${theme.primaryClass} text-white font-bold`
+                              : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`
+                              } ${isDisabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer"
+                              }`}
+                          // onClick={() => handleBooksFirstLevelDomainClick(domain)} 
+                          // className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${booksSelectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}
+                          >
+                            <Tooltip
+                              key={domain.id}
+                              title={
+                                isDisabled
+                                  ? "Final Chapter Dropping Soon – Stay Tuned ! ✌️"
+                                  : ""
+                              }
+                              arrow
+                              placement="right"
+                              disableHoverListener={!isDisabled}
+                              disableFocusListener={!isDisabled}
+                              disableTouchListener={!isDisabled}
+                            >
+                              <span className="truncate">{domain.name}</span>
+                            </Tooltip>
+                            {!booksShowSecondLevel && domain.child && domain.child.length > 0 && (
+                              <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${booksSelectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
+                                <span className="text-[10px] font-semibold">{domain.child.length}</span>
+                                <Icons.ChevronRight size={12} />
+                              </div>
+                            )}
+                          </button>
+                        })}
                       {booksCurrentLevel === 'second' && booksSelectedParentDomain && (
                         <>
                           <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>

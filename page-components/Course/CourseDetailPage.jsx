@@ -8,10 +8,16 @@ import Endpoints from '../../config/endpoints';
 import CourseConfigModal from '../Home/sections/CourseConfigModal';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
+import { ChevronLeft, ChevronRight } from "lucide-react";
+
+
 
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
-
+  // const Icons = {
+  //   ChevronLeft,
+  //   ChevronRight,
+  // };
   // Format duration from coursePricing
   const formatDuration = (duration) => {
     if (!duration || isNaN(duration)) return "0 hr";
@@ -96,7 +102,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
       console.error('Error sharing:', err);
     }
   };
-  
+
 
   return (
     <div className="bg-slate-50 pt-8 pb-12 border-b border-slate-200">
@@ -158,6 +164,26 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                     />
                   ))}
                 </div>
+              )}
+              {carouselItems.length > 1 && (
+                <>
+                  {/* Left Arrow */}
+                  <button
+                    onClick={handleCarouselPrev}
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+
+                  {/* Right Arrow */}
+                  <button
+                    onClick={handleCarouselNext}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-2 rounded-full backdrop-blur-sm transition-all"
+                  >
+
+                    <ChevronRight size={20} />
+                  </button>
+                </>
               )}
             </div>
           </div>
