@@ -16,6 +16,7 @@ import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
 import { WhyChooseUsSection } from './sections/WhyChooseUsSection';
+import { FAQSection } from './sections/FAQSection';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -43,6 +44,7 @@ export default function HomePage() {
       {/* <BookStore /> */}
       {/* <MarathonGallery /> */}
       <StudentGallery />
+      <FAQSection />
       {/* <BlogSection /> */}
       {/* <FreeResources /> */}
       {/* <StudentSupportSection /> */}

@@ -1,6 +1,7 @@
 import React from 'react';
 import { BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, Icons, LAYOUT_PADDING, TEXT_GREEN } from '../../../constants/Icons';
 import { useTheme } from '../../../config/ThemeContext';
+import cawallah from '../../../public/cawallah.png'
 
 export const AboutSection = () => {
   const { theme } = useTheme();
@@ -48,13 +49,17 @@ export const AboutSection = () => {
           <div className="w-full md:w-4/12 relative">
             <div className="relative rounded-2xl overflow-hidden shadow-lg aspect-[4/4] bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center">
               <div className="text-center">
-                <div className="text-6xl mb-4">👤</div>
-                <p className="text-slate-700 font-bold text-lg">CA Wallah</p>
+                <img
+                  src={cawallah.src}
+                  alt="CA Wallah"
+                  className="w-50 h-50 object-contain mx-auto mb-0"
+                />
+                {/* <p className="text-slate-700 font-bold text-lg">CA Wallah</p> */}
               </div>
-              <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
+              {/* <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent text-white">
                 <p className="font-bold text-lg">CA Wallah</p>
                 <p className="text-emerald-300 text-[10px] uppercase tracking-widest">Founder & FR Expert</p>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
