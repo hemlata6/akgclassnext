@@ -44,11 +44,11 @@ export default function HomePage() {
       {/* <BookStore /> */}
       {/* <MarathonGallery /> */}
       <StudentGallery />
-      <FAQSection />
       {/* <BlogSection /> */}
       {/* <FreeResources /> */}
       {/* <StudentSupportSection /> */}
       <StudentHub />
+      <FAQSection />
       <AppDownload />
       <CounsellingStrip />
       <a href="https://wa.me/918949190985" target="_blank" rel="noopener noreferrer" className="fixed z-40 right-4 bottom-24 md:bottom-12 group">
