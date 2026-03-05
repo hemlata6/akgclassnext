@@ -16,7 +16,6 @@ import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
 import { WhyChooseUsSection } from './sections/WhyChooseUsSection';
-import Endpoints from '@/config/endpoints';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -30,33 +29,6 @@ export default function HomePage() {
   const handleScrollToCourses = () => {
     const element = document.getElementById('fr-courses');
     if (element) element.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  useEffect(() =>{
-    fetchInstitute();
-  },[]);
-
-  const fetchInstitute = async () => {
-    try {
-      // const authToken = localStorage.getItem('authToken');
-      // if (!authToken) {
-      //   console.log('No auth token available for institute fetch');
-      //   return;
-      // }
-
-      // console.log('Fetching institute data with auth token...');
-      const response = await Network.getInstitute();
-      if (response.status && response.institute) {
-        // console.log("Fetched institute data:", response);
-        Endpoints.mediaBaseUrl = response?.instituteTechSetting?.mediaUrl;
-        return response.institute;
-      } else {
-        console.log("No institute data found or invalid response");
-        return null;
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   return (

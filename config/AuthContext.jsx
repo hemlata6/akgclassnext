@@ -104,7 +104,7 @@ export const AuthProvider = ({ children }) => {
         setInstituteModuleSettings(response.institute?.instituteModuleSetting);
         setInstituteTechSettingModals(response?.instituteTechSettingModals);
         Endpoints.mediaBaseUrl = response?.instituteTechSetting?.mediaUrl;
-        fetch(Endpoints.mediaBaseUrl, { next: { revalidate: 60 } });
+        // fetch(Endpoints.mediaBaseUrl, { next: { revalidate: 60 } });
         return response.institute;
       } else {
         console.log("No institute data found or invalid response");
