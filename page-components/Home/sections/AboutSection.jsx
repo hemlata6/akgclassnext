@@ -14,11 +14,15 @@ export const AboutSection = () => {
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Admissions Open: Enroll Now
             </div> */}
               <h1 className="text-2xl lg:text-4xl font-extrabold text-slate-900 tracking-tight mb-4 leading-[1.15]">
-                Master Accounting & <span className={TEXT_GREEN}>Financial Reporting </span>
-                <br />with <span className="text-slate-800">CA Wallah</span>
+                CA Wallah Test-Series
               </h1>
               <p className="text-slate-600 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
-                Simplified concepts, strong AS & Ind AS foundation, and a comprehensive, exam-oriented approach for <b> CA Foundation (Accounts), CA Inter (Advanced Accounting), and CA Final (Financial Reporting) </b> aspirants.
+                Prepare smarter for CA exams with CA Wallah’s ICAI-pattern based mock test series
+                for CA Foundation, Inter, and Final.
+                <br /><br />
+                Our tests are carefully designed by experts to match real ICAI exam standards,
+                helping students practice effectively, improve performance, and gain the
+                confidence needed to succeed.
               </p>
             </div>
             {/* <div className="flex flex-wrap gap-4 pt-2">
@@ -30,13 +34,13 @@ export const AboutSection = () => {
           </div> */}
             <div className="pt-1 text-center lg:text-left">
               <a
-                href="/faculty"
+                href="/store"
                 className="inline-flex items-center gap-2 px-6 py-3 text-white font-semibold rounded-lg transition-colors cursor-pointer"
                 style={{ backgroundColor: theme.primary }}
                 onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
                 onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
               >
-                Know More about your Faculty
+                Explore Test-Series
                 <Icons.ChevronRight />
               </a>
             </div>

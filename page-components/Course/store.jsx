@@ -241,7 +241,7 @@ const Store = ({ onQuizNavigation }) => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="h-1 w-12 bg-gradient-to-r from-orange-600 to-red-600 rounded-full"></div>
-                <h2 className="text-2xl md:text-1xl font-bold text-gray-800">Featured Courses</h2>
+                <h2 className="text-2xl md:text-1xl font-bold text-gray-800">Featured Test-Series</h2>
               </div>
               {courseList.length > 6 && (
                 <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">

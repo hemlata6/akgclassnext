@@ -1117,7 +1117,7 @@ const Store = () => {
                                 </div>
                                 <div>
                                     <h1 className="text-sm md:text-base font-bold" style={{ color: primaryColor }}>
-                                        Course Store
+                                        Test-Series Store
                                     </h1>
                                     <p className="text-[9px] text-gray-600 hidden md:block">Explore our premium courses</p>
                                 </div>

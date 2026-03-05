@@ -439,7 +439,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
               ))}
             </div> */}
             <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
-              <h3 className="font-bold text-lg text-emerald-900 mb-4">Course Description</h3>
+              <h3 className="font-bold text-lg text-emerald-900 mb-4">Test-Series Description</h3>
               <div
                 className="display-none text-sm text-emerald-800 leading-relaxed break-words prose prose-sm max-w-none [&>*]:max-w-full [&_img]:max-w-full [&_table]:max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_*]:break-words"
                 style={{ wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-word' }}

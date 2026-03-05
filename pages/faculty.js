@@ -201,7 +201,7 @@ const FacultyProfile = () => {
                                 onMouseEnter={(e) => e.target.style.backgroundColor = theme.primaryHover}
                                 onMouseLeave={(e) => e.target.style.backgroundColor = theme.primary}
                             >
-                                Explore Courses
+                                Explore Test-Series
                                 <Icons.ChevronRight />
                             </button>
                         </div>

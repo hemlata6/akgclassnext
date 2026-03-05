@@ -189,7 +189,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                     <div className="flex items-center justify-between mb-4 gap-2">
                         <div>
                             <span className={`${theme.textClass} font-bold tracking-widest text-xs uppercase`}>Our Flagship</span>
-                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured Courses</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured Test-Series</h2>
                         </div>
                         {/* Mobile: Explore Store button next to title */}
                         <button

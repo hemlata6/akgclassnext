@@ -434,7 +434,7 @@ export const Header = ({ cartCount }) => {
                 <button
                   className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
                 >
-                  Lectures <Icons.ChevronDown />
+                  Test-Series <Icons.ChevronDown />
                 </button>
                 <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
                   {domainLoading ? (
@@ -489,7 +489,7 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
-              <div
+              {/* <div
                 className="relative group h-full flex items-center"
                 onMouseEnter={() => {
                   setHoveredMenu('Books');
@@ -554,7 +554,7 @@ export const Header = ({ cartCount }) => {
                     </>
                   )}
                 </div>
-              </div>
+              </div> */}
                <NavItem label="Blog" onClick={() => router.push('/blog')} />
               <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
@@ -746,7 +746,7 @@ export const Header = ({ cartCount }) => {
                       e.currentTarget.style.color = '#0f172a';
                     }}
                   >
-                    <span>Lectures</span>
+                    <span>Test-Series</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'courses' ? 'rotate-180' : ''}`} />
                   </button>
                   {openMobileSubmenu === 'courses' && (
