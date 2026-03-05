@@ -44,7 +44,7 @@ export const PromoBanners = () => {
             const response = await Network.getBannersApi(instId);
             if (response && response.banners && response.banners.length > 0) {
                 const activeBanners = response.banners.filter(banner => banner.active);
-
+// console.log('Endpoints.mediaBaseUrl :', Endpoints.mediaBaseUrl);
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({
                         ...banner,
@@ -147,7 +147,8 @@ export const PromoBanners = () => {
                     className="flex overflow-x-auto gap-3 md:gap-6 pb-0 snap-x snap-mandatory scroll-smooth"
                     style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                    {slides.map((slide, index) => (
+                    {slides.map((slide, index) =>  {
+                        return(
                         <div
                             onClick={() => handleLinkClick(slide)}
                             key={index}
@@ -165,7 +166,8 @@ export const PromoBanners = () => {
                                 alt={`${slide.alt} Desktop`}
                             />
                         </div>
-                    ))}
+                    )
+                    })}
                 </div>
 
                 {/* Pagination Dots */}

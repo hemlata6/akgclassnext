@@ -174,8 +174,8 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
             <p className="text-slate-500 text-sm leading-relaxed">
               {courseData?.shortDescription}
             </p>
-            <div className="flex items-center gap-6 py-4 border-y border-slate-200">
-              <div className="flex items-center gap-2">
+            {/* <div className="flex items-center gap-6 py-4 border-y border-slate-200"> */}
+              {/* <div className="flex items-center gap-2">
                 <div className="p-2 bg-emerald-50 rounded-lg text-emerald-700"><Icons.Clock /></div>
                 <div>
                   <p className="text-[10px] text-slate-500 uppercase font-bold">Duration</p>
@@ -189,7 +189,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                   <p className="text-[10px] text-slate-500 uppercase font-bold">Watch Time</p>
                   <p className="text-sm font-bold text-slate-900">{formatWatchTime()}</p>
                 </div>
-              </div>
+              </div> */}
               {/* <div className="flex items-center gap-2">
                 <div className="p-2 bg-purple-50 rounded-lg text-purple-700"><Icons.Book /></div>
                 <div>
@@ -197,7 +197,8 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                   <p className="text-sm font-bold text-slate-900">Hard Copy</p>
                 </div>
               </div> */}
-            </div>
+            {/* </div> */}
+            <hr className='mt-2' />
             <div className="flex items-center gap-3">
               <img
                 src="https://placehold.co/100x100/0f5be0/FFF?text=PA"
@@ -419,7 +420,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     }
   };
 
-  console.log('suggestedCourses', suggestedCourses);
+  // console.log('suggestedCourses', suggestedCourses);
 
 
   return (
