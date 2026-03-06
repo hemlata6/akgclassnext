@@ -58,10 +58,10 @@ const EmployeeList = () => {
         ]
     }
     ]);
-     const [currentPosition, setCurrentPosition] = useState(0);
+    const [currentPosition, setCurrentPosition] = useState(0);
     const [itemsPerSlide, setItemsPerSlide] = useState(3);
 
-     useEffect(() => {
+    useEffect(() => {
 
         const updateItems = () => {
             if (window.innerWidth < 640) {
@@ -103,38 +103,47 @@ const EmployeeList = () => {
         router.push(`/faculty/${facultyName}`);
     };
 
-    console.log('employees', employees);
+    // console.log('employees', employees);
 
     return (
-        <div className="w-full">
+        <div className="w-full overflow-hidden">
             <section className="py-3 sm:py-3 bg-gradient-to-br from-white via-blue-50/40 to-indigo-50/40">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+                    {/* Heading */}
                     <div className="text-center mb-10 sm:mb-12">
-                        <h2 className="text-2xl md:text-2xl text-green-600 font-bold tracking-widest uppercase">  Our Expert Faculty</h2>
+                        <h2 className="text-2xl md:text-2xl text-green-600 font-bold tracking-widest uppercase">
+                            Our Expert Faculty
+                        </h2>
                         <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto font-medium">
                             Learn from industry professionals with proven expertise and dedication
                         </p>
                     </div>
 
                     <div className="relative">
+
+                        {/* Arrows */}
                         {employees.length > itemsPerSlide && (
                             <>
                                 <button
                                     onClick={prevSlide}
                                     disabled={currentPosition === 0}
-                                    className={`absolute -left-6 sm:-left-8 top-1/2 transform -translate-y-1/2 z-20 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-110 p-2 sm:p-1 ${currentPosition === 0
-                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
+                                    className={`absolute left-0 sm:-left-8 top-1/2 -translate-y-1/2 z-20 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-110 p-2
+              ${currentPosition === 0
+                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                            : "bg-blue-100 text-blue-600 hover:bg-blue-200"
                                         }`}
                                 >
                                     <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
                                 </button>
+
                                 <button
                                     onClick={nextSlide}
                                     disabled={currentPosition >= maxPosition}
-                                    className={`absolute -right-6 sm:-right-8 top-1/2 transform -translate-y-1/2 z-20 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-110 p-2 sm:p-1 ${currentPosition >= maxPosition
-                                        ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                        : 'bg-purple-100 text-purple-600 hover:bg-purple-200'
+                                    className={`absolute right-0 sm:-right-8 top-1/2 -translate-y-1/2 z-20 rounded-full transition-all duration-300 shadow-md hover:shadow-lg hover:scale-110 p-2
+              ${currentPosition >= maxPosition
+                                            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                                            : "bg-purple-100 text-purple-600 hover:bg-purple-200"
                                         }`}
                                 >
                                     <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -143,60 +152,54 @@ const EmployeeList = () => {
                         )}
 
                         {/* Employee Cards */}
-                        <div className="overflow-hidden rounded-xl px-6 sm:px-8">
-                            <div className="overflow-hidden rounded-xl">
+                        <div className="overflow-hidden rounded-xl">
 
-                        <div
-                            className="flex gap-4 transition-transform duration-700"
-                            style={{
-                                transform: `translateX(-${currentPosition * (100 / itemsPerSlide)}%)`
-                            }}
-                        >
-
-                            {employees.map((employee, index) => (
-                                <div
-                                    key={index}
-                                    className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2"
-                                >
-
+                            <div
+                                className="flex gap-4 transition-transform duration-700"
+                                style={{
+                                    transform: `translateX(-${currentPosition * (100 / itemsPerSlide)}%)`,
+                                }}
+                            >
+                                {employees.map((employee, index) => (
                                     <div
-                                        onClick={() =>
-                                            handleFaculty(employee.value)
-                                        }
-                                        className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-2xl transition-all cursor-pointer h-full"
+                                        key={index}
+                                        className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2"
                                     >
+                                        <div
+                                            onClick={() => handleFaculty(employee.value)}
+                                            className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-xl transition-all cursor-pointer h-full"
+                                        >
 
-                                        {/* IMAGE */}
-                                        <div className="mb-5">
-                                            <div className="w-32 h-32 mx-auto rounded-full overflow-hidden">
-                                                <img
-                                                    src={employee.image}
-                                                    alt={employee.name}
-                                                    className="object-cover"
-                                                />
+                                            {/* IMAGE */}
+                                            <div className="mb-5">
+                                                <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto rounded-full overflow-hidden">
+                                                    <img
+                                                        src={employee.image}
+                                                        alt={employee.name}
+                                                        className="w-full h-full object-cover object-top"
+                                                    />
+                                                </div>
                                             </div>
+
+                                            {/* INFO */}
+                                            <h3 className="font-bold text-lg">
+                                                {employee.name}
+                                            </h3>
+
+                                            <div className="flex justify-center gap-2 text-blue-600 mt-2">
+                                                <Briefcase size={16} />
+                                                <p className="text-sm">
+                                                    {employee.subtitle}
+                                                </p>
+                                            </div>
+
                                         </div>
-
-                                        {/* INFO */}
-                                        <h3 className="font-bold text-lg">
-                                            {employee.name}
-                                        </h3>
-
-                                        <div className="flex justify-center gap-2 text-blue-600 mt-2">
-                                            <Briefcase size={16} />
-                                            <p className="text-sm">
-                                                {employee.subtitle}
-                                            </p>
-                                        </div>
-
                                     </div>
-                                </div>
-
-                            ))}
-                        </div>
-                        </div>
+                                ))}
+                            </div>
 
                         </div>
+
                     </div>
                 </div>
             </section>

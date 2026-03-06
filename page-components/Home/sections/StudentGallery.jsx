@@ -1,156 +1,146 @@
-import React, { useState, useEffect } from 'react';
-import { LAYOUT_PADDING, Icons } from '../../../constants/Icons';
-import Network from '../../../config/Network';
-import Endpoints from '../../../config/endpoints';
-import instId from '../../../config/instituteId';
+import React, { useState, useEffect } from "react";
+import { LAYOUT_PADDING, Icons } from "../../../constants/Icons";
+import Network from "../../../config/Network";
+import Endpoints from "../../../config/endpoints";
+import instId from "../../../config/instituteId";
 
 export const StudentGallery = () => {
-    const [gallery, setGallery] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [itemsPerView, setItemsPerView] = useState(4);
-    const [canGoPrev, setCanGoPrev] = useState(false);
-    const [canGoNext, setCanGoNext] = useState(true);
+  const [gallery, setGallery] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [itemsPerView, setItemsPerView] = useState(4);
 
-    useEffect(() => {
-        fetchGallery();
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
+  useEffect(() => {
+    fetchGallery();
+    handleResize();
 
-    useEffect(() => {
-        updateNavigationButtons();
-    }, [currentIndex, gallery, itemsPerView]);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    const handleResize = () => {
-        if (typeof window !== 'undefined') {
-            const width = window.innerWidth;
-            if (width < 640) setItemsPerView(1);
-            else if (width < 1024) setItemsPerView(2);
-            else if (width < 1280) setItemsPerView(3);
-            else setItemsPerView(4);
-        }
-    };
+  const handleResize = () => {
+    const width = window.innerWidth;
 
-    const updateNavigationButtons = () => {
-        setCanGoPrev(currentIndex > 0);
-        setCanGoNext(currentIndex < gallery.length - itemsPerView);
-    };
+    if (width < 640) setItemsPerView(1);
+    else if (width < 1024) setItemsPerView(2);
+    else if (width < 1280) setItemsPerView(3);
+    else setItemsPerView(4);
+  };
 
-    const handlePrev = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-        }
-    };
+  const handlePrev = () => {
+    setCurrentIndex((prev) => Math.max(prev - 1, 0));
+  };
 
-    const handleNext = () => {
-        if (currentIndex < gallery.length - itemsPerView) {
-            setCurrentIndex(currentIndex + 1);
-        }
-    };
-
-    const fetchGallery = async () => {
-        try {
-            setLoading(true);
-            const response = await Network.fetchGalley(instId);
-
-            if (response && Array.isArray(response)) {
-                // Map the array of image paths to objects with full URLs
-                const galleryItems = response.map((imagePath, index) => ({
-                    id: index,
-                    img: Endpoints.mediaBaseUrl + imagePath,
-                    // title: `Student ${index + 1}`,
-                    // type: 'PHOTO'
-                }));
-                setGallery(galleryItems);
-            }
-        } catch (error) {
-            console.error('Error fetching gallery:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <section className="py-12 bg-white border-t border-slate-200">
-            <div className={LAYOUT_PADDING}>
-                <div className="text-center mb-10">
-                    <h2 className="text-2xl md:text-2xl text-green-600 font-bold tracking-widest uppercase"> Student Testimonials</h2>
-                    {/* <h2 className="text-2xl md:text-2xl font-bold text-slate-900 mt-1">Meet Our Top Achievers</h2> */}
-                </div>
-
-                {loading ? (
-                    <div className="flex justify-center py-8">
-                        <p className="text-slate-500">Loading gallery...</p>
-                    </div>
-                ) : gallery.length === 0 ? (
-                    <div className="text-center py-8">
-                        <p className="text-slate-500">No images available</p>
-                    </div>
-                ) : (
-                    <div>
-                        {/* Carousel Container */}
-                        <div className="overflow-hidden">
-                            <div
-                                className="flex gap-4 transition-transform duration-500 ease-in-out"
-                                style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
-                                }}
-                            >
-                                {gallery.map((item) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex-shrink-0"
-                                        style={{
-                                            width: `calc((100% - ${(itemsPerView - 1) * 1}rem) / ${itemsPerView})`
-                                        }}
-                                    >
-                                        <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-2 hover:shadow-lg transition-shadow">
-                                            <div className="bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center" style={{ minHeight: '200px' }}>
-                                                <img
-                                                    src={item.img}
-                                                    className="block hover:opacity-95 transition-all duration-500 rounded-lg"
-                                                    alt={item.title || 'Student photo'}
-                                                    style={{ maxHeight: '350px', maxWidth: '100%', height: 'auto', width: 'auto', objectFit: 'contain' }}
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        e.target.parentElement.innerHTML = '<div class="flex items-center justify-center text-slate-400 p-8">No Image</div>';
-                                                    }}
-                                                />
-                                            </div>
-                                            {item.title && <p className="font-bold text-xs text-slate-900 mt-2 text-center">{item.title}</p>}
-                                            {item.type && <span className="text-[9px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full mt-1 uppercase font-bold block text-center">{item.type}</span>}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Navigation Buttons */}
-                        {gallery.length > itemsPerView && (
-                            <div className="flex justify-center items-center gap-4 mt-6">
-                                <button
-                                    onClick={handlePrev}
-                                    disabled={!canGoPrev}
-                                    className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <Icons.ChevronLeft />
-                                </button>
-                                <button
-                                    onClick={handleNext}
-                                    disabled={!canGoNext}
-                                    className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <Icons.ChevronRight />
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                )}
-            </div>
-        </section>
+  const handleNext = () => {
+    setCurrentIndex((prev) =>
+      Math.min(prev + 1, gallery.length - itemsPerView)
     );
+  };
+
+  const fetchGallery = async () => {
+    try {
+      setLoading(true);
+
+      const response = await Network.fetchGalley(instId);
+
+      if (response && Array.isArray(response)) {
+        const galleryItems = response.map((imagePath, index) => ({
+          id: index,
+          img: Endpoints.mediaBaseUrl + imagePath,
+        }));
+
+        setGallery(galleryItems);
+      }
+    } catch (error) {
+      console.error("Error fetching gallery:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="py-12 bg-white border-t border-slate-200">
+      <div className={LAYOUT_PADDING}>
+
+        {/* Heading */}
+        <div className="text-center mb-10">
+          <h2 className="text-2xl text-green-600 font-bold tracking-widest uppercase">
+            Student Testimonials
+          </h2>
+        </div>
+
+        {loading ? (
+          <div className="text-center py-8 text-slate-500">
+            Loading gallery...
+          </div>
+        ) : (
+          <>
+            {/* Slider */}
+            <div className="overflow-hidden">
+              <div
+                className="flex transition-transform duration-500 ease-in-out"
+                style={{
+                  transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
+                }}
+              >
+                {gallery.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex-shrink-0 px-2"
+                    style={{
+                      width: `${100 / itemsPerView}%`,
+                    }}
+                  >
+                    <div className="bg-white shadow-md border border-slate-200 rounded-2xl p-3 hover:shadow-lg transition h-full">
+
+                      {/* Image */}
+                      <div className="w-full h-[380px] md:h-[420px] bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center">
+                        <img
+                          src={item.img}
+                          alt="Student testimonial"
+                          className="w-full h-full object-contain rounded-xl"
+                        />
+                      </div>
+
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Navigation */}
+            {gallery.length > itemsPerView && (
+              <div className="flex justify-center gap-4 mt-8">
+
+                <button
+                  onClick={handlePrev}
+                  disabled={currentIndex === 0}
+                  className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${
+                    currentIndex === 0
+                      ? "opacity-30 cursor-not-allowed"
+                      : "hover:scale-110 hover:bg-emerald-700"
+                  }`}
+                >
+                  <Icons.ChevronLeft />
+                </button>
+
+                <button
+                  onClick={handleNext}
+                  disabled={currentIndex >= gallery.length - itemsPerView}
+                  className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg ${
+                    currentIndex >= gallery.length - itemsPerView
+                      ? "opacity-30 cursor-not-allowed"
+                      : "hover:scale-110 hover:bg-emerald-700"
+                  }`}
+                >
+                  <Icons.ChevronRight />
+                </button>
+
+              </div>
+            )}
+          </>
+        )}
+      </div>
+    </section>
+  );
 };

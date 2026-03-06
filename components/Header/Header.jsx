@@ -17,6 +17,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
   const theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
+  const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -31,45 +32,52 @@ export const StickyMobileFooter = ({ cartCount }) => {
   if (!isMobile) return null;
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
-      {[
-        { l: "Call", i: <Icons.Phone />, a: "tel:+" },
-        { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
-        { l: "Store", i: <Icons.Cart />, action: () => router.push('/store'), h: true },
-        { l: "Free", i: <Icons.Book />, action: () => { router.push('/free-resources') } },
-        { l: "App", i: <Icons.Download />, action: () => { router.push('/'); setTimeout(() => document.getElementById('free-resources-section')?.scrollIntoView({ behavior: 'smooth' }), 100); } }
-      ].map((item, idx) => (
-        <button
-          key={idx}
-          onClick={item.action ? item.action : () => window.location.href = item.a}
-          className={`flex flex-col items-center justify-center transition-all relative ${item.h ? 'pt-1 pb-3' : 'py-3'}`}
-        >
-          {item.h ? (
-            <>
-              <div
-                className={`h-14 w-14 ${theme.primaryClass} rounded-full text-white shadow-lg border-4 border-white flex items-center justify-center transform active:scale-95 -mt-8 mb-1 z-10`}
-                style={{ backgroundColor: `var(--theme-primary, #2196F3)` }}
-              >
-                {item.i}
-              </div>
-              <span className={`text-[10px] font-bold ${theme.textClass}`}>
-                {item.l}
-              </span>
-            </>
-          ) : (
-            <>
-              <div className={`${theme.textClass} relative mb-1 transition-colors`}>
-                {item.i}
-                {item.badge > 0 && <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-600 rounded-full border border-white"></span>}
-              </div>
-              <span className={`text-[10px] font-bold ${theme.textClass}`}>
-                {item.l}
-              </span>
-            </>
-          )}
-        </button>
-      ))}
-    </div>
+    <>
+      <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
+        {[
+          { l: "Call", i: <Icons.Phone />, a: "tel:+" },
+          { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
+          { l: "Store", i: <Icons.Cart />, action: () => router.push('/store'), h: true },
+          { l: "Free", i: <Icons.Book />, action: () => { router.push('/free-resources') } },
+          { l: "App", i: <Icons.Download />, action: () => setShowAppDownloadModal(true) },
+        ].map((item, idx) => (
+          <button
+            key={idx}
+            onClick={item.action ? item.action : () => window.location.href = item.a}
+            className={`flex flex-col items-center justify-center transition-all relative ${item.h ? 'pt-1 pb-3' : 'py-3'}`}
+          >
+            {item.h ? (
+              <>
+                <div
+                  className={`h-14 w-14 ${theme.primaryClass} rounded-full text-white shadow-lg border-4 border-white flex items-center justify-center transform active:scale-95 -mt-8 mb-1 z-10`}
+                  style={{ backgroundColor: `var(--theme-primary, #2196F3)` }}
+                >
+                  {item.i}
+                </div>
+                <span className={`text-[10px] font-bold ${theme.textClass}`}>
+                  {item.l}
+                </span>
+              </>
+            ) : (
+              <>
+                <div className={`${theme.textClass} relative mb-1 transition-colors`}>
+                  {item.i}
+                  {item.badge > 0 && <span className="absolute -top-1 -right-1 h-2 w-2 bg-red-600 rounded-full border border-white"></span>}
+                </div>
+                <span className={`text-[10px] font-bold ${theme.textClass}`}>
+                  {item.l}
+                </span>
+              </>
+            )}
+          </button>
+        ))}
+      </div>
+      <AppDownloadModal
+        open={showAppDownloadModal}
+        onClose={() => setShowAppDownloadModal(false)}
+        brandColor={`var(--theme-primary, #0d5a3e)`}
+      />
+    </>
   );
 };
 
@@ -605,6 +613,11 @@ export const Header = ({ cartCount }) => {
               </div>
               {/* <NavItem label="Announcement" onClick={() => router.push('/announcements')} /> */}
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
+              <button
+                onClick={() => setShowAppDownloadModal(true)}
+                className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
+                Download App
+              </button>
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
             </div>
 
@@ -664,7 +677,7 @@ export const Header = ({ cartCount }) => {
                     onClick={() => setShowLoginModal(true)}
                     className={`block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
                   >
-                    Login
+                    Loginsss
                   </button>
                 )}
               </div>
@@ -717,11 +730,7 @@ export const Header = ({ cartCount }) => {
                 </button>
               )}
 
-              <button
-                onClick={() => setShowAppDownloadModal(true)}
-                className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
-                Download App
-              </button>
+              
             </div>
           </div>
         </div>

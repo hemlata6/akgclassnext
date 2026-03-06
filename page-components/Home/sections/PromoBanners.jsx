@@ -183,19 +183,20 @@ export const PromoBanners = () => {
                 </div>
 
                 {/* Pagination Dots */}
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
+                {/* Pagination Dots */}
+                {/* <div className="absolute -bottom-5 md:bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 bg-black/20 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/10">
                     {slides.map((_, index) => (
                         <button
                             key={index}
                             onClick={() => goToSlide(index)}
                             className={`w-2 h-2 rounded-full shadow-md transition-all duration-300 ${currentSlide === index
-                                ? 'bg-white w-6'
-                                : 'bg-white/40 hover:bg-white/60'
+                                    ? 'bg-white w-6'
+                                    : 'bg-white/40 hover:bg-white/60'
                                 }`}
                             aria-label={`Go to slide ${index + 1}`}
                         />
                     ))}
-                </div>
+                </div> */}
             </div>
         </section>
     );
