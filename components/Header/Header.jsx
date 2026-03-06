@@ -613,12 +613,56 @@ export const Header = ({ cartCount }) => {
               </div>
               {/* <NavItem label="Announcement" onClick={() => router.push('/announcements')} /> */}
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
+              {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
+               {user ? (
+                <div className="relative group hidden md:block">
+                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
+                    <Icons.User size={16} />
+                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
+                  </button>
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
+                      {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
+                    </div>
+                    {/* <button 
+                      onClick={() => router.push('/profile')}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition"
+                    >
+                      My Profile
+                    </button>
+                    <button 
+                      onClick={() => router.push('/orders')}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition border-b border-gray-100"
+                    >
+                      My Orders
+                    </button> */}
+                    <button
+                      onClick={async () => {
+                        await logout();
+                        router.push('/');
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-semibold"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
+                >
+                  Login
+                </button>
+              )}
               <button
                 onClick={() => setShowAppDownloadModal(true)}
                 className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
                 Download App
               </button>
-              {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
+              
+              
             </div>
 
             <div className="flex items-center gap-3">
@@ -687,48 +731,7 @@ export const Header = ({ cartCount }) => {
                 {cartCount > 0 && <span className="absolute top-0 right-0 h-4 w-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-in zoom-in">{cartCount}</span>}
               </button>
 
-              {user ? (
-                <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
-                    <Icons.User size={16} />
-                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
-                  </button>
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                      {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
-                    </div>
-                    {/* <button 
-                      onClick={() => router.push('/profile')}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition"
-                    >
-                      My Profile
-                    </button>
-                    <button 
-                      onClick={() => router.push('/orders')}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition border-b border-gray-100"
-                    >
-                      My Orders
-                    </button> */}
-                    <button
-                      onClick={async () => {
-                        await logout();
-                        router.push('/');
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-semibold"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
-                >
-                  Login
-                </button>
-              )}
+             
 
               
             </div>
