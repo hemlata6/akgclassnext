@@ -993,7 +993,7 @@ export const Header = ({ cartCount }) => {
                     e.currentTarget.style.color = '#111827';
                   }}
                 >
-                  Contact
+                  Contact Us
                 </button>
 
                 {/* Free Resources */}
