@@ -37,7 +37,7 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {"NextGenCA"}
+              {"NextGen CA"}
             </div>
             <p>NextGenCA is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
               Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “Learn Smart, Clear Fast”</p>
