@@ -556,8 +556,8 @@ export const Header = ({ cartCount }) => {
                 </div>
               </div> */}
                <NavItem label="Blog" onClick={() => router.push('/blog')} />
-              <NavItem label="Announcement" onClick={() => router.push('/announcements')} />
-              <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
+              <NavItem label="Contact Us" onClick={() => router.push('/contact-us')} />
+              {/* <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} /> */}
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
             </div>
 
@@ -982,7 +982,7 @@ export const Header = ({ cartCount }) => {
 
                 {/* Announcements */}
                 <button
-                  onClick={() => { router.push('/announcements'); setMobileMenuOpen(false); }}
+                  onClick={() => { router.push('/contact-us'); setMobileMenuOpen(false); }}
                   className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = `${theme.primary}10`;
@@ -993,11 +993,11 @@ export const Header = ({ cartCount }) => {
                     e.currentTarget.style.color = '#111827';
                   }}
                 >
-                  Announcement
+                  Contact
                 </button>
 
                 {/* Free Resources */}
-                <button
+                {/* <button
                   onClick={() => { router.push('/free-resources'); setMobileMenuOpen(false); }}
                   className="w-full text-left px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
                   onMouseEnter={(e) => {
@@ -1010,7 +1010,7 @@ export const Header = ({ cartCount }) => {
                   }}
                 >
                   Free Resources
-                </button>
+                </button> */}
 
                 {/* My Purchases (only if logged in) */}
                 {user && (

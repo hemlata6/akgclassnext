@@ -34,9 +34,9 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "CA Wallah"}
+              {institute?.institue ? institute?.institue : "CA Wallah Test-Series"}
             </div>
-            <p>Best CA Classes for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
+            <p>At CAWALLAH Test Series, we are committed to helping aspiring Chartered Accountants (CAs) achieve their goals by providing comprehensive and effective test preparation resources. Our test series is designed to enhance your knowledge, sharpen your skills, and boost your confidence as you prepare for the CA exams and clear in just one attempt.</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>

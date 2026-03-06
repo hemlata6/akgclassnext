@@ -227,7 +227,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
             </p>
           </div>
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+          {/* <p className="mt-4 text-center text-sm text-gray-500">
             Don't have an account?{' '}
             <button
               onClick={() => {
@@ -239,7 +239,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
             >
               Create one here
             </button>
-          </p>
+          </p> */}
         </div>
 
         {/* Form */}

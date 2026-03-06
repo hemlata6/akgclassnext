@@ -182,7 +182,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
             </div>
           )}
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+          {/* <p className="mt-4 text-center text-sm text-gray-500">
             Already have an account?{' '}
             <button
               onClick={() => {
@@ -192,9 +192,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
               className="font-semibold hover:opacity-80 transition-all duration-200"
               style={{ color: theme?.primary || '#2196F3' }}
             >
-              Sign in here
+              Sign in heresss
             </button>
-          </p>
+          </p> */}
         </div>
 
         {/* Form */}
@@ -206,7 +206,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick }) => {
             </label>
             <div className="relative group">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:" style={{ color: 'inherit' }}>
-                <User className="h-5 w-5" />
+                <User className="h-5 w-5 text-black" />
               </div>
               <input
                 id="firstname"
