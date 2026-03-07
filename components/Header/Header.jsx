@@ -17,6 +17,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
   const theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
+  const { institute } = useAuth();
   const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
 
   useEffect(() => {
@@ -35,7 +36,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
     <>
       <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
         {[
-          { l: "Call", i: <Icons.Phone />, a: "tel:+" },
+          { l: "Call", i: <Icons.Phone />, a: `tel:+${institute?.contact}` },
           { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
           { l: "Store", i: <Icons.Cart />, action: () => router.push('/store'), h: true },
           { l: "Free", i: <Icons.Book />, action: () => { router.push('/free-resources') } },
@@ -391,7 +392,6 @@ export const Header = ({ cartCount }) => {
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
                 <img src="/nextgen/nextgenlogo.png" alt="NextGenCA" className="h-16 md:h-16 object-contain" />
-
               </Link>
             </div>
 
@@ -613,12 +613,56 @@ export const Header = ({ cartCount }) => {
               </div>
               {/* <NavItem label="Announcement" onClick={() => router.push('/announcements')} /> */}
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
+              {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
+               {user ? (
+                <div className="relative group hidden md:block">
+                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
+                    <Icons.User size={16} />
+                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
+                  </button>
+                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                    <div className="px-4 py-3 border-b border-gray-100">
+                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
+                      {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
+                    </div>
+                    {/* <button 
+                      onClick={() => router.push('/profile')}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition"
+                    >
+                      My Profile
+                    </button>
+                    <button 
+                      onClick={() => router.push('/orders')}
+                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition border-b border-gray-100"
+                    >
+                      My Orders
+                    </button> */}
+                    <button
+                      onClick={async () => {
+                        await logout();
+                        router.push('/');
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-semibold"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
+                >
+                  Login
+                </button>
+              )}
               <button
                 onClick={() => setShowAppDownloadModal(true)}
                 className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
                 Download App
               </button>
-              {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
+              
+              
             </div>
 
             <div className="flex items-center gap-3">
@@ -677,7 +721,7 @@ export const Header = ({ cartCount }) => {
                     onClick={() => setShowLoginModal(true)}
                     className={`block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
                   >
-                    Loginsss
+                    Login
                   </button>
                 )}
               </div>
@@ -687,48 +731,7 @@ export const Header = ({ cartCount }) => {
                 {cartCount > 0 && <span className="absolute top-0 right-0 h-4 w-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-in zoom-in">{cartCount}</span>}
               </button>
 
-              {user ? (
-                <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
-                    <Icons.User size={16} />
-                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
-                  </button>
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                      {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
-                    </div>
-                    {/* <button 
-                      onClick={() => router.push('/profile')}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition"
-                    >
-                      My Profile
-                    </button>
-                    <button 
-                      onClick={() => router.push('/orders')}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition border-b border-gray-100"
-                    >
-                      My Orders
-                    </button> */}
-                    <button
-                      onClick={async () => {
-                        await logout();
-                        router.push('/');
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-semibold"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={() => setShowLoginModal(true)}
-                  className={`hidden md:block text-slate-700 hover:${theme.textClass} px-4 py-2 rounded-lg text-sm font-bold transition-colors`}
-                >
-                  Login
-                </button>
-              )}
+             
 
               
             </div>
@@ -754,7 +757,7 @@ export const Header = ({ cartCount }) => {
               >
                 NextGenCA
               </Typography> */}
-              <img src={instituteAppSettingsModals?.logo ? Endpoints?.mediaBaseUrl + instituteAppSettingsModals.logo : "/nextgen/nextgenlogo.png"} alt="Logo" className="h-20" />
+              <img src='nextgen/nextgenlogo.png' alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

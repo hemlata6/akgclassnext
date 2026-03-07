@@ -31,16 +31,16 @@ export const Footer = () => {
   return (
     <footer className="bg-slate-950 text-slate-500 pt-10 pb-24 md:pb-10 border-t border-slate-900">
       <div className={LAYOUT_PADDING}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-xs">
           <div className="col-span-2 md:col-span-1">
             <div className="text-white font-bold text-lg mb-2 flex items-center gap-2">
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {"NextGenCA"}
+              {institute?.institue || "NextGenCA"}
             </div>
             <p>NextGenCA is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
-              Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “Learn Smart, Clear Fast”</p>
+              Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “This attempt is last attempt”</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
@@ -95,11 +95,63 @@ export const Footer = () => {
             </ul>
           </div>
           <div>
+            <h4 className="text-white font-bold mb-3">Important Link</h4>
+            <ul className="space-y-1.5">
+              <li
+                // onClick={() => router.push('/privacy-policy')}
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
+              >
+                <a href='https://www.icai.org/' target='_blank' rel='noopener noreferrer'>
+                  ICAI
+                </a>
+              </li>
+              <li
+                // onClick={() => router.push('/terms-of-use')}
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
+              >
+                <a href='https://www.icsi.edu/home/' target='_blank' rel='noopener noreferrer'>
+                  ICSI
+                </a>
+              </li>
+              <li
+                // onClick={() => router.push('/refund-policy')}
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
+              >
+                <a href='https://www.icmai.in/icmai/' target='_blank' rel='noopener noreferrer'>
+                  ICMAI
+                </a>
+              </li>
+              <li
+                // onClick={() => router.push('/contact-us')}
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
+              >
+                <a href='https://www.accaglobal.com/in/en.html' target='_blank' rel='noopener noreferrer'>
+                  ACCA
+                </a>
+              </li>
+              <li
+                // onClick={() => router.push('/contact-us')}
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
+              >
+                <a href='https://www.cpaaustralia.com.au/become-a-cpa?gclsrc=aw.ds&gad_source=1&gad_campaignid=20343277106&gclid=CjwKCAiAqprNBhB6EiwAMe3yhtopC_PkAX-7OPlz6utIBAdNW2g4uBZswV_WknxxbgU-HEOt-W8D9RoCRpsQAvD_BwE' target='_blank' rel='noopener noreferrer'>
+                  CPA Australia
+                </a>
+              </li>
+              <li
+                className="cursor-pointer hover:text-indigo-400 transition-colors"
+              >
+                <a href='https://www.cfainstitute.org/' target='_blank' rel='noopener noreferrer'>
+                  CFA
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: +91 9465829512</li>
-              <li>nextgencaacademy1@gmail.com</li>
-              <li>LUDHIANA</li>
+              <li>Call: +{institute?.contact}</li>
+              <li>{institute?.email}</li>
+              <li>{institute?.address}</li>
             </ul>
           </div>
         </div>

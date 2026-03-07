@@ -14,6 +14,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
+  const [allEmployee, setAllEmployee] = useState([]);
+  console.log('coursesData', courseData);
+  console.log('employeeList', allEmployee);
+
   // const Icons = {
   //   ChevronLeft,
   //   ChevronRight,
@@ -34,6 +38,18 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 
     return parts.length ? parts.join(" ") : "0 hr";
   };
+
+  useEffect(() => {
+    const fetchAllEmployee = async () => {
+      try {
+        const response = await Network.fetchEmployee(instId);
+        setAllEmployee(response.employees || []);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    };
+    fetchAllEmployee();
+  }, []);
 
 
 
@@ -82,7 +98,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const handleShare = async () => {
     const baseUrl = window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
-      : 'https://caclasses.in';
+      : 'https://nextgencaclass.netlify.app/';
 
     const shareUrl = `${baseUrl}/course/${courseData?.id}`;
     const shareData = {
@@ -226,14 +242,27 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
               </div> */}
             </div>
             <div className="flex items-center gap-3">
-              <img
+              {/* <img
                 src="https://placehold.co/100x100/164e33/FFF?text=NextGenCA"
                 className="h-12 w-12 rounded-full object-cover border-2 border-white shadow-sm"
                 alt="Faculty"
-              />
+              /> */}
               <div>
-                <p className="text-sm font-bold text-slate-900">NextGenCA</p>
-                <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
+               <div>
+  {allEmployee
+    ?.filter((employee) =>
+      employee.courseIds?.includes(Number(courseData?.id))
+    )
+    .map((employee) => (
+      <img
+        key={employee.id}
+        src={Endpoints.mediaBaseUrl + employee.profile}
+        className="h-12 w-12 rounded-full object-cover border-2 border-white"
+        alt={employee.firstName}
+        title={`${employee.firstName} ${employee.lastName}`}
+      />
+    ))}
+</div>
               </div>
               <button
                 onClick={handleShare}
@@ -292,7 +321,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         console.error('Error fetching courses:', error);
       }
     };
-    fetchAllCourses();
+
   }, []);
 
   // Get suggested courses based on checkout tag

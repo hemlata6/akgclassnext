@@ -526,10 +526,11 @@ export default class Network {
   //   return response.data;
   // }
 
-  // static async fetchEmployee(instId) {
-  //   const response = await axios.get(this.FETCH_PUBLIC_EMPLOYEE + instId,);
-  //   return response.data;
-  // }
+  static async fetchEmployee(instId) {
+    const response = await axios.get(this.FETCH_PUBLIC_EMPLOYEE + instId,);
+    return response.data;
+  }
+  
   // static async fetchCourses(instId) {
   //   let requestOptions = {
   //     withCredentials: false,
