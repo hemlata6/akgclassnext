@@ -15,8 +15,8 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [allEmployee, setAllEmployee] = useState([]);
-  console.log('coursesData', courseData);
-  console.log('employeeList', allEmployee);
+  // console.log('coursesData', courseData);
+  // console.log('employeeList', allEmployee);
 
   // const Icons = {
   //   ChevronLeft,
@@ -248,21 +248,21 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                 alt="Faculty"
               /> */}
               <div>
-               <div>
-  {allEmployee
-    ?.filter((employee) =>
-      employee.courseIds?.includes(Number(courseData?.id))
-    )
-    .map((employee) => (
-      <img
-        key={employee.id}
-        src={Endpoints.mediaBaseUrl + employee.profile}
-        className="h-12 w-12 rounded-full object-cover border-2 border-white"
-        alt={employee.firstName}
-        title={`${employee.firstName} ${employee.lastName}`}
-      />
-    ))}
-</div>
+                <div>
+                  {allEmployee
+                    ?.filter((employee) =>
+                      employee.courseIds?.includes(Number(courseData?.id))
+                    )
+                    .map((employee) => (
+                      <img
+                        key={employee.id}
+                        src={Endpoints.mediaBaseUrl + employee.profile}
+                        className="h-12 w-12 rounded-full object-cover border-2 border-white"
+                        alt={employee.firstName}
+                        title={`${employee.firstName} ${employee.lastName}`}
+                      />
+                    ))}
+                </div>
               </div>
               <button
                 onClick={handleShare}
@@ -312,17 +312,17 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   }, []);
 
   // Fetch all courses for suggestions
-  useEffect(() => {
-    const fetchAllCourses = async () => {
-      try {
-        const response = await Network.getFreeCourseList(instId);
-        setAllCourses(response.courses || []);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchAllCourses = async () => {
+  //     try {
+  //       const response = await Network.getFreeCourseList(instId);
+  //       setAllCourses(response.courses || []);
+  //     } catch (error) {
+  //       console.error('Error fetching courses:', error);
+  //     }
+  //   };
 
-  }, []);
+  // }, []);
 
   // Get suggested courses based on checkout tag
   useEffect(() => {

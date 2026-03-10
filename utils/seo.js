@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'CA Class',
-    description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://nextgencaclass.netlify.app/logo.png',
-    url = 'https://caclassestest.netlify.app',
+    title = 'NextGenCA Academy | Professional Coaching for CA & CMA',
+    description = 'NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.',
+    image = 'https://nextgencaclasses.netlify.app/logo.png',
+    url = 'https://nextgencaclasses.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'CA Class',
-    keywords = 'CA Class, CA Final, Financial Reporting, Ind AS',
+    author = 'NextGenCA Academy',
+    keywords = 'CA coaching, CMA coaching, CA exam preparation, professional coaching, accounting courses, NextGenCA Academy',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'CA Class',
+      site_name: 'NextGenCA Academy',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),

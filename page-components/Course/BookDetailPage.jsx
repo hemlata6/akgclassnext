@@ -17,6 +17,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
     const [allCourses, setAllCourses] = useState([]);
     const [routeData, setRouteData] = useState(null);
     const [tokenFromUrl, setTokenFromUrl] = useState(null);
+    const [allEmployee, setAllEmployee] = useState([]);
 
     // Detect query params on mount
     useEffect(() => {
@@ -133,6 +134,19 @@ const BookDetailPage = ({ bookData, onBack }) => {
             setShowConfigModal(true);
         }
     };
+
+    useEffect(() => {
+        const fetchAllEmployee = async () => {
+            try {
+                const response = await Network.fetchEmployee(instId);
+                setAllEmployee(response.employees || []);
+            } catch (error) {
+                console.error('Error fetching employees:', error);
+            }
+        };
+        fetchAllEmployee();
+    }, []);
+
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-emerald-50 animate-in fade-in duration-500 pb-20 md:pb-0">
@@ -266,7 +280,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                 </p>
                             )}
 
-                            <div className="flex items-center gap-1.5 text-xs">
+                            {/* <div className="flex items-center gap-1.5 text-xs">
                                 <div className="flex items-center gap-1.5">
                                     <div className="h-6 w-6 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-[8px] shadow-sm">
                                         CA
@@ -275,6 +289,23 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                         <p className="font-bold text-slate-900 text-xs">NextGenCA</p>
                                         <p className="text-[10px] text-emerald-600">Author</p>
                                     </div>
+                                </div>
+                            </div> */}
+                            <div>
+                                <div>
+                                    {allEmployee
+                                        ?.filter((employee) =>
+                                            employee.courseIds?.includes(Number(bookData?.id))
+                                        )
+                                        .map((employee) => (
+                                            <img
+                                                key={employee.id}
+                                                src={Endpoints.mediaBaseUrl + employee.profile}
+                                                className="h-12 w-12 rounded-full object-cover border-2 border-white"
+                                                alt={employee.firstName}
+                                                title={`${employee.firstName} ${employee.lastName}`}
+                                            />
+                                        ))}
                                 </div>
                             </div>
                         </div>

@@ -31,16 +31,22 @@ export const CoursesSection = ({ onAddToCart }) => {
 
         // Handle responsive items per view
         const handleResize = () => {
-            if (window.innerWidth < 768) {
+            if (window.innerWidth < 640) {
+                // Mobile: 1 item
                 setItemsPerView(1);
             } else if (window.innerWidth < 1024) {
+                // Tablet: 2 items
                 setItemsPerView(2);
             } else {
+                // Desktop: 3 items
                 setItemsPerView(3);
             }
         };
 
+        // Call on initial mount
         handleResize();
+        
+        // Add resize listener
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
@@ -48,22 +54,31 @@ export const CoursesSection = ({ onAddToCart }) => {
     // Load cart from localStorage
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            const savedCart = localStorage.getItem('cartCourses');
-            if (savedCart) {
-                setCartCourses(JSON.parse(savedCart));
+            const saved = localStorage.getItem('cartCourses');
+            if (saved) {
+                try {
+                    setCartCourses(JSON.parse(saved));
+                } catch (err) {
+                    console.error('Error loading cart:', err);
+                }
             }
 
+            // Listen for cart updates from other tabs
             const handleCartUpdate = () => {
-                const updatedCart = localStorage.getItem('cartCourses');
-                if (updatedCart) {
-                    setCartCourses(JSON.parse(updatedCart));
+                const updated = localStorage.getItem('cartCourses');
+                if (updated) {
+                    setCartCourses(JSON.parse(updated));
                 }
             };
-
-            window.addEventListener('cartUpdated', handleCartUpdate);
-            return () => window.removeEventListener('cartUpdated', handleCartUpdate);
+            window.addEventListener('storage', handleCartUpdate);
+            return () => window.removeEventListener('storage', handleCartUpdate);
         }
     }, []);
+
+    // Reset carousel index when itemsPerView changes (responsive resize)
+    useEffect(() => {
+        setCurrentIndex(0);
+    }, [itemsPerView]);
 
     const fetchTags = async () => {
         try {
@@ -256,9 +271,9 @@ export const CoursesSection = ({ onAddToCart }) => {
                         {/* Carousel Container */}
                         <div className="overflow-hidden">
                             <div
-                                className="flex gap-6 transition-transform duration-500 ease-in-out"
+                                className="flex transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
                                 }}
                             >
                                 {filtered.map((course, i) => {
@@ -277,11 +292,14 @@ export const CoursesSection = ({ onAddToCart }) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0"
+                                            className="flex-shrink-0 px-2"
                                             style={{
-                                                width: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
+                                                width: `${100 / itemsPerView}%`,
                                             }}
                                         >
+                                            <div
+                                                className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col h-full"
+                                            >
                                             <div
                                                 onClick={() => router.push(`/course/${course.id}`)}
                                                 className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
@@ -365,6 +383,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
                                     );
                                 })}
                             </div>
@@ -403,5 +422,5 @@ export const CoursesSection = ({ onAddToCart }) => {
             )}
         </section>
     );
-};
+}
 
