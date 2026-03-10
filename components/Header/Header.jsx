@@ -355,6 +355,7 @@ export const Header = ({ cartCount }) => {
 
   return (
     <>
+      <nav className={`sticky top-0 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-0 border-slate-100' : 'bg-white py-0'}`}>
       <button
         onClick={() => router.push('/announcements')}
         className="sticky top-0 z-50 bg-slate-900 text-white text-[14px] md:text-md font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
@@ -383,7 +384,6 @@ export const Header = ({ cartCount }) => {
           )}
         </div>
       </button>
-      <nav className={`sticky top-6 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-1 border-slate-100' : 'bg-white py-1'}`}>
         <div className={LAYOUT_PADDING}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
