@@ -22,11 +22,14 @@
     "@mui/material": "^7.3.7",
     "axios": "^1.13.2",
     "html-react-parser": "^5.0.0",
+    "js-base64": "^3.7.8",
     "lucide-react": "^0.562.0",
     "next": "^14.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-helmet-async": "^2.0.5"
+    "react-helmet-async": "^2.0.5",
+    "react-multi-carousel": "^2.8.6",
+    "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.5",

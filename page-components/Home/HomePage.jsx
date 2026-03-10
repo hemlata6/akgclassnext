@@ -17,6 +17,7 @@ import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
 import { WhyChooseUsSection } from './sections/WhyChooseUsSection';
 import { FAQSection } from './sections/FAQSection';
+import { NewCoursesSection } from './sections/NewCourseSection';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -40,7 +41,8 @@ export default function HomePage() {
       {/* <WhyChooseUs /> */}
       <AboutSection />
       <WhyChooseUsSection />
-      <CoursesSection />
+      {/* <CoursesSection /> */}
+      <NewCoursesSection />
       {/* <BookStore /> */}
       {/* <MarathonGallery /> */}
       <StudentGallery />
