@@ -155,7 +155,7 @@ const EmployeeList = () => {
                         <div className="overflow-hidden rounded-xl">
 
                             <div
-                                className="flex gap-4 transition-transform duration-700"
+                                className="flex transition-transform duration-700"
                                 style={{
                                     transform: `translateX(-${currentPosition * (100 / itemsPerSlide)}%)`,
                                 }}
@@ -163,7 +163,10 @@ const EmployeeList = () => {
                                 {employees.map((employee, index) => (
                                     <div
                                         key={index}
-                                        className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/3 px-2"
+                                        className="flex-shrink-0 px-2"
+                                        style={{
+                                            width: `${100 / itemsPerSlide}%`
+                                        }}
                                     >
                                         <div
                                             onClick={() => handleFaculty(employee.value)}

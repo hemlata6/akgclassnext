@@ -350,8 +350,6 @@ export const Header = ({ cartCount }) => {
     </div>
   );
 
-  // console.log('firstLevelDomains', firstLevelDomains, secondLevelDomains, shouldShowSecondLevel);
-
 
   return (
     <>

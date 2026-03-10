@@ -147,21 +147,8 @@ export const PromoBanners = () => {
                                w-full
       h-auto
       object-contain
-                  transition-all duration-[1400ms]
-                  
-                  ${active
-                                            ? `
-                        scale-100
-                        blur-0
-                        rotate-y-0
-                        opacity-100
-                      `
-                                            : `
-                        scale-75
-                        blur-md
-                        opacity-60
-                      `
-                                        }
+                  transition-all duration-500
+                  opacity-100
                 `}
                                 />
 
@@ -169,11 +156,8 @@ export const PromoBanners = () => {
                                 <div
                                     className={`
                   absolute inset-0
-                  transition-all duration-[1400ms]
-                  ${active
-                                            ? "bg-transparent"
-                                            : "bg-black/20"
-                                        }
+                  transition-all duration-500
+                  bg-transparent
                 `}
                                 />
 

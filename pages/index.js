@@ -3,10 +3,10 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://nextgencaclass.netlify.app/';
+  const siteUrl = 'https://nextgencaclasses.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
-  const title = 'NextGenCA | NextGenCA - NextGenCA';
-  const description = 'Get Conceptual Clarity of CA Final IDT - NextGenCA';
+  const title = 'NextGenCA Academy | Professional Coaching for CA & CMA';
+  const description = 'NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.';
   const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, NextGenCA, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {

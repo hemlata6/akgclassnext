@@ -11,7 +11,7 @@ export default function CAFinalFROfferPage() {
         <>
             <Head>
                 <title>CA Final FR Course - Financial Reporting by NextGenCA | NextGenCA</title>
-                <meta name="description" content="Master CA Final Financial Reporting with 100% LIVE batch by NextGenCA (AIR 43). Concept clarity, Test Series, Mentorship & 24x7 Doubt Support included." />
+                <meta name="description" content="NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams." />
                 <meta property="og:title" content="CA Final FR Course - Master Financial Reporting" />
                 <meta property="og:description" content="Learn FR from NextGenCA - AIR 43. 100% LIVE Batch with 280 hours, Test Series & Career Mentorship." />
                 <meta name="robots" content="index, follow" />

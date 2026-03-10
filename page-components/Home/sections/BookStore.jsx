@@ -30,13 +30,13 @@ export const BookStore = () => {
         // Handle responsive items per view
         const handleResize = () => {
             if (window.innerWidth < 768) {
-                setItemsPerView(2);
+                setItemsPerView(1);
             } else if (window.innerWidth < 1024) {
-                setItemsPerView(3);
+                setItemsPerView(2);
             } else if (window.innerWidth < 1536) {
-                setItemsPerView(4);
+                setItemsPerView(3);
             } else {
-                setItemsPerView(5);
+                setItemsPerView(4);
             }
         };
 
@@ -250,7 +250,7 @@ export const BookStore = () => {
                         {/* Carousel Container */}
                         <div className="overflow-hidden">
                             <div
-                                className="flex gap-6 transition-transform duration-500 ease-in-out"
+                                className="flex transition-transform duration-500 ease-in-out"
                                 style={{
                                     transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
                                 }}
@@ -272,16 +272,17 @@ export const BookStore = () => {
                                     return (
                                         <div
                                             key={i}
-                                            className="group flex-shrink-0"
+                                            className="group flex-shrink-0 px-2"
                                             style={{
-                                                width: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
+                                                width: `${100 / itemsPerView}%`
                                             }}
                                         >
                                             <div
                                                 onClick={() => router.push(`/book/${book.id}`)}
                                                 className="relative bg-slate-50 rounded-lg shadow-md mb-2 overflow-hidden border-l-4 border-emerald-900 transition-transform duration-300 group-hover:-translate-y-1 cursor-pointer"
                                                 style={{
-                                                    aspectRatio: '16/9'
+                                                    aspectRatio: '16/9',
+                                                    maxHeight: '300px'
                                                 }}
                                             >
                                                 {book.logo ? (
