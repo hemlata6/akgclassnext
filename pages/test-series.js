@@ -474,7 +474,7 @@ const TestSeries = ({
     const selectScheduleContentObj = data?.selectScheduleContent;
     const selectedPlanDataObj = data?.selectedPlanData;
     const selectedScheduleObj = data?.selectedSchedule;
-    const cartRouteData = sessionStorage?.getItem('cartRoute');
+    const cartRouteData = typeof sessionStorage !== 'undefined' ? sessionStorage?.getItem('cartRoute') : null;
     const [error, setError] = useState('');
     const [selectCourse, setSelectCourse] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
@@ -544,6 +544,7 @@ const TestSeries = ({
         setTotalPrice(totalPrice)
         setPurchaseArray(allEntityIds);
         localStorage.setItem("purchaseArray", JSON.stringify(allEntityIds));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartArray]);
 
     useEffect(() => {
@@ -556,6 +557,7 @@ const TestSeries = ({
             }
 
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coursePublic])
     const updateCartAndPurchaseArrays = (plansList, addedCartPlans) => {
         //     const matchedPlans = [];
@@ -697,6 +699,7 @@ const TestSeries = ({
             }
         }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleBackBrowserBack() {
@@ -739,6 +742,7 @@ const TestSeries = ({
             setSchedule("");
             // setSelectShedule('');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [courseContentList])
 
     useEffect(() => {
@@ -841,10 +845,12 @@ const TestSeries = ({
             // setActiveBtn('both')
             getPlans('both');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alltreeList])
 
     useEffect(() => {
         getPlans(activeBtn);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectSubjectWise, activeBtn])
 
     function getPlans(selectBtnType) {
@@ -3484,7 +3490,7 @@ const TestSeries = ({
                                                                     >
                                                                         {
                                                                             suggestedCourse && suggestedCourse.map((course, id) => {
-                                                                                return <Grid container sx={{ justifyContent: "center", alignItems: "center", marginBottom: 2 }}>
+                                                                                return <Grid key={id} container sx={{ justifyContent: "center", alignItems: "center", marginBottom: 2 }}>
                                                                                     <Grid item xs={12} sm={2.4} md={2.4} lg={2.4} sx={{ padding: "5px", textAlign: "left", }}>
                                                                                         <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
                                                                                             <img src={Endpoints + course.logo} alt="cardthumbimage" style={{ width: "100%", height: "125px" }} />
@@ -3543,7 +3549,7 @@ const TestSeries = ({
                                                                                 <Grid container>
                                                                                     {
                                                                                         suggestedCourse?.length > 0 && suggestedCourse.map((course, i) => {
-                                                                                            return <Grid item xs={12} sm={12} md={12} lg={12}>
+                                                                                            return <Grid key={i} item xs={12} sm={12} md={12} lg={12}>
                                                                                                 <Box sx={{
                                                                                                     boxShadow: "rgba(0, 0, 0, 0.11) 0px 5px 15px", margin: "10px"
                                                                                                 }} >

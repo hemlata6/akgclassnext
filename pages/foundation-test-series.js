@@ -667,6 +667,7 @@ export default function FoundationTestSeries({
         setTotalPrice(totalPrice)
         setPurchaseArray(allEntityIds);
         localStorage.setItem("purchaseArray", JSON.stringify(allEntityIds));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartArray]);
 
     // console.log('cartArray', cartArray);
@@ -682,6 +683,7 @@ export default function FoundationTestSeries({
             }
 
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coursePublic])
     const updateCartAndPurchaseArrays = (plansList, addedCartPlans) => {
         //     const matchedPlans = [];
@@ -817,6 +819,7 @@ export default function FoundationTestSeries({
             }
         }
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleBackBrowserBack() {
@@ -859,6 +862,7 @@ export default function FoundationTestSeries({
             setSchedule("");
             // setSelectShedule('');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [courseContentList])
 
     useEffect(() => {
@@ -963,10 +967,12 @@ export default function FoundationTestSeries({
             // setActiveBtn('both')
             getPlans('both');
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alltreeList])
 
     useEffect(() => {
         getPlans(activeBtn);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectSubjectWise, activeBtn])
 
     function getPlans(selectBtnType) {

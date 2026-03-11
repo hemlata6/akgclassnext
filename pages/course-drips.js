@@ -96,15 +96,19 @@ const CourseDrips = () => {
         if (courseObj?.id) {
             getCourseSchedule(courseObj?.id, 0);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [courseObj]);
 
     // Load initial content list
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Load initial content list
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => {
         if (courseContentList?.length > 0) {
             setSelectedSchedule(courseContentList[0]);
             getSelectedSchedule(courseObj?.id, courseContentList[0]?.id, 'first');
         }
-    }, [courseContentList]);
+    }, [courseContentList]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const getAllCourses = async () => {
         try {

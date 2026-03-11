@@ -436,16 +436,20 @@ export const Header = ({ cartCount }) => {
                     </div>
                   ) : courses && courses.length > 0 ? (
                     courses.map((course, i) => (
-                      <a
+                      <Link
                         key={i}
                         href="/course-drips"
-                        onClick={() => sessionStorage.setItem('selectedCourse', JSON.stringify(course))}
+                        onClick={() => {
+                          if (typeof sessionStorage !== 'undefined') {
+                            sessionStorage.setItem('selectedCourse', JSON.stringify(course));
+                          }
+                        }}
                         className="w-full text-left px-4 py-3 text-xs transition-all border-b border-slate-50 last:border-0 hover:bg-slate-50 flex items-start justify-between group block"
                       >
                         <div className="flex-1">
                           <p className={`font-semibold text-slate-700 group-hover:${theme.textClass} truncate`}>{course.title}</p>
                         </div>
-                      </a>
+                      </Link>
                     ))
                   ) : (
                     <div className="px-4 py-3 text-xs text-slate-500">No courses available</div>
@@ -718,16 +722,20 @@ export const Header = ({ cartCount }) => {
                         </div>
                       ) : courses && courses.length > 0 ? (
                         courses.map((course, i) => (
-                           <a
+                           <Link
                         key={i}
                         href="/course-drips"
-                        onClick={() => sessionStorage.setItem('selectedCourse', JSON.stringify(course))}
+                        onClick={() => {
+                          if (typeof sessionStorage !== 'undefined') {
+                            sessionStorage.setItem('selectedCourse', JSON.stringify(course));
+                          }
+                        }}
                         className="w-full text-left px-4 py-3 text-xs transition-all border-b border-slate-50 last:border-0 hover:bg-slate-50 flex items-start justify-between group block"
                       >
                         <div className="flex-1">
                           <p className={`font-semibold text-slate-700 group-hover:${theme.textClass} truncate`}>{course.title}</p>
                         </div>
-                      </a>
+                      </Link>
                         ))
                       ) : (
                         <p className="px-4 py-2 text-xs text-slate-400">No courses available</p>
