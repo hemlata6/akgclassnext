@@ -137,21 +137,17 @@ export const Header = ({ cartCount }) => {
       const allCourses = response?.courses || response || [];
 
       // Filter active courses and separate by domain
-      const activeCourses = Array.isArray(allCourses) ? allCourses.filter(c => c.active === true) : [];
-
-
-
-      const courseList = Array.isArray(activeCourses)
-        ? activeCourses.filter(c => c.type !== "books")
+      const activeCourses = Array.isArray(allCourses)
+        ? allCourses.filter((item) =>
+          item?.active === true &&
+          item?.paid === true &&
+          ["CA Foundation Test Series", "CA Inter Test Series", "CA Final Test Series"].includes(item?.title)
+        )
         : [];
 
-      // Filter books: only active courses that have "Books" domain
-      const bookCourses = Array.isArray(activeCourses)
-        ? activeCourses.filter(c => c.type === "books")
-        : [];
 
-      setCourses(courseList);
-      setBooks(bookCourses);
+      setCourses(activeCourses);
+      // setBooks(bookCourses);
     } catch (error) {
       console.error('Error fetching courses:', error);
       setCourses([]);
@@ -335,26 +331,25 @@ export const Header = ({ cartCount }) => {
     </div>
   );
 
-  // console.log('instituteAppSettingsModals', instituteAppSettingsModals, Endpoints?.mediaBaseUrl);
 
 
   return (
     <>
-      <div 
-      style={{
-        backgroundColor: "#02154c"
-      }} 
-      className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer flex">
+      <div
+        style={{
+          backgroundColor: "#02154c"
+        }}
+        className="sticky top-0 z-50 bg-slate-900 text-white text-[10px] md:text-xs font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer flex">
         <div className="flex-1 overflow-hidden relative mx-4">
           <div className="whitespace-nowrap animate-marquee flex items-center gap-12 font-medium">
-         
+
           </div>
         </div>
 
         {/* Socials & Login */}
         <div className="flex items-center h-full">
           <div className="flex md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
-           <a href="tel:+918949190985" className="hover:text-green-500 transition-colors flex"><Icons.Phone /> &nbsp; +91 8949190985  </a>
+            <a href="tel:+918949190985" className="hover:text-green-500 transition-colors flex"><Icons.Phone /> &nbsp; +91 8949190985  </a>
             <a href="https://wa.me/918949190985" className="hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
             <a href="https://t.me/capankajinter" className="hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
             <a href="https://youtube.com/@capankajaswaniair10" className="hover:text-red-500 transition-colors"><Icons.Youtube /></a>
@@ -425,67 +420,35 @@ export const Header = ({ cartCount }) => {
               />
               <div
                 className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('Lectures');
-                  fetchDomainsForMenu();
-                }}
+                onMouseEnter={() => setHoveredMenu('Courses')}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button
                   className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
                 >
-                  Test-Series <Icons.ChevronDown />
+                  Test Series <Icons.ChevronDown />
                 </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Lectures' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                  {domainLoading ? (
+                <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Courses' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                  {loadingCourses ? (
                     <div className="px-4 py-3 text-xs text-slate-500 flex items-center gap-2">
                       <div className={`w-1.5 h-1.5 rounded-full ${theme.primaryClass} animate-bounce`}></div>
                       <span>Loading...</span>
                     </div>
-                  ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
-                    <div className="px-4 py-3 text-xs text-slate-500">No categories available</div>
+                  ) : courses && courses.length > 0 ? (
+                    courses.map((course, i) => (
+                      <a
+                        key={i}
+                        href="/course-drips"
+                        onClick={() => sessionStorage.setItem('selectedCourse', JSON.stringify(course))}
+                        className="w-full text-left px-4 py-3 text-xs transition-all border-b border-slate-50 last:border-0 hover:bg-slate-50 flex items-start justify-between group block"
+                      >
+                        <div className="flex-1">
+                          <p className={`font-semibold text-slate-700 group-hover:${theme.textClass} truncate`}>{course.title}</p>
+                        </div>
+                      </a>
+                    ))
                   ) : (
-                    <>
-                      {currentLevel === 'second' && (
-                        <button
-                          onClick={handleBackToFirstLevel}
-                          className="w-full text-left px-4 py-2.5 text-xs font-semibold text-white mb-1 flex items-center gap-2 transition-all rounded-lg"
-                          style={{
-                            backgroundColor: theme.primary
-                          }}
-                          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
-                          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
-                        >
-                          <Icons.ChevronLeft size={14} />
-                          Back to Categories
-                        </button>
-                      )}
-                      {currentLevel === 'first' && firstLevelDomains.map((domain) => (
-                        <button key={domain.id} onClick={() => handleFirstLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${selectedFirstLevelDomain?.id === domain.id ? `${theme.primaryClass} text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                          <span className="truncate">{domain.name}</span>
-                          {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
-                            <div className={`flex items-center gap-1 ml-2 flex-shrink-0 ${selectedFirstLevelDomain?.id === domain.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'} transition-all`}>
-                              <span className="text-[10px] font-semibold">{domain.child.length}</span>
-                              <Icons.ChevronRight size={12} />
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                      {currentLevel === 'second' && selectedParentDomain && (
-                        <>
-                          <div className={`px-4 py-2 text-xs font-bold text-white ${theme.primaryClass} mb-1 flex items-center gap-2`}>
-                            <div className="w-2 h-4 rounded-full bg-white opacity-80"></div>
-                            <span>{selectedParentDomain.name}</span>
-                          </div>
-                          {secondLevelDomains.map((domain) => (
-                            <button key={domain.id} onClick={() => handleSecondLevelDomainClick(domain)} className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center gap-2 group ${selectedSecondLevelDomain?.id === domain.id ? `${theme.primaryClass} opacity-60 text-white font-bold` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                              <span className={`w-2 h-2 rounded-full flex-shrink-0 transition-all ${selectedSecondLevelDomain?.id === domain.id ? 'bg-white' : theme.primaryClass}`}></span>
-                              <span className="truncate">{domain.name}</span>
-                            </button>
-                          ))}
-                        </>
-                      )}
-                    </>
+                    <div className="px-4 py-3 text-xs text-slate-500">No courses available</div>
                   )}
                 </div>
               </div>
@@ -555,7 +518,7 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div> */}
-               <NavItem label="Blog" onClick={() => router.push('/blog')} />
+              <NavItem label="Blog" onClick={() => router.push('/blog')} />
               <NavItem label="Contact Us" onClick={() => router.push('/contact-us')} />
               {/* <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} /> */}
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
@@ -696,7 +659,7 @@ export const Header = ({ cartCount }) => {
               >
                 CA Wallah
               </Typography> */}
-              <img src={"/pankajaswani/logo.png"} alt="Logo" className="h-20" />
+              <img src={"/cawallah/cawallahlogo.png"} alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>
@@ -722,17 +685,14 @@ export const Header = ({ cartCount }) => {
                   Home
                 </button>
 
-                {/* Lectures */}
+                {/* Courses */}
                 <div className="">
                   <button
                     onClick={() => {
                       if (openMobileSubmenu === 'courses') {
                         setOpenMobileSubmenu(null);
-                        setCurrentLevel('first');
-                        setSelectedParentDomain(null);
                       } else {
                         setOpenMobileSubmenu('courses');
-                        fetchDomainsForMenu();
                       }
                     }}
                     className="w-full flex items-center justify-between px-4 py-3 font-bold text-slate-900 text-sm rounded-lg transition"
@@ -746,106 +706,31 @@ export const Header = ({ cartCount }) => {
                       e.currentTarget.style.color = '#0f172a';
                     }}
                   >
-                    <span>Test-Series</span>
+                    <span>Test Series</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'courses' ? 'rotate-180' : ''}`} />
                   </button>
                   {openMobileSubmenu === 'courses' && (
                     <div className="space-y-1 mt-1 pl-2">
-                      {domainLoading ? (
+                      {loadingCourses ? (
                         <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ backgroundColor: theme.primary }}></div>
+                          <div className={`w-1.5 h-1.5 rounded-full animate-bounce`} style={{ backgroundColor: theme.primary }}></div>
                           <span>Loading...</span>
                         </div>
-                      ) : currentLevel === 'first' && firstLevelDomains.length === 0 ? (
-                        <p className="px-4 py-2 text-xs text-slate-400">No categories available</p>
+                      ) : courses && courses.length > 0 ? (
+                        courses.map((course, i) => (
+                           <a
+                        key={i}
+                        href="/course-drips"
+                        onClick={() => sessionStorage.setItem('selectedCourse', JSON.stringify(course))}
+                        className="w-full text-left px-4 py-3 text-xs transition-all border-b border-slate-50 last:border-0 hover:bg-slate-50 flex items-start justify-between group block"
+                      >
+                        <div className="flex-1">
+                          <p className={`font-semibold text-slate-700 group-hover:${theme.textClass} truncate`}>{course.title}</p>
+                        </div>
+                      </a>
+                        ))
                       ) : (
-                        <>
-                          {currentLevel === 'second' && (
-                            <button
-                              onClick={handleBackToFirstLevel}
-                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white rounded-lg flex items-center gap-2 transition-all"
-                              style={{ backgroundColor: theme.primary }}
-                              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.primaryHover}
-                              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = theme.primary}
-                            >
-                              <Icons.ChevronLeft size={14} />
-                              Back to Categories
-                            </button>
-                          )}
-                          {currentLevel === 'first' && firstLevelDomains.map((domain) => (
-                            <button
-                              key={domain.id}
-                              onClick={() => {
-                                handleFirstLevelDomainClick(domain);
-                                if (domain.child && domain.child.length > 0 && shouldShowSecondLevel) {
-                                  setMobileMenuOpen(false);
-                                  setOpenMobileSubmenu(null);
-                                  setCurrentLevel('first');
-                                  setSelectedParentDomain(null);
-                                }
-                              }}
-                              style={selectedFirstLevelDomain?.id === domain.id ? { backgroundColor: theme.primary, color: 'white' } : {}}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${selectedFirstLevelDomain?.id === domain.id
-                                ? 'font-semibold'
-                                : 'text-slate-600'
-                                }`}
-                              onMouseEnter={(e) => {
-                                if (selectedFirstLevelDomain?.id !== domain.id) {
-                                  e.currentTarget.style.backgroundColor = `${theme.primary}10`;
-                                  e.currentTarget.style.color = theme.primary;
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (selectedFirstLevelDomain?.id !== domain.id) {
-                                  e.currentTarget.style.backgroundColor = 'transparent';
-                                  e.currentTarget.style.color = '#475569';
-                                }
-                              }}
-                            >
-                              <span className="truncate">{domain.name}</span>
-                              {!shouldShowSecondLevel && domain.child && domain.child.length > 0 && (
-                                <Icons.ChevronRight size={16} />
-                              )}
-                            </button>
-                          ))}
-                          {currentLevel === 'second' && selectedParentDomain && (
-                            <>
-                              <div
-                                className="px-4 py-2 text-xs font-bold rounded-lg mb-1"
-                                style={{ backgroundColor: `${theme.primary}15`, color: theme.primary }}
-                              >
-                                {selectedParentDomain.name}
-                              </div>
-                              {secondLevelDomains.map((domain) => (
-                                <button
-                                  key={domain.id}
-                                  onClick={() => {
-                                    handleSecondLevelDomainClick(domain);
-                                    setMobileMenuOpen(false);
-                                    setOpenMobileSubmenu(null);
-                                    setCurrentLevel('first');
-                                    setSelectedParentDomain(null);
-                                  }}
-                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600"
-                                  onMouseEnter={(e) => {
-                                    e.currentTarget.style.backgroundColor = `${theme.primary}10`;
-                                    e.currentTarget.style.color = theme.primary;
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.currentTarget.style.backgroundColor = 'transparent';
-                                    e.currentTarget.style.color = '#475569';
-                                  }}
-                                >
-                                  <span
-                                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                                    style={{ backgroundColor: theme.primary }}
-                                  ></span>
-                                  <span className="truncate">{domain.name}</span>
-                                </button>
-                              ))}
-                            </>
-                          )}
-                        </>
+                        <p className="px-4 py-2 text-xs text-slate-400">No courses available</p>
                       )}
                     </div>
                   )}

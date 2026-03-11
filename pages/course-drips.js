@@ -36,7 +36,7 @@ const CourseDrips = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [courseObj, setCourseObj] = useState(null);
 
-    // Get course data from sessionStorage on mount
+    // Get course data from sessionStorage on mount and when route changes
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const storedCourse = sessionStorage.getItem('selectedCourse');
@@ -44,7 +44,7 @@ const CourseDrips = () => {
                 setCourseObj(JSON.parse(storedCourse));
             }
         }
-    }, []);
+    }, [router.asPath]);
 
     const [selectedTag, setSelectedTag] = useState('');
     const [course, setCourse] = useState([]);
@@ -182,39 +182,22 @@ const CourseDrips = () => {
     };
 
     const handleSelectPlan = (contentId) => {
-        if (
-            ((selectedContentId?.title === 'Full Length Test Series' ||
-                selectedContentId?.title === 'Exam oriented Test Series') &&
-                (courseObj?.title === 'CA Final' || courseObj?.title === 'CA Inter')) ||
-            (selectedContentId?.title === 'Portion WiseTest Series' &&
-                courseObj?.title === 'CA Final')
-        ) {
+        if (courseObj?.title === 'CA Foundation Test Series') {
+            // For Foundation: Load Step 3
+            setSelectedPlan(contentId);
+            getSelectedSchedule(courseObj?.id, contentId?.id, 'third');
+            setShouldScrollToPlan(true);
+        } else {
+            // For other courses: Redirect directly to test series
             const testSeriesData = {
-                courseObj: courseObj,
-                selectedPlanData: '',
-                selectedSchedule: selectedSchedule,
-                selectScheduleContent: selectedContentId,
-                basicPlan: contentId,
-            };
-            const encodedData = Base64.encode(JSON.stringify(testSeriesData), true);
-            router.push('/test-series?data=' + encodedData);
-        } else if (
-            selectedContentId?.title === 'Full Length Test Series' &&
-            courseObj?.title === 'CA Foundation'
-        ) {
-            const foundationTestData = {
                 courseObj: courseObj,
                 selectedPlanData: contentId,
                 selectedSchedule: selectedSchedule,
                 selectScheduleContent: selectedContentId,
                 basicPlan: contentId,
             };
-            const encodedData = Base64.encode(JSON.stringify(foundationTestData), true);
-            router.push('/foundation-test-series?data=' + encodedData);
-        } else {
-            setSelectedPlan(contentId);
-            getSelectedSchedule(courseObj?.id, contentId?.id, 'third');
-            setShouldScrollToPlan(true);
+            const encodedData = Base64.encode(JSON.stringify(testSeriesData), true);
+            router.push('/test-series?data=' + encodedData);
         }
     };
 
@@ -290,28 +273,28 @@ const CourseDrips = () => {
                                     background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 50%, rgba(241, 245, 249, 0.85) 100%)',
                                     backdropFilter: 'blur(20px)',
                                     border: '1px solid rgba(255, 255, 255, 0.8)',
-                                    borderRadius: 6,
-                                    p: { xs: 4, md: 6 },
-                                    mb: 6,
-                                    boxShadow: '0 20px 40px rgba(0,0,0,0.08), 0 8px 25px rgba(59, 130, 246, 0.1)',
+                                    borderRadius: 4,
+                                    p: { xs: 2, md: 3 },
+                                    mb: 3,
+                                    boxShadow: '0 10px 20px rgba(0,0,0,0.05), 0 4px 15px rgba(59, 130, 246, 0.08)',
                                 }}
                             >
-                                <Grid container spacing={4} alignItems="center">
+                                <Grid container spacing={2} alignItems="center">
                                     <Grid item xs={12} md={8}>
                                         <Typography
-                                            variant="h3"
+                                            variant="h4"
                                             sx={{
-                                                fontSize: { xs: '2.5rem', sm: '3.2rem', md: '4rem' },
-                                                fontWeight: 900,
+                                                fontSize: { xs: '1.5rem', sm: '1.8rem', md: '2.2rem' },
+                                                fontWeight: 800,
                                                 background: 'linear-gradient(135deg, #1e293b 0%, #334155 30%, #475569 60%, #64748b 100%)',
                                                 backgroundClip: 'text',
                                                 WebkitBackgroundClip: 'text',
                                                 WebkitTextFillColor: 'transparent',
-                                                mb: 4,
-                                                lineHeight: 1.1,
+                                                mb: 2,
+                                                lineHeight: 1.2,
                                             }}
                                         >
-                                            Let's Personalize Your
+                                            Personalize Your
                                             <br />
                                             <Box
                                                 component="span"
@@ -328,34 +311,34 @@ const CourseDrips = () => {
                                         <Typography
                                             sx={{
                                                 color: 'rgba(30, 41, 59, 0.85)',
-                                                fontSize: { xs: '1.2rem', md: '1.4rem' },
-                                                lineHeight: 1.7,
+                                                fontSize: { xs: '0.9rem', md: '1rem' },
+                                                lineHeight: 1.6,
                                             }}
                                         >
-                                            Personalizing your {courseObj?.title} Test Series is simple and efficient. Start by selecting the Test Series Portion Type, followed by choosing the Test Series Plan that suits your needs. Next, determine the Level of Premiumness for added benefits.
+                                            Select your test series portion type, choose your plan, and set your preferred level.
                                         </Typography>
                                     </Grid>
                                     <Grid item xs={12} md={4} textAlign="center">
                                         <Box
                                             sx={{
                                                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.08) 30%)',
-                                                borderRadius: 5,
-                                                p: 5,
+                                                borderRadius: 4,
+                                                p: 2.5,
                                                 border: '1px solid rgba(59, 130, 246, 0.2)',
                                             }}
                                         >
                                             <StarIcon
                                                 sx={{
-                                                    fontSize: 64,
+                                                    fontSize: 40,
                                                     background: 'linear-gradient(135deg, #3b82f6, #6366f1, #8b5cf6)',
                                                     backgroundClip: 'text',
                                                     WebkitBackgroundClip: 'text',
                                                     WebkitTextFillColor: 'transparent',
-                                                    mb: 3,
+                                                    mb: 1,
                                                 }}
                                             />
-                                            <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontWeight: 700, fontSize: '1.4rem' }}>
-                                                Premium Experience
+                                            <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontWeight: 700, fontSize: '0.95rem' }}>
+                                                Premium
                                             </Typography>
                                         </Box>
                                     </Grid>
@@ -365,18 +348,18 @@ const CourseDrips = () => {
 
                         {/* Step 1: Test Series Portion Type */}
                         <Fade in timeout={1200}>
-                            <Card sx={{ background: 'linear-gradient(135deg, rgba(219, 234, 254, 0.6) 0%, rgba(241, 245, 249, 0.8) 100%)', borderRadius: 6, p: { xs: 4, md: 6 }, mb: 6 }}>
-                                <Box display="flex" alignItems="center" mb={4}>
-                                    <Box sx={{ background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)', borderRadius: '50%', width: 56, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 3 }}>
-                                        <Typography sx={{ color: 'white', fontWeight: 800, fontSize: '1.4rem' }}>1</Typography>
+                            <Card sx={{ background: 'linear-gradient(135deg, rgba(219, 234, 254, 0.6) 0%, rgba(241, 245, 249, 0.8) 100%)', borderRadius: 4, p: { xs: 2.5, md: 3 }, mb: 3 }}>
+                                <Box display="flex" alignItems="center" mb={2.5}>
+                                    <Box sx={{ background: 'linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 2 }}>
+                                        <Typography sx={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>1</Typography>
                                     </Box>
-                                    <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontSize: { xs: '1.3rem', md: '1.5rem' }, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
+                                    <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontSize: { xs: '1rem', md: '1.2rem' }, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
                                         Select Test Series Portion Type
-                                        <ArrowForwardIcon sx={{ ml: 2, fontSize: 28, color: '#3b82f6' }} />
+                                        <ArrowForwardIcon sx={{ ml: 1.5, fontSize: 20, color: '#3b82f6' }} />
                                     </Typography>
                                 </Box>
 
-                                <Grid container spacing={3}>
+                                <Grid container spacing={2}>
                                     {selectedSceduleList?.map((content) => (
                                         <Grid item key={content.id} xs={12} sm={6} md={3}>
                                             <Button
@@ -387,19 +370,19 @@ const CourseDrips = () => {
                                                         ? 'linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #6366f1 100%)'
                                                         : 'linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)',
                                                     color: 'white',
-                                                    py: 2,
-                                                    px: 4,
-                                                    borderRadius: 5,
-                                                    fontSize: { xs: '1.1rem', md: '1.3rem' },
+                                                    py: 1.5,
+                                                    px: 2,
+                                                    borderRadius: 3,
+                                                    fontSize: { xs: '0.9rem', md: '1rem' },
                                                     fontWeight: 700,
                                                     textTransform: 'none',
                                                     '&:hover': {
-                                                        transform: 'translateY(-4px)',
+                                                        transform: 'translateY(-2px)',
                                                     },
                                                 }}
                                             >
                                                 {content.id === selectedContentId?.id && (
-                                                    <CheckCircleIcon sx={{ mr: 2, fontSize: 20 }} />
+                                                    <CheckCircleIcon sx={{ mr: 1, fontSize: 16 }} />
                                                 )}
                                                 {content.title}
                                             </Button>
@@ -414,30 +397,30 @@ const CourseDrips = () => {
                         {/* Step 2: Test Series Plan Type */}
                         {schedulePlans?.length > 0 && (
                             <Fade in timeout={1400}>
-                                <Card sx={{ background: 'linear-gradient(135deg, rgba(224, 231, 255, 0.6) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: 6, p: { xs: 4, md: 6 }, mb: 6 }}>
-                                    <Box display="flex" alignItems="center" mb={4}>
-                                        <Box sx={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)', borderRadius: '50%', width: 56, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 3 }}>
-                                            <Typography sx={{ color: 'white', fontWeight: 800, fontSize: '1.4rem' }}>2</Typography>
+                                <Card sx={{ background: 'linear-gradient(135deg, rgba(224, 231, 255, 0.6) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: 4, p: { xs: 2.5, md: 3 }, mb: 3 }}>
+                                    <Box display="flex" alignItems="center" mb={2.5}>
+                                        <Box sx={{ background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 2 }}>
+                                            <Typography sx={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>2</Typography>
                                         </Box>
-                                        <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontSize: { xs: '1.3rem', md: '1.5rem' }, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
+                                        <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontSize: { xs: '1rem', md: '1.2rem' }, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
                                             Select Test Series Plan Type
-                                            <ArrowForwardIcon sx={{ ml: 2, fontSize: 28, color: '#6366f1' }} />
+                                            <ArrowForwardIcon sx={{ ml: 1.5, fontSize: 20, color: '#6366f1' }} />
                                         </Typography>
                                     </Box>
 
-                                    <Grid container spacing={4}>
+                                    <Grid container spacing={2}>
                                         {schedulePlans?.map((item, i) => (
                                             <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-                                                <Card sx={{ background: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(15px)', border: '1px solid rgba(100, 116, 139, 0.2)', borderRadius: 6, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                                                    <CardContent sx={{ flexGrow: 1, p: 4, pb: 2 }}>
-                                                        <Typography sx={{ fontWeight: 700, color: 'rgba(30, 41, 59, 0.9)', mb: 3, fontSize: { xs: '1.3rem', md: '1.5rem' } }}>
+                                                <Card sx={{ background: 'rgba(255, 255, 255, 0.8)', backdropFilter: 'blur(15px)', border: '1px solid rgba(100, 116, 139, 0.2)', borderRadius: 4, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                                    <CardContent sx={{ flexGrow: 1, p: 2, pb: 1 }}>
+                                                        <Typography sx={{ fontWeight: 700, color: 'rgba(30, 41, 59, 0.9)', mb: 1.5, fontSize: { xs: '1rem', md: '1.15rem' } }}>
                                                             {item?.title}
                                                         </Typography>
-                                                        <Box sx={{ color: 'rgba(30, 41, 59, 0.7)', fontSize: { xs: '1rem', md: '1.1rem' }, lineHeight: 1.6 }}>
+                                                        <Box sx={{ color: 'rgba(30, 41, 59, 0.7)', fontSize: { xs: '0.85rem', md: '0.95rem' }, lineHeight: 1.5 }}>
                                                             {item?.description?.description ? parse(item?.description?.description) : ''}
                                                         </Box>
                                                     </CardContent>
-                                                    <Box sx={{ p: 4, pt: 0 }}>
+                                                    <Box sx={{ p: 2, pt: 0 }}>
                                                         <Button
                                                             fullWidth
                                                             onClick={() => handleSelectPlan(item)}
@@ -446,16 +429,16 @@ const CourseDrips = () => {
                                                                     ? 'linear-gradient(135deg, #5b21b6 0%, #7c3aed 50%, #8b5cf6 100%)'
                                                                     : 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%)',
                                                                 color: 'white',
-                                                                py: 2,
-                                                                borderRadius: 4,
-                                                                fontSize: { xs: '1rem', md: '1.15rem' },
+                                                                py: 1,
+                                                                borderRadius: 3,
+                                                                fontSize: { xs: '0.85rem', md: '0.95rem' },
                                                                 fontWeight: 700,
                                                                 textTransform: 'none',
                                                             }}
                                                         >
                                                             {item.id === selectedPlan?.id ? (
                                                                 <>
-                                                                    <CheckCircleIcon sx={{ mr: 1, fontSize: 18 }} />
+                                                                    <CheckCircleIcon sx={{ mr: 0.5, fontSize: 14 }} />
                                                                     Selected
                                                                 </>
                                                             ) : (
@@ -473,42 +456,42 @@ const CourseDrips = () => {
 
                         <Box ref={planRef}></Box>
 
-                        {/* Step 3: Programme Level Type */}
-                        {planList?.length > 0 && (
+                        {/* Step 3: Programme Level Type - Only for CA Foundation Test Series */}
+                        {planList?.length > 0 && courseObj?.title === 'CA Foundation Test Series' && (
                             <Fade in timeout={1600}>
-                                <Card sx={{ background: 'linear-gradient(135deg, rgba(237, 233, 254, 0.6) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: 6, p: { xs: 4, md: 6 }, mb: 6 }}>
-                                    <Box display="flex" alignItems="center" mb={4}>
-                                        <Box sx={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #9333ea 100%)', borderRadius: '50%', width: 56, height: 56, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 3 }}>
-                                            <Typography sx={{ color: 'white', fontWeight: 800, fontSize: '1.4rem' }}>3</Typography>
+                                <Card sx={{ background: 'linear-gradient(135deg, rgba(237, 233, 254, 0.6) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: 4, p: { xs: 2.5, md: 3 }, mb: 3 }}>
+                                    <Box display="flex" alignItems="center" mb={2.5}>
+                                        <Box sx={{ background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #9333ea 100%)', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', mr: 2 }}>
+                                            <Typography sx={{ color: 'white', fontWeight: 800, fontSize: '1rem' }}>3</Typography>
                                         </Box>
-                                        <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontSize: { xs: '1.3rem', md: '1.5rem' }, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
+                                        <Typography sx={{ color: 'rgba(30, 41, 59, 0.9)', fontSize: { xs: '1rem', md: '1.2rem' }, fontWeight: 700, display: 'flex', alignItems: 'center' }}>
                                             Select Programme Level Type
-                                            <ArrowForwardIcon sx={{ ml: 2, fontSize: 28, color: '#8b5cf6' }} />
+                                            <ArrowForwardIcon sx={{ ml: 1.5, fontSize: 20, color: '#8b5cf6' }} />
                                         </Typography>
                                     </Box>
 
-                                    <Grid container spacing={4}>
+                                    <Grid container spacing={2}>
                                         {planList?.map((item, i) => (
                                             <Grid item xs={12} sm={6} md={4} lg={3} key={i}>
-                                                <Card sx={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 6, display: 'flex', flexDirection: 'column', height: '100%' }}>
-                                                    <CardContent sx={{ flexGrow: 1, p: 4, pb: 2 }}>
-                                                        <Typography sx={{ fontWeight: 700, color: 'rgba(30, 41, 59, 0.9)', mb: 3, fontSize: { xs: '1.3rem', md: '1.5rem' } }}>
+                                                <Card sx={{ background: 'rgba(255, 255, 255, 0.9)', borderRadius: 4, display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                                    <CardContent sx={{ flexGrow: 1, p: 2, pb: 1 }}>
+                                                        <Typography sx={{ fontWeight: 700, color: 'rgba(30, 41, 59, 0.9)', mb: 1.5, fontSize: { xs: '1rem', md: '1.15rem' } }}>
                                                             {item?.title}
                                                         </Typography>
-                                                        <Box sx={{ color: 'rgba(30, 41, 59, 0.7)', fontSize: { xs: '1rem', md: '1.1rem' }, lineHeight: 1.6 }}>
+                                                        <Box sx={{ color: 'rgba(30, 41, 59, 0.7)', fontSize: { xs: '0.85rem', md: '0.95rem' }, lineHeight: 1.5 }}>
                                                             {item?.description?.description ? parse(item?.description?.description) : ''}
                                                         </Box>
                                                     </CardContent>
-                                                    <Box sx={{ p: 4, pt: 0 }}>
+                                                    <Box sx={{ p: 2, pt: 0 }}>
                                                         <Button
                                                             fullWidth
                                                             onClick={() => handleTestDetail(item)}
                                                             sx={{
                                                                 background: 'linear-gradient(135deg, #8b5cf6 0%, #a855f7 50%, #9333ea 100%)',
                                                                 color: 'white',
-                                                                py: 2,
-                                                                borderRadius: 4,
-                                                                fontSize: { xs: '1rem', md: '1.15rem' },
+                                                                py: 1,
+                                                                borderRadius: 3,
+                                                                fontSize: { xs: '0.85rem', md: '0.95rem' },
                                                                 fontWeight: 700,
                                                                 textTransform: 'none',
                                                             }}

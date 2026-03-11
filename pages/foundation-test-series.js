@@ -5,6 +5,7 @@ import AddCircleIcon from "@mui/icons-material/AddCircle";
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import { useRouter } from 'next/router';
 import parse from "html-react-parser";
+import Layout from '../components/Layout';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
@@ -80,21 +81,18 @@ const modernColors = {
 const ModernPlanCard = styled(Card)(({ theme, isSelected, isPremium }) => ({
     position: 'relative',
     height: '100%',
-    borderRadius: '20px',
-    background: 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(20px)',
-    border: `2px solid ${isSelected ? modernColors.primary.main : 'rgba(255, 255, 255, 0.2)'}`,
-    boxShadow: isSelected
-        ? `0 20px 40px rgba(19, 84, 193, 0.3), 0 0 0 1px ${modernColors.primary.main}`
-        : '0 10px 30px rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+    minWidth: '260px',
+    borderRadius: '16px',
+    background: '#FFFFFF',
+    border: '1px solid #E5E7EB',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
+    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
     overflow: 'hidden',
     cursor: 'pointer',
 
     '&:hover': {
-        transform: 'translateY(-12px) scale(1.02)',
-        boxShadow: '0 25px 50px rgba(19, 84, 193, 0.25), 0 0 0 2px rgba(19, 84, 193, 0.1)',
-        border: `2px solid ${modernColors.primary.light}`,
+        transform: 'translateY(-8px)',
+        boxShadow: '0 12px 24px rgba(0, 0, 0, 0.12)',
     },
 
     '&::before': {
@@ -103,98 +101,85 @@ const ModernPlanCard = styled(Card)(({ theme, isSelected, isPremium }) => ({
         top: 0,
         left: 0,
         right: 0,
-        height: '4px',
-        background: isPremium ? modernColors.accent.gradient : modernColors.primary.gradient,
-        opacity: isSelected ? 1 : 0.7,
+        height: '3px',
+        background: modernColors.primary.main,
     },
-
-    '&::after': isPremium ? {
-        content: '"⭐"',
-        position: 'absolute',
-        top: '15px',
-        right: '15px',
-        fontSize: '20px',
-        animation: 'pulse 2s infinite',
-    } : {},
 }));
 
-const ModernPlanImage = styled(CardMedia)({
-    height: 200,
+const ModernPlanImage = styled(CardMedia)(({ theme }) => ({
+    height: theme.breakpoints.down('sm') ? 120 : theme.breakpoints.down('md') ? 150 : 180,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     position: 'relative',
-    borderRadius: '16px',
-    margin: '16px',
-    marginBottom: '12px',
+    borderRadius: '0px',
+    margin: '0px',
+    marginBottom: '0px',
     transition: 'transform 0.3s ease',
 
     '&:hover': {
-        transform: 'scale(1.05)',
+        transform: 'scale(1.02)',
     },
-});
+}));
 
 const ModernPlanTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 700,
-    fontSize: '1.4rem',
-    background: modernColors.primary.gradient,
-    backgroundClip: 'text',
-    WebkitBackgroundClip: 'text',
-    color: 'transparent',
-    marginBottom: '8px',
+    fontSize: '0.9rem',
+    color: modernColors.primary.main,
+    marginBottom: '12px',
     textAlign: 'center',
+    letterSpacing: '0.5px',
+    textTransform: 'uppercase',
 }));
 
 const ModernPriceContainer = styled(Box)({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    gap: '8px',
+    gap: '12px',
     marginBottom: '16px',
     flexWrap: 'wrap',
+    flexDirection: 'column',
 });
 
 const ModernPrice = styled(Typography)(({ isDiscounted }) => ({
     fontWeight: 800,
-    fontSize: isDiscounted ? '1.7rem' : '1.45rem',
-    color: isDiscounted ? modernColors.secondary.main : modernColors.primary.main,
+    fontSize: '1.5rem',
+    color: modernColors.secondary.main,
 }));
 
 const ModernOriginalPrice = styled(Typography)({
-    fontSize: '1.1rem',
+    fontSize: '0.9rem',
     color: modernColors.neutral.gray,
     textDecoration: 'line-through',
+    fontWeight: 500,
 });
 
 const ModernDiscountBadge = styled(Chip)({
-    background: modernColors.accent.gradient,
+    background: modernColors.accent.main,
     color: 'white',
     fontWeight: 700,
-    fontSize: '0.75rem',
-    height: '24px',
+    fontSize: '0.7rem',
+    height: '22px',
+    padding: '0 8px',
 });
 
 const ModernAddButton = styled(Button)(({ isAdded, theme }) => ({
     width: '100%',
-    padding: '12px 24px',
-    borderRadius: '12px',
+    padding: theme.breakpoints.down('sm') ? '10px 12px' : '12px 20px',
+    borderRadius: '10px',
     fontWeight: 700,
-    fontSize: '1.05rem',
+    fontSize: theme.breakpoints.down('sm') ? '0.75rem' : '0.95rem',
     textTransform: 'none',
-    background: isAdded
-        ? modernColors.secondary.gradient
-        : modernColors.primary.gradient,
+    background: modernColors.primary.main,
     color: 'white',
     border: 'none',
-    boxShadow: isAdded
-        ? `0 8px 20px ${modernColors.secondary.main}40`
-        : `0 8px 20px ${modernColors.primary.main}40`,
+    boxShadow: `0 4px 12px ${modernColors.primary.main}30`,
     transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
 
     '&:hover': {
+        background: modernColors.primary.dark,
         transform: 'translateY(-2px)',
-        boxShadow: isAdded
-            ? `0 12px 25px ${modernColors.secondary.main}50`
-            : `0 12px 25px ${modernColors.primary.main}50`,
+        boxShadow: `0 8px 16px ${modernColors.primary.main}40`,
     },
 
     '&:active': {
@@ -287,14 +272,21 @@ const ModernStepper = styled(Stepper)(({ theme }) => ({
     background: 'rgba(255, 255, 255, 0.95)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
-    padding: '24px 0px',
+    padding: { xs: '16px 8px', sm: '20px 12px', md: '24px 0px' },
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
-    margin: '20px 0',
+    margin: { xs: '12px 0', sm: '16px 0', md: '20px 0' },
+    overflow: 'hidden',
+    width: '100%',
 
     // Mobile-specific overflow scroll
-    [theme.breakpoints.down('md')]: {
+    [theme.breakpoints.down('sm')]: {
         overflowX: 'auto',
+        overflowY: 'hidden',
+        '& .MuiStepper-root': {
+            display: 'flex',
+            flexWrap: 'nowrap',
+        },
         '&::-webkit-scrollbar': {
             height: '4px',
         },
@@ -306,9 +298,12 @@ const ModernStepper = styled(Stepper)(({ theme }) => ({
             background: '#667eea',
             borderRadius: '4px',
         },
-        '&::-webkit-scrollbar-thumb:hover': {
-            background: '#5a67d8',
-        },
+    },
+
+    // Tablet
+    [theme.breakpoints.between('sm', 'md')]: {
+        overflowX: 'auto',
+        '&::-webkit-scrollbar': { height: '4px' },
     },
 
     // Desktop view - no horizontal scroll
@@ -590,23 +585,21 @@ export default function FoundationTestSeries({
     const BASE_URL = "https://prodapi.classiolabs.com/";
     // let Endpoints = ''
     // const InstId = 119;
-    const InstId = 149;
+    const InstId = 499;
 
     // const InstId = 49;
     // const InstId = 149
     const router = useRouter();
     const queryParam = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '');
     const campaignId = queryParam.get("campaignId");
-    
-    // Extract data from URL parameters with Base64 decoding
-    const [data, setData] = useState({});
-    const selectCourserout = data.courseObj;
-    const basicPlanObj = data.basicPlan;
+    let paramData = queryParam.get("data");
+    let data = paramData ? JSON?.parse(Base64?.decode(paramData)) : {};
+    const selectCourserout = data?.courseObj;
+    const basicPlanObj = data?.basicPlan;
     const selectScheduleContentObj = data?.selectScheduleContent;
     const selectedPlanDataObj = data?.selectedPlanData;
     const selectedScheduleObj = data?.selectedSchedule;
-    const cartRouteData = router.query?.cartRoute;
-    console.log('dataaaaa', data)
+    const cartRouteData = null;
     const [error, setError] = useState('');
     const [selectCourse, setSelectCourse] = useState('');
     const [selectedTag, setSelectedTag] = useState('');
@@ -742,9 +735,6 @@ export default function FoundationTestSeries({
         getTagsList();
         getInstituteDetail();
         setSelectCourse(selectCourserout);
-        if (selectCourserout?.id) {
-            getCourseContentList(selectCourserout?.id);
-        }
         if (selectedScheduleObj) {
             setSelectedSchedule(selectedScheduleObj);
             getSheduleContentList(selectCourserout?.id, selectedScheduleObj?.id, 'second');
@@ -757,7 +747,7 @@ export default function FoundationTestSeries({
         if (basicPlanObj?.id) {
             getSheduleContentList(selectCourserout?.id, basicPlanObj?.id, 'fourth');
             setSelectedBasicPlan(basicPlanObj);
-            if ((selectScheduleContentObj?.title === "Full Length Test Series") || (selectScheduleContentObj?.title === "Portion wise Test Series" && selectCourserout?.title === "CA Final")) {
+            if ((selectScheduleContentObj?.title === "Full Length Test Series") || (selectScheduleContentObj?.title === "Portion WiseTest Series" && selectCourserout?.title === "CA Final")) {
                 fetchDripContent(basicPlanObj?.id)
             }
         }
@@ -800,25 +790,11 @@ export default function FoundationTestSeries({
     }
 
     useEffect(() => {
-        // Extract data from URL on mount
-        if (typeof window !== 'undefined') {
-            const queryParam = new URLSearchParams(window.location.search);
-            let paramData = queryParam.get("data");
-            if (paramData) {
-                try {
-                    const decodedData = JSON?.parse(Base64?.decode(paramData));
-                    console.log('Decoded data from URL:', decodedData);
-                    setData(decodedData);
-                } catch (error) {
-                    console.error('Error decoding Base64 data:', error);
-                }
-            }
-        }
-
         window.scrollTo(0, 0)
-        
+        initial();
         window.onpopstate = () => {
             handleBackBrowserBack();
+            initial();
         }
 
         const localPlans = localStorage.getItem('addedCartPlans');
@@ -842,13 +818,6 @@ export default function FoundationTestSeries({
         }
 
     }, []);
-
-    // Call initial() after data is populated from URL
-    useEffect(() => {
-        if (data?.courseObj?.id) {
-            initial();
-        }
-    }, [data]);
 
     function handleBackBrowserBack() {
         handleBack();
@@ -886,7 +855,6 @@ export default function FoundationTestSeries({
             setSchedule(firstItem);
             // setSelectShedule(firstItem);
             getSheduleContentList(selectCourse?.id, firstItem.id, "first");
-            fetchDripContent(firstItem.id);
         } else {
             setSchedule("");
             // setSelectShedule('');
@@ -945,9 +913,10 @@ export default function FoundationTestSeries({
                 if (value === "fourth") {
                     setPlanList(filterCourseContent)
                 }
-                if (value === "fifth") {
-                    setAlltreeList(filterCourseContent)
-                }
+                // if (value === "fifth") { 
+
+                //     // setAlltreeList(filterCourseContent)                                     
+                // }
             };
         } catch (error) {
             console.log(error);
@@ -974,7 +943,7 @@ export default function FoundationTestSeries({
         const value = e.target.value
         setSelectedBasicPlan(value);
         getSheduleContentList(selectCourse?.id, value?.id, 'fourth');
-        if ((selectedAotherSchedule?.title === "Full Length Test Series") || (selectedAotherSchedule?.title === "Portion wise Test Series" && selectCourse?.title === "CA Final")) {
+        if ((selectedAotherSchedule?.title === "Full Length Test Series") || (selectedAotherSchedule?.title === "Portion WiseTest Series" && selectCourse?.title === "CA Final")) {
             fetchDripContent(value?.id)
         }
     };
@@ -1447,7 +1416,7 @@ export default function FoundationTestSeries({
             const updatedCartArray = cartArray.filter(cartItem => cartItem.plan.id !== id);
             setCartArray(updatedCartArray);
             localStorage.setItem("cartArray", JSON.stringify(updatedCartArray));
-            cartNumberUpdate()
+            cartNumberUpdate?.();
         } else {
             // Add the item to the cart
             const obj = {
@@ -1458,7 +1427,7 @@ export default function FoundationTestSeries({
             const updatedCartArray = [...cartArray, obj];
             setCartArray(updatedCartArray);
             localStorage.setItem("cartArray", JSON.stringify(updatedCartArray));
-            cartNumberUpdate()
+            cartNumberUpdate?.();
         }
     };
 
@@ -1604,7 +1573,7 @@ export default function FoundationTestSeries({
             }
             const newActiveStep = isLastStep() && !allStepsCompleted() ? steps.findIndex((step, i) => !(i in completed)) : activeStep + 1;
             setActiveStep(newActiveStep);
-            cartNumberUpdate()
+            cartNumberUpdate?.();
         } catch (err) {
             console.log(err);
         };
@@ -1652,7 +1621,7 @@ export default function FoundationTestSeries({
         if (temp?.length === 0) {
             setActiveStep(0)
         }
-        cartNumberUpdate()
+        cartNumberUpdate?.();
     }
 
     const toggleExpandDescription = (des) => {
@@ -1774,136 +1743,141 @@ export default function FoundationTestSeries({
 
 
     return (
-        <>
-             <Box
-                           id="testseries"
-                           sx={{
-                               width: '100%',
-                               maxWidth: '100vw',
-                               margin: { xs: '20px 0', sm: '40px' },
-                               textAlign: 'left',
-                               overflow: 'hidden',
-                               overflowX: 'hidden',
-                            //    px: { xs: 2, sm: 3 },
-                               boxSizing: 'border-box',
-                               // Desktop-specific overflow prevention and spacing
-                               '@media (min-width: 768px)': {
-                                   maxWidth: '100vw',
-                                   overflow: 'hidden',
-                                   margin: '40px auto',
-                                   px: 6, // Add more horizontal padding on desktop
-                               },
-                               '@media (min-width: 1024px)': {
-                                   px: 8, // Even more padding on larger desktops
-                               },
-                               '@media (min-width: 1200px)': {
-                                   px: 12, // Maximum padding on very large screens
-                               },
-                           }}
-                       >
-                    <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
-                        <div className="col-xs-12 col-md-12 col-lg-12">
-                    <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2, mt: 3 }}>
-                        <Button
-                            color="inherit"
-                            // disabled={activeStep === 0}
-                            onClick={handleBack}
-                            sx={{
-                                mr: 1,
-                                fontWeight: "bold",
-                                fontSize: "16px",
-                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
-                                backdropFilter: 'blur(20px)',
-                                border: '1px solid rgba(255, 255, 255, 0.2)',
-                                borderRadius: '16px',
-                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                color: '#667eea',
-                                padding: '12px 24px',
-                                minWidth: '120px',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                '&:hover': {
-                                    background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                    transform: 'translateY(-2px)',
-                                    boxShadow: '0 12px 40px rgba(102, 126, 234, 0.2)',
-                                    color: '#5a67d8'
-                                },
-                                '&:active': {
-                                    transform: 'translateY(0px)',
-                                    boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)'
-                                }
-                            }}
-                        >
-                            <ArrowBackIcon sx={{ mr: 1, fontSize: '18px' }} /> Back
-                        </Button>
-                        <Box sx={{ flex: '1 1 auto' }} />
-                    </Box>
-                    <div>
-                        <h2 className='mobile-text-high' style={{
-                            textTransform: "initial",
-                            display: "flex",
-                            alignItems: "center",
-                            textAlign: "left",
-                            fontWeight: "bold",
-                            marginBottom: "15px",
-                            justifyContent: "left",
-                            background: 'linear-gradient(135deg, #2D3748 0%, #4A5568 50%, #2D3748 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent',
-                            backgroundClip: 'text',
-                            fontSize: '2.5rem',
-                            letterSpacing: '-0.02em',
-                            textShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                            position: 'relative'
-                        }}>
-                            🏆 Highly Rated
-                            <span style={{
-                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                                marginLeft: "8px",
-                                marginRight: "8px",
-                                fontWeight: "800",
-                                textShadow: '0 2px 10px rgba(102, 126, 234, 0.3)'
-                            }}>V Smart</span>
-                            Test Series Program ✨
-                        </h2>
-                        <p style={{
-                            marginBottom: '24px',
-                            fontSize: '1.3rem',
-                            color: '#4A5568',
-                            fontWeight: '500',
-                            background: 'linear-gradient(135deg, #4A5568 0%, #667eea 100%)',
-                            WebkitBackgroundClip: 'text',
-                            WebkitTextFillColor: 'transparent'
-                        }}>
-                            🚀 Crack CA-CS with Our Trusted and Most Loved Test Series.
-                        </p>
-                    </div>
-
-                    <Grid container sx={{ pt: 2, pb: 1 }}>
-                        <Grid item xs={12} sm={8} md={8} lg={8}>
-                            <Stack
-                                direction={{ xs: "column", sm: "row" }}
-                                spacing={{ xs: 2, sm: 3 }}
-                                className='stack-mobile'
+        <Layout>
+            <Box
+                id="testseries"
+                sx={{
+                    width: '100%',
+                    maxWidth: '100%',
+                    margin: { xs: '12px 0', sm: '20px 0', md: '40px' },
+                    textAlign: 'left',
+                    overflow: 'hidden',
+                    overflowX: 'hidden',
+                    px: { xs: 1.5, sm: 2, md: 3 },
+                    boxSizing: 'border-box',
+                    // Desktop-specific overflow prevention and spacing
+                    '@media (min-width: 768px)': {
+                        maxWidth: '100%',
+                        overflow: 'hidden',
+                        margin: '40px auto',
+                        px: 6,
+                    },
+                    '@media (min-width: 1024px)': {
+                        px: 8,
+                    },
+                    '@media (min-width: 1200px)': {
+                        px: 12,
+                    },
+                }}
+            >
+                <Box sx={{ width: '100%', maxWidth: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
+                    <div className="col-xs-12 col-md-12 col-lg-12">
+                        <Box sx={{ display: 'flex', flexDirection: 'row', pb: 2, mt: 3 }}>
+                            <Button
+                                color="inherit"
+                                // disabled={activeStep === 0}
+                                onClick={handleBack}
                                 sx={{
-                                    background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                    borderRadius: '24px',
-                                    padding: { xs: '16px', sm: '20px' },
-                                    border: '1px solid rgba(255, 255, 255, 0.4)',
-                                    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-                                    // marginBottom: '24px',
-                                    flexWrap: 'wrap',
-                                    gap: { xs: '12px', sm: '16px' },
-                                    '& .mobile-select-button': {
-                                        minWidth: { xs: '100%', sm: 'auto' },
-                                        flex: { xs: '1 1 100%', sm: '1 1 auto' }
+                                    mr: 1,
+                                    fontWeight: "bold",
+                                    fontSize: "16px",
+                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                                    backdropFilter: 'blur(20px)',
+                                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                                    borderRadius: '16px',
+                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                    color: '#667eea',
+                                    padding: '12px 24px',
+                                    minWidth: '120px',
+                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    '&:hover': {
+                                        background: 'linear-gradient(145deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: '0 12px 40px rgba(102, 126, 234, 0.2)',
+                                        color: '#5a67d8'
+                                    },
+                                    '&:active': {
+                                        transform: 'translateY(0px)',
+                                        boxShadow: '0 4px 16px rgba(102, 126, 234, 0.3)'
                                     }
                                 }}
                             >
-                                {activeStep === 0 && (
-                                    <>
-                                        {/* <FormControl className='mobile-select-button'>
+                                <ArrowBackIcon sx={{ mr: 1, fontSize: '18px' }} /> Back
+                            </Button>
+                            <Box sx={{ flex: '1 1 auto' }} />
+                        </Box>
+                        <div>
+                            <h2 className='mobile-text-high' style={{
+                                textTransform: "initial",
+                                display: "block",
+                                wordWrap: "break-word",
+                                overflowWrap: "break-word",
+                                textAlign: "left",
+                                fontWeight: "bold",
+                                marginBottom: "15px",
+                                background: 'linear-gradient(135deg, #2D3748 0%, #4A5568 50%, #2D3748 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                backgroundClip: 'text',
+                                fontSize: typeof window !== 'undefined' && window.innerWidth < 480 ? '1.3rem' : typeof window !== 'undefined' && window.innerWidth < 768 ? '1.8rem' : '2.5rem',
+                                lineHeight: typeof window !== 'undefined' && window.innerWidth < 480 ? '1.4' : '1.2',
+                                letterSpacing: '-0.02em',
+                                position: 'relative',
+                                width: '100%'
+                            }}>
+                                🏆 Highly Rated
+                                <span style={{
+                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                    WebkitBackgroundClip: 'text',
+                                    WebkitTextFillColor: 'transparent',
+                                    marginLeft: "6px",
+                                    marginRight: "6px",
+                                    fontWeight: "800",
+                                    display: "inline-block",
+                                    whiteSpace: "nowrap"
+                                }}>CAwallah</span>
+                                Test Series Program ✨
+                            </h2>
+                            <p style={{
+                                marginBottom: typeof window !== 'undefined' && window.innerWidth < 480 ? '16px' : '24px',
+                                fontSize: typeof window !== 'undefined' && window.innerWidth < 480 ? '0.95rem' : typeof window !== 'undefined' && window.innerWidth < 768 ? '1.1rem' : '1.3rem',
+                                color: '#4A5568',
+                                fontWeight: '500',
+                                background: 'linear-gradient(135deg, #4A5568 0%, #667eea 100%)',
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent',
+                                lineHeight: '1.6',
+                                wordWrap: 'break-word',
+                                overflowWrap: 'break-word'
+                            }}>
+                                🚀 Crack CA-CS with Our Trusted and Most Loved Test Series.
+                            </p>
+                        </div>
+
+                        <Grid container sx={{ pt: 2, pb: 1 }}>
+                            <Grid item xs={12} sm={8} md={8} lg={8}>
+                                <Stack
+                                    direction={{ xs: "column", sm: "row" }}
+                                    spacing={{ xs: 2, sm: 3 }}
+                                    className='stack-mobile'
+                                    sx={{
+                                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                        borderRadius: '24px',
+                                        padding: { xs: '16px', sm: '20px' },
+                                        border: '1px solid rgba(255, 255, 255, 0.4)',
+                                        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+                                        // marginBottom: '24px',
+                                        flexWrap: 'wrap',
+                                        gap: { xs: '12px', sm: '16px' },
+                                        '& .mobile-select-button': {
+                                            minWidth: { xs: '100%', sm: 'auto' },
+                                            flex: { xs: '1 1 100%', sm: '1 1 auto' }
+                                        }
+                                    }}
+                                >
+                                    {activeStep === 0 && (
+                                        <>
+                                            {/* <FormControl className='mobile-select-button'>
                                             <InputLabel id="demo-simple-select-label" sx={{ fontSize: "13px" }}>Select Exam</InputLabel>
                                             <Select
                                                 className='select-option'
@@ -1923,7 +1897,7 @@ export default function FoundationTestSeries({
                                                 }
                                             </Select>
                                         </FormControl> */}
-                                        {/* <FormControl className='mobile-select-button'>
+                                            {/* <FormControl className='mobile-select-button'>
                                             <InputLabel id="demo-simple-select-label" sx={{ fontSize: "13px" }}>Select Course</InputLabel>
                                             <Select
                                                 className='select-option'
@@ -1942,387 +1916,387 @@ export default function FoundationTestSeries({
                                             </Select>
                                         </FormControl> */}
 
-                                        {
-                                            courseContentList?.length > 1 && (
-                                                <FormControl className='mobile-select-button' sx={{
-                                                    '& .MuiOutlinedInput-root': {
-                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                        borderRadius: '16px',
-                                                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                        '&:hover': {
-                                                            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-                                                            transform: 'translateY(-2px)',
-                                                            '& .MuiOutlinedInput-notchedOutline': {
-                                                                borderColor: 'rgba(102, 126, 234, 0.5)'
+                                            {
+                                                courseContentList?.length > 1 && (
+                                                    <FormControl className='mobile-select-button' sx={{
+                                                        '& .MuiOutlinedInput-root': {
+                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                            borderRadius: '16px',
+                                                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                            '&:hover': {
+                                                                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                                                                transform: 'translateY(-2px)',
+                                                                '& .MuiOutlinedInput-notchedOutline': {
+                                                                    borderColor: 'rgba(102, 126, 234, 0.5)'
+                                                                }
+                                                            },
+                                                            '&.Mui-focused': {
+                                                                '& .MuiOutlinedInput-notchedOutline': {
+                                                                    borderColor: '#667eea',
+                                                                    borderWidth: '2px'
+                                                                }
                                                             }
                                                         },
-                                                        '&.Mui-focused': {
-                                                            '& .MuiOutlinedInput-notchedOutline': {
-                                                                borderColor: '#667eea',
-                                                                borderWidth: '2px'
-                                                            }
-                                                        }
-                                                    },
-                                                    '& .MuiInputLabel-root': {
-                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                        WebkitBackgroundClip: 'text',
-                                                        WebkitTextFillColor: 'transparent',
-                                                        fontWeight: 600,
-                                                        '&.Mui-focused': {
+                                                        '& .MuiInputLabel-root': {
                                                             background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                                                             WebkitBackgroundClip: 'text',
-                                                            WebkitTextFillColor: 'transparent'
-                                                        }
-                                                    }
-                                                }}>
-                                                    <InputLabel
-                                                        id="demo-simple-select-label"
-                                                        sx={{
-                                                            fontSize: { xs: "14px", sm: "15px" },
-                                                            fontWeight: 600
-                                                        }}
-                                                    >
-                                                        Select Schedule
-                                                    </InputLabel>
-                                                    <Select
-                                                        className='select-option'
-                                                        sx={{
-                                                            mb: 2,
-                                                            minWidth: { xs: "120px", sm: "140px" },
-                                                            fontSize: { xs: "13px", sm: "14px" },
-                                                            '& .MuiSelect-select': {
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: '8px'
+                                                            WebkitTextFillColor: 'transparent',
+                                                            fontWeight: 600,
+                                                            '&.Mui-focused': {
+                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                WebkitBackgroundClip: 'text',
+                                                                WebkitTextFillColor: 'transparent'
                                                             }
-                                                        }}
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
-                                                        value={selectedSchedule}
-                                                        label="Select Schedule"
-                                                        onChange={handleSchedule}
-                                                        MenuProps={{
-                                                            PaperProps: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-                                                                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                                    borderRadius: '16px',
-                                                                    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
-                                                                    '& .MuiMenuItem-root': {
-                                                                        borderRadius: '8px',
-                                                                        margin: '4px 8px',
-                                                                        transition: 'all 0.2s ease',
-                                                                        '&:hover': {
-                                                                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                            transform: 'translateX(4px)'
+                                                        }
+                                                    }}>
+                                                        <InputLabel
+                                                            id="demo-simple-select-label"
+                                                            sx={{
+                                                                fontSize: { xs: "14px", sm: "15px" },
+                                                                fontWeight: 600
+                                                            }}
+                                                        >
+                                                            Select Schedule
+                                                        </InputLabel>
+                                                        <Select
+                                                            className='select-option'
+                                                            sx={{
+                                                                mb: 2,
+                                                                minWidth: { xs: "120px", sm: "140px" },
+                                                                fontSize: { xs: "13px", sm: "14px" },
+                                                                '& .MuiSelect-select': {
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '8px'
+                                                                }
+                                                            }}
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
+                                                            value={selectedSchedule}
+                                                            label="Select Schedule"
+                                                            onChange={handleSchedule}
+                                                            MenuProps={{
+                                                                PaperProps: {
+                                                                    sx: {
+                                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
+                                                                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                                        borderRadius: '16px',
+                                                                        boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                                                                        '& .MuiMenuItem-root': {
+                                                                            borderRadius: '8px',
+                                                                            margin: '4px 8px',
+                                                                            transition: 'all 0.2s ease',
+                                                                            '&:hover': {
+                                                                                background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                                transform: 'translateX(4px)'
+                                                                            }
                                                                         }
                                                                     }
                                                                 }
+                                                            }}
+                                                        >
+                                                            {
+                                                                courseContentList && courseContentList.map((data, index) => {
+                                                                    if (data?.active === true) {
+                                                                        return (
+                                                                            <MenuItem key={index} value={data}>{data?.title}</MenuItem>
+                                                                        )
+                                                                    }
+
+                                                                })
                                                             }
-                                                        }}
-                                                    >
-                                                        {
-                                                            courseContentList && courseContentList.map((data, index) => {
-                                                                if (data?.active === true) {
-                                                                    return (
-                                                                        <MenuItem key={index} value={data}>{data?.title}</MenuItem>
-                                                                    )
-                                                                }
-
-                                                            })
-                                                        }
-                                                    </Select>
-                                                </FormControl>
-                                            )
-                                        }
-
-                                        <FormControl className='mobile-select-button' sx={{
-                                            '& .MuiOutlinedInput-root': {
-                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                borderRadius: '16px',
-                                                border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                '&:hover': {
-                                                    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-                                                    transform: 'translateY(-2px)',
-                                                    '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: 'rgba(102, 126, 234, 0.5)'
-                                                    }
-                                                },
-                                                '&.Mui-focused': {
-                                                    '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#667eea',
-                                                        borderWidth: '2px'
-                                                    }
-                                                }
-                                            },
-                                            '& .MuiInputLabel-root': {
-                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                WebkitBackgroundClip: 'text',
-                                                WebkitTextFillColor: 'transparent',
-                                                fontWeight: 600,
-                                                '&.Mui-focused': {
-                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                    WebkitBackgroundClip: 'text',
-                                                    WebkitTextFillColor: 'transparent'
-                                                }
+                                                        </Select>
+                                                    </FormControl>
+                                                )
                                             }
-                                        }}>
-                                            <InputLabel
-                                                id="demo-simple-select-label"
-                                                sx={{
-                                                    fontSize: { xs: "14px", sm: "15px" },
-                                                    fontWeight: 600
-                                                }}
-                                            >
-                                                Select Portion Type
-                                            </InputLabel>
-                                            <Select
-                                                className='select-option'
-                                                sx={{
-                                                    mb: 2,
-                                                    minWidth: { xs: "120px", sm: "140px" },
-                                                    fontSize: { xs: "13px", sm: "14px" },
-                                                    '& .MuiSelect-select': {
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '8px'
-                                                    }
-                                                }}
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
-                                                value={selectedAotherSchedule}
-                                                label="Select Portion Type"
-                                                onChange={handleAnotherSchedule}
-                                                MenuProps={{
-                                                    PaperProps: {
-                                                        sx: {
-                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-                                                            border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                            borderRadius: '16px',
-                                                            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
-                                                            '& .MuiMenuItem-root': {
-                                                                borderRadius: '8px',
-                                                                margin: '4px 8px',
-                                                                transition: 'all 0.2s ease',
-                                                                '&:hover': {
-                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                    transform: 'translateX(4px)'
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                {
-                                                    sheduleContentList && sheduleContentList.map((data, index) => {
-                                                        if (data?.active === true) {
-                                                            return (
-                                                                <MenuItem key={index} value={data}>{data?.title}</MenuItem>
-                                                            )
-                                                        }
 
-                                                    })
-                                                }
-                                            </Select>
-                                        </FormControl>
-
-                                        <FormControl className='mobile-select-button' sx={{
-                                            '& .MuiOutlinedInput-root': {
-                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                borderRadius: '16px',
-                                                border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                '&:hover': {
-                                                    boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-                                                    transform: 'translateY(-2px)',
-                                                    '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: 'rgba(102, 126, 234, 0.5)'
-                                                    }
-                                                },
-                                                '&.Mui-focused': {
-                                                    '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: '#667eea',
-                                                        borderWidth: '2px'
-                                                    }
-                                                }
-                                            },
-                                            '& .MuiInputLabel-root': {
-                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                WebkitBackgroundClip: 'text',
-                                                WebkitTextFillColor: 'transparent',
-                                                fontWeight: 600,
-                                                '&.Mui-focused': {
-                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                    WebkitBackgroundClip: 'text',
-                                                    WebkitTextFillColor: 'transparent'
-                                                }
-                                            }
-                                        }}>
-                                            <InputLabel
-                                                id="demo-simple-select-label"
-                                                sx={{
-                                                    fontSize: { xs: "14px", sm: "15px" },
-                                                    fontWeight: 600
-                                                }}
-                                            >
-                                                Select Plan Type
-                                            </InputLabel>
-                                            <Select
-                                                className='select-option'
-                                                sx={{
-                                                    mb: 2,
-                                                    minWidth: { xs: "120px", sm: "140px" },
-                                                    fontSize: { xs: "13px", sm: "14px" },
-                                                    '& .MuiSelect-select': {
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '8px'
-                                                    }
-                                                }}
-                                                labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
-                                                renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
-                                                value={selectedBasicPlan}
-                                                label="Select Plan Type"
-                                                onChange={handleBasicPlans}
-                                                MenuProps={{
-                                                    PaperProps: {
-                                                        sx: {
-                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-                                                            border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                            borderRadius: '16px',
-                                                            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
-                                                            '& .MuiMenuItem-root': {
-                                                                borderRadius: '8px',
-                                                                margin: '4px 8px',
-                                                                transition: 'all 0.2s ease',
-                                                                '&:hover': {
-                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                    transform: 'translateX(4px)'
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                }}
-                                            >
-                                                {
-                                                    schedulePlans && schedulePlans.map((data, index) => {
-                                                        if (data?.active === true) {
-                                                            return (
-                                                                <MenuItem key={index} value={data}>{data?.title}</MenuItem>
-                                                            )
-                                                        }
-
-                                                    })
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        {
-                                            ((selectedAotherSchedule?.title !== "Full Length Test Series") && (selectedAotherSchedule?.title !== "Portion WiseTest Series" && selectCourse?.title !== "CA Final")) && (
-                                                <FormControl className='mobile-select-button' sx={{
-                                                    '& .MuiOutlinedInput-root': {
-                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                        borderRadius: '16px',
-                                                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                        '&:hover': {
-                                                            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-                                                            transform: 'translateY(-2px)',
-                                                            '& .MuiOutlinedInput-notchedOutline': {
-                                                                borderColor: 'rgba(102, 126, 234, 0.5)'
-                                                            }
-                                                        },
-                                                        '&.Mui-focused': {
-                                                            '& .MuiOutlinedInput-notchedOutline': {
-                                                                borderColor: '#667eea',
-                                                                borderWidth: '2px'
-                                                            }
+                                            <FormControl className='mobile-select-button' sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                    borderRadius: '16px',
+                                                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                    '&:hover': {
+                                                        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                                                        transform: 'translateY(-2px)',
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: 'rgba(102, 126, 234, 0.5)'
                                                         }
                                                     },
-                                                    '& .MuiInputLabel-root': {
-                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                        WebkitBackgroundClip: 'text',
-                                                        WebkitTextFillColor: 'transparent',
-                                                        fontWeight: 600,
-                                                        '&.Mui-focused': {
-                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                            WebkitBackgroundClip: 'text',
-                                                            WebkitTextFillColor: 'transparent'
+                                                    '&.Mui-focused': {
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#667eea',
+                                                            borderWidth: '2px'
                                                         }
                                                     }
-                                                }}>
-                                                    <InputLabel
-                                                        id="demo-simple-select-label"
-                                                        sx={{
-                                                            fontSize: { xs: "14px", sm: "15px" },
-                                                            fontWeight: 600
-                                                        }}
-                                                    >
-                                                        Select Program Type
-                                                    </InputLabel>
-                                                    <Select
-                                                        className='select-option'
-                                                        sx={{
-                                                            mb: 2,
-                                                            minWidth: { xs: "120px", sm: "140px" },
-                                                            fontSize: { xs: "13px", sm: "14px" },
-                                                            '& .MuiSelect-select': {
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: '8px'
-                                                            }
-                                                        }}
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
-                                                        value={selectedForPlans}
-                                                        label="Select Program Type"
-                                                        onChange={handleSelecForPlan}
-                                                        MenuProps={{
-                                                            PaperProps: {
-                                                                sx: {
-                                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-                                                                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                                    borderRadius: '16px',
-                                                                    boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
-                                                                    '& .MuiMenuItem-root': {
-                                                                        borderRadius: '8px',
-                                                                        margin: '4px 8px',
-                                                                        transition: 'all 0.2s ease',
-                                                                        '&:hover': {
-                                                                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                            transform: 'translateX(4px)'
-                                                                        }
+                                                },
+                                                '& .MuiInputLabel-root': {
+                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                    WebkitBackgroundClip: 'text',
+                                                    WebkitTextFillColor: 'transparent',
+                                                    fontWeight: 600,
+                                                    '&.Mui-focused': {
+                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                        WebkitBackgroundClip: 'text',
+                                                        WebkitTextFillColor: 'transparent'
+                                                    }
+                                                }
+                                            }}>
+                                                <InputLabel
+                                                    id="demo-simple-select-label"
+                                                    sx={{
+                                                        fontSize: { xs: "14px", sm: "15px" },
+                                                        fontWeight: 600
+                                                    }}
+                                                >
+                                                    Select Portion Type
+                                                </InputLabel>
+                                                <Select
+                                                    className='select-option'
+                                                    sx={{
+                                                        mb: 2,
+                                                        minWidth: { xs: "120px", sm: "140px" },
+                                                        fontSize: { xs: "13px", sm: "14px" },
+                                                        '& .MuiSelect-select': {
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '8px'
+                                                        }
+                                                    }}
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
+                                                    value={selectedAotherSchedule}
+                                                    label="Select Portion Type"
+                                                    onChange={handleAnotherSchedule}
+                                                    MenuProps={{
+                                                        PaperProps: {
+                                                            sx: {
+                                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
+                                                                border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                                borderRadius: '16px',
+                                                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                                                                '& .MuiMenuItem-root': {
+                                                                    borderRadius: '8px',
+                                                                    margin: '4px 8px',
+                                                                    transition: 'all 0.2s ease',
+                                                                    '&:hover': {
+                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                        transform: 'translateX(4px)'
                                                                     }
                                                                 }
                                                             }
-                                                        }}
-                                                    >
-                                                        {
-                                                            planList && planList.map((data, index) => {
-                                                                if (data?.active === true) {
-                                                                    return (
-                                                                        <MenuItem key={index} value={data}>{data?.title}</MenuItem>
-                                                                    )
-                                                                }
-
-                                                            })
                                                         }
-                                                    </Select>
-                                                </FormControl>
-                                            )
-                                        }
-                                        {/* Removed duplicate commented View Schedules button */}
-                                    </>)}
-                                {/* {
+                                                    }}
+                                                >
+                                                    {
+                                                        sheduleContentList && sheduleContentList.map((data, index) => {
+                                                            if (data?.active === true) {
+                                                                return (
+                                                                    <MenuItem key={index} value={data}>{data?.title}</MenuItem>
+                                                                )
+                                                            }
+
+                                                        })
+                                                    }
+                                                </Select>
+                                            </FormControl>
+
+                                            <FormControl className='mobile-select-button' sx={{
+                                                '& .MuiOutlinedInput-root': {
+                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                    borderRadius: '16px',
+                                                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                    '&:hover': {
+                                                        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                                                        transform: 'translateY(-2px)',
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: 'rgba(102, 126, 234, 0.5)'
+                                                        }
+                                                    },
+                                                    '&.Mui-focused': {
+                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                            borderColor: '#667eea',
+                                                            borderWidth: '2px'
+                                                        }
+                                                    }
+                                                },
+                                                '& .MuiInputLabel-root': {
+                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                    WebkitBackgroundClip: 'text',
+                                                    WebkitTextFillColor: 'transparent',
+                                                    fontWeight: 600,
+                                                    '&.Mui-focused': {
+                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                        WebkitBackgroundClip: 'text',
+                                                        WebkitTextFillColor: 'transparent'
+                                                    }
+                                                }
+                                            }}>
+                                                <InputLabel
+                                                    id="demo-simple-select-label"
+                                                    sx={{
+                                                        fontSize: { xs: "14px", sm: "15px" },
+                                                        fontWeight: 600
+                                                    }}
+                                                >
+                                                    Select Plan Type
+                                                </InputLabel>
+                                                <Select
+                                                    className='select-option'
+                                                    sx={{
+                                                        mb: 2,
+                                                        minWidth: { xs: "120px", sm: "140px" },
+                                                        fontSize: { xs: "13px", sm: "14px" },
+                                                        '& .MuiSelect-select': {
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '8px'
+                                                        }
+                                                    }}
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
+                                                    value={selectedBasicPlan}
+                                                    label="Select Plan Type"
+                                                    onChange={handleBasicPlans}
+                                                    MenuProps={{
+                                                        PaperProps: {
+                                                            sx: {
+                                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
+                                                                border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                                borderRadius: '16px',
+                                                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                                                                '& .MuiMenuItem-root': {
+                                                                    borderRadius: '8px',
+                                                                    margin: '4px 8px',
+                                                                    transition: 'all 0.2s ease',
+                                                                    '&:hover': {
+                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                        transform: 'translateX(4px)'
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }}
+                                                >
+                                                    {
+                                                        schedulePlans && schedulePlans.map((data, index) => {
+                                                            if (data?.active === true) {
+                                                                return (
+                                                                    <MenuItem key={index} value={data}>{data?.title}</MenuItem>
+                                                                )
+                                                            }
+
+                                                        })
+                                                    }
+                                                </Select>
+                                            </FormControl>
+                                            {
+                                                ((selectedAotherSchedule?.title !== "Full Length Test Series") && (selectedAotherSchedule?.title !== "Portion WiseTest Series" && selectCourse?.title !== "CA Final")) && (
+                                                    <FormControl className='mobile-select-button' sx={{
+                                                        '& .MuiOutlinedInput-root': {
+                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                            borderRadius: '16px',
+                                                            border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                            '&:hover': {
+                                                                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                                                                transform: 'translateY(-2px)',
+                                                                '& .MuiOutlinedInput-notchedOutline': {
+                                                                    borderColor: 'rgba(102, 126, 234, 0.5)'
+                                                                }
+                                                            },
+                                                            '&.Mui-focused': {
+                                                                '& .MuiOutlinedInput-notchedOutline': {
+                                                                    borderColor: '#667eea',
+                                                                    borderWidth: '2px'
+                                                                }
+                                                            }
+                                                        },
+                                                        '& .MuiInputLabel-root': {
+                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                            WebkitBackgroundClip: 'text',
+                                                            WebkitTextFillColor: 'transparent',
+                                                            fontWeight: 600,
+                                                            '&.Mui-focused': {
+                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                WebkitBackgroundClip: 'text',
+                                                                WebkitTextFillColor: 'transparent'
+                                                            }
+                                                        }
+                                                    }}>
+                                                        <InputLabel
+                                                            id="demo-simple-select-label"
+                                                            sx={{
+                                                                fontSize: { xs: "14px", sm: "15px" },
+                                                                fontWeight: 600
+                                                            }}
+                                                        >
+                                                            Select Program Type
+                                                        </InputLabel>
+                                                        <Select
+                                                            className='select-option'
+                                                            sx={{
+                                                                mb: 2,
+                                                                minWidth: { xs: "120px", sm: "140px" },
+                                                                fontSize: { xs: "13px", sm: "14px" },
+                                                                '& .MuiSelect-select': {
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '8px'
+                                                                }
+                                                            }}
+                                                            labelId="demo-simple-select-label"
+                                                            id="demo-simple-select"
+                                                            renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
+                                                            value={selectedForPlans}
+                                                            label="Select Program Type"
+                                                            onChange={handleSelecForPlan}
+                                                            MenuProps={{
+                                                                PaperProps: {
+                                                                    sx: {
+                                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
+                                                                        border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                                        borderRadius: '16px',
+                                                                        boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                                                                        '& .MuiMenuItem-root': {
+                                                                            borderRadius: '8px',
+                                                                            margin: '4px 8px',
+                                                                            transition: 'all 0.2s ease',
+                                                                            '&:hover': {
+                                                                                background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                                transform: 'translateX(4px)'
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }}
+                                                        >
+                                                            {
+                                                                planList && planList.map((data, index) => {
+                                                                    if (data?.active === true) {
+                                                                        return (
+                                                                            <MenuItem key={index} value={data}>{data?.title}</MenuItem>
+                                                                        )
+                                                                    }
+
+                                                                })
+                                                            }
+                                                        </Select>
+                                                    </FormControl>
+                                                )
+                                            }
+                                            {/* Removed duplicate commented View Schedules button */}
+                                        </>)}
+                                    {/* {
                                     activeStep === 1 && (
                                         <>
                                             {
@@ -2354,8 +2328,8 @@ export default function FoundationTestSeries({
                                     )
                                 } */}
 
-                            </Stack>
-                            {/* {
+                                </Stack>
+                                {/* {
                                 !isMobileDevice && activeStep === 0 && (
                                     <Grid container>
                                         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -2371,157 +2345,158 @@ export default function FoundationTestSeries({
                                 )
                             } */}
 
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    <Box>
-                        <Grid item xs={12} sm={8} md={8} lg={8}>
-                            <ModernStepper activeStep={activeStep} connector={<ModernStepConnector />}>
-                                {steps.map((label, index) => {
-                                    const stepProps = {};
-                                    const labelProps = {};
-                                    if (isStepSkipped(index)) {
-                                        stepProps.completed = false;
-                                    }
-                                    return (
-                                        <Step key={label} {...stepProps}>
-                                            <StepLabel {...labelProps} StepIconComponent={(props) => (
-                                                <ModernStepIcon {...props} icon={index + 1} />
-                                            )}>
-                                                <Typography
-                                                    variant="body2"
-                                                    fontWeight={600}
-                                                    sx={{
-                                                        fontSize: "1.375rem",
-                                                        color: activeStep === index ? modernColors.primary.main : modernColors.neutral.gray,
-                                                        transition: 'color 0.3s ease'
-                                                    }}
-                                                >
-                                                    {label}
-                                                </Typography>
-                                            </StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </ModernStepper>
-                        </Grid>
-                        {
-                            activeStep === 0 && (
-                                <Grid item xs={12} sm={12} md={12} lg={12}>
-                                    <Box sx={{ mt: 5, ml: 1 }} className="filter-btn">
-                                        {/* <Button onClick={() => handleFilter('group')} sx={{ background: filterGroupSubject === "group" ? "#1354C1" : "", color: filterGroupSubject === "group" ? "#fff" : "#1354C1", fontWeight: "bold", marginRight: '16px !important', border: "1px solid #c1c1c196", fontSize: "12px", padding: "14px 11px!important" }} className='mobile-group-btn button-hover'>Groups Wise</Button>
+                        <Box>
+                            <Grid item xs={12} sm={8} md={8} lg={8}>
+                                <ModernStepper activeStep={activeStep} connector={<ModernStepConnector />}>
+                                    {steps.map((label, index) => {
+                                        const stepProps = {};
+                                        const labelProps = {};
+                                        if (isStepSkipped(index)) {
+                                            stepProps.completed = false;
+                                        }
+                                        return (
+                                            <Step key={label} {...stepProps}>
+                                                <StepLabel {...labelProps} StepIconComponent={(props) => (
+                                                    <ModernStepIcon {...props} icon={index + 1} />
+                                                )}>
+                                                    <Typography
+                                                        variant="body2"
+                                                        fontWeight={600}
+                                                        sx={{
+                                                            fontSize: { xs: '0.75rem', sm: '0.95rem', md: '1.375rem' },
+                                                            color: activeStep === index ? modernColors.primary.main : modernColors.neutral.gray,
+                                                            transition: 'color 0.3s ease',
+                                                            whiteSpace: 'nowrap'
+                                                        }}
+                                                    >
+                                                        {label}
+                                                    </Typography>
+                                                </StepLabel>
+                                            </Step>
+                                        );
+                                    })}
+                                </ModernStepper>
+                            </Grid>
+                            {
+                                activeStep === 0 && (
+                                    <Grid item xs={12} sm={12} md={12} lg={12}>
+                                        <Box sx={{ mt: 5, ml: 1 }} className="filter-btn">
+                                            {/* <Button onClick={() => handleFilter('group')} sx={{ background: filterGroupSubject === "group" ? "#1354C1" : "", color: filterGroupSubject === "group" ? "#fff" : "#1354C1", fontWeight: "bold", marginRight: '16px !important', border: "1px solid #c1c1c196", fontSize: "12px", padding: "14px 11px!important" }} className='mobile-group-btn button-hover'>Groups Wise</Button>
                                         <Button onClick={() => handleFilter('subject')} sx={{ background: filterGroupSubject === "subject" ? "#1354C1" : "", color: filterGroupSubject === "subject" ? "#fff" : "#1354C1", fontWeight: "bold", marginRight: '16px', border: "1px solid #c1c1c196", fontSize: "12px", padding: "14px 11px!important" }} className='mobile-group-btn button-hover'>Subjects Wise</Button> */}
 
-                                        <FormControl
-                                            className='mobile-select-button'
-                                            sx={{
-                                                marginRight: '16px',
-                                                marginTop: !isMobileDevice ? "20px" : "",
-                                                '& .MuiOutlinedInput-root': {
-                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
-                                                    backdropFilter: 'blur(20px)',
-                                                    borderRadius: '16px',
-                                                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                    '&:hover': {
-                                                        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-                                                        transform: 'translateY(-2px)',
-                                                        '& .MuiOutlinedInput-notchedOutline': {
-                                                            borderColor: 'rgba(102, 126, 234, 0.5)'
+                                            <FormControl
+                                                className='mobile-select-button'
+                                                sx={{
+                                                    marginRight: '16px',
+                                                    marginTop: !isMobileDevice ? "20px" : "",
+                                                    '& .MuiOutlinedInput-root': {
+                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                                                        backdropFilter: 'blur(20px)',
+                                                        borderRadius: '16px',
+                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                        '&:hover': {
+                                                            boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                                                            transform: 'translateY(-2px)',
+                                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: 'rgba(102, 126, 234, 0.5)'
+                                                            }
+                                                        },
+                                                        '&.Mui-focused': {
+                                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                                borderColor: '#667eea',
+                                                                borderWidth: '2px'
+                                                            }
                                                         }
                                                     },
-                                                    '&.Mui-focused': {
-                                                        '& .MuiOutlinedInput-notchedOutline': {
-                                                            borderColor: '#667eea',
-                                                            borderWidth: '2px'
-                                                        }
-                                                    }
-                                                },
-                                                '& .MuiInputLabel-root': {
-                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                    WebkitBackgroundClip: 'text',
-                                                    WebkitTextFillColor: 'transparent',
-                                                    fontWeight: 600,
-                                                    '&.Mui-focused': {
+                                                    '& .MuiInputLabel-root': {
                                                         background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
                                                         WebkitBackgroundClip: 'text',
-                                                        WebkitTextFillColor: 'transparent'
-                                                    }
-                                                }
-                                            }}
-                                        >
-                                            <InputLabel id="demo-simple-select-label" sx={{ fontSize: "15px" }}>
-                                                📚 Subject Wise
-                                            </InputLabel>
-                                            <Select
-                                                // defaultOpen={true}
-                                                onOpen={handleSelectSub}
-                                                sx={{
-                                                    minWidth: "100px",
-                                                    maxWidth: "300px",
-                                                    width: "200px",
-                                                    fontSize: "14px",
-                                                    '& .MuiSelect-select': {
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '8px'
-                                                    }
-                                                }}
-                                                labelId='channel-lable'
-                                                className='select-option'
-                                                multiple
-                                                value={selectSubjectWise}
-                                                onChange={handleSubjectWise}
-                                                renderValue={(selected) => selected?.map((x) => x?.title).join(', ')}
-                                                // renderValue={(selected) => (selected.title).join(', ')}
-                                                // MenuProps={MenuProps}
-                                                label="📚 Subject Wise"
-                                                MenuProps={{
-                                                    PaperProps: {
-                                                        sx: {
-                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                            backdropFilter: 'blur(20px)',
-                                                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                            borderRadius: '16px',
-                                                            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
-                                                            '& .MuiMenuItem-root': {
-                                                                borderRadius: '8px',
-                                                                margin: '4px 8px',
-                                                                transition: 'all 0.2s ease',
-                                                                '&:hover': {
-                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                    transform: 'translateX(4px)'
-                                                                },
-                                                                '&.Mui-selected': {
-                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)',
-                                                                    '&:hover': {
-                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%)'
-                                                                    }
-                                                                }
-                                                            }
+                                                        WebkitTextFillColor: 'transparent',
+                                                        fontWeight: 600,
+                                                        '&.Mui-focused': {
+                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                            WebkitBackgroundClip: 'text',
+                                                            WebkitTextFillColor: 'transparent'
                                                         }
                                                     }
                                                 }}
                                             >
-                                                {
-                                                    subjectWiseListRender && subjectWiseListRender
-                                                        .filter(item => item.title === item.title)
-                                                        .map((item, index) => {
-                                                            return (
-                                                                <MenuItem key={index} value={item}>
-                                                                    <Checkbox checked={selectSubjectWise.indexOf(item) > -1} />
-                                                                    <ListItemText primary={item?.title} />
-                                                                </MenuItem>
-                                                            );
-                                                        })
-                                                }
-                                            </Select>
-                                        </FormControl>
-                                        {/* Removed duplicate commented View Schedules button */}
-                                    </Box>
-                                    {/* <Box sx={{ mt: 5, ml: 1 }} className="filter-btn"> */}
-                                    {/* {
+                                                <InputLabel id="demo-simple-select-label" sx={{ fontSize: "15px" }}>
+                                                    📚 Subject Wise
+                                                </InputLabel>
+                                                <Select
+                                                    // defaultOpen={true}
+                                                    onOpen={handleSelectSub}
+                                                    sx={{
+                                                        minWidth: "100px",
+                                                        maxWidth: "300px",
+                                                        width: "200px",
+                                                        fontSize: "14px",
+                                                        '& .MuiSelect-select': {
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '8px'
+                                                        }
+                                                    }}
+                                                    labelId='channel-lable'
+                                                    className='select-option'
+                                                    multiple
+                                                    value={selectSubjectWise}
+                                                    onChange={handleSubjectWise}
+                                                    renderValue={(selected) => selected?.map((x) => x?.title).join(', ')}
+                                                    // renderValue={(selected) => (selected.title).join(', ')}
+                                                    // MenuProps={MenuProps}
+                                                    label="📚 Subject Wise"
+                                                    MenuProps={{
+                                                        PaperProps: {
+                                                            sx: {
+                                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                                backdropFilter: 'blur(20px)',
+                                                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                                borderRadius: '16px',
+                                                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                                                                '& .MuiMenuItem-root': {
+                                                                    borderRadius: '8px',
+                                                                    margin: '4px 8px',
+                                                                    transition: 'all 0.2s ease',
+                                                                    '&:hover': {
+                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                        transform: 'translateX(4px)'
+                                                                    },
+                                                                    '&.Mui-selected': {
+                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%)',
+                                                                        '&:hover': {
+                                                                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%)'
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }}
+                                                >
+                                                    {
+                                                        subjectWiseListRender && subjectWiseListRender
+                                                            .filter(item => item.title === item.title)
+                                                            .map((item, index) => {
+                                                                return (
+                                                                    <MenuItem key={index} value={item}>
+                                                                        <Checkbox checked={selectSubjectWise.indexOf(item) > -1} />
+                                                                        <ListItemText primary={item?.title} />
+                                                                    </MenuItem>
+                                                                );
+                                                            })
+                                                    }
+                                                </Select>
+                                            </FormControl>
+                                            {/* Removed duplicate commented View Schedules button */}
+                                        </Box>
+                                        {/* <Box sx={{ mt: 5, ml: 1 }} className="filter-btn"> */}
+                                        {/* {
                                             selectCourse?.id && (
                                                 <FormControl className='mobile-select-button'>
                                                     <InputLabel id="demo-simple-select-label" sx={{ fontSize: "13px" }}>Schedule</InputLabel>
@@ -2545,7 +2520,7 @@ export default function FoundationTestSeries({
                                                 </FormControl>
                                             )
                                         } */}
-                                    {/* <FormControl className='mobile-select-button' sx={{ marginRight: '16px' }} >
+                                        {/* <FormControl className='mobile-select-button' sx={{ marginRight: '16px' }} >
                                             <InputLabel id="demo-simple-select-label" sx={{ fontSize: "13px" }}>Groups/Subjects</InputLabel>
                                             <Select
                                                 sx={{ minWidth: "100px", maxWidth: "300px", width: "200px", fontSize: "12px" }}
@@ -2560,7 +2535,7 @@ export default function FoundationTestSeries({
                                             </Select>
                                         </FormControl> */}
 
-                                    {/* {
+                                        {/* {
                                             filterGroupSubject === "group" && (
                                                 <Box className="mobile-filter-btn">
                                                     <Button onClick={() => handleButtonClick('both')} sx={{ background: activeBtn === "both" ? "#1354C1" : "", color: activeBtn === "both" ? "#fff" : "#1354C1", fontWeight: "bold", width: "fit-content", marginRight: '16px', padding: "14px 11px!important", border: "1px solid #c1c1c196", fontSize: "12px", width: "110px" }} className='mobile-group-btn button-hover'>Both Group</Button>
@@ -2569,1783 +2544,1636 @@ export default function FoundationTestSeries({
                                                 </Box>
                                             )
                                         } */}
-                                    {/* </Box> */}
-                                </Grid>
-                            )
-                        }
-                        <div>
-                            {allStepsCompleted() ? (
-                                <React.Fragment>
-                                    <Typography sx={{ mt: 2, mb: 1 }}>
-                                        All steps completed - you&apos;re finished
-                                    </Typography>
-                                    <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
-                                        <Box sx={{ flex: '1 1 auto' }} />
-                                        <Button onClick={handleReset}>Reset</Button>
-                                    </Box>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    {
-                                        activeStep === 0 && schedule?.id && (
-                                            <Typography sx={{ mb: 1, py: 1 }}>
-                                                {cartArray?.length > 0 && (
-                                                    <Box sx={{ textAlign: "right" }}>
-                                                        <ModernCheckoutButton
-                                                            disabled={cartArray?.length === 0}
-                                                            onClick={handleShowCart}
-                                                            className='button-hover mobile-view-checkout'
-                                                            startIcon={<ArrowForwardIcon />}
-                                                            sx={{
-                                                                fontSize: '14px',
-                                                                padding: '12px 20px',
-                                                                background: modernColors.secondary.gradient
-                                                            }}
-                                                        >
-                                                            Go to Cart Details
-                                                        </ModernCheckoutButton>
-                                                    </Box>
-                                                )}
-                                                {
-                                                    selectCourse?.id && (
-                                                        <>
-                                                            <div className='react-multi-carousel-list'>
-                                                                <Container maxWidth="lg" sx={{ 
-                                                                    py: 2,
-                                                                    px: { xs: 1, md: 2 }
-                                                                }}>
-                                                                    <Grid container spacing={3}>
-                                                                        {
-                                                                            plansList && plansList.map((item, i) => {
-                                                                                let object = getPlanPrice(item, activeBtn, selectSubjectWise);
-                                                                                let logo = object?.thumbLogo;
-                                                                                let price = object?.price;
-                                                                                let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.discount)) : object?.finalPrice;
-                                                                                let discount = Math.round(100 - ((finalPrices / price) * 100));
-                                                                                const fullDescription = item?.description?.description || "";
-                                                                                const isAdded = cartArray.some(cartItem => cartItem.plan.id === item.id);
-                                                                                const isPremium = discount > 20;
+                                        {/* </Box> */}
+                                    </Grid>
+                                )
+                            }
+                            <div>
+                                {allStepsCompleted() ? (
+                                    <React.Fragment>
+                                        <Typography sx={{ mt: 2, mb: 1 }}>
+                                            All steps completed - you&apos;re finished
+                                        </Typography>
+                                        <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+                                            <Box sx={{ flex: '1 1 auto' }} />
+                                            <Button onClick={handleReset}>Reset</Button>
+                                        </Box>
+                                    </React.Fragment>
+                                ) : (
+                                    <React.Fragment>
+                                        {
+                                            activeStep === 0 && schedule?.id && (
+                                                <Stack direction={'column'}>
+                                                 {cartArray?.length > 0 && (
+                                                            <Box sx={{ textAlign: { xs: "end", sm: "right" } , py:1}}>
+                                                                <ModernCheckoutButton
+                                                                    disabled={cartArray?.length === 0}
+                                                                    onClick={handleShowCart}
+                                                                    className='button-hover mobile-view-checkout'
+                                                                    startIcon={<ArrowForwardIcon sx={{ fontSize: { xs: '16px', sm: '18px' } }} />}
+                                                                    sx={{
+                                                                        fontSize: { xs: '12px', sm: '14px' },
+                                                                        padding: { xs: '10px 12px', sm: '12px 20px' },
+                                                                        background: modernColors.secondary.gradient,
+                                                                        width: { xs: '50%', sm: 'auto' }
+                                                                    }}
+                                                                >
+                                                                    Go to Cart Details
+                                                                </ModernCheckoutButton>
+                                                            </Box>
+                                                        )}
+                                                    <Typography sx={{ mb: 1, py: 1, display: 'flex', justifyContent: 'start' }}>
+                                                       
+                                                        {
+                                                            selectCourse?.id && (
+                                                                <div>
+                                                                    <div className='react-multi-carousel-list' >
+                                                                        <Container maxWidth="lg" sx={{
+                                                                            py: { xs: 1, sm: 2 },
+                                                                            px: { xs: 0.5, sm: 1, md: 2 },
+                                                                        }}>
+                                                                            <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }} sx={{ justifyContent: 'flex-start' }}>
+                                                                                {
+                                                                                    plansList && plansList.map((item, i) => {
+                                                                                        let object = getPlanPrice(item, activeBtn, selectSubjectWise);
+                                                                                        let logo = object?.thumbLogo;
+                                                                                        let price = object?.price;
+                                                                                        let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.discount)) : object?.finalPrice;
+                                                                                        let discount = Math.round(100 - ((finalPrices / price) * 100));
+                                                                                        const fullDescription = item?.description?.description || "";
+                                                                                        const isAdded = cartArray.some(cartItem => cartItem.plan.id === item.id);
+                                                                                        const isPremium = discount > 20;
 
-                                                                                return (
-                                                                                    <Grid item xs={12} sm={6} md={4} lg={3} key={item.id || i}>
-                                                                                        <Fade in timeout={600 + i * 100}>
-                                                                                            <ModernPlanCard
-                                                                                                isSelected={isAdded}
-                                                                                                isPremium={isPremium}
-                                                                                                onClick={() => handleEnrollNow(item)}
-                                                                                            >
-                                                                                                <ModernPlanImage
-                                                                                                    image={filterGroupSubject === "subject" ?
-                                                                                                        Endpoints + subjectWiseListRender[0]?.description?.thumb :
-                                                                                                        logo ? Endpoints + logo : "img/folder-2.png"
-                                                                                                    }
-                                                                                                    title={item?.title}
-                                                                                                />
-
-                                                                                                <CardContent sx={{ px: 2, pt: 1, pb: 2 }}>
-                                                                                                    <ModernPlanTitle variant="h6">
-                                                                                                        {item?.title}
-                                                                                                    </ModernPlanTitle>
-
-                                                                                                    <Typography
-                                                                                                        variant="body2"
-                                                                                                        sx={{
-                                                                                                            color: modernColors.neutral.gray,
-                                                                                                            mb: 2,
-                                                                                                            display: '-webkit-box',
-                                                                                                            WebkitLineClamp: 2,
-                                                                                                            WebkitBoxOrient: 'vertical',
-                                                                                                            overflow: 'hidden',
-                                                                                                            textAlign: 'center',
-                                                                                                            fontSize: "14px",
-                                                                                                            // minHeight: '40px'
-                                                                                                        }}
+                                                                                        return (
+                                                                                            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id || i}>
+                                                                                                <Fade in timeout={600 + i * 100}>
+                                                                                                    <ModernPlanCard
+                                                                                                        isSelected={isAdded}
+                                                                                                        isPremium={isPremium}
+                                                                                                        onClick={() => handleEnrollNow(item)}
                                                                                                     >
-                                                                                                        {fullDescription || "Premium test series for better preparation"}
-                                                                                                    </Typography>
+                                                                                                        <ModernPlanImage
+                                                                                                            image={filterGroupSubject === "subject" ?
+                                                                                                                Endpoints + subjectWiseListRender[0]?.description?.thumb :
+                                                                                                                logo ? Endpoints + logo : "img/folder-2.png"
+                                                                                                            }
+                                                                                                            title={item?.title}
+                                                                                                        />
 
-                                                                                                    {selectSubjectWise?.length > 0 && (
-                                                                                                        <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
-                                                                                                            {selectSubjectWise.slice(0, 3).map((chipLabel, idx) => (
-                                                                                                                <ModernChip
-                                                                                                                    key={idx}
-                                                                                                                    size="small"
-                                                                                                                    label={chipTitle(chipLabel?.title)}
-                                                                                                                    chipcolor="accent"
-                                                                                                                />
-                                                                                                            ))}
-                                                                                                            {selectSubjectWise.length > 3 && (
-                                                                                                                <ModernChip
-                                                                                                                    size="small"
-                                                                                                                    label={`+${selectSubjectWise.length - 3}`}
-                                                                                                                    chipcolor="primary"
-                                                                                                                />
+                                                                                                        <CardContent sx={{ px: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 1, sm: 1.5, md: 2 }, pb: { xs: 1, sm: 1.5, md: 2 } }}>
+                                                                                                            <ModernPlanTitle variant="h6">
+                                                                                                                {item?.title}
+                                                                                                            </ModernPlanTitle>
+
+                                                                                                            {/* <Typography
+                                                                                                            variant="body2"
+                                                                                                            sx={{
+                                                                                                                color: modernColors.neutral.gray,
+                                                                                                                mb: 1.5,
+                                                                                                                display: '-webkit-box',
+                                                                                                                WebkitLineClamp: 2,
+                                                                                                                WebkitBoxOrient: 'vertical',
+                                                                                                                overflow: 'hidden',
+                                                                                                                textAlign: 'center',
+                                                                                                                fontSize: "13px",
+                                                                                                                lineHeight: '1.4',
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            {fullDescription || "Premium test series for better preparation"}
+                                                                                                        </Typography> */}
+
+                                                                                                            {selectSubjectWise?.length > 0 && (
+                                                                                                                <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
+                                                                                                                    {selectSubjectWise.slice(0, 3).map((chipLabel, idx) => (
+                                                                                                                        <ModernChip
+                                                                                                                            key={idx}
+                                                                                                                            size="small"
+                                                                                                                            label={chipTitle(chipLabel?.title)}
+                                                                                                                            chipcolor="accent"
+                                                                                                                        />
+                                                                                                                    ))}
+                                                                                                                    {selectSubjectWise.length > 3 && (
+                                                                                                                        <ModernChip
+                                                                                                                            size="small"
+                                                                                                                            label={`+${selectSubjectWise.length - 3}`}
+                                                                                                                            chipcolor="primary"
+                                                                                                                        />
+                                                                                                                    )}
+                                                                                                                </Box>
                                                                                                             )}
-                                                                                                        </Box>
-                                                                                                    )}
 
-                                                                                                    <ModernPriceContainer>
-                                                                                                        {item.paid ? (
-                                                                                                            <>
-                                                                                                                {object.percent > 0 ? (
+                                                                                                            <ModernPriceContainer>
+                                                                                                                {item.paid ? (
                                                                                                                     <>
-                                                                                                                        <ModernPrice isDiscounted>
-                                                                                                                            ₹{object?.finalPrice.toFixed(0)}
-                                                                                                                        </ModernPrice>
-                                                                                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                                                                                            <ModernOriginalPrice>
-                                                                                                                                ₹{price}
-                                                                                                                            </ModernOriginalPrice>
-                                                                                                                            <ModernDiscountBadge
-                                                                                                                                label={`${Math.round(object.percent)}% OFF`}
-                                                                                                                                size="small"
-                                                                                                                            />
-                                                                                                                        </Box>
+                                                                                                                        {object.percent > 0 ? (
+                                                                                                                            <>
+                                                                                                                                <Box sx={{ textAlign: 'center' }}>
+                                                                                                                                    <ModernPrice isDiscounted>
+                                                                                                                                        ₹{object?.finalPrice.toFixed(0)}
+                                                                                                                                    </ModernPrice>
+                                                                                                                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mt: 0.5 }}>
+                                                                                                                                        <ModernOriginalPrice>
+                                                                                                                                            ₹{price}
+                                                                                                                                        </ModernOriginalPrice>
+                                                                                                                                        <ModernDiscountBadge
+                                                                                                                                            label={`${Math.round(object.percent)}% OFF`}
+                                                                                                                                            size="small"
+                                                                                                                                        />
+                                                                                                                                    </Box>
+                                                                                                                                </Box>
+                                                                                                                            </>
+                                                                                                                        ) : (
+                                                                                                                            <ModernPrice>₹{price}</ModernPrice>
+                                                                                                                        )}
                                                                                                                     </>
                                                                                                                 ) : (
-                                                                                                                    <ModernPrice>₹{price}</ModernPrice>
+                                                                                                                    <Typography
+                                                                                                                        variant="h6"
+                                                                                                                        sx={{
+                                                                                                                            color: modernColors.secondary.main,
+                                                                                                                            fontWeight: 700,
+                                                                                                                            display: 'flex',
+                                                                                                                            alignItems: 'center',
+                                                                                                                            gap: 1
+                                                                                                                        }}
+                                                                                                                    >
+                                                                                                                        <VerifiedIcon fontSize="small" />
+                                                                                                                        FREE
+                                                                                                                    </Typography>
                                                                                                                 )}
-                                                                                                            </>
-                                                                                                        ) : (
-                                                                                                            <Typography
-                                                                                                                variant="h6"
-                                                                                                                sx={{
-                                                                                                                    color: modernColors.secondary.main,
-                                                                                                                    fontWeight: 700,
-                                                                                                                    display: 'flex',
-                                                                                                                    alignItems: 'center',
-                                                                                                                    gap: 1
+                                                                                                            </ModernPriceContainer>
+                                                                                                        </CardContent>
+
+                                                                                                        <CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 } }}>
+                                                                                                            <ModernAddButton
+                                                                                                                isAdded={isAdded}
+                                                                                                                onClick={(e) => {
+                                                                                                                    e.stopPropagation();
+                                                                                                                    handleEnrollNow(item);
                                                                                                                 }}
+                                                                                                                startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
                                                                                                             >
-                                                                                                                <VerifiedIcon fontSize="small" />
-                                                                                                                FREE
-                                                                                                            </Typography>
-                                                                                                        )}
-                                                                                                    </ModernPriceContainer>
-                                                                                                </CardContent>
-
-                                                                                                <CardActions sx={{ p: 2, pt: 0 }}>
-                                                                                                    <ModernAddButton
-                                                                                                        isAdded={isAdded}
-                                                                                                        onClick={(e) => {
-                                                                                                            e.stopPropagation();
-                                                                                                            handleEnrollNow(item);
-                                                                                                        }}
-                                                                                                        startIcon={isAdded ? <CheckCircleRoundedIcon /> : <AddCircleIcon />}
-                                                                                                    >
-                                                                                                        {isAdded ? "✓ Added to Cart" : "Add to Cart"}
-                                                                                                    </ModernAddButton>
-                                                                                                </CardActions>
-                                                                                            </ModernPlanCard>
-                                                                                        </Fade>
-                                                                                    </Grid>
-                                                                                );
-                                                                            })
+                                                                                                                {isAdded ? "✓ Added to Cart" : "Add to Cart"}
+                                                                                                            </ModernAddButton>
+                                                                                                        </CardActions>
+                                                                                                    </ModernPlanCard>
+                                                                                                </Fade>
+                                                                                            </Grid>
+                                                                                        );
+                                                                                    })
+                                                                                }
+                                                                            </Grid>
+                                                                        </Container>
+                                                                    </div>
+                                                                </div>
+                                                            )
+                                                        }
+                                                    </Typography>
+                                                </Stack>
+                                            )
+                                        }
+                                        {
+                                            activeStep === 1 && (
+                                                <Typography sx={{ mt: 3, mb: 3, py: 1 }}>
+                                                    <Box
+                                                        sx={{
+                                                            padding: !isMobileDevice ? "0" : "0 2rem",
+                                                            margin: isMobileDevice ? "0" : "0 2rem",
+                                                            display: "flex",
+                                                            justifyContent: "flex-end",
+                                                            alignItems: "center",
+                                                            mb: 3,
+                                                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                                                            borderRadius: '20px',
+                                                            padding: '20px',
+                                                            border: '1px solid rgba(102, 126, 234, 0.1)',
+                                                            backdropFilter: 'blur(10px)',
+                                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+                                                            gap: '20px',
+                                                            flexWrap: 'wrap'
+                                                        }}
+                                                    >
+                                                        {/* View Detailed Schedules Button - First (left) */}
+                                                        {
+                                                            plansList?.length > 0 && selectShedule?.title !== "UnScheduled" && (
+                                                                <Typography
+                                                                    variant='button'
+                                                                    onClick={handleViewPlan}
+                                                                    sx={{
+                                                                        width: !isMobileDevice ? '100%' : 'auto',
+                                                                        fontWeight: "700",
+                                                                        padding: "16px 24px",
+                                                                        fontSize: "16px",
+                                                                        color: "#667eea",
+                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                        border: "2px solid rgba(102, 126, 234, 0.2)",
+                                                                        borderRadius: "16px",
+                                                                        cursor: "pointer",
+                                                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                                        backdropFilter: 'blur(10px)',
+                                                                        textTransform: 'none',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '8px',
+                                                                        height: '56px',
+                                                                        whiteSpace: 'nowrap',
+                                                                        '&:hover': {
+                                                                            transform: 'translateY(-2px)',
+                                                                            boxShadow: '0 8px 25px rgba(102, 126, 234, 0.2)',
+                                                                            border: "2px solid rgba(102, 126, 234, 0.4)",
+                                                                            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%)'
+                                                                        },
+                                                                        '&::before': {
+                                                                            content: '"📋"',
+                                                                            marginRight: '4px'
                                                                         }
-                                                                    </Grid>
-                                                                </Container>
-                                                            </div>
-                                                            <div className='desktop-plan-box'>
-                                                                <Container maxWidth="xl" sx={{ 
-                                                                    m:0,
-                                                                    py: 2,
-                                                                    px: { xs: 0, md: 0, lg: 0 }
-                                                                }}>
-                                                                    <Grid container spacing={3}>
-                                                                        {
-                                                                            plansList && plansList.map((item, i) => {
-                                                                                let object = getPlanPrice(item, activeBtn, selectSubjectWise);
-                                                                                let logo = object?.thumbLogo;
-                                                                                let price = object?.price;
-                                                                                let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.discount)) : object?.finalPrice;
-                                                                                let discount = Math.round(100 - ((finalPrices / price) * 100));
-                                                                                const fullDescription = item?.description?.description || "";
-                                                                                const isAdded = cartArray.some(cartItem => cartItem.plan.id === item.id);
-                                                                                const isPremium = discount > 20;
+                                                                    }}
+                                                                >
+                                                                    View Detailed Schedules
+                                                                </Typography>
+                                                            )
+                                                        }
 
-                                                                                return (
-                                                                                    <Grid item xs={12} sm={6} md={4} lg={2.4} key={item.id || i}>
-                                                                                        <Fade in timeout={600 + i * 100}>
-                                                                                            <ModernPlanCard
-                                                                                                isSelected={isAdded}
-                                                                                                isPremium={isPremium}
-                                                                                                onClick={() => handleEnrollNow(item)}
-                                                                                            >
-                                                                                                <ModernPlanImage
-                                                                                                    image={filterGroupSubject === "subject" ?
-                                                                                                        Endpoints + subjectWiseListRender[0]?.description?.thumb :
-                                                                                                        logo ? Endpoints + logo : "img/folder-2.png"
-                                                                                                    }
-                                                                                                    title={item?.title}
-                                                                                                />
-
-                                                                                                <CardContent sx={{ px: 2, pt: 1, pb: 2 }}>
-                                                                                                    <ModernPlanTitle variant="h5">
-                                                                                                        {item?.title}
-                                                                                                    </ModernPlanTitle>
-
-                                                                                                    <Typography
-                                                                                                        variant="body2"
-                                                                                                        sx={{
-                                                                                                            color: modernColors.neutral.gray,
-                                                                                                            mb: 2,
-                                                                                                            display: '-webkit-box',
-                                                                                                            WebkitLineClamp: 3,
-                                                                                                            WebkitBoxOrient: 'vertical',
-                                                                                                            overflow: 'hidden',
-                                                                                                            fontSize: "14px", textAlign: 'center',
-                                                                                                            // minHeight: '60px'
-                                                                                                        }}
-                                                                                                    >
-                                                                                                        {fullDescription || "Premium test series for better preparation"}
-                                                                                                    </Typography>
-
-                                                                                                    {selectSubjectWise?.length > 0 && (
-                                                                                                        <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
-                                                                                                            {selectSubjectWise.slice(0, 4).map((chipLabel, idx) => (
-                                                                                                                <ModernChip
-                                                                                                                    key={idx}
-                                                                                                                    size="small"
-                                                                                                                    label={chipTitle(chipLabel?.title)}
-                                                                                                                    chipcolor="accent"
-                                                                                                                />
-                                                                                                            ))}
-                                                                                                            {selectSubjectWise.length > 4 && (
-                                                                                                                <ModernChip
-                                                                                                                    size="small"
-                                                                                                                    label={`+${selectSubjectWise.length - 4}`}
-                                                                                                                    chipcolor="primary"
-                                                                                                                />
-                                                                                                            )}
-                                                                                                        </Box>
-                                                                                                    )}
-
-                                                                                                    <ModernPriceContainer>
-                                                                                                        {item.paid ? (
-                                                                                                            <>
-                                                                                                                {object.percent > 0 ? (
-                                                                                                                    <>
-                                                                                                                        <ModernPrice isDiscounted>
-                                                                                                                            ₹{object?.finalPrice.toFixed(0)}
-                                                                                                                        </ModernPrice>
-                                                                                                                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                                                                                                                            <ModernOriginalPrice>
-                                                                                                                                ₹{price.toFixed(0)}
-                                                                                                                            </ModernOriginalPrice>
-                                                                                                                            <ModernDiscountBadge
-                                                                                                                                label={`${Math.round(object.percent)}% OFF`}
-                                                                                                                                size="small"
-                                                                                                                            />
-                                                                                                                        </Box>
-                                                                                                                    </>
-                                                                                                                ) : (
-                                                                                                                    <ModernPrice>₹{object?.finalPrice.toFixed(0)}</ModernPrice>
-                                                                                                                )}
-                                                                                                            </>
-                                                                                                        ) : (
-                                                                                                            <Typography
-                                                                                                                variant="h6"
-                                                                                                                sx={{
-                                                                                                                    color: modernColors.secondary.main,
-                                                                                                                    fontWeight: 700,
-                                                                                                                    display: 'flex',
-                                                                                                                    alignItems: 'center',
-                                                                                                                    gap: 1
-                                                                                                                }}
-                                                                                                            >
-                                                                                                                <VerifiedIcon fontSize="small" />
-                                                                                                                FREE
-                                                                                                            </Typography>
-                                                                                                        )}
-                                                                                                    </ModernPriceContainer>
-                                                                                                </CardContent>
-
-                                                                                                <CardActions sx={{ p: 2, pt: 0 }}>
-                                                                                                    <ModernAddButton
-                                                                                                        isAdded={isAdded}
-                                                                                                        onClick={(e) => {
-                                                                                                            e.stopPropagation();
-                                                                                                            handleEnrollNow(item);
-                                                                                                        }}
-                                                                                                        startIcon={isAdded ? <CheckCircleRoundedIcon /> : <AddCircleIcon />}
-                                                                                                    >
-                                                                                                        {isAdded ? "✓ Added to Cart" : "Add to Cart"}
-                                                                                                    </ModernAddButton>
-                                                                                                </CardActions>
-                                                                                            </ModernPlanCard>
-                                                                                        </Fade>
-                                                                                    </Grid>
-                                                                                );
-                                                                            })
-                                                                        }
-                                                                    </Grid>
-                                                                </Container>
-                                                            </div>
-                                                        </>
-                                                    )
-                                                }
-                                            </Typography>
-                                        )
-                                    }
-                                    {
-                                        activeStep === 1 && (
-                                            <Typography sx={{ mt: 3, mb: 3, py: 1 }}>
-                                                <Box
-                                                    sx={{
-                                                        padding: !isMobileDevice ? "0" : "0 2rem",
-                                                        margin: isMobileDevice ? "0" : "0 2rem",
-                                                        display: "flex",
-                                                        justifyContent: "flex-end",
-                                                        alignItems: "center",
-                                                        mb: 3,
-                                                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
-                                                        borderRadius: '20px',
-                                                        padding: '20px',
-                                                        border: '1px solid rgba(102, 126, 234, 0.1)',
-                                                        backdropFilter: 'blur(10px)',
-                                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
-                                                        gap: '20px',
-                                                        flexWrap: 'wrap'
-                                                    }}
-                                                >
-                                                    {/* View Detailed Schedules Button - First (left) */}
-                                                    {
-                                                        plansList?.length > 0 && selectShedule?.title !== "UnScheduled" && (
-                                                            <Typography
-                                                                variant='button'
-                                                                onClick={handleViewPlan}
+                                                        {/* Select Schedule - Second (right) */}
+                                                        <FormControl className='mobile-select-button' sx={{
+                                                            minWidth: '250px',
+                                                            '& .MuiOutlinedInput-root': {
+                                                                background: 'rgba(255, 255, 255, 0.9)',
+                                                                borderRadius: '16px',
+                                                                height: '56px',
+                                                                '&:hover fieldset': {
+                                                                    borderColor: '#667eea',
+                                                                    borderWidth: '2px'
+                                                                },
+                                                                '&.Mui-focused fieldset': {
+                                                                    borderColor: '#667eea',
+                                                                    borderWidth: '2px',
+                                                                    boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
+                                                                }
+                                                            }
+                                                        }}>
+                                                            <InputLabel
+                                                                id="demo-simple-select-label"
                                                                 sx={{
-                                                                     width: !isMobileDevice ? '100%' : 'auto',
-                                                                    fontWeight: "700",
-                                                                    padding: "16px 24px",
                                                                     fontSize: "16px",
-                                                                    color: "#667eea",
-                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                    border: "2px solid rgba(102, 126, 234, 0.2)",
-                                                                    borderRadius: "16px",
-                                                                    cursor: "pointer",
-                                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                                    backdropFilter: 'blur(10px)',
-                                                                    textTransform: 'none',
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '8px',
-                                                                    height: '56px',
-                                                                    whiteSpace: 'nowrap',
-                                                                    '&:hover': {
-                                                                        transform: 'translateY(-2px)',
-                                                                        boxShadow: '0 8px 25px rgba(102, 126, 234, 0.2)',
-                                                                        border: "2px solid rgba(102, 126, 234, 0.4)",
-                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.15) 0%, rgba(118, 75, 162, 0.15) 100%)'
-                                                                    },
-                                                                    '&::before': {
-                                                                        content: '"📋"',
-                                                                        marginRight: '4px'
+                                                                    fontWeight: '600',
+                                                                    color: '#4a5568',
+                                                                    '&.Mui-focused': {
+                                                                        color: '#667eea'
                                                                     }
                                                                 }}
                                                             >
-                                                                View Detailed Schedules
-                                                            </Typography>
-                                                        )
-                                                    }
+                                                                📅 Select Schedule
+                                                            </InputLabel>
+                                                            <Select
+                                                                className='select-option'
+                                                                sx={{
+                                                                    minWidth: "100px",
+                                                                    maxWidth: "300px",
+                                                                    fontSize: "14px",
+                                                                    width: "250px",
+                                                                    borderRadius: '16px'
+                                                                }}
+                                                                labelId="demo-simple-select-label"
+                                                                id="demo-simple-select"
+                                                                label="📅 Select Schedule"
+                                                                value={selectShedule}
+                                                                onChange={handleChange}
+                                                            >
+                                                                {
+                                                                    courseContentList && courseContentList.map((data, index) => {
+                                                                        return (
+                                                                            <MenuItem key={index} value={data}>{data?.title}</MenuItem>
+                                                                        )
+                                                                    })
+                                                                }
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Box>
 
-                                                    {/* Select Schedule - Second (right) */}
-                                                    <FormControl className='mobile-select-button' sx={{
-                                                        minWidth: '250px',
-                                                        '& .MuiOutlinedInput-root': {
-                                                            background: 'rgba(255, 255, 255, 0.9)',
-                                                            borderRadius: '16px',
-                                                            height: '56px',
-                                                            '&:hover fieldset': {
-                                                                borderColor: '#667eea',
-                                                                borderWidth: '2px'
-                                                            },
-                                                            '&.Mui-focused fieldset': {
-                                                                borderColor: '#667eea',
-                                                                borderWidth: '2px',
-                                                                boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
-                                                            }
+                                                    {/* Remove the separate button container below */}
+                                                    <Grid container sx={{
+                                                        borderBottom: "1px solid rgba(128, 128, 128, 0.1)",
+                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                                                        borderRadius: '24px 24px 0 0',
+                                                        backdropFilter: 'blur(20px)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+                                                        overflow: 'hidden',
+                                                        position: 'relative',
+                                                        '&::before': {
+                                                            content: '""',
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            height: '4px',
+                                                            background: 'linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                                                            backgroundSize: '200% 200%',
+                                                            backgroundSize: '200% 200%',
+                                                            animation: 'gradientShift 3s ease infinite'
                                                         }
                                                     }}>
-                                                        <InputLabel
-                                                            id="demo-simple-select-label"
-                                                            sx={{
-                                                                fontSize: "16px",
-                                                                fontWeight: '600',
-                                                                color: '#4a5568',
-                                                                '&.Mui-focused': {
-                                                                    color: '#667eea'
-                                                                }
-                                                            }}
-                                                        >
-                                                            📅 Select Schedule
-                                                        </InputLabel>
-                                                        <Select
-                                                            className='select-option'
-                                                            sx={{
-                                                                minWidth: "100px",
-                                                                maxWidth: "300px",
-                                                                fontSize: "14px",
-                                                                width: "250px",
-                                                                borderRadius: '16px'
-                                                            }}
-                                                            labelId="demo-simple-select-label"
-                                                            id="demo-simple-select"
-                                                            label="📅 Select Schedule"
-                                                            value={selectShedule}
-                                                            onChange={handleChange}
-                                                        >
-                                                            {
-                                                                courseContentList && courseContentList.map((data, index) => {
-                                                                    return (
-                                                                        <MenuItem key={index} value={data}>{data?.title}</MenuItem>
-                                                                    )
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </FormControl>
-                                                </Box>
+                                                        <Grid item xs={12} sm={9.5} md={9.5} lg={9.5} sx={{
+                                                            padding: '24px',
+                                                            position: 'relative',
+                                                            zIndex: 1
+                                                        }}>
+                                                            <Typography
+                                                                variant="h5"
+                                                                sx={{
+                                                                    fontWeight: '800',
+                                                                    mb: 3,
+                                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                    WebkitBackgroundClip: 'text',
+                                                                    WebkitTextFillColor: 'transparent',
+                                                                    backgroundClip: 'text',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    gap: '12px',
+                                                                    '&::before': {
+                                                                        content: '"🛒"',
+                                                                        fontSize: '24px'
+                                                                    }
+                                                                }}
+                                                            >
+                                                                Your Selected Items
+                                                            </Typography>
+                                                            <Grid container>
+                                                                {
+                                                                    cartArray?.length > 0 && cartArray?.map((item, i) => {
 
-                                                {/* Remove the separate button container below */}
-                                                <Grid container sx={{
-                                                    borderBottom: "1px solid rgba(128, 128, 128, 0.1)",
-                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
-                                                    borderRadius: '24px 24px 0 0',
-                                                    backdropFilter: 'blur(20px)',
-                                                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
-                                                    overflow: 'hidden',
-                                                    position: 'relative',
-                                                    '&::before': {
-                                                        content: '""',
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        height: '4px',
-                                                        background: 'linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-                                                        backgroundSize: '200% 200%',
-                                                        backgroundSize: '200% 200%',
-                                                        animation: 'gradientShift 3s ease infinite'
-                                                    }
-                                                }}>
-                                                    <Grid item xs={12} sm={9.5} md={9.5} lg={9.5} sx={{
-                                                        padding: '24px',
-                                                        position: 'relative',
-                                                        zIndex: 1
-                                                    }}>
-                                                        <Typography
-                                                            variant="h5"
-                                                            sx={{
-                                                                fontWeight: '800',
-                                                                mb: 3,
-                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                WebkitBackgroundClip: 'text',
-                                                                WebkitTextFillColor: 'transparent',
-                                                                backgroundClip: 'text',
-                                                                display: 'flex',
-                                                                alignItems: 'center',
-                                                                gap: '12px',
-                                                                '&::before': {
-                                                                    content: '"🛒"',
-                                                                    fontSize: '24px'
-                                                                }
-                                                            }}
-                                                        >
-                                                            Your Selected Items
-                                                        </Typography>
-                                                        <Grid container>
-                                                            {
-                                                                cartArray?.length > 0 && cartArray?.map((item, i) => {
+                                                                        let object = getPlanPrice(item.plan, item.group, item.subject);
+                                                                        let subjects = item.subject;
+                                                                        // getEntityIdPurchase(object)
+                                                                        // console.log('objectobjectobjectobject', object, item);
+                                                                        // console.log('Endpoints', Endpoints);
+                                                                        let logo = object?.thumbLogo
+                                                                        let price = object?.price;
+                                                                        let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.plan?.discount)) : object?.finalPrice;
+                                                                        let discount = 100 - ((finalPrices / price) * 100)
 
-                                                                    let object = getPlanPrice(item.plan, item.group, item.subject);
-                                                                    let subjects = item.subject;
-                                                                    // getEntityIdPurchase(object)
-                                                                    // console.log('objectobjectobjectobject', object, item);
-                                                                    // console.log('Endpoints', Endpoints);
-                                                                    let logo = object?.thumbLogo
-                                                                    let price = object?.price;
-                                                                    let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.plan?.discount)) : object?.finalPrice;
-                                                                    let discount = 100 - ((finalPrices / price) * 100)
+                                                                        let details = item.plan;
+                                                                        const preview = peviewImgVideo[details.id];
+                                                                        const newDiscount = details.discount || 0;
+                                                                        const newPrice = details.price || 0;
+                                                                        const totalPrice = 0;
+                                                                        const fullDescription = details?.description?.description || "";
 
-                                                                    let details = item.plan;
-                                                                    const preview = peviewImgVideo[details.id];
-                                                                    const newDiscount = details.discount || 0;
-                                                                    const newPrice = details.price || 0;
-                                                                    const totalPrice = 0;
-                                                                    const fullDescription = details?.description?.description || "";
-
-                                                                    return <Grid item xs={12} sm={12} md={12} lg={12} key={i} sx={{
-                                                                        position: "relative",
-                                                                        mb: 3
-                                                                    }}>
-                                                                        <Box sx={{
-                                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                                            backdropFilter: 'blur(20px)',
-                                                                            border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                                            borderRadius: '24px',
-                                                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
-                                                                            padding: '24px',
-                                                                            position: 'relative',
-                                                                            overflow: 'hidden',
-                                                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                                            '&:hover': {
-                                                                                transform: 'translateY(-4px)',
-                                                                                boxShadow: '0 16px 48px rgba(0, 0, 0, 0.12)'
-                                                                            }
+                                                                        return <Grid item xs={12} sm={12} md={12} lg={12} key={i} sx={{
+                                                                            position: "relative",
+                                                                            mb: 3
                                                                         }}>
-                                                                            <Grid container spacing={3}>
-                                                                                <Grid item xs={12} sm={4} md={4} lg={4}>
-                                                                                    <Box sx={{
-                                                                                        background: "linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)",
-                                                                                        borderRadius: "20px",
-                                                                                        display: "flex",
-                                                                                        justifyContent: "center",
-                                                                                        padding: '16px',
-                                                                                        border: '1px solid rgba(102, 126, 234, 0.1)',
-                                                                                        mb: 2
-                                                                                    }}>
-                                                                                        <img
-                                                                                            src={subjects?.length > 0 ? Endpoints + subjects[0]?.description?.thumb : logo ? Endpoints + logo : 'img/folder-2.png'}
-                                                                                            style={{
-                                                                                                width: '100%',
-                                                                                                maxHeight: '200px',
-                                                                                                objectFit: 'cover',
-                                                                                                borderRadius: '12px',
-                                                                                                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
-                                                                                            }}
-                                                                                            alt="Course Preview"
-                                                                                            className='mobile-view-image'
-                                                                                        />
-                                                                                    </Box>
-                                                                                    {details?.description?.video && (
+                                                                            <Box sx={{
+                                                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                                                backdropFilter: 'blur(20px)',
+                                                                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                                                borderRadius: '24px',
+                                                                                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+                                                                                padding: '24px',
+                                                                                position: 'relative',
+                                                                                overflow: 'hidden',
+                                                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-4px)',
+                                                                                    boxShadow: '0 16px 48px rgba(0, 0, 0, 0.12)'
+                                                                                }
+                                                                            }}>
+                                                                                <Grid container spacing={3}>
+                                                                                    <Grid item xs={12} sm={4} md={4} lg={4}>
                                                                                         <Box sx={{
                                                                                             background: "linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)",
                                                                                             borderRadius: "20px",
                                                                                             display: "flex",
                                                                                             justifyContent: "center",
                                                                                             padding: '16px',
-                                                                                            border: '1px solid rgba(102, 126, 234, 0.1)'
+                                                                                            border: '1px solid rgba(102, 126, 234, 0.1)',
+                                                                                            mb: 2
                                                                                         }}>
-                                                                                            <video
-                                                                                                controls
-                                                                                                src={details?.description?.video ? Endpoints + details?.description?.video : ''}
+                                                                                            <img
+                                                                                                src={subjects?.length > 0 ? Endpoints + subjects[0]?.description?.thumb : logo ? Endpoints + logo : 'img/folder-2.png'}
                                                                                                 style={{
-                                                                                                    width: "100%",
-                                                                                                    height: "160px",
-                                                                                                    borderRadius: '12px'
+                                                                                                    width: '100%',
+                                                                                                    maxHeight: '200px',
+                                                                                                    objectFit: 'cover',
+                                                                                                    borderRadius: '12px',
+                                                                                                    filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
                                                                                                 }}
-                                                                                                onClick={() => handlePreview(details?.description?.video, 'video', details.id)}
+                                                                                                alt="Course Preview"
+                                                                                                className='mobile-view-image'
                                                                                             />
                                                                                         </Box>
-                                                                                    )}
-                                                                                </Grid>
-                                                                                <Grid item xs={12} sm={8} md={8} lg={8}>
-                                                                                    <Typography
-                                                                                        variant='h5'
-                                                                                        sx={{
-                                                                                            fontWeight: "800",
-                                                                                            color: "#2d3748",
-                                                                                            mb: 2,
-                                                                                            fontSize: { xs: '1.25rem', md: '1.5rem' }
-                                                                                        }}
-                                                                                    >
-                                                                                        {details?.title}
-                                                                                    </Typography>
-
-                                                                                    <Box sx={{
-                                                                                        textAlign: "left",
-                                                                                        mb: 2,
-                                                                                        display: 'flex',
-                                                                                        flexWrap: 'wrap',
-                                                                                        gap: '8px'
-                                                                                    }}>
-                                                                                        {
-                                                                                            item.subject?.length > 0 && item.subject?.map((chipLebel, i) => {
-                                                                                                return <Chip
-                                                                                                    size="small"
-                                                                                                    label={chipTitle(chipLebel?.title)}
-                                                                                                    variant="outlined"
-                                                                                                    key={i}
-                                                                                                    sx={{
-                                                                                                        background: "linear-gradient(135deg, rgba(221, 42, 61, 0.1) 0%, rgba(221, 42, 61, 0.05) 100%)",
-                                                                                                        color: "#DD2A3D",
-                                                                                                        fontWeight: "700",
-                                                                                                        fontSize: "12px",
-                                                                                                        border: "1px solid rgba(221, 42, 61, 0.3)",
-                                                                                                        borderRadius: '12px',
-                                                                                                        '&:hover': {
-                                                                                                            background: "linear-gradient(135deg, rgba(221, 42, 61, 0.15) 0%, rgba(221, 42, 61, 0.1) 100%)",
-                                                                                                            transform: 'translateY(-1px)'
-                                                                                                        },
-                                                                                                        transition: 'all 0.2s ease'
-                                                                                                    }}
-                                                                                                />
-                                                                                            })
-                                                                                        }
-                                                                                    </Box>
-
-                                                                                    <Box sx={{ mb: 2 }}>
-                                                                                        {details?.paid ? (
-                                                                                            <Box>
-                                                                                                {discount > 0 ? (
-                                                                                                    <Typography sx={{
-                                                                                                        fontWeight: '800',
-                                                                                                        fontSize: '18px',
-                                                                                                        color: '#2f855a',
-                                                                                                        display: 'flex',
-                                                                                                        alignItems: 'center',
-                                                                                                        gap: '8px'
-                                                                                                    }}>
-                                                                                                        💰 Price: ₹{object?.finalPrice.toFixed(2)}
-                                                                                                    </Typography>
-                                                                                                ) : (
-                                                                                                    <Typography sx={{
-                                                                                                        fontWeight: '800',
-                                                                                                        fontSize: '18px',
-                                                                                                        color: '#2f855a',
-                                                                                                        display: 'flex',
-                                                                                                        alignItems: 'center',
-                                                                                                        gap: '8px'
-                                                                                                    }}>
-                                                                                                        💰 Price: ₹{(price).toFixed(2)}
-                                                                                                    </Typography>
-                                                                                                )}
-                                                                                            </Box>
-                                                                                        ) : (
-                                                                                            <Typography sx={{
-                                                                                                fontWeight: '800',
-                                                                                                fontSize: '18px',
-                                                                                                color: '#48bb78',
-                                                                                                display: 'flex',
-                                                                                                alignItems: 'center',
-                                                                                                gap: '8px'
+                                                                                        {details?.description?.video && (
+                                                                                            <Box sx={{
+                                                                                                background: "linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)",
+                                                                                                borderRadius: "20px",
+                                                                                                display: "flex",
+                                                                                                justifyContent: "center",
+                                                                                                padding: '16px',
+                                                                                                border: '1px solid rgba(102, 126, 234, 0.1)'
                                                                                             }}>
-                                                                                                🎉 Free Course
-                                                                                            </Typography>
-                                                                                        )}
-                                                                                    </Box>
-
-                                                                                    <Typography
-                                                                                        variant='body1'
-                                                                                        sx={{
-                                                                                            color: '#4a5568',
-                                                                                            lineHeight: '1.6',
-                                                                                            mb: 2,
-                                                                                            fontSize: '14px'
-                                                                                        }}
-                                                                                        className='mobile-view-discrip'
-                                                                                    >
-                                                                                        {setCourseExpandedDescriptions === false ? truncateDescription(fullDescription) : truncateDescription(fullDescription)}
-                                                                                        {fullDescription.length > 100 && (
-                                                                                            <span
-                                                                                                style={{
-                                                                                                    color: '#667eea',
-                                                                                                    cursor: 'pointer',
-                                                                                                    marginLeft: '8px',
-                                                                                                    textDecoration: 'underline',
-                                                                                                    fontWeight: '600'
-                                                                                                }}
-                                                                                                onClick={() => toggleExpandDescription(fullDescription)}
-                                                                                            >
-                                                                                                Read more
-                                                                                            </span>
-                                                                                        )}
-                                                                                    </Typography>
-                                                                                    <Typography
-                                                                                        variant='body1'
-                                                                                        sx={{
-                                                                                            color: '#4a5568',
-                                                                                            lineHeight: '1.6',
-                                                                                            mb: 2
-                                                                                        }}
-                                                                                        className='desktop-view-discrip'
-                                                                                    >
-                                                                                        {details?.description?.description ? parse(details?.description?.description) : ""}
-                                                                                    </Typography>
-
-                                                                                    <Button
-                                                                                        onClick={() => handleRemoveItem(item, i)}
-                                                                                        sx={{
-                                                                                            textTransform: "none",
-                                                                                            fontSize: '14px',
-                                                                                            fontWeight: '600',
-                                                                                            color: '#e53e3e',
-                                                                                            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%)',
-                                                                                            border: '1px solid rgba(239, 68, 68, 0.2)',
-                                                                                            borderRadius: '12px',
-                                                                                            padding: '8px 16px',
-                                                                                            '&:hover': {
-                                                                                                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)',
-                                                                                                border: '1px solid rgba(239, 68, 68, 0.3)',
-                                                                                                transform: 'translateY(-1px)'
-                                                                                            },
-                                                                                            transition: 'all 0.3s ease'
-                                                                                        }}
-                                                                                    >
-                                                                                        🗑️ Remove from Cart
-                                                                                    </Button>
-                                                                                </Grid>
-                                                                            </Grid>
-                                                                        </Box>
-                                                                    </Grid>
-                                                                })
-                                                            }
-                                                        </Grid>
-                                                    </Grid>
-                                                    <Grid item xs={12} sm={2.5} md={2.5} lg={2.5}>
-                                                        {
-                                                            suggestedCourse?.length > 0 && (
-                                                                <>
-
-                                                                    <Typography variant='h5' fontWeight={'bold'} ml={3} mb={1} mt={3} sx={{ fontSize: '1.5rem' }} className='mobile-suggested mobile-plan-box'>Suggested Course</Typography>
-                                                                    <Carousel
-                                                                        className=''
-                                                                        swipeable={true}
-                                                                        draggable={true}
-                                                                        showDots={true}
-                                                                        responsive={responsive}
-                                                                        ssr={true} // means to render carousel on server-side.
-                                                                        infinite={true}
-                                                                        //   autoPlay={this.props.deviceType !== "mobile" ? true : false}
-                                                                        autoPlaySpeed={1000}
-                                                                        keyBoardControl={true}
-                                                                        customTransition="all .5"
-                                                                        transitionDuration={500}
-                                                                        containerClass="carousel-container"
-                                                                        removeArrowOnDeviceType={["tablet", "mobile"]}
-                                                                        //   deviceType={this.props.deviceType}
-                                                                        dotListClass="custom-dot-list-style"
-                                                                        itemClass="carousel-item-padding-40-px"
-                                                                    >
-                                                                        {
-                                                                            suggestedCourse && suggestedCourse.map((course, id) => {
-                                                                                return <Grid key={id} container sx={{ justifyContent: "center", alignItems: "center", marginBottom: 2 }}>
-                                                                                    <Grid item xs={12} sm={2.4} md={2.4} lg={2.4} sx={{ padding: "5px", textAlign: "left", }}>
-                                                                                        <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
-                                                                                            <img src={Endpoints + course.logo} alt="cardthumbimage" style={{ width: "100%", height: "125px" }} />
-                                                                                            <Stack gap={'0.5rem'} pl={'1rem'} pr={'1rem'}>
-                                                                                                <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} textAlign={"left"}>
-                                                                                                    <p style={{ width: "100%", fontWeight: "bold", margin: 0 }}>
-                                                                                                        {course.title}
-                                                                                                    </p>
-                                                                                                </Stack>
-                                                                                                {
-                                                                                                    course.paid ?
-                                                                                                        <>
-                                                                                                            {
-                                                                                                                course.discount > 0 ? <p style={{ fontWeight: "bold", color: "#f59f00", display: "flex", fontSize: "11px", margin: 0 }}>
-                                                                                                                    <p>
-                                                                                                                        {Number(course.price) - (Number(course.price) * (Number(course.discount) / 100))}/-
-                                                                                                                    </p>
-
-                                                                                                                    <p style={{ color: "#e5dfdf" }}> &nbsp; <s>{course.price}/-</s> &nbsp;{course.discount}%</p>
-                                                                                                                </p>
-                                                                                                                    : <p style={{ fontWeight: "bold", color: "#f59f00" }}>{course.price}/-</p>
-                                                                                                            }
-                                                                                                        </>
-                                                                                                        :
-                                                                                                        <p style={{ fontWeight: "bold", fontSize: "11px" }}>
-                                                                                                            Free
-                                                                                                        </p>
-                                                                                                }
-                                                                                                {/* <div>
-                                                                                            <div className={course.active ? " bg-green-500 h-3 w-3 rounded-full" : " bg-red-500 w-3 h-3 rounded-full"}></div>
-                                                                                        </div> */}
-                                                                                            </Stack>
-                                                                                            <Box sx={{ textAlign: 'right' }}>
-                                                                                                <Button startIcon={selectedIds.includes(course?.id) ?
-                                                                                                    <CheckCircleRoundedIcon /> :
-                                                                                                    <AddCircleIcon fontSize="40px" />
-                                                                                                } onClick={() => handleAddCourse(course)}>{selectedIds.includes(course?.id) ? "Added" : "Add to cart"}</Button>
+                                                                                                <video
+                                                                                                    controls
+                                                                                                    src={details?.description?.video ? Endpoints + details?.description?.video : ''}
+                                                                                                    style={{
+                                                                                                        width: "100%",
+                                                                                                        height: "160px",
+                                                                                                        borderRadius: '12px'
+                                                                                                    }}
+                                                                                                    onClick={() => handlePreview(details?.description?.video, 'video', details.id)}
+                                                                                                />
                                                                                             </Box>
+                                                                                        )}
+                                                                                    </Grid>
+                                                                                    <Grid item xs={12} sm={8} md={8} lg={8}>
+                                                                                        <Typography
+                                                                                            variant='h5'
+                                                                                            sx={{
+                                                                                                fontWeight: "800",
+                                                                                                color: "#2d3748",
+                                                                                                mb: 2,
+                                                                                                fontSize: { xs: '1.25rem', md: '1.5rem' }
+                                                                                            }}
+                                                                                        >
+                                                                                            {details?.title}
+                                                                                        </Typography>
+
+                                                                                        <Box sx={{
+                                                                                            textAlign: "left",
+                                                                                            mb: 2,
+                                                                                            display: 'flex',
+                                                                                            flexWrap: 'wrap',
+                                                                                            gap: '8px'
+                                                                                        }}>
+                                                                                            {
+                                                                                                item.subject?.length > 0 && item.subject?.map((chipLebel, i) => {
+                                                                                                    return <Chip
+                                                                                                        size="small"
+                                                                                                        label={chipTitle(chipLebel?.title)}
+                                                                                                        variant="outlined"
+                                                                                                        key={i}
+                                                                                                        sx={{
+                                                                                                            background: "linear-gradient(135deg, rgba(221, 42, 61, 0.1) 0%, rgba(221, 42, 61, 0.05) 100%)",
+                                                                                                            color: "#DD2A3D",
+                                                                                                            fontWeight: "700",
+                                                                                                            fontSize: "12px",
+                                                                                                            border: "1px solid rgba(221, 42, 61, 0.3)",
+                                                                                                            borderRadius: '12px',
+                                                                                                            '&:hover': {
+                                                                                                                background: "linear-gradient(135deg, rgba(221, 42, 61, 0.15) 0%, rgba(221, 42, 61, 0.1) 100%)",
+                                                                                                                transform: 'translateY(-1px)'
+                                                                                                            },
+                                                                                                            transition: 'all 0.2s ease'
+                                                                                                        }}
+                                                                                                    />
+                                                                                                })
+                                                                                            }
                                                                                         </Box>
+
+                                                                                        <Box sx={{ mb: 2 }}>
+                                                                                            {details?.paid ? (
+                                                                                                <Box>
+                                                                                                    {discount > 0 ? (
+                                                                                                        <Typography sx={{
+                                                                                                            fontWeight: '800',
+                                                                                                            fontSize: '18px',
+                                                                                                            color: '#2f855a',
+                                                                                                            display: 'flex',
+                                                                                                            alignItems: 'center',
+                                                                                                            gap: '8px'
+                                                                                                        }}>
+                                                                                                            💰 Price: ₹{object?.finalPrice.toFixed(2)}
+                                                                                                        </Typography>
+                                                                                                    ) : (
+                                                                                                        <Typography sx={{
+                                                                                                            fontWeight: '800',
+                                                                                                            fontSize: '18px',
+                                                                                                            color: '#2f855a',
+                                                                                                            display: 'flex',
+                                                                                                            alignItems: 'center',
+                                                                                                            gap: '8px'
+                                                                                                        }}>
+                                                                                                            💰 Price: ₹{(price).toFixed(2)}
+                                                                                                        </Typography>
+                                                                                                    )}
+                                                                                                </Box>
+                                                                                            ) : (
+                                                                                                <Typography sx={{
+                                                                                                    fontWeight: '800',
+                                                                                                    fontSize: '18px',
+                                                                                                    color: '#48bb78',
+                                                                                                    display: 'flex',
+                                                                                                    alignItems: 'center',
+                                                                                                    gap: '8px'
+                                                                                                }}>
+                                                                                                    🎉 Free Course
+                                                                                                </Typography>
+                                                                                            )}
+                                                                                        </Box>
+
+                                                                                        <Typography
+                                                                                            variant='body1'
+                                                                                            sx={{
+                                                                                                color: '#4a5568',
+                                                                                                lineHeight: '1.6',
+                                                                                                mb: 2,
+                                                                                                fontSize: '14px'
+                                                                                            }}
+                                                                                            className='mobile-view-discrip'
+                                                                                        >
+                                                                                            {setCourseExpandedDescriptions === false ? truncateDescription(fullDescription) : truncateDescription(fullDescription)}
+                                                                                            {fullDescription.length > 100 && (
+                                                                                                <span
+                                                                                                    style={{
+                                                                                                        color: '#667eea',
+                                                                                                        cursor: 'pointer',
+                                                                                                        marginLeft: '8px',
+                                                                                                        textDecoration: 'underline',
+                                                                                                        fontWeight: '600'
+                                                                                                    }}
+                                                                                                    onClick={() => toggleExpandDescription(fullDescription)}
+                                                                                                >
+                                                                                                    Read more
+                                                                                                </span>
+                                                                                            )}
+                                                                                        </Typography>
+                                                                                        <Typography
+                                                                                            variant='body1'
+                                                                                            sx={{
+                                                                                                color: '#4a5568',
+                                                                                                lineHeight: '1.6',
+                                                                                                mb: 2
+                                                                                            }}
+                                                                                            className='desktop-view-discrip'
+                                                                                        >
+                                                                                            {details?.description?.description ? parse(details?.description?.description) : ""}
+                                                                                        </Typography>
+
+                                                                                        <Button
+                                                                                            onClick={() => handleRemoveItem(item, i)}
+                                                                                            sx={{
+                                                                                                textTransform: "none",
+                                                                                                fontSize: '14px',
+                                                                                                fontWeight: '600',
+                                                                                                color: '#e53e3e',
+                                                                                                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%)',
+                                                                                                border: '1px solid rgba(239, 68, 68, 0.2)',
+                                                                                                borderRadius: '12px',
+                                                                                                padding: '8px 16px',
+                                                                                                '&:hover': {
+                                                                                                    background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.15) 100%)',
+                                                                                                    border: '1px solid rgba(239, 68, 68, 0.3)',
+                                                                                                    transform: 'translateY(-1px)'
+                                                                                                },
+                                                                                                transition: 'all 0.3s ease'
+                                                                                            }}
+                                                                                        >
+                                                                                            🗑️ Remove from Cart
+                                                                                        </Button>
                                                                                     </Grid>
                                                                                 </Grid>
-                                                                            })
-                                                                        }
-                                                                    </Carousel>
-                                                                </>
-                                                            )
-                                                        }
-                                                        <div className='desktop-plan-box'>
-                                                            {/* Duplicate View Schedules button removed - using modern one above */}
+                                                                            </Box>
+                                                                        </Grid>
+                                                                    })
+                                                                }
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Grid item xs={12} sm={2.5} md={2.5} lg={2.5}>
                                                             {
                                                                 suggestedCourse?.length > 0 && (
-                                                                    <Grid container sx={{ padding: 1, height: suggestedCourse?.length > 2 ? "530px" : "", overflowY: suggestedCourse?.length > 2 ? "scroll" : "none" }}>
-                                                                        <Grid item xs={12} sm={12} md={12} lg={12} sx={{ padding: "10px" }}>
-                                                                            <Typography variant='h5' fontWeight={'bold'} ml={3} mb={1} sx={{ color: "black", fontSize: '1.5rem' }} className='mobile-suggested'>Suggested Course</Typography>
-                                                                            <Box sx={{ ml: 3 }} className='mobile-suggested'>
-                                                                                <Grid container>
-                                                                                    {
-                                                                                        suggestedCourse?.length > 0 && suggestedCourse.map((course, i) => {
-                                                                                            return <Grid key={i} item xs={12} sm={12} md={12} lg={12}>
-                                                                                                <Box sx={{
-                                                                                                    boxShadow: "rgba(0, 0, 0, 0.11) 0px 5px 15px", margin: "10px"
-                                                                                                }} >
-                                                                                                    <img src={Endpoints + course.logo} alt="cardthumbimage" style={{ width: "100%", height: "125px" }} />
-                                                                                                    <Stack gap={'0.5rem'} pl={'1rem'} pr={'1rem'}>
-                                                                                                        <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} textAlign={"left"}>
-                                                                                                            <p style={{ width: "100%", fontWeight: "bold", margin: 0 }}>
-                                                                                                                {course.title}
-                                                                                                            </p>
-                                                                                                        </Stack>
-                                                                                                        {
-                                                                                                            course.paid ?
-                                                                                                                <>
-                                                                                                                    {
-                                                                                                                        course.discount > 0 ? <p style={{ fontWeight: "bold", color: "#f59f00", display: "flex", fontSize: "11px", margin: 0 }}>
-                                                                                                                            <p>
-                                                                                                                                {Number(course.price) - (Number(course.price) * (Number(course.discount) / 100))}/-
-                                                                                                                            </p>
+                                                                    <>
 
-                                                                                                                            <p style={{ color: "#e5dfdf" }}> &nbsp; <s>{course.price}/-</s> &nbsp;{course.discount}%</p>
+                                                                        <Typography variant='h5' fontWeight={'bold'} ml={3} mb={1} mt={3} sx={{ fontSize: '1.5rem' }} className='mobile-suggested mobile-plan-box'>Suggested Course</Typography>
+                                                                        <Carousel
+                                                                            className=''
+                                                                            swipeable={true}
+                                                                            draggable={true}
+                                                                            showDots={true}
+                                                                            responsive={responsive}
+                                                                            ssr={true} // means to render carousel on server-side.
+                                                                            infinite={true}
+                                                                            //   autoPlay={this.props.deviceType !== "mobile" ? true : false}
+                                                                            autoPlaySpeed={1000}
+                                                                            keyBoardControl={true}
+                                                                            customTransition="all .5"
+                                                                            transitionDuration={500}
+                                                                            containerClass="carousel-container"
+                                                                            removeArrowOnDeviceType={["tablet", "mobile"]}
+                                                                            //   deviceType={this.props.deviceType}
+                                                                            dotListClass="custom-dot-list-style"
+                                                                            itemClass="carousel-item-padding-40-px"
+                                                                        >
+                                                                            {
+                                                                                suggestedCourse && suggestedCourse.map((course, id) => {
+                                                                                    return <Grid key={id} container sx={{ justifyContent: "center", alignItems: "center", marginBottom: 2 }}>
+                                                                                        <Grid item xs={12} sm={2.4} md={2.4} lg={2.4} sx={{ padding: "5px", textAlign: "left", }}>
+                                                                                            <Box sx={{ boxShadow: "rgba(0, 0, 0, 0.35) 0px 5px 15px" }}>
+                                                                                                <img src={Endpoints + course.logo} alt="cardthumbimage" style={{ width: "100%", height: "125px" }} />
+                                                                                                <Stack gap={'0.5rem'} pl={'1rem'} pr={'1rem'}>
+                                                                                                    <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} textAlign={"left"}>
+                                                                                                        <p style={{ width: "100%", fontWeight: "bold", margin: 0 }}>
+                                                                                                            {course.title}
+                                                                                                        </p>
+                                                                                                    </Stack>
+                                                                                                    {
+                                                                                                        course.paid ?
+                                                                                                            <>
+                                                                                                                {
+                                                                                                                    course.discount > 0 ? <p style={{ fontWeight: "bold", color: "#f59f00", display: "flex", fontSize: "11px", margin: 0 }}>
+                                                                                                                        <p>
+                                                                                                                            {Number(course.price) - (Number(course.price) * (Number(course.discount) / 100))}/-
                                                                                                                         </p>
-                                                                                                                            : <p style={{ fontWeight: "bold", color: "#f59f00" }}>{course.price}/-</p>
-                                                                                                                    }
-                                                                                                                </>
-                                                                                                                :
-                                                                                                                <p style={{ fontWeight: "bold", fontSize: "11px" }}>
-                                                                                                                    Free
-                                                                                                                </p>
-                                                                                                        }
-                                                                                                        {/* <div>
+
+                                                                                                                        <p style={{ color: "#e5dfdf" }}> &nbsp; <s>{course.price}/-</s> &nbsp;{course.discount}%</p>
+                                                                                                                    </p>
+                                                                                                                        : <p style={{ fontWeight: "bold", color: "#f59f00" }}>{course.price}/-</p>
+                                                                                                                }
+                                                                                                            </>
+                                                                                                            :
+                                                                                                            <p style={{ fontWeight: "bold", fontSize: "11px" }}>
+                                                                                                                Free
+                                                                                                            </p>
+                                                                                                    }
+                                                                                                    {/* <div>
                                                                                             <div className={course.active ? " bg-green-500 h-3 w-3 rounded-full" : " bg-red-500 w-3 h-3 rounded-full"}></div>
                                                                                         </div> */}
-                                                                                                    </Stack>
-                                                                                                    <Box sx={{ textAlign: 'right' }}>
-                                                                                                        <Button startIcon={selectedIds.includes(course?.id) ?
-                                                                                                            <CheckCircleRoundedIcon /> :
-                                                                                                            <AddCircleIcon fontSize="40px" />
-                                                                                                        } onClick={() => handleAddCourse(course)}>{selectedIds.includes(course?.id) ? "Added" : "Add to cart"}</Button>
-                                                                                                    </Box>
+                                                                                                </Stack>
+                                                                                                <Box sx={{ textAlign: 'right' }}>
+                                                                                                    <Button startIcon={selectedIds.includes(course?.id) ?
+                                                                                                        <CheckCircleRoundedIcon /> :
+                                                                                                        <AddCircleIcon fontSize="40px" />
+                                                                                                    } onClick={() => handleAddCourse(course)}>{selectedIds.includes(course?.id) ? "Added" : "Add to cart"}</Button>
                                                                                                 </Box>
-                                                                                            </Grid>
-                                                                                        })
-                                                                                    }
-                                                                                </Grid>
-                                                                            </Box>
-
-                                                                        </Grid>
-                                                                    </Grid>
+                                                                                            </Box>
+                                                                                        </Grid>
+                                                                                    </Grid>
+                                                                                })
+                                                                            }
+                                                                        </Carousel>
+                                                                    </>
                                                                 )
                                                             }
-                                                            {/* <Box sx={{ textAlign: 'right', mb: 3 }} className="desktop-plan-box desktop-view-checkout">
+                                                            <div className='desktop-plan-box'>
+                                                                {/* Duplicate View Schedules button removed - using modern one above */}
+                                                                {
+                                                                    suggestedCourse?.length > 0 && (
+                                                                        <Grid container sx={{ padding: 1, height: suggestedCourse?.length > 2 ? "530px" : "", overflowY: suggestedCourse?.length > 2 ? "scroll" : "none" }}>
+                                                                            <Grid item xs={12} sm={12} md={12} lg={12} sx={{ padding: "10px" }}>
+                                                                                <Typography variant='h5' fontWeight={'bold'} ml={3} mb={1} sx={{ color: "black", fontSize: '1.5rem' }} className='mobile-suggested'>Suggested Course</Typography>
+                                                                                <Box sx={{ ml: 3 }} className='mobile-suggested'>
+                                                                                    <Grid container>
+                                                                                        {
+                                                                                            suggestedCourse?.length > 0 && suggestedCourse.map((course, i) => {
+                                                                                                return <Grid key={i} item xs={12} sm={12} md={12} lg={12}>
+                                                                                                    <Box sx={{
+                                                                                                        boxShadow: "rgba(0, 0, 0, 0.11) 0px 5px 15px", margin: "10px"
+                                                                                                    }} >
+                                                                                                        <img src={Endpoints + course.logo} alt="cardthumbimage" style={{ width: "100%", height: "125px" }} />
+                                                                                                        <Stack gap={'0.5rem'} pl={'1rem'} pr={'1rem'}>
+                                                                                                            <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'} textAlign={"left"}>
+                                                                                                                <p style={{ width: "100%", fontWeight: "bold", margin: 0 }}>
+                                                                                                                    {course.title}
+                                                                                                                </p>
+                                                                                                            </Stack>
+                                                                                                            {
+                                                                                                                course.paid ?
+                                                                                                                    <>
+                                                                                                                        {
+                                                                                                                            course.discount > 0 ? <p style={{ fontWeight: "bold", color: "#f59f00", display: "flex", fontSize: "11px", margin: 0 }}>
+                                                                                                                                <p>
+                                                                                                                                    {Number(course.price) - (Number(course.price) * (Number(course.discount) / 100))}/-
+                                                                                                                                </p>
+
+                                                                                                                                <p style={{ color: "#e5dfdf" }}> &nbsp; <s>{course.price}/-</s> &nbsp;{course.discount}%</p>
+                                                                                                                            </p>
+                                                                                                                                : <p style={{ fontWeight: "bold", color: "#f59f00" }}>{course.price}/-</p>
+                                                                                                                        }
+                                                                                                                    </>
+                                                                                                                    :
+                                                                                                                    <p style={{ fontWeight: "bold", fontSize: "11px" }}>
+                                                                                                                        Free
+                                                                                                                    </p>
+                                                                                                            }
+                                                                                                            {/* <div>
+                                                                                            <div className={course.active ? " bg-green-500 h-3 w-3 rounded-full" : " bg-red-500 w-3 h-3 rounded-full"}></div>
+                                                                                        </div> */}
+                                                                                                        </Stack>
+                                                                                                        <Box sx={{ textAlign: 'right' }}>
+                                                                                                            <Button startIcon={selectedIds.includes(course?.id) ?
+                                                                                                                <CheckCircleRoundedIcon /> :
+                                                                                                                <AddCircleIcon fontSize="40px" />
+                                                                                                            } onClick={() => handleAddCourse(course)}>{selectedIds.includes(course?.id) ? "Added" : "Add to cart"}</Button>
+                                                                                                        </Box>
+                                                                                                    </Box>
+                                                                                                </Grid>
+                                                                                            })
+                                                                                        }
+                                                                                    </Grid>
+                                                                                </Box>
+
+                                                                            </Grid>
+                                                                        </Grid>
+                                                                    )
+                                                                }
+                                                                {/* <Box sx={{ textAlign: 'right', mb: 3 }} className="desktop-plan-box desktop-view-checkout">
                                                                 <Button sx={{ fontWeight: "bold", background: "#DD2A3D", color: "#fff", boxShadow: "4px 3px 14px 0px rgba(0,0,0,0.5)", display: "inline", padding: "14px 11px", fontSize: "12px" }} onClick={handleAddToCard} className='button-hover mobile-buy-now'>Proceed to Checkout  <span style={{ fontSize: "12px", textTransform: "initial", color: "#fbff00", padding: 0, margin: 0 }}>
                                                                     &nbsp;&nbsp;Total Price: {(totalPrice).toFixed(2)}
                                                                 </span>
                                                                 </Button>
                                                             </Box> */}
-                                                        </div>
-                                                    </Grid>
-                                                </Grid>
-                                                <Grid container>
-                                                    <Grid item xs={12} sm={12} md={12} lg={12}>
-                                                        <Box sx={{ textAlign: 'right', mb: 3 }} className="desktop-plan-box desktop-view-checkout">
-                                                            <ModernCheckoutButton
-                                                                onClick={handleCheckoutSubmit}
-                                                                className='button-hover mobile-buy-now'
-                                                                startIcon={<TrendingUpIcon />}
-                                                            >
-                                                                🚀 Proceed to Checkout
-                                                                <span className="total-price">
-                                                                    ₹{totalPrice.toFixed(0)}
-                                                                </span>
-                                                            </ModernCheckoutButton>
-                                                        </Box>
-                                                    </Grid>
-
-                                                </Grid>
-                                                <Box sx={{ textAlign: 'right', ml: 2, mb: 3 }} className="mobile-view-checkout mobile-plan-box">
-                                                    <ModernCheckoutButton
-                                                        onClick={handleCheckoutSubmit}
-                                                        className='button-hover mobile-buy-now'
-                                                        startIcon={<TrendingUpIcon />}
-                                                        sx={{ mt: 3 }}
-                                                    >
-                                                        🚀 Proceed to Checkout
-                                                        <span className="total-price">
-                                                            ₹{totalPrice.toFixed(0)}
-                                                        </span>
-                                                    </ModernCheckoutButton>
-                                                </Box>
-                                            </Typography>
-                                        )
-                                    }
-                                    {
-                                                                          activeStep === 2 && (
-                                                                              <Typography sx={{ mt: 3, mb: 1, py: 1 }}>
-                                                                                  <Card sx={{
-                                                                                      width: "100%",
-                                                                                      background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                                                      backdropFilter: 'blur(20px)',
-                                                                                      border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                                                      borderRadius: '24px',
-                                                                                      boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                                                                                      textAlign: "center",
-                                                                                      mb: 3,
-                                                                                      position: 'relative',
-                                                                                      overflow: 'hidden',
-                                                                                      '&::before': {
-                                                                                          content: '""',
-                                                                                          position: 'absolute',
-                                                                                          top: 0,
-                                                                                          left: 0,
-                                                                                          right: 0,
-                                                                                          height: '4px',
-                                                                                          background: 'linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-                                                                                          backgroundSize: '200% 200%',
-                                                                                          backgroundSize: '200% 200%',
-                                                                                          animation: 'gradientShift 3s ease infinite'
-                                                                                      },
-                                                                                      '&:hover': {
-                                                                                          transform: 'translateY(-5px)',
-                                                                                          boxShadow: '0 35px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15)',
-                                                                                          transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                                                                                      },
-                                                                                      transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                                                                                  }}>
-                                                                                      <Typography
-                                                                                          padding={2}
-                                                                                          mt={4}
-                                                                                          fontWeight={'800'}
-                                                                                          variant='h4'
-                                                                                          sx={{
-                                                                                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                                              WebkitBackgroundClip: 'text',
-                                                                                              WebkitTextFillColor: 'transparent',
-                                                                                              backgroundClip: 'text',
-                                                                                              fontSize: { xs: '1.75rem', md: '2.25rem' },
-                                                                                              letterSpacing: '-0.02em',
-                                                                                              textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-                                                                                          }}
-                                                                                      >
-                                                                                          ✨ Complete Your Journey
-                                                                                      </Typography>
-                                                                                      <Grid container sx={{ margin: "32px 0", justifyContent: "center", px: 2 }}>
-                                                                                          <Grid item xs={12} sm={8} md={7} lg={6}>
-                                                                                              <TextField
-                                                                                                  className='mobile-fill-textfield'
-                                                                                                  fullWidth
-                                                                                                  variant="outlined"
-                                                                                                  type="text"
-                                                                                                  label="Full Name"
-                                                                                                  name="name"
-                                                                                                  value={title}
-                                                                                                  onChange={(e) => setTitle(e.target.value)}
-                                                                                                  InputProps={{
-                                                                                                      style: {
-                                                                                                          borderRadius: "16px",
-                                                                                                          fontSize: '16px',
-                                                                                                          background: 'rgba(255, 255, 255, 0.8)',
-                                                                                                          backdropFilter: 'blur(10px)',
-                                                                                                          transition: 'all 0.3s ease',
-                                                                                                          paddingLeft: '16px' // Add left padding for placeholder
-                                                                                                      }
-                                                                                                  }}
-                                                                                                  InputLabelProps={{
-                                                                                                      sx: {
-                                                                                                          fontSize: '16px',
-                                                                                                          fontWeight: '600',
-                                                                                                          color: '#4a5568',
-                                                                                                          '&.Mui-focused': {
-                                                                                                              color: '#667eea'
-                                                                                                          }
-                                                                                                      }
-                                                                                                  }}
-                                                                                                  sx={{
-                                                                                                      gridColumn: "span 12",
-                                                                                                      m: { xs: 1, sm: 2 }, // Reduced margin on mobile
-                                                                                                      '& .MuiOutlinedInput-root': {
-                                                                                                          '&:hover fieldset': {
-                                                                                                              borderColor: '#667eea',
-                                                                                                              borderWidth: '2px'
-                                                                                                          },
-                                                                                                          '&.Mui-focused fieldset': {
-                                                                                                              borderColor: '#667eea',
-                                                                                                              borderWidth: '2px',
-                                                                                                              boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
-                                                                                                          }
-                                                                                                      }
-                                                                                                  }}
-                                                                                              />
-                                                                                              <TextField
-                                                                                                  inputProps={{
-                                                                                                      maxLength: 10
-                                                                                                  }}
-                                                                                                  className='mobile-fill-textfield'
-                                                                                                  fullWidth
-                                                                                                  variant="outlined"
-                                                                                                  type="number"
-                                                                                                  label="Phone Number"
-                                                                                                  name="number"
-                                                                                                  value={number}
-                                                                                                  onChange={handleNumberChange}
-                                                                                                  error={!!error}
-                                                                                                  helperText={error}
-                                                                                                  InputProps={{
-                                                                                                      style: {
-                                                                                                          borderRadius: "16px",
-                                                                                                          fontSize: '16px',
-                                                                                                          background: 'rgba(255, 255, 255, 0.8)',
-                                                                                                          backdropFilter: 'blur(10px)',
-                                                                                                          transition: 'all 0.3s ease',
-                                                                                                          paddingLeft: '16px' // Add left padding for placeholder
-                                                                                                      }
-                                                                                                  }}
-                                                                                                  InputLabelProps={{
-                                                                                                      sx: {
-                                                                                                          fontSize: '16px',
-                                                                                                          fontWeight: '600',
-                                                                                                          color: '#4a5568',
-                                                                                                          '&.Mui-focused': {
-                                                                                                              color: '#667eea'
-                                                                                                          }
-                                                                                                      }
-                                                                                                  }}
-                                                                                                  sx={{
-                                                                                                      gridColumn: "span 12",
-                                                                                                      m: { xs: 1, sm: 2 }, // Reduced margin on mobile
-                                                                                                      '& .MuiOutlinedInput-root': {
-                                                                                                          '&:hover fieldset': {
-                                                                                                              borderColor: '#667eea',
-                                                                                                              borderWidth: '2px'
-                                                                                                          },
-                                                                                                          '&.Mui-focused fieldset': {
-                                                                                                              borderColor: '#667eea',
-                                                                                                              borderWidth: '2px',
-                                                                                                              boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
-                                                                                                          }
-                                                                                                      }
-                                                                                                  }}
-                                                                                              />
-                                                                                              <TextField
-                                                                                                  className='mobile-fill-textfield'
-                                                                                                  fullWidth
-                                                                                                  variant="outlined"
-                                                                                                  type="email"
-                                                                                                  label="Email Address"
-                                                                                                  name="email"
-                                                                                                  value={email}
-                                                                                                  onChange={(e) => setEmail(e.target.value)}
-                                                                                                  InputProps={{
-                                                                                                      style: {
-                                                                                                          borderRadius: "16px",
-                                                                                                          fontSize: '16px',
-                                                                                                          background: 'rgba(255, 255, 255, 0.8)',
-                                                                                                          backdropFilter: 'blur(10px)',
-                                                                                                          transition: 'all 0.3s ease',
-                                                                                                          paddingLeft: '16px' // Add left padding for placeholder
-                                                                                                      }
-                                                                                                  }}
-                                                                                                  InputLabelProps={{
-                                                                                                      sx: {
-                                                                                                          fontSize: '16px',
-                                                                                                          fontWeight: '600',
-                                                                                                          color: '#4a5568',
-                                                                                                          '&.Mui-focused': {
-                                                                                                              color: '#667eea'
-                                                                                                          }
-                                                                                                      }
-                                                                                                  }}
-                                                                                                  sx={{
-                                                                                                      gridColumn: "span 12",
-                                                                                                      m: { xs: 1, sm: 2 }, // Reduced margin on mobile
-                                                                                                      '& .MuiOutlinedInput-root': {
-                                                                                                          '&:hover fieldset': {
-                                                                                                              borderColor: '#667eea',
-                                                                                                              borderWidth: '2px'
-                                                                                                          },
-                                                                                                          '&.Mui-focused fieldset': {
-                                                                                                              borderColor: '#667eea',
-                                                                                                              borderWidth: '2px',
-                                                                                                              boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
-                                                                                                          }
-                                                                                                      }
-                                                                                                  }}
-                                                                                              />
-                                                                                              {
-                                                                                                  orderBumpCourse?.price ?
-                                                                                                      <>
-                                                                                                          <InputLabel sx={{
-                                                                                                              width: '100%',
-                                                                                                              textAlign: "left",
-                                                                                                              fontWeight: '700',
-                                                                                                              fontSize: '16px',
-                                                                                                              color: '#2d3748',
-                                                                                                              ml: 2,
-                                                                                                              mb: 1,
-                                                                                                              display: 'flex',
-                                                                                                              alignItems: 'center',
-                                                                                                              '&::before': {
-                                                                                                                  content: '"🎯"',
-                                                                                                                  marginRight: '8px'
-                                                                                                              }
-                                                                                                          }}>{orderBumpCourse?.title}</InputLabel>
-                                                                                                          <div className='mobile-headint-margin'>
-                                                                                                              <Box sx={{
-                                                                                                                  background: "linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)",
-                                                                                                                  m: { xs: 1, sm: 2 }, // Reduced margin on mobile
-                                                                                                                  width: "100%",
-                                                                                                                  borderRadius: '16px',
-                                                                                                                  border: '2px solid rgba(102, 126, 234, 0.2)',
-                                                                                                                  backdropFilter: 'blur(10px)',
-                                                                                                                  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                                                                                  '&:hover': {
-                                                                                                                      transform: 'translateY(-2px)',
-                                                                                                                      boxShadow: '0 10px 25px rgba(102, 126, 234, 0.15)',
-                                                                                                                      border: '2px solid rgba(102, 126, 234, 0.3)'
-                                                                                                                  }
-                                                                                                              }}
-                                                                                                                  display={'flex'}
-                                                                                                                  alignItems={'center'}
-                                                                                                                  justifyContent={"space-between"}
-                                                                                                                  padding={"16px"}
-                                                                                                                  className='mobile-fill-textfield'>
-                                                                                                                  <Typography
-                                                                                                                      sx={{
-                                                                                                                          fontWeight: '800',
-                                                                                                                          ml: 1,
-                                                                                                                          fontSize: '18px',
-                                                                                                                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                                                                          WebkitBackgroundClip: 'text',
-                                                                                                                          WebkitTextFillColor: 'transparent',
-                                                                                                                          backgroundClip: 'text'
-                                                                                                                      }}
-                                                                                                                  >
-                                                                                                                      ₹ {(orderBumpCourse.price - ((orderBumpCourse.price / 100) * orderBumpCourse.discount)).toFixed(2)}
-                                                                                                                  </Typography>
-                                                                                                                  <Checkbox
-                                                                                                                      checked={checked}
-                                                                                                                      onChange={handleCheckboxChange}
-                                                                                                                      color="primary"
-                                                                                                                      sx={{
-                                                                                                                          transform: 'scale(1.2)',
-                                                                                                                          '&.Mui-checked': {
-                                                                                                                              color: '#667eea'
-                                                                                                                          },
-                                                                                                                          '&:hover': {
-                                                                                                                              backgroundColor: 'rgba(102, 126, 234, 0.1)'
-                                                                                                                          }
-                                                                                                                      }}
-                                                                                                                  />
-                                                                                                              </Box>
-                                                                                                          </div>
-                                                                                                          <Typography sx={{
-                                                                                                              fontSize: '15px',
-                                                                                                              color: '#718096',
-                                                                                                              margin: '8px 16px 16px 16px',
-                                                                                                              fontWeight: '500',
-                                                                                                              lineHeight: '1.6',
-                                                                                                              fontStyle: 'italic'
-                                                                                                          }}>
-                                                                                                              {orderBumpCourse?.setting?.orderBumpDescription}
-                                                                                                          </Typography>
-                                                                                                      </> : ""
-                                                                                              }
-                                  
-                                                                                              <Box sx={{
-                                                                                                  textAlign: "end",
-                                                                                                  mb: 1
-                                                                                              }}>
-                                                                                                  <Typography
-                                                                                                      variant="p"
-                                                                                                      fontWeight={'700'}
-                                                                                                      onClick={handleReedemCode}
-                                                                                                      sx={{
-                                                                                                          cursor: 'pointer',
-                                                                                                          color: "#667eea",
-                                                                                                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                                                          WebkitBackgroundClip: 'text',
-                                                                                                          WebkitTextFillColor: 'transparent',
-                                                                                                          backgroundClip: 'text',
-                                                                                                          margin: "8px 16px",
-                                                                                                          fontSize: "14px",
-                                                                                                          fontWeight: '800',
-                                                                                                          textDecoration: 'underline',
-                                                                                                          textDecorationColor: 'rgba(102, 126, 234, 0.5)',
-                                                                                                          '&:hover': {
-                                                                                                              transform: 'translateY(-1px)',
-                                                                                                              textShadow: '0 2px 4px rgba(102, 126, 234, 0.3)'
-                                                                                                          },
-                                                                                                          transition: 'all 0.3s ease'
-                                                                                                      }}
-                                                                                                  >
-                                                                                                      🎟️ Have a Coupon Code?
-                                                                                                  </Typography>
-                                                                                              </Box>
-                                  
-                                                                                              {
-                                                                                                  reedemCode === true && (
-                                                                                                      <Box className='mobile-fill-textfield' sx={{
-                                                                                                          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
-                                                                                                          borderRadius: '20px',
-                                                                                                          padding: { xs: '16px', sm: '20px' }, // Reduced padding on mobile
-                                                                                                          margin: { xs: '12px', sm: '16px' }, // Reduced margin on mobile
-                                                                                                          border: '1px solid rgba(102, 126, 234, 0.2)',
-                                                                                                          backdropFilter: 'blur(10px)',
-                                                                                                          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
-                                                                                                      }}>
-                                                                                                          <InputLabel sx={{
-                                                                                                              width: '100%',
-                                                                                                              textAlign: "left",
-                                                                                                              fontWeight: '700',
-                                                                                                              fontSize: '16px',
-                                                                                                              color: '#2d3748',
-                                                                                                              mb: 2,
-                                                                                                              display: 'flex',
-                                                                                                              alignItems: 'center',
-                                                                                                              '&::before': {
-                                                                                                                  content: '"🎫"',
-                                                                                                                  marginRight: '8px'
-                                                                                                              }
-                                                                                                          }}>Enter Your Coupon Code</InputLabel>
-                                  
-                                                                                                          <OutlinedInput
-                                                                                                              className='mobile-coupon-field'
-                                                                                                              fullWidth
-                                                                                                              type="text"
-                                                                                                              name="number"
-                                                                                                              value={couponNumber}
-                                                                                                              onChange={handleCoupon}
-                                                                                                              placeholder="Enter discount code"
-                                                                                                              id="outlined-adornment-weight"
-                                                                                                              endAdornment={
-                                                                                                                  <InputAdornment position="end">
-                                                                                                                      <IconButton
-                                                                                                                          disabled={couponNumber && number ? false : true}
-                                                                                                                          aria-label="apply coupon"
-                                                                                                                          onClick={handleCheckCoupon}
-                                                                                                                          edge="end"
-                                                                                                                          sx={{
-                                                                                                                              fontSize: "14px",
-                                                                                                                              color: getColor(),
-                                                                                                                              fontWeight: '700',
-                                                                                                                              background: isCouponValid === true ?
-                                                                                                                                  'linear-gradient(135deg, #48bb78 0%, #38a169 100%)' :
-                                                                                                                                  'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                                                                              color: 'white',
-                                                                                                                              borderRadius: '12px',
-                                                                                                                              padding: '8px 16px',
-                                                                                                                              minWidth: 'auto',
-                                                                                                                              '&:hover': {
-                                                                                                                                  transform: 'translateY(-2px)',
-                                                                                                                                  boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)'
-                                                                                                                              },
-                                                                                                                              '&:disabled': {
-                                                                                                                                  background: '#e2e8f0',
-                                                                                                                                  color: '#a0aec0'
-                                                                                                                              },
-                                                                                                                              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                                                                                                                          }}
-                                                                                                                      >
-                                                                                                                          {isCouponValid === true ?
-                                                                                                                              <>✅ Applied</> :
-                                                                                                                              "Apply Code"
-                                                                                                                          }
-                                                                                                                      </IconButton>
-                                                                                                                  </InputAdornment>
-                                                                                                              }
-                                                                                                              aria-describedby="outlined-weight-helper-text"
-                                                                                                              sx={{
-                                                                                                                  borderRadius: "16px",
-                                                                                                                  background: 'rgba(255, 255, 255, 0.9)',
-                                                                                                                  backdropFilter: 'blur(10px)',
-                                                                                                                  '& .MuiOutlinedInput-root': {
-                                                                                                                      '&:hover fieldset': {
-                                                                                                                          borderColor: '#667eea',
-                                                                                                                          borderWidth: '2px'
-                                                                                                                      },
-                                                                                                                      '&.Mui-focused fieldset': {
-                                                                                                                          borderColor: '#667eea',
-                                                                                                                          borderWidth: '2px',
-                                                                                                                          boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
-                                                                                                                      }
-                                                                                                                  }
-                                                                                                              }}
-                                                                                                          />
-                                                                                                          {errorMessage &&
-                                                                                                              <FormHelperText
-                                                                                                                  error
-                                                                                                                  sx={{
-                                                                                                                      marginTop: "12px",
-                                                                                                                      fontSize: '14px',
-                                                                                                                      fontWeight: '600'
-                                                                                                                  }}
-                                                                                                              >
-                                                                                                                  {errorMessage}
-                                                                                                              </FormHelperText>
-                                                                                                          }
-                                                                                                      </Box>
-                                                                                                  )
-                                                                                              }
-                                                                                              <Box sx={{
-                                                                                                  display: "flex",
-                                                                                                  flexDirection: "row", // Keep in same row for all screen sizes
-                                                                                                  justifyContent: "space-between",
-                                                                                                  alignItems: "center",
-                                                                                                  flexWrap: "wrap", // Allow wrapping if needed
-                                                                                                  gap: { xs: 1, sm: 0 },
-                                                                                                  margin: { xs: "16px 8px", sm: "24px 16px" },
-                                                                                                  padding: { xs: "16px", sm: "20px" },
-                                                                                                  width: { xs: "calc(100% - 16px)", sm: isMobileDevice ? "calc(100% - 32px)" : "calc(90% - 32px)" },
-                                                                                                  background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
-                                                                                                  borderRadius: '16px',
-                                                                                                  border: '2px solid rgba(102, 126, 234, 0.1)',
-                                                                                                  backdropFilter: 'blur(10px)'
-                                                                                              }}>
-                                                                                                  <Typography
-                                                                                                      variant="h6"
-                                                                                                      sx={{
-                                                                                                          fontWeight: '800',
-                                                                                                          fontSize: '18px',
-                                                                                                          color: '#2d3748',
-                                                                                                          display: 'flex',
-                                                                                                          alignItems: 'center',
-                                                                                                          '&::before': {
-                                                                                                              content: '"💰"',
-                                                                                                              marginRight: '8px'
-                                                                                                          }
-                                                                                                      }}
-                                                                                                  >
-                                                                                                      Total Amount:
-                                                                                                  </Typography>
-                                                                                                  <Typography
-                                                                                                      variant="h6"
-                                                                                                      sx={{
-                                                                                                          fontWeight: '900',
-                                                                                                          fontSize: '20px',
-                                                                                                          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                                                          WebkitBackgroundClip: 'text',
-                                                                                                          WebkitTextFillColor: 'transparent',
-                                                                                                          backgroundClip: 'text'
-                                                                                                      }}
-                                                                                                  >
-                                                                                                      ₹ {checked ? (orderBumpCourse.price - ((orderBumpCourse.price / 100) * orderBumpCourse.discount)) + totalPrice : totalPrice}
-                                                                                                  </Typography>
-                                                                                              </Box>
-                                                                                              {
-                                                                                                  isCouponValid === true && (
-                                                                                                      <>
-                                                                                                          <Box sx={{
-                                                                                                              display: "flex",
-                                                                                                              flexDirection: "row", // Keep in same row for all screen sizes
-                                                                                                              justifyContent: "space-between",
-                                                                                                              alignItems: "center",
-                                                                                                              flexWrap: "wrap", // Allow wrapping if needed
-                                                                                                              gap: { xs: 1, sm: 0 },
-                                                                                                              margin: { xs: "12px 8px", sm: "16px" },
-                                                                                                              padding: { xs: "12px", sm: "16px" },
-                                                                                                              background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%)',
-                                                                                                              borderRadius: '12px',
-                                                                                                              border: '1px solid rgba(239, 68, 68, 0.2)'
-                                                                                                          }}>
-                                                                                                              <Typography
-                                                                                                                  variant="h6"
-                                                                                                                  sx={{
-                                                                                                                      fontWeight: '700',
-                                                                                                                      color: '#e53e3e',
-                                                                                                                      fontSize: '16px',
-                                                                                                                      display: 'flex',
-                                                                                                                      alignItems: 'center',
-                                                                                                                      '&::before': {
-                                                                                                                          content: '"🎉"',
-                                                                                                                          marginRight: '8px'
-                                                                                                                      }
-                                                                                                                  }}
-                                                                                                              >
-                                                                                                                  Discount Applied:
-                                                                                                              </Typography>
-                                                                                                              <Typography
-                                                                                                                  variant="h6"
-                                                                                                                  sx={{
-                                                                                                                      fontWeight: '800',
-                                                                                                                      color: '#e53e3e',
-                                                                                                                      fontSize: '18px'
-                                                                                                                  }}
-                                                                                                              >
-                                                                                                                  - ₹ {couponDiscount}
-                                                                                                              </Typography>
-                                                                                                          </Box>
-                                                                                                          <Box sx={{
-                                                                                                              display: "flex",
-                                                                                                              flexDirection: "row", // Keep in same row for all screen sizes
-                                                                                                              justifyContent: "space-between",
-                                                                                                              alignItems: "center",
-                                                                                                              flexWrap: "wrap", // Allow wrapping if needed
-                                                                                                              gap: { xs: 1, sm: 0 },
-                                                                                                              margin: { xs: "12px 8px", sm: "16px" },
-                                                                                                              padding: { xs: "16px", sm: "20px" },
-                                                                                                              background: 'linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(56, 161, 105, 0.1) 100%)',
-                                                                                                              borderRadius: '16px',
-                                                                                                              border: '2px solid rgba(72, 187, 120, 0.3)',
-                                                                                                              boxShadow: '0 8px 32px rgba(72, 187, 120, 0.1)'
-                                                                                                          }}>
-                                                                                                              <Typography
-                                                                                                                  variant="h6"
-                                                                                                                  sx={{
-                                                                                                                      fontWeight: '800',
-                                                                                                                      color: '#2f855a',
-                                                                                                                      fontSize: '18px',
-                                                                                                                      display: 'flex',
-                                                                                                                      alignItems: 'center',
-                                                                                                                      '&::before': {
-                                                                                                                          content: '"🎯"',
-                                                                                                                          marginRight: '8px'
-                                                                                                                      }
-                                                                                                                  }}
-                                                                                                              >
-                                                                                                                  Final Amount:
-                                                                                                              </Typography>
-                                                                                                              <Typography
-                                                                                                                  variant="h6"
-                                                                                                                  sx={{
-                                                                                                                      fontWeight: '900',
-                                                                                                                      fontSize: '22px',
-                                                                                                                      background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-                                                                                                                      WebkitBackgroundClip: 'text',
-                                                                                                                      WebkitTextFillColor: 'transparent',
-                                                                                                                      backgroundClip: 'text'
-                                                                                                                  }}
-                                                                                                              >
-                                                                                                                  ₹ {checked ? ((orderBumpCourse.price - ((orderBumpCourse.price / 100) * orderBumpCourse.discount)) + totalPrice) - couponDiscount : totalPrice - couponDiscount}
-                                                                                                              </Typography>
-                                                                                                          </Box>
-                                                                                                      </>
-                                                                                                  )
-                                                                                              }
-                                  
-                                                                                          </Grid>
-                                                                                      </Grid>
-                                                                                      <Button
-                                                                                          variant="contained"
-                                                                                          sx={{
-                                                                                              width: { xs: "calc(100% - 32px)", sm: "300px" }, // Full width on mobile, fixed width on desktop
-                                                                                              height: "56px",
-                                                                                              margin: { xs: "24px 16px 16px 16px", sm: "32px auto 24px auto" }, // Different margins for mobile
-                                                                                              fontSize: '16px',
-                                                                                              fontWeight: '800',
-                                                                                              borderRadius: '16px',
-                                                                                              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-                                                                                              backgroundSize: '200% 200%',
-                                                                                              color: 'white',
-                                                                                              textTransform: 'none',
-                                                                                              boxShadow: '0 8px 32px rgba(102, 126, 234, 0.4)',
-                                                                                              border: 'none',
-                                                                                              position: 'relative',
-                                                                                              overflow: 'hidden',
-                                                                                              '&::before': {
-                                                                                                  content: '""',
-                                                                                                  position: 'absolute',
-                                                                                                  top: 0,
-                                                                                                  left: 0,
-                                                                                                  right: 0,
-                                                                                                  bottom: 0,
-                                                                                                  background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
-                                                                                                  transform: 'translateX(-100%)',
-                                                                                                  transition: 'transform 0.6s ease'
-                                                                                              },
-                                                                                              '&:hover': {
-                                                                                                  transform: 'translateY(-3px)',
-                                                                                                  boxShadow: '0 15px 40px rgba(102, 126, 234, 0.5)',
-                                                                                                  backgroundPosition: '100% 0',
-                                                                                                  animation: 'gradientShift 2s ease infinite'
-                                                                                              },
-                                                                                              '&:hover::before': {
-                                                                                                  transform: 'translateX(100%)'
-                                                                                              },
-                                                                                              '&:active': {
-                                                                                                  transform: 'translateY(-1px)'
-                                                                                              },
-                                                                                              '&:disabled': {
-                                                                                                  background: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%)',
-                                                                                                  color: '#a0aec0',
-                                                                                                  boxShadow: 'none',
-                                                                                                  transform: 'none'
-                                                                                              },
-                                                                                              transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                                                              display: 'flex',
-                                                                                              alignItems: 'center',
-                                                                                              gap: '12px'
-                                                                                          }}
-                                                                                          onClick={handleSubmit}
-                                                                                          disabled={title === '' || number === '' || email === ''}
-                                                                                      >
-                                                                                          <span style={{ fontSize: '20px' }}>🚀</span>
-                                                                                          Complete Payment
-                                                                                          <span style={{ fontSize: '20px' }}>💳</span>
-                                                                                      </Button>
-                                                                                  </Card>
-                                                                              </Typography>
-                                                                          )
-                                                                      }
-                                    {
-                                        activeStep === 3 && (
-                                            <Typography sx={{ mt: 3, mb: 1, py: 1 }}>
-                                                <Card sx={{
-                                                    width: "100%",
-                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                    backdropFilter: 'blur(20px)',
-                                                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                    borderRadius: '32px',
-                                                    boxShadow: '0 30px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
-                                                    textAlign: "center",
-                                                    position: 'relative',
-                                                    overflow: 'hidden',
-                                                    '&::before': {
-                                                        content: '""',
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        height: '6px',
-                                                        background: 'linear-gradient(90deg, #48bb78 0%, #38a169 50%, #2f855a 100%)',
-                                                        background: 'linear-gradient(90deg, #48bb78 0%, #38a169 50%, #2f855a 100%)',
-                                                        backgroundSize: '200% 200%',
-                                                        animation: 'gradientShift 3s ease infinite'
-                                                    },
-                                                    '&:hover': {
-                                                        transform: 'translateY(-8px)',
-                                                        boxShadow: '0 40px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15)',
-                                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                                                    },
-                                                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
-                                                }}>
-                                                    {/* Success Animation Background */}
-                                                    <Box sx={{
-                                                        position: 'absolute',
-                                                        top: 0,
-                                                        left: 0,
-                                                        right: 0,
-                                                        bottom: 0,
-                                                        background: 'radial-gradient(circle at 50% 50%, rgba(72, 187, 120, 0.05) 0%, transparent 70%)',
-                                                        pointerEvents: 'none'
-                                                    }} />
-
-                                                    <Grid container sx={{ margin: "40px 0", justifyContent: "center", position: 'relative', zIndex: 1 }}>
-                                                        <Grid item xs={12} sm={8} md={6} lg={5}>
-                                                            {/* Success Icon and Title */}
-                                                            <Box sx={{ mb: 4 }}>
-                                                                <Box sx={{
-                                                                    width: '120px',
-                                                                    height: '120px',
-                                                                    margin: '0 auto 20px',
-                                                                    background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-                                                                    borderRadius: '50%',
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    justifyContent: 'center',
-                                                                    boxShadow: '0 20px 40px rgba(72, 187, 120, 0.3)',
-                                                                    animation: 'pulse 2s ease-in-out infinite'
-                                                                }}>
-                                                                    <Typography sx={{ fontSize: '48px' }}>🎉</Typography>
-                                                                </Box>
-                                                                <Typography
-                                                                    variant='h3'
-                                                                    sx={{
-                                                                        fontWeight: '900',
-                                                                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
-                                                                        WebkitBackgroundClip: 'text',
-                                                                        WebkitTextFillColor: 'transparent',
-                                                                        backgroundClip: 'text',
-                                                                        fontSize: { xs: '2rem', md: '2.5rem' },
-                                                                        letterSpacing: '-0.02em',
-                                                                        mb: 2
-                                                                    }}
-                                                                >
-                                                                    Enrollment Successful!
-                                                                </Typography>
-                                                                <Typography sx={{
-                                                                    fontSize: '18px',
-                                                                    color: '#4a5568',
-                                                                    fontWeight: '500',
-                                                                    mb: 3,
-                                                                    lineHeight: '1.6'
-                                                                }}>
-                                                                    Welcome to your learning journey! 🚀
-                                                                </Typography>
-                                                            </Box>
-
-                                                            {/* Logo Section */}
-                                                            <Box sx={{ mb: 4 }}>
-                                                                <Box sx={{
-                                                                    background: 'rgba(255, 255, 255, 0.8)',
-                                                                    borderRadius: '20px',
-                                                                    padding: '24px',
-                                                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                                                                    backdropFilter: 'blur(10px)'
-                                                                }}>
-                                                                    <img
-                                                                        src="img/Image [header-logo].png"
-                                                                        alt="V Smart Logo"
-                                                                        style={{
-                                                                            height: "80px",
-                                                                            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
-                                                                        }}
-                                                                    />
-                                                                </Box>
-                                                            </Box>
-
-                                                            {/* Download Instructions */}
-                                                            <Box sx={{
-                                                                background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
-                                                                borderRadius: '20px',
-                                                                padding: '24px',
-                                                                margin: '24px 0',
-                                                                border: '1px solid rgba(102, 126, 234, 0.1)'
-                                                            }}>
-                                                                <Typography sx={{
-                                                                    fontWeight: "700",
-                                                                    fontSize: "16px",
-                                                                    color: '#2d3748',
-                                                                    lineHeight: '1.7',
-                                                                    mb: 3
-                                                                }}>
-                                                                    📱 <strong>Next Steps:</strong> Download our mobile app to access test papers and upload your answer sheets.
-                                                                    The complete student dashboard is available exclusively on mobile!
-                                                                </Typography>
-
-                                                                {/* App Store Buttons */}
-                                                                <Box sx={{
-                                                                    display: "flex",
-                                                                    justifyContent: "center",
-                                                                    alignItems: "center",
-                                                                    gap: 2,
-                                                                    flexWrap: 'wrap'
-                                                                }}>
-                                                                    <Box
-                                                                        component="img"
-                                                                        src="img/playstore.svg"
-                                                                        alt="Download from Google Play"
-                                                                        onClick={handlePlayStore}
-                                                                        sx={{
-                                                                            height: '48px',
-                                                                            cursor: 'pointer',
-                                                                            borderRadius: '12px',
-                                                                            transition: 'all 0.3s ease',
-                                                                            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
-                                                                            '&:hover': {
-                                                                                transform: 'translateY(-4px) scale(1.05)',
-                                                                                filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2))'
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                    <Box
-                                                                        component="img"
-                                                                        src="img/applestore.svg"
-                                                                        alt="Download from App Store"
-                                                                        sx={{
-                                                                            height: '48px',
-                                                                            cursor: 'pointer',
-                                                                            borderRadius: '12px',
-                                                                            transition: 'all 0.3s ease',
-                                                                            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
-                                                                            '&:hover': {
-                                                                                transform: 'translateY(-4px) scale(1.05)',
-                                                                                filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2))'
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                    <Box
-                                                                        component="img"
-                                                                        src="img/windowstore.svg"
-                                                                        alt="Download from Microsoft Store"
-                                                                        onClick={handleWindowStore}
-                                                                        sx={{
-                                                                            height: '48px',
-                                                                            cursor: 'pointer',
-                                                                            borderRadius: '12px',
-                                                                            transition: 'all 0.3s ease',
-                                                                            filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
-                                                                            '&:hover': {
-                                                                                transform: 'translateY(-4px) scale(1.05)',
-                                                                                filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2))'
-                                                                            }
-                                                                        }}
-                                                                    />
-                                                                </Box>
-                                                            </Box>
-                                                            {/* Action Button */}
-                                                            <Button
-                                                                variant="contained"
-                                                                sx={{
-                                                                    // width: "320px",
-                                                                    height: "64px",
-                                                                    margin: "32px auto",
-                                                                    fontSize: '16px',
-                                                                    fontWeight: '800',
-                                                                    borderRadius: '20px',
-                                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
-                                                                    backgroundSize: '200% 200%',
-                                                                    color: 'white',
-                                                                    textTransform: 'none',
-                                                                    boxShadow: '0 12px 40px rgba(102, 126, 234, 0.4)',
-                                                                    border: 'none',
-                                                                    position: 'relative',
-                                                                    overflow: 'hidden',
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '12px',
-                                                                    '&::before': {
-                                                                        content: '""',
-                                                                        position: 'absolute',
-                                                                        top: 0,
-                                                                        left: 0,
-                                                                        right: 0,
-                                                                        bottom: 0,
-                                                                        background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
-                                                                        transform: 'translateX(-100%)',
-                                                                        transition: 'transform 0.6s ease'
-                                                                    },
-                                                                    '&:hover': {
-                                                                        transform: 'translateY(-4px)',
-                                                                        boxShadow: '0 20px 50px rgba(102, 126, 234, 0.5)',
-                                                                        backgroundPosition: '100% 0',
-                                                                        animation: 'gradientShift 2s ease infinite'
-                                                                    },
-                                                                    '&:hover::before': {
-                                                                        transform: 'translateX(100%)'
-                                                                    },
-                                                                    '&:active': {
-                                                                        transform: 'translateY(-2px)'
-                                                                    },
-                                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                                                                }}
-                                                                onClick={() => {
-                                                                    setActiveStep(0);
-                                                                    setAddedCartPlans([]);
-                                                                    setAddtoCartIds([]);
-                                                                    setPurchaseArray([]);
-                                                                    setSelectedIds([]);
-                                                                    setSelectSubjectWise([]);
-                                                                    setChecked(false);
-                                                                }}
-                                                            >
-                                                                <span style={{ fontSize: '24px' }}>🎯</span>
-                                                                Start Another Journey
-                                                                <span style={{ fontSize: '24px' }}>✨</span>
-                                                            </Button>
+                                                            </div>
                                                         </Grid>
                                                     </Grid>
-                                                </Card>
-                                            </Typography>
-                                        )
-                                    }
-                                </React.Fragment>
-                            )}
-                        </div>
-                    </Box>
+                                                    <Box sx={{ textAlign: 'right', ml: 2, mb: 3 }} className="mobile-plan-box">
+                                                        <ModernCheckoutButton
+                                                            onClick={handleCheckoutSubmit}
+                                                            className='button-hover mobile-buy-now'
+                                                            startIcon={<TrendingUpIcon />}
+                                                            sx={{ mt: 3 }}
+                                                        >
+                                                            🚀 Proceed to Checkout
+                                                            <span className="total-price">
+                                                                ₹{totalPrice.toFixed(0)}
+                                                            </span>
+                                                        </ModernCheckoutButton>
+                                                    </Box>
+                                                </Typography>
+                                            )
+                                        }
+                                        {
+                                            activeStep === 2 && (
+                                                <Typography sx={{ mt: 3, mb: 1, py: 1 }}>
+                                                    <Card sx={{
+                                                        width: "100%",
+                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                        backdropFilter: 'blur(20px)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                        borderRadius: '24px',
+                                                        boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                                                        textAlign: "center",
+                                                        mb: 3,
+                                                        position: 'relative',
+                                                        overflow: 'hidden',
+                                                        '&::before': {
+                                                            content: '""',
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            height: '4px',
+                                                            background: 'linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                                                            backgroundSize: '200% 200%',
+                                                            backgroundSize: '200% 200%',
+                                                            animation: 'gradientShift 3s ease infinite'
+                                                        },
+                                                        '&:hover': {
+                                                            transform: 'translateY(-5px)',
+                                                            boxShadow: '0 35px 60px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15)',
+                                                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                        },
+                                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                    }}>
+                                                        <Typography
+                                                            padding={2}
+                                                            mt={4}
+                                                            fontWeight={'800'}
+                                                            variant='h4'
+                                                            sx={{
+                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                WebkitBackgroundClip: 'text',
+                                                                WebkitTextFillColor: 'transparent',
+                                                                backgroundClip: 'text',
+                                                                fontSize: { xs: '1.75rem', md: '2.25rem' },
+                                                                letterSpacing: '-0.02em',
+                                                                textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+                                                            }}
+                                                        >
+                                                            ✨ Complete Your Journey
+                                                        </Typography>
+                                                        <Grid container sx={{ margin: "32px 0", justifyContent: "center", px: 2 }}>
+                                                            <Grid item xs={12} sm={8} md={7} lg={6}>
+                                                                <TextField
+                                                                    className='mobile-fill-textfield'
+                                                                    fullWidth
+                                                                    variant="outlined"
+                                                                    type="text"
+                                                                    label="Full Name"
+                                                                    name="name"
+                                                                    value={title}
+                                                                    onChange={(e) => setTitle(e.target.value)}
+                                                                    InputProps={{
+                                                                        style: {
+                                                                            borderRadius: "16px",
+                                                                            fontSize: '16px',
+                                                                            background: 'rgba(255, 255, 255, 0.8)',
+                                                                            backdropFilter: 'blur(10px)',
+                                                                            transition: 'all 0.3s ease',
+                                                                            paddingLeft: '16px' // Add left padding for placeholder
+                                                                        }
+                                                                    }}
+                                                                    InputLabelProps={{
+                                                                        sx: {
+                                                                            fontSize: '16px',
+                                                                            fontWeight: '600',
+                                                                            color: '#4a5568',
+                                                                            '&.Mui-focused': {
+                                                                                color: '#667eea'
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                    sx={{
+                                                                        gridColumn: "span 12",
+                                                                        m: { xs: 1, sm: 2 }, // Reduced margin on mobile
+                                                                        '& .MuiOutlinedInput-root': {
+                                                                            '&:hover fieldset': {
+                                                                                borderColor: '#667eea',
+                                                                                borderWidth: '2px'
+                                                                            },
+                                                                            '&.Mui-focused fieldset': {
+                                                                                borderColor: '#667eea',
+                                                                                borderWidth: '2px',
+                                                                                boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <TextField
+                                                                    inputProps={{
+                                                                        maxLength: 10
+                                                                    }}
+                                                                    className='mobile-fill-textfield'
+                                                                    fullWidth
+                                                                    variant="outlined"
+                                                                    type="number"
+                                                                    label="Phone Number"
+                                                                    name="number"
+                                                                    value={number}
+                                                                    onChange={handleNumberChange}
+                                                                    error={!!error}
+                                                                    helperText={error}
+                                                                    InputProps={{
+                                                                        style: {
+                                                                            borderRadius: "16px",
+                                                                            fontSize: '16px',
+                                                                            background: 'rgba(255, 255, 255, 0.8)',
+                                                                            backdropFilter: 'blur(10px)',
+                                                                            transition: 'all 0.3s ease',
+                                                                            paddingLeft: '16px' // Add left padding for placeholder
+                                                                        }
+                                                                    }}
+                                                                    InputLabelProps={{
+                                                                        sx: {
+                                                                            fontSize: '16px',
+                                                                            fontWeight: '600',
+                                                                            color: '#4a5568',
+                                                                            '&.Mui-focused': {
+                                                                                color: '#667eea'
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                    sx={{
+                                                                        gridColumn: "span 12",
+                                                                        m: { xs: 1, sm: 2 }, // Reduced margin on mobile
+                                                                        '& .MuiOutlinedInput-root': {
+                                                                            '&:hover fieldset': {
+                                                                                borderColor: '#667eea',
+                                                                                borderWidth: '2px'
+                                                                            },
+                                                                            '&.Mui-focused fieldset': {
+                                                                                borderColor: '#667eea',
+                                                                                borderWidth: '2px',
+                                                                                boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <TextField
+                                                                    className='mobile-fill-textfield'
+                                                                    fullWidth
+                                                                    variant="outlined"
+                                                                    type="email"
+                                                                    label="Email Address"
+                                                                    name="email"
+                                                                    value={email}
+                                                                    onChange={(e) => setEmail(e.target.value)}
+                                                                    InputProps={{
+                                                                        style: {
+                                                                            borderRadius: "16px",
+                                                                            fontSize: '16px',
+                                                                            background: 'rgba(255, 255, 255, 0.8)',
+                                                                            backdropFilter: 'blur(10px)',
+                                                                            transition: 'all 0.3s ease',
+                                                                            paddingLeft: '16px' // Add left padding for placeholder
+                                                                        }
+                                                                    }}
+                                                                    InputLabelProps={{
+                                                                        sx: {
+                                                                            fontSize: '16px',
+                                                                            fontWeight: '600',
+                                                                            color: '#4a5568',
+                                                                            '&.Mui-focused': {
+                                                                                color: '#667eea'
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                    sx={{
+                                                                        gridColumn: "span 12",
+                                                                        m: { xs: 1, sm: 2 }, // Reduced margin on mobile
+                                                                        '& .MuiOutlinedInput-root': {
+                                                                            '&:hover fieldset': {
+                                                                                borderColor: '#667eea',
+                                                                                borderWidth: '2px'
+                                                                            },
+                                                                            '&.Mui-focused fieldset': {
+                                                                                borderColor: '#667eea',
+                                                                                borderWidth: '2px',
+                                                                                boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                {
+                                                                    orderBumpCourse?.price ?
+                                                                        <>
+                                                                            <InputLabel sx={{
+                                                                                width: '100%',
+                                                                                textAlign: "left",
+                                                                                fontWeight: '700',
+                                                                                fontSize: '16px',
+                                                                                color: '#2d3748',
+                                                                                ml: 2,
+                                                                                mb: 1,
+                                                                                display: 'flex',
+                                                                                alignItems: 'center',
+                                                                                '&::before': {
+                                                                                    content: '"🎯"',
+                                                                                    marginRight: '8px'
+                                                                                }
+                                                                            }}>{orderBumpCourse?.title}</InputLabel>
+                                                                            <div className='mobile-headint-margin'>
+                                                                                <Box sx={{
+                                                                                    background: "linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)",
+                                                                                    m: { xs: 1, sm: 2 }, // Reduced margin on mobile
+                                                                                    width: "100%",
+                                                                                    borderRadius: '16px',
+                                                                                    border: '2px solid rgba(102, 126, 234, 0.2)',
+                                                                                    backdropFilter: 'blur(10px)',
+                                                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                                                    '&:hover': {
+                                                                                        transform: 'translateY(-2px)',
+                                                                                        boxShadow: '0 10px 25px rgba(102, 126, 234, 0.15)',
+                                                                                        border: '2px solid rgba(102, 126, 234, 0.3)'
+                                                                                    }
+                                                                                }}
+                                                                                    display={'flex'}
+                                                                                    alignItems={'center'}
+                                                                                    justifyContent={"space-between"}
+                                                                                    padding={"16px"}
+                                                                                    className='mobile-fill-textfield'>
+                                                                                    <Typography
+                                                                                        sx={{
+                                                                                            fontWeight: '800',
+                                                                                            ml: 1,
+                                                                                            fontSize: '18px',
+                                                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                                            WebkitBackgroundClip: 'text',
+                                                                                            WebkitTextFillColor: 'transparent',
+                                                                                            backgroundClip: 'text'
+                                                                                        }}
+                                                                                    >
+                                                                                        ₹ {(orderBumpCourse.price - ((orderBumpCourse.price / 100) * orderBumpCourse.discount)).toFixed(2)}
+                                                                                    </Typography>
+                                                                                    <Checkbox
+                                                                                        checked={checked}
+                                                                                        onChange={handleCheckboxChange}
+                                                                                        color="primary"
+                                                                                        sx={{
+                                                                                            transform: 'scale(1.2)',
+                                                                                            '&.Mui-checked': {
+                                                                                                color: '#667eea'
+                                                                                            },
+                                                                                            '&:hover': {
+                                                                                                backgroundColor: 'rgba(102, 126, 234, 0.1)'
+                                                                                            }
+                                                                                        }}
+                                                                                    />
+                                                                                </Box>
+                                                                            </div>
+                                                                            <Typography sx={{
+                                                                                fontSize: '15px',
+                                                                                color: '#718096',
+                                                                                margin: '8px 16px 16px 16px',
+                                                                                fontWeight: '500',
+                                                                                lineHeight: '1.6',
+                                                                                fontStyle: 'italic'
+                                                                            }}>
+                                                                                {orderBumpCourse?.setting?.orderBumpDescription}
+                                                                            </Typography>
+                                                                        </> : ""
+                                                                }
 
-                        </div>
-                    </Box>
-              </Box>
+                                                                <Box sx={{
+                                                                    textAlign: "end",
+                                                                    mb: 1
+                                                                }}>
+                                                                    <Typography
+                                                                        variant="p"
+                                                                        fontWeight={'700'}
+                                                                        onClick={handleReedemCode}
+                                                                        sx={{
+                                                                            cursor: 'pointer',
+                                                                            color: "#667eea",
+                                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                            WebkitBackgroundClip: 'text',
+                                                                            WebkitTextFillColor: 'transparent',
+                                                                            backgroundClip: 'text',
+                                                                            margin: "8px 16px",
+                                                                            fontSize: "14px",
+                                                                            fontWeight: '800',
+                                                                            textDecoration: 'underline',
+                                                                            textDecorationColor: 'rgba(102, 126, 234, 0.5)',
+                                                                            '&:hover': {
+                                                                                transform: 'translateY(-1px)',
+                                                                                textShadow: '0 2px 4px rgba(102, 126, 234, 0.3)'
+                                                                            },
+                                                                            transition: 'all 0.3s ease'
+                                                                        }}
+                                                                    >
+                                                                        🎟️ Have a Coupon Code?
+                                                                    </Typography>
+                                                                </Box>
+
+                                                                {
+                                                                    reedemCode === true && (
+                                                                        <Box className='mobile-fill-textfield' sx={{
+                                                                            background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)',
+                                                                            borderRadius: '20px',
+                                                                            padding: { xs: '16px', sm: '20px' }, // Reduced padding on mobile
+                                                                            margin: { xs: '12px', sm: '16px' }, // Reduced margin on mobile
+                                                                            border: '1px solid rgba(102, 126, 234, 0.2)',
+                                                                            backdropFilter: 'blur(10px)',
+                                                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)'
+                                                                        }}>
+                                                                            <InputLabel sx={{
+                                                                                width: '100%',
+                                                                                textAlign: "left",
+                                                                                fontWeight: '700',
+                                                                                fontSize: '16px',
+                                                                                color: '#2d3748',
+                                                                                mb: 2,
+                                                                                display: 'flex',
+                                                                                alignItems: 'center',
+                                                                                '&::before': {
+                                                                                    content: '"🎫"',
+                                                                                    marginRight: '8px'
+                                                                                }
+                                                                            }}>Enter Your Coupon Code</InputLabel>
+
+                                                                            <OutlinedInput
+                                                                                className='mobile-coupon-field'
+                                                                                fullWidth
+                                                                                type="text"
+                                                                                name="number"
+                                                                                value={couponNumber}
+                                                                                onChange={handleCoupon}
+                                                                                placeholder="Enter discount code"
+                                                                                id="outlined-adornment-weight"
+                                                                                endAdornment={
+                                                                                    <InputAdornment position="end">
+                                                                                        <IconButton
+                                                                                            disabled={couponNumber && number ? false : true}
+                                                                                            aria-label="apply coupon"
+                                                                                            onClick={handleCheckCoupon}
+                                                                                            edge="end"
+                                                                                            sx={{
+                                                                                                fontSize: "14px",
+                                                                                                color: getColor(),
+                                                                                                fontWeight: '700',
+                                                                                                background: isCouponValid === true ?
+                                                                                                    'linear-gradient(135deg, #48bb78 0%, #38a169 100%)' :
+                                                                                                    'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                                                color: 'white',
+                                                                                                borderRadius: '12px',
+                                                                                                padding: '8px 16px',
+                                                                                                minWidth: 'auto',
+                                                                                                '&:hover': {
+                                                                                                    transform: 'translateY(-2px)',
+                                                                                                    boxShadow: '0 8px 25px rgba(102, 126, 234, 0.3)'
+                                                                                                },
+                                                                                                '&:disabled': {
+                                                                                                    background: '#e2e8f0',
+                                                                                                    color: '#a0aec0'
+                                                                                                },
+                                                                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                                                            }}
+                                                                                        >
+                                                                                            {isCouponValid === true ?
+                                                                                                <>✅ Applied</> :
+                                                                                                "Apply Code"
+                                                                                            }
+                                                                                        </IconButton>
+                                                                                    </InputAdornment>
+                                                                                }
+                                                                                aria-describedby="outlined-weight-helper-text"
+                                                                                sx={{
+                                                                                    borderRadius: "16px",
+                                                                                    background: 'rgba(255, 255, 255, 0.9)',
+                                                                                    backdropFilter: 'blur(10px)',
+                                                                                    '& .MuiOutlinedInput-root': {
+                                                                                        '&:hover fieldset': {
+                                                                                            borderColor: '#667eea',
+                                                                                            borderWidth: '2px'
+                                                                                        },
+                                                                                        '&.Mui-focused fieldset': {
+                                                                                            borderColor: '#667eea',
+                                                                                            borderWidth: '2px',
+                                                                                            boxShadow: '0 0 0 4px rgba(102, 126, 234, 0.1)'
+                                                                                        }
+                                                                                    }
+                                                                                }}
+                                                                            />
+                                                                            {errorMessage &&
+                                                                                <FormHelperText
+                                                                                    error
+                                                                                    sx={{
+                                                                                        marginTop: "12px",
+                                                                                        fontSize: '14px',
+                                                                                        fontWeight: '600'
+                                                                                    }}
+                                                                                >
+                                                                                    {errorMessage}
+                                                                                </FormHelperText>
+                                                                            }
+                                                                        </Box>
+                                                                    )
+                                                                }
+                                                                <Box sx={{
+                                                                    display: "flex",
+                                                                    flexDirection: "row", // Keep in same row for all screen sizes
+                                                                    justifyContent: "space-between",
+                                                                    alignItems: "center",
+                                                                    flexWrap: "wrap", // Allow wrapping if needed
+                                                                    gap: { xs: 1, sm: 0 },
+                                                                    margin: { xs: "16px 8px", sm: "24px 16px" },
+                                                                    padding: { xs: "16px", sm: "20px" },
+                                                                    width: { xs: "calc(100% - 16px)", sm: isMobileDevice ? "calc(100% - 32px)" : "calc(90% - 32px)" },
+                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+                                                                    borderRadius: '16px',
+                                                                    border: '2px solid rgba(102, 126, 234, 0.1)',
+                                                                    backdropFilter: 'blur(10px)'
+                                                                }}>
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        sx={{
+                                                                            fontWeight: '800',
+                                                                            fontSize: '18px',
+                                                                            color: '#2d3748',
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            '&::before': {
+                                                                                content: '"💰"',
+                                                                                marginRight: '8px'
+                                                                            }
+                                                                        }}
+                                                                    >
+                                                                        Total Amount:
+                                                                    </Typography>
+                                                                    <Typography
+                                                                        variant="h6"
+                                                                        sx={{
+                                                                            fontWeight: '900',
+                                                                            fontSize: '20px',
+                                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                            WebkitBackgroundClip: 'text',
+                                                                            WebkitTextFillColor: 'transparent',
+                                                                            backgroundClip: 'text'
+                                                                        }}
+                                                                    >
+                                                                        ₹ {checked ? (orderBumpCourse.price - ((orderBumpCourse.price / 100) * orderBumpCourse.discount)) + totalPrice : totalPrice}
+                                                                    </Typography>
+                                                                </Box>
+                                                                {
+                                                                    isCouponValid === true && (
+                                                                        <>
+                                                                            <Box sx={{
+                                                                                display: "flex",
+                                                                                flexDirection: "row", // Keep in same row for all screen sizes
+                                                                                justifyContent: "space-between",
+                                                                                alignItems: "center",
+                                                                                flexWrap: "wrap", // Allow wrapping if needed
+                                                                                gap: { xs: 1, sm: 0 },
+                                                                                margin: { xs: "12px 8px", sm: "16px" },
+                                                                                padding: { xs: "12px", sm: "16px" },
+                                                                                background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(220, 38, 38, 0.05) 100%)',
+                                                                                borderRadius: '12px',
+                                                                                border: '1px solid rgba(239, 68, 68, 0.2)'
+                                                                            }}>
+                                                                                <Typography
+                                                                                    variant="h6"
+                                                                                    sx={{
+                                                                                        fontWeight: '700',
+                                                                                        color: '#e53e3e',
+                                                                                        fontSize: '16px',
+                                                                                        display: 'flex',
+                                                                                        alignItems: 'center',
+                                                                                        '&::before': {
+                                                                                            content: '"🎉"',
+                                                                                            marginRight: '8px'
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    Discount Applied:
+                                                                                </Typography>
+                                                                                <Typography
+                                                                                    variant="h6"
+                                                                                    sx={{
+                                                                                        fontWeight: '800',
+                                                                                        color: '#e53e3e',
+                                                                                        fontSize: '18px'
+                                                                                    }}
+                                                                                >
+                                                                                    - ₹ {couponDiscount}
+                                                                                </Typography>
+                                                                            </Box>
+                                                                            <Box sx={{
+                                                                                display: "flex",
+                                                                                flexDirection: "row", // Keep in same row for all screen sizes
+                                                                                justifyContent: "space-between",
+                                                                                alignItems: "center",
+                                                                                flexWrap: "wrap", // Allow wrapping if needed
+                                                                                gap: { xs: 1, sm: 0 },
+                                                                                margin: { xs: "12px 8px", sm: "16px" },
+                                                                                padding: { xs: "16px", sm: "20px" },
+                                                                                background: 'linear-gradient(135deg, rgba(72, 187, 120, 0.1) 0%, rgba(56, 161, 105, 0.1) 100%)',
+                                                                                borderRadius: '16px',
+                                                                                border: '2px solid rgba(72, 187, 120, 0.3)',
+                                                                                boxShadow: '0 8px 32px rgba(72, 187, 120, 0.1)'
+                                                                            }}>
+                                                                                <Typography
+                                                                                    variant="h6"
+                                                                                    sx={{
+                                                                                        fontWeight: '800',
+                                                                                        color: '#2f855a',
+                                                                                        fontSize: '18px',
+                                                                                        display: 'flex',
+                                                                                        alignItems: 'center',
+                                                                                        '&::before': {
+                                                                                            content: '"🎯"',
+                                                                                            marginRight: '8px'
+                                                                                        }
+                                                                                    }}
+                                                                                >
+                                                                                    Final Amount:
+                                                                                </Typography>
+                                                                                <Typography
+                                                                                    variant="h6"
+                                                                                    sx={{
+                                                                                        fontWeight: '900',
+                                                                                        fontSize: '22px',
+                                                                                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                                                                                        WebkitBackgroundClip: 'text',
+                                                                                        WebkitTextFillColor: 'transparent',
+                                                                                        backgroundClip: 'text'
+                                                                                    }}
+                                                                                >
+                                                                                    ₹ {checked ? ((orderBumpCourse.price - ((orderBumpCourse.price / 100) * orderBumpCourse.discount)) + totalPrice) - couponDiscount : totalPrice - couponDiscount}
+                                                                                </Typography>
+                                                                            </Box>
+                                                                        </>
+                                                                    )
+                                                                }
+
+                                                            </Grid>
+                                                        </Grid>
+                                                        <Button
+                                                            variant="contained"
+                                                            sx={{
+                                                                width: { xs: "calc(100% - 32px)", sm: "300px" }, // Full width on mobile, fixed width on desktop
+                                                                height: "56px",
+                                                                margin: { xs: "24px 16px 16px 16px", sm: "32px auto 24px auto" }, // Different margins for mobile
+                                                                fontSize: '16px',
+                                                                fontWeight: '800',
+                                                                borderRadius: '16px',
+                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                                                                backgroundSize: '200% 200%',
+                                                                color: 'white',
+                                                                textTransform: 'none',
+                                                                boxShadow: '0 8px 32px rgba(102, 126, 234, 0.4)',
+                                                                border: 'none',
+                                                                position: 'relative',
+                                                                overflow: 'hidden',
+                                                                '&::before': {
+                                                                    content: '""',
+                                                                    position: 'absolute',
+                                                                    top: 0,
+                                                                    left: 0,
+                                                                    right: 0,
+                                                                    bottom: 0,
+                                                                    background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                                                                    transform: 'translateX(-100%)',
+                                                                    transition: 'transform 0.6s ease'
+                                                                },
+                                                                '&:hover': {
+                                                                    transform: 'translateY(-3px)',
+                                                                    boxShadow: '0 15px 40px rgba(102, 126, 234, 0.5)',
+                                                                    backgroundPosition: '100% 0',
+                                                                    animation: 'gradientShift 2s ease infinite'
+                                                                },
+                                                                '&:hover::before': {
+                                                                    transform: 'translateX(100%)'
+                                                                },
+                                                                '&:active': {
+                                                                    transform: 'translateY(-1px)'
+                                                                },
+                                                                '&:disabled': {
+                                                                    background: 'linear-gradient(135deg, #e2e8f0 0%, #cbd5e0 100%)',
+                                                                    color: '#a0aec0',
+                                                                    boxShadow: 'none',
+                                                                    transform: 'none'
+                                                                },
+                                                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '12px'
+                                                            }}
+                                                            onClick={handleSubmit}
+                                                            disabled={title === '' || number === '' || email === ''}
+                                                        >
+                                                            <span style={{ fontSize: '20px' }}>🚀</span>
+                                                            Complete Payment
+                                                            <span style={{ fontSize: '20px' }}>💳</span>
+                                                        </Button>
+                                                    </Card>
+                                                </Typography>
+                                            )
+                                        }
+                                        {
+                                            activeStep === 3 && (
+                                                <Typography sx={{ mt: 3, mb: 1, py: 1 }}>
+                                                    <Card sx={{
+                                                        width: "100%",
+                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                        backdropFilter: 'blur(20px)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                        borderRadius: '32px',
+                                                        boxShadow: '0 30px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.1)',
+                                                        textAlign: "center",
+                                                        position: 'relative',
+                                                        overflow: 'hidden',
+                                                        '&::before': {
+                                                            content: '""',
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            height: '6px',
+                                                            background: 'linear-gradient(90deg, #48bb78 0%, #38a169 50%, #2f855a 100%)',
+                                                            background: 'linear-gradient(90deg, #48bb78 0%, #38a169 50%, #2f855a 100%)',
+                                                            backgroundSize: '200% 200%',
+                                                            animation: 'gradientShift 3s ease infinite'
+                                                        },
+                                                        '&:hover': {
+                                                            transform: 'translateY(-8px)',
+                                                            boxShadow: '0 40px 80px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.15)',
+                                                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                        },
+                                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                    }}>
+                                                        {/* Success Animation Background */}
+                                                        <Box sx={{
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            bottom: 0,
+                                                            background: 'radial-gradient(circle at 50% 50%, rgba(72, 187, 120, 0.05) 0%, transparent 70%)',
+                                                            pointerEvents: 'none'
+                                                        }} />
+
+                                                        <Grid container sx={{ margin: "40px 0", justifyContent: "center", position: 'relative', zIndex: 1 }}>
+                                                            <Grid item xs={12} sm={8} md={6} lg={5}>
+                                                                {/* Success Icon and Title */}
+                                                                <Box sx={{ mb: 4 }}>
+                                                                    <Box sx={{
+                                                                        width: '120px',
+                                                                        height: '120px',
+                                                                        margin: '0 auto 20px',
+                                                                        background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                                                                        borderRadius: '50%',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        justifyContent: 'center',
+                                                                        boxShadow: '0 20px 40px rgba(72, 187, 120, 0.3)',
+                                                                        animation: 'pulse 2s ease-in-out infinite'
+                                                                    }}>
+                                                                        <Typography sx={{ fontSize: '48px' }}>🎉</Typography>
+                                                                    </Box>
+                                                                    <Typography
+                                                                        variant='h3'
+                                                                        sx={{
+                                                                            fontWeight: '900',
+                                                                            background: 'linear-gradient(135deg, #48bb78 0%, #38a169 100%)',
+                                                                            WebkitBackgroundClip: 'text',
+                                                                            WebkitTextFillColor: 'transparent',
+                                                                            backgroundClip: 'text',
+                                                                            fontSize: { xs: '2rem', md: '2.5rem' },
+                                                                            letterSpacing: '-0.02em',
+                                                                            mb: 2
+                                                                        }}
+                                                                    >
+                                                                        Enrollment Successful!
+                                                                    </Typography>
+                                                                    <Typography sx={{
+                                                                        fontSize: '18px',
+                                                                        color: '#4a5568',
+                                                                        fontWeight: '500',
+                                                                        mb: 3,
+                                                                        lineHeight: '1.6'
+                                                                    }}>
+                                                                        Welcome to your learning journey! 🚀
+                                                                    </Typography>
+                                                                </Box>
+
+                                                                {/* Logo Section */}
+                                                                <Box sx={{ mb: 4 }}>
+                                                                    <Box sx={{
+                                                                        background: 'rgba(255, 255, 255, 0.8)',
+                                                                        borderRadius: '20px',
+                                                                        padding: '24px',
+                                                                        boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                                        backdropFilter: 'blur(10px)'
+                                                                    }}>
+                                                                        <img
+                                                                            src={'/cawallah/cawallahlogo.png'}
+                                                                            alt="CAwallah Logo"
+                                                                            style={{
+                                                                                height: "80px",
+                                                                                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))'
+                                                                            }}
+                                                                        />
+                                                                    </Box>
+                                                                </Box>
+
+                                                                {/* Download Instructions */}
+                                                                <Box sx={{
+                                                                    background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
+                                                                    borderRadius: '20px',
+                                                                    padding: '24px',
+                                                                    margin: '24px 0',
+                                                                    border: '1px solid rgba(102, 126, 234, 0.1)'
+                                                                }}>
+                                                                    <Typography sx={{
+                                                                        fontWeight: "700",
+                                                                        fontSize: "16px",
+                                                                        color: '#2d3748',
+                                                                        lineHeight: '1.7',
+                                                                        mb: 3
+                                                                    }}>
+                                                                        📱 <strong>Next Steps:</strong> Download our mobile app to access test papers and upload your answer sheets.
+                                                                        The complete student dashboard is available exclusively on mobile!
+                                                                    </Typography>
+
+                                                                    {/* App Store Buttons */}
+                                                                    <Box sx={{
+                                                                        display: "flex",
+                                                                        justifyContent: "center",
+                                                                        alignItems: "center",
+                                                                        gap: 2,
+                                                                        flexWrap: 'wrap'
+                                                                    }}>
+                                                                        <Box
+                                                                            component="img"
+                                                                            src="img/playstore.svg"
+                                                                            alt="Download from Google Play"
+                                                                            onClick={handlePlayStore}
+                                                                            sx={{
+                                                                                height: '48px',
+                                                                                cursor: 'pointer',
+                                                                                borderRadius: '12px',
+                                                                                transition: 'all 0.3s ease',
+                                                                                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-4px) scale(1.05)',
+                                                                                    filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2))'
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        <Box
+                                                                            component="img"
+                                                                            src="img/applestore.svg"
+                                                                            alt="Download from App Store"
+                                                                            sx={{
+                                                                                height: '48px',
+                                                                                cursor: 'pointer',
+                                                                                borderRadius: '12px',
+                                                                                transition: 'all 0.3s ease',
+                                                                                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-4px) scale(1.05)',
+                                                                                    filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2))'
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                        <Box
+                                                                            component="img"
+                                                                            src="img/windowstore.svg"
+                                                                            alt="Download from Microsoft Store"
+                                                                            onClick={handleWindowStore}
+                                                                            sx={{
+                                                                                height: '48px',
+                                                                                cursor: 'pointer',
+                                                                                borderRadius: '12px',
+                                                                                transition: 'all 0.3s ease',
+                                                                                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1))',
+                                                                                '&:hover': {
+                                                                                    transform: 'translateY(-4px) scale(1.05)',
+                                                                                    filter: 'drop-shadow(0 8px 16px rgba(0, 0, 0, 0.2))'
+                                                                                }
+                                                                            }}
+                                                                        />
+                                                                    </Box>
+                                                                </Box>
+                                                                {/* Action Button */}
+                                                                <Button
+                                                                    variant="contained"
+                                                                    sx={{
+                                                                        // width: "320px",
+                                                                        height: "64px",
+                                                                        margin: "32px auto",
+                                                                        fontSize: '16px',
+                                                                        fontWeight: '800',
+                                                                        borderRadius: '20px',
+                                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)',
+                                                                        backgroundSize: '200% 200%',
+                                                                        color: 'white',
+                                                                        textTransform: 'none',
+                                                                        boxShadow: '0 12px 40px rgba(102, 126, 234, 0.4)',
+                                                                        border: 'none',
+                                                                        position: 'relative',
+                                                                        overflow: 'hidden',
+                                                                        display: 'flex',
+                                                                        alignItems: 'center',
+                                                                        gap: '12px',
+                                                                        '&::before': {
+                                                                            content: '""',
+                                                                            position: 'absolute',
+                                                                            top: 0,
+                                                                            left: 0,
+                                                                            right: 0,
+                                                                            bottom: 0,
+                                                                            background: 'linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%)',
+                                                                            transform: 'translateX(-100%)',
+                                                                            transition: 'transform 0.6s ease'
+                                                                        },
+                                                                        '&:hover': {
+                                                                            transform: 'translateY(-4px)',
+                                                                            boxShadow: '0 20px 50px rgba(102, 126, 234, 0.5)',
+                                                                            backgroundPosition: '100% 0',
+                                                                            animation: 'gradientShift 2s ease infinite'
+                                                                        },
+                                                                        '&:hover::before': {
+                                                                            transform: 'translateX(100%)'
+                                                                        },
+                                                                        '&:active': {
+                                                                            transform: 'translateY(-2px)'
+                                                                        },
+                                                                        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                                                                    }}
+                                                                    onClick={() => {
+                                                                        setActiveStep(0);
+                                                                        setAddedCartPlans([]);
+                                                                        setAddtoCartIds([]);
+                                                                        setPurchaseArray([]);
+                                                                        setSelectedIds([]);
+                                                                        setSelectSubjectWise([]);
+                                                                        setChecked(false);
+                                                                    }}
+                                                                >
+                                                                    <span style={{ fontSize: '24px' }}>🎯</span>
+                                                                    Start Another Journey
+                                                                    <span style={{ fontSize: '24px' }}>✨</span>
+                                                                </Button>
+                                                            </Grid>
+                                                        </Grid>
+                                                    </Card>
+                                                </Typography>
+                                            )
+                                        }
+                                    </React.Fragment>
+                                )}
+                            </div>
+                        </Box>
+
+                    </div>
+                </Box>
+            </Box>
 
             <Dialog open={courseExpandedDescriptions} onClose={() => setCourseExpandedDescriptions(false)}>                <DialogContent dividers>
-                    <Typography variant='body1'>
-                        {parse(fullDes)}
-                    </Typography>
-                </DialogContent>
+                <Typography variant='body1'>
+                    {parse(fullDes)}
+                </Typography>
+            </DialogContent>
                 <DialogActions>
                     <Button onClick={() => setCourseExpandedDescriptions(false)}>Close</Button>
                 </DialogActions>
@@ -4468,6 +4296,6 @@ export default function FoundationTestSeries({
 
                 </DialogContent>
             </Dialog>
-        </>
+        </Layout>
     );
 };
