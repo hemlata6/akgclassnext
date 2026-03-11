@@ -81,7 +81,7 @@ const modernColors = {
 const ModernPlanCard = styled(Card)(({ theme, isSelected, isPremium }) => ({
     position: 'relative',
     height: '100%',
-    minWidth: '260px',
+    minWidth: '300px',
     borderRadius: '16px',
     background: '#FFFFFF',
     border: '1px solid #E5E7EB',
@@ -272,7 +272,7 @@ const ModernStepper = styled(Stepper)(({ theme }) => ({
     background: 'rgba(255, 255, 255, 0.95)',
     backdropFilter: 'blur(20px)',
     borderRadius: '20px',
-    padding: { xs: '16px 8px', sm: '20px 12px', md: '24px 0px' },
+    padding: '10px',
     boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
     border: '1px solid rgba(255, 255, 255, 0.2)',
     margin: { xs: '12px 0', sm: '16px 0', md: '20px 0' },
@@ -334,8 +334,8 @@ const ModernStepper = styled(Stepper)(({ theme }) => ({
 const ModernStepIconRoot = styled('div')(({ theme, ownerState }) => ({
     color: modernColors.neutral.lightGray,
     display: 'flex',
-    height: 44,
-    width: 44,
+    height: 30,
+    width: 30,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '50%',
@@ -362,13 +362,13 @@ const ModernStepIconRoot = styled('div')(({ theme, ownerState }) => ({
     '& .ModernStepIcon-completedIcon': {
         color: 'white',
         zIndex: 1,
-        fontSize: 20,
+        fontSize: 10,
         fontWeight: 'bold',
     },
 
     '& .ModernStepIcon-circle': {
-        width: 16,
-        height: 16,
+        width: '20px',
+        height: '20px',
         borderRadius: '50%',
         backgroundColor: 'currentColor',
     },
@@ -667,7 +667,7 @@ export default function FoundationTestSeries({
         setTotalPrice(totalPrice)
         setPurchaseArray(allEntityIds);
         localStorage.setItem("purchaseArray", JSON.stringify(allEntityIds));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartArray]);
 
     // console.log('cartArray', cartArray);
@@ -683,7 +683,7 @@ export default function FoundationTestSeries({
             }
 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coursePublic])
     const updateCartAndPurchaseArrays = (plansList, addedCartPlans) => {
         //     const matchedPlans = [];
@@ -819,7 +819,7 @@ export default function FoundationTestSeries({
             }
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleBackBrowserBack() {
@@ -862,7 +862,7 @@ export default function FoundationTestSeries({
             setSchedule("");
             // setSelectShedule('');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [courseContentList])
 
     useEffect(() => {
@@ -967,12 +967,12 @@ export default function FoundationTestSeries({
             // setActiveBtn('both')
             getPlans('both');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alltreeList])
 
     useEffect(() => {
         getPlans(activeBtn);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectSubjectWise, activeBtn])
 
     function getPlans(selectBtnType) {
@@ -2112,7 +2112,7 @@ export default function FoundationTestSeries({
                                                 </Select>
                                             </FormControl>
 
-                                            <FormControl className='mobile-select-button' sx={{
+                                            {/* <FormControl className='mobile-select-button' sx={{
                                                 '& .MuiOutlinedInput-root': {
                                                     background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
                                                     borderRadius: '16px',
@@ -2203,8 +2203,8 @@ export default function FoundationTestSeries({
                                                         })
                                                     }
                                                 </Select>
-                                            </FormControl>
-                                            {
+                                            </FormControl> */}
+                                            {/* {
                                                 ((selectedAotherSchedule?.title !== "Full Length Test Series") && (selectedAotherSchedule?.title !== "Portion WiseTest Series" && selectCourse?.title !== "CA Final")) && (
                                                     <FormControl className='mobile-select-button' sx={{
                                                         '& .MuiOutlinedInput-root': {
@@ -2299,7 +2299,7 @@ export default function FoundationTestSeries({
                                                         </Select>
                                                     </FormControl>
                                                 )
-                                            }
+                                            } */}
                                             {/* Removed duplicate commented View Schedules button */}
                                         </>)}
                                     {/* {
@@ -2369,10 +2369,10 @@ export default function FoundationTestSeries({
                                                     <ModernStepIcon {...props} icon={index + 1} />
                                                 )}>
                                                     <Typography
-                                                        variant="body2"
+                                                        // variant="body2"
                                                         fontWeight={600}
                                                         sx={{
-                                                            fontSize: { xs: '0.75rem', sm: '0.95rem', md: '1.375rem' },
+                                                            fontSize: { xs: '0.55rem', sm: '0.75rem', md: '0.9rem' },
                                                             color: activeStep === index ? modernColors.primary.main : modernColors.neutral.gray,
                                                             transition: 'color 0.3s ease',
                                                             whiteSpace: 'nowrap'
@@ -2570,68 +2570,63 @@ export default function FoundationTestSeries({
                                         {
                                             activeStep === 0 && schedule?.id && (
                                                 <Stack direction={'column'}>
-                                                 {cartArray?.length > 0 && (
-                                                            <Box sx={{ textAlign: { xs: "end", sm: "right" } , py:1}}>
-                                                                <ModernCheckoutButton
-                                                                    disabled={cartArray?.length === 0}
-                                                                    onClick={handleShowCart}
-                                                                    className='button-hover mobile-view-checkout'
-                                                                    startIcon={<ArrowForwardIcon sx={{ fontSize: { xs: '16px', sm: '18px' } }} />}
-                                                                    sx={{
-                                                                        fontSize: { xs: '12px', sm: '14px' },
-                                                                        padding: { xs: '10px 12px', sm: '12px 20px' },
-                                                                        background: modernColors.secondary.gradient,
-                                                                        width: { xs: '50%', sm: 'auto' }
-                                                                    }}
-                                                                >
-                                                                    Go to Cart Details
-                                                                </ModernCheckoutButton>
-                                                            </Box>
-                                                        )}
-                                                    <Typography sx={{ mb: 1, py: 1, display: 'flex', justifyContent: 'start' }}>
-                                                       
+                                                    {cartArray?.length > 0 && (
+                                                        <Box sx={{ textAlign: { xs: "end", sm: "right" }, py: 1 }}>
+                                                            <ModernCheckoutButton
+                                                                disabled={cartArray?.length === 0}
+                                                                onClick={handleShowCart}
+                                                                className='button-hover mobile-view-checkout'
+                                                                startIcon={<ArrowForwardIcon sx={{ fontSize: { xs: '16px', sm: '18px' } }} />}
+                                                                sx={{
+                                                                    fontSize: { xs: '12px', sm: '14px' },
+                                                                    padding: { xs: '10px 12px', sm: '12px 20px' },
+                                                                    background: modernColors.secondary.gradient,
+                                                                    width: { xs: '50%', sm: 'auto' }
+                                                                }}
+                                                            >
+                                                                Go to Cart Details
+                                                            </ModernCheckoutButton>
+                                                        </Box>
+                                                    )}
+                                                    <Stack direction='row' spacing={2} sx={{ mb: 1, py: 1}}>
+
                                                         {
                                                             selectCourse?.id && (
-                                                                <div>
-                                                                    <div className='react-multi-carousel-list' >
-                                                                        <Container maxWidth="lg" sx={{
-                                                                            py: { xs: 1, sm: 2 },
-                                                                            px: { xs: 0.5, sm: 1, md: 2 },
-                                                                        }}>
-                                                                            <Grid container spacing={{ xs: 1.5, sm: 2, md: 3 }} sx={{ justifyContent: 'flex-start' }}>
-                                                                                {
-                                                                                    plansList && plansList.map((item, i) => {
-                                                                                        let object = getPlanPrice(item, activeBtn, selectSubjectWise);
-                                                                                        let logo = object?.thumbLogo;
-                                                                                        let price = object?.price;
-                                                                                        let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.discount)) : object?.finalPrice;
-                                                                                        let discount = Math.round(100 - ((finalPrices / price) * 100));
-                                                                                        const fullDescription = item?.description?.description || "";
-                                                                                        const isAdded = cartArray.some(cartItem => cartItem.plan.id === item.id);
-                                                                                        const isPremium = discount > 20;
+                                                                <Box sx={{display:'flex', flexWrap:'wrap', gap: 2, justifyContent: 'center'}}>
+                                                                    {
+                                                                        schedulePlans && schedulePlans.map((item, i) => {
+                                                                            let object = getPlanPrice(item, activeBtn, selectSubjectWise);
+                                                                            let logo = object?.thumbLogo;
+                                                                            let price = object?.price;
+                                                                            let finalPrices = object?.finalPrice === 0 ? Number(price) - (Number(price / 100) * Number(item?.discount)) : object?.finalPrice;
+                                                                            let discount = Math.round(100 - ((finalPrices / price) * 100));
+                                                                            const fullDescription = item?.description?.description || "";
+                                                                            const isAdded = cartArray.some(cartItem => cartItem.plan.id === item.id);
+                                                                            const isPremium = discount > 20;
 
-                                                                                        return (
-                                                                                            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id || i}>
-                                                                                                <Fade in timeout={600 + i * 100}>
-                                                                                                    <ModernPlanCard
-                                                                                                        isSelected={isAdded}
-                                                                                                        isPremium={isPremium}
-                                                                                                        onClick={() => handleEnrollNow(item)}
-                                                                                                    >
-                                                                                                        <ModernPlanImage
-                                                                                                            image={filterGroupSubject === "subject" ?
-                                                                                                                Endpoints + subjectWiseListRender[0]?.description?.thumb :
-                                                                                                                logo ? Endpoints + logo : "img/folder-2.png"
-                                                                                                            }
-                                                                                                            title={item?.title}
-                                                                                                        />
+                                                                            return (
+                                                                                <Grid item xs={12} sm={6} md={4} lg={3} spacing={2} key={item.id || i}>
+                                                                                    <Fade in timeout={600 + i * 100}>
+                                                                                        <ModernPlanCard
+                                                                                            isSelected={isAdded}
+                                                                                            isPremium={isPremium}
+                                                                                            onClick={() => handleEnrollNow(item)}
+                                                                                        >
+                                                                                            <ModernPlanImage
+                                                                                                image={filterGroupSubject === "subject" ?
+                                                                                                    Endpoints + subjectWiseListRender[0]?.description?.thumb :
+                                                                                                    logo ? Endpoints + logo : "img/folder-2.png"
+                                                                                                }
+                                                                                                title={item?.title}
+                                                                                            />
 
-                                                                                                        <CardContent sx={{ px: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 1, sm: 1.5, md: 2 }, pb: { xs: 1, sm: 1.5, md: 2 } }}>
-                                                                                                            <ModernPlanTitle variant="h6">
-                                                                                                                {item?.title}
-                                                                                                            </ModernPlanTitle>
-
-                                                                                                            {/* <Typography
+                                                                                            <CardContent sx={{ px: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 1, sm: 1.5, md: 2 }, pb: { xs: 1, sm: 1.5, md: 2 } }}>
+                                                                                                <ModernPlanTitle variant="h6">
+                                                                                                    {item?.title}
+                                                                                                </ModernPlanTitle>
+                                                                                                {
+                                                                                                    fullDescription && (
+                                                                                                        <Typography
                                                                                                             variant="body2"
                                                                                                             sx={{
                                                                                                                 color: modernColors.neutral.gray,
@@ -2645,96 +2640,99 @@ export default function FoundationTestSeries({
                                                                                                                 lineHeight: '1.4',
                                                                                                             }}
                                                                                                         >
-                                                                                                            {fullDescription || "Premium test series for better preparation"}
-                                                                                                        </Typography> */}
+                                                                                                            {parse(fullDescription) || "Premium test series for better preparation"}
+                                                                                                            {/* <RenderHtml
+                                                                                                                            contentWidth={width}
+                                                                                                                            source={fullDescription}
+                                                                                                                        /> */}
+                                                                                                        </Typography>
+                                                                                                    )
+                                                                                                }
 
-                                                                                                            {selectSubjectWise?.length > 0 && (
-                                                                                                                <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
-                                                                                                                    {selectSubjectWise.slice(0, 3).map((chipLabel, idx) => (
-                                                                                                                        <ModernChip
-                                                                                                                            key={idx}
-                                                                                                                            size="small"
-                                                                                                                            label={chipTitle(chipLabel?.title)}
-                                                                                                                            chipcolor="accent"
-                                                                                                                        />
-                                                                                                                    ))}
-                                                                                                                    {selectSubjectWise.length > 3 && (
-                                                                                                                        <ModernChip
-                                                                                                                            size="small"
-                                                                                                                            label={`+${selectSubjectWise.length - 3}`}
-                                                                                                                            chipcolor="primary"
-                                                                                                                        />
-                                                                                                                    )}
-                                                                                                                </Box>
+                                                                                                {selectSubjectWise?.length > 0 && (
+                                                                                                    <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
+                                                                                                        {selectSubjectWise.slice(0, 3).map((chipLabel, idx) => (
+                                                                                                            <ModernChip
+                                                                                                                key={idx}
+                                                                                                                size="small"
+                                                                                                                label={chipTitle(chipLabel?.title)}
+                                                                                                                chipcolor="accent"
+                                                                                                            />
+                                                                                                        ))}
+                                                                                                        {selectSubjectWise.length > 3 && (
+                                                                                                            <ModernChip
+                                                                                                                size="small"
+                                                                                                                label={`+${selectSubjectWise.length - 3}`}
+                                                                                                                chipcolor="primary"
+                                                                                                            />
+                                                                                                        )}
+                                                                                                    </Box>
+                                                                                                )}
+
+                                                                                                <ModernPriceContainer>
+                                                                                                    {item.paid ? (
+                                                                                                        <>
+                                                                                                            {object.percent > 0 ? (
+                                                                                                                <>
+                                                                                                                    <Box sx={{ textAlign: 'center' }}>
+                                                                                                                        <ModernPrice isDiscounted>
+                                                                                                                            ₹{object?.finalPrice.toFixed(0)}
+                                                                                                                        </ModernPrice>
+                                                                                                                        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mt: 0.5 }}>
+                                                                                                                            <ModernOriginalPrice>
+                                                                                                                                ₹{price}
+                                                                                                                            </ModernOriginalPrice>
+                                                                                                                            <ModernDiscountBadge
+                                                                                                                                label={`${Math.round(object.percent)}% OFF`}
+                                                                                                                                size="small"
+                                                                                                                            />
+                                                                                                                        </Box>
+                                                                                                                    </Box>
+                                                                                                                </>
+                                                                                                            ) : (
+                                                                                                                <ModernPrice>₹{price}</ModernPrice>
                                                                                                             )}
+                                                                                                        </>
+                                                                                                    ) : (
+                                                                                                        <Typography
+                                                                                                            variant="h6"
+                                                                                                            sx={{
+                                                                                                                color: modernColors.secondary.main,
+                                                                                                                fontWeight: 700,
+                                                                                                                display: 'flex',
+                                                                                                                alignItems: 'center',
+                                                                                                                gap: 1
+                                                                                                            }}
+                                                                                                        >
+                                                                                                            <VerifiedIcon fontSize="small" />
+                                                                                                            FREE
+                                                                                                        </Typography>
+                                                                                                    )}
+                                                                                                </ModernPriceContainer>
+                                                                                            </CardContent>
 
-                                                                                                            <ModernPriceContainer>
-                                                                                                                {item.paid ? (
-                                                                                                                    <>
-                                                                                                                        {object.percent > 0 ? (
-                                                                                                                            <>
-                                                                                                                                <Box sx={{ textAlign: 'center' }}>
-                                                                                                                                    <ModernPrice isDiscounted>
-                                                                                                                                        ₹{object?.finalPrice.toFixed(0)}
-                                                                                                                                    </ModernPrice>
-                                                                                                                                    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1, mt: 0.5 }}>
-                                                                                                                                        <ModernOriginalPrice>
-                                                                                                                                            ₹{price}
-                                                                                                                                        </ModernOriginalPrice>
-                                                                                                                                        <ModernDiscountBadge
-                                                                                                                                            label={`${Math.round(object.percent)}% OFF`}
-                                                                                                                                            size="small"
-                                                                                                                                        />
-                                                                                                                                    </Box>
-                                                                                                                                </Box>
-                                                                                                                            </>
-                                                                                                                        ) : (
-                                                                                                                            <ModernPrice>₹{price}</ModernPrice>
-                                                                                                                        )}
-                                                                                                                    </>
-                                                                                                                ) : (
-                                                                                                                    <Typography
-                                                                                                                        variant="h6"
-                                                                                                                        sx={{
-                                                                                                                            color: modernColors.secondary.main,
-                                                                                                                            fontWeight: 700,
-                                                                                                                            display: 'flex',
-                                                                                                                            alignItems: 'center',
-                                                                                                                            gap: 1
-                                                                                                                        }}
-                                                                                                                    >
-                                                                                                                        <VerifiedIcon fontSize="small" />
-                                                                                                                        FREE
-                                                                                                                    </Typography>
-                                                                                                                )}
-                                                                                                            </ModernPriceContainer>
-                                                                                                        </CardContent>
-
-                                                                                                        <CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 } }}>
-                                                                                                            <ModernAddButton
-                                                                                                                isAdded={isAdded}
-                                                                                                                onClick={(e) => {
-                                                                                                                    e.stopPropagation();
-                                                                                                                    handleEnrollNow(item);
-                                                                                                                }}
-                                                                                                                startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
-                                                                                                            >
-                                                                                                                {isAdded ? "✓ Added to Cart" : "Add to Cart"}
-                                                                                                            </ModernAddButton>
-                                                                                                        </CardActions>
-                                                                                                    </ModernPlanCard>
-                                                                                                </Fade>
-                                                                                            </Grid>
-                                                                                        );
-                                                                                    })
-                                                                                }
-                                                                            </Grid>
-                                                                        </Container>
-                                                                    </div>
-                                                                </div>
+                                                                                            <CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 } }}>
+                                                                                                <ModernAddButton
+                                                                                                    isAdded={isAdded}
+                                                                                                    onClick={(e) => {
+                                                                                                        e.stopPropagation();
+                                                                                                        handleEnrollNow(item);
+                                                                                                    }}
+                                                                                                    startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
+                                                                                                >
+                                                                                                    {isAdded ? "✓ Added to Cart" : "Add to Cart"}
+                                                                                                </ModernAddButton>
+                                                                                            </CardActions>
+                                                                                        </ModernPlanCard>
+                                                                                    </Fade>
+                                                                                </Grid>
+                                                                            );
+                                                                        })
+                                                                    }
+                                                                </Box>
                                                             )
                                                         }
-                                                    </Typography>
+                                                    </Stack>
                                                 </Stack>
                                             )
                                         }

@@ -164,25 +164,16 @@ const CourseDrips = () => {
     };
 
     const handleContentClick = (contentId) => {
-        if (
-            courseObj?.title === 'CA Inter' &&
-            contentId?.title === 'Test Series Plus Mentorship'
-        ) {
-            const testSeriesData = {
-                courseObj: courseObj,
-                selectedPlanData: '',
-                selectedSchedule: selectedSchedule,
-                selectScheduleContent: contentId,
-                basicPlan: '',
-            };
-            sessionStorage.setItem('testSeriesData', JSON.stringify(testSeriesData));
-            router.push('/test-series');
-        } else {
-            setPlanList([]);
-            setSelectedContentId(contentId);
-            getSelectedSchedule(courseObj?.id, contentId?.id, 'second');
-            setShouldScrollToSchedule(true);
-        }
+        // Redirect to foundation-test-series when portion type is selected
+        const testSeriesData = {
+            courseObj: courseObj,
+            selectedPlanData: '',
+            selectedSchedule: selectedSchedule,
+            selectScheduleContent: contentId,
+            basicPlan: '',
+        };
+        const encodedData = Base64.encode(JSON.stringify(testSeriesData), true);
+        router.push('/foundation-test-series?data=' + encodedData);
     };
 
     const handleSelectPlan = (contentId) => {
@@ -322,7 +313,7 @@ const CourseDrips = () => {
                                             Select your test series portion type, choose your plan, and set your preferred level.
                                         </Typography>
                                     </Grid>
-                                    <Grid item xs={12} md={4} textAlign="center">
+                                    {/* <Grid item xs={12} md={4} textAlign="center">
                                         <Box
                                             sx={{
                                                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(99, 102, 241, 0.08) 30%)',
@@ -345,7 +336,7 @@ const CourseDrips = () => {
                                                 Premium
                                             </Typography>
                                         </Box>
-                                    </Grid>
+                                    </Grid> */}
                                 </Grid>
                             </Card>
                         </Fade>
@@ -396,10 +387,10 @@ const CourseDrips = () => {
                             </Card>
                         </Fade>
 
-                        <Box ref={scheduleRef}></Box>
+                        <Box ref={scheduleRef} sx={{ display: 'none' }}></Box>
 
-                        {/* Step 2: Test Series Plan Type */}
-                        {schedulePlans?.length > 0 && (
+                        {/* Step 2: Test Series Plan Type - HIDDEN */}
+                        {false && schedulePlans?.length > 0 && (
                             <Fade in timeout={1400}>
                                 <Card sx={{ background: 'linear-gradient(135deg, rgba(224, 231, 255, 0.6) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: 4, p: { xs: 2.5, md: 3 }, mb: 3 }}>
                                     <Box display="flex" alignItems="center" mb={2.5}>
@@ -458,10 +449,10 @@ const CourseDrips = () => {
                             </Fade>
                         )}
 
-                        <Box ref={planRef}></Box>
+                        <Box ref={planRef} sx={{ display: 'none' }}></Box>
 
-                        {/* Step 3: Programme Level Type - Only for CA Foundation Test Series */}
-                        {planList?.length > 0 && courseObj?.title === 'CA Foundation Test Series' && (
+                        {/* Step 3: Programme Level Type - HIDDEN */}
+                        {false && planList?.length > 0 && courseObj?.title === 'CA Foundation Test Series' && (
                             <Fade in timeout={1600}>
                                 <Card sx={{ background: 'linear-gradient(135deg, rgba(237, 233, 254, 0.6) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: 4, p: { xs: 2.5, md: 3 }, mb: 3 }}>
                                     <Box display="flex" alignItems="center" mb={2.5}>

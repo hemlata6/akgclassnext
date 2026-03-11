@@ -1988,7 +1988,7 @@ const TestSeries = ({
                                                     )
                                                 }
 
-                                                <FormControl
+                                                {/* <FormControl
                                                     className='mobile-select-button'
                                                     sx={{
                                                         width: { xs: '100%', sm: 'auto' },
@@ -2090,8 +2090,8 @@ const TestSeries = ({
                                                             })
                                                         }
                                                     </Select>
-                                                </FormControl>
-                                                {
+                                                </FormControl> */}
+                                                {/* {
                                                     selectScheduleContentObj?.title !== "Test Series Plus Mentorship" && (
                                                         <FormControl className='mobile-select-button' sx={{
                                                             '& .MuiOutlinedInput-root': {
@@ -2186,9 +2186,9 @@ const TestSeries = ({
                                                             </Select>
                                                         </FormControl>
                                                     )
-                                                }
+                                                } */}
 
-                                                {
+                                                {/* {
                                                     ((selectedAotherSchedule?.title !== "Full Length Test Series" && selectScheduleContentObj?.title !== "Exam oriented Test Series" && selectScheduleContentObj?.title !== "Test Series Plus Mentorship") && (selectedAotherSchedule?.title !== "Portion WiseTest Series" && selectCourse?.title !== "CA Final")) && (
                                                         <FormControl className='mobile-select-button' sx={{
                                                             '& .MuiOutlinedInput-root': {
@@ -2283,7 +2283,7 @@ const TestSeries = ({
                                                             </Select>
                                                         </FormControl>
                                                     )
-                                                }
+                                                } */}
                                                 {
                                                     selectCourse?.title === "CA Inter" && selectedAotherSchedule?.title === "Portion wise Test Series" && selectedBasicPlan?.title ?
                                                         <>
