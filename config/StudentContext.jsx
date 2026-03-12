@@ -34,7 +34,7 @@ export const StudentProvider = ({ children }) => {
         setIsAuthenticated(true);
         // console.log('Student data loaded from localStorage:', { student: parsedStudentData, hasToken: !!storedAuthToken });
       } else {
-        console.log('No student data or auth token found in localStorage');
+        // console.log('No student data or auth token found in localStorage');
       }
     } catch (error) {
       console.error('Error loading student data from localStorage:', error);

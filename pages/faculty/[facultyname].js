@@ -1,16 +1,36 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import CheckIcon from '@mui/icons-material/Check';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import Layout from '../../components/Layout';
 import { useTheme } from '../../config/ThemeContext';
 
-const FacultyProfile = () => {
+const FacultyProfile = ({}) => {
 
     const router = useRouter();
     const { theme } = useTheme();
-    const { facultyname } = router?.query || {};
+    const { facultyname, state } = router?.query || {};
     console.log('faculty name from URL:', router.query, facultyname);
+
+    const facultyState = useMemo(() => {
+        if (!state || typeof state !== 'string') return null;
+        try {
+            return JSON.parse(state);
+        } catch {
+            return null;
+        }
+    }, [state]);
+
+    const facultyPayload = useMemo(() => {
+        if (!facultyState) return null;
+        if (facultyState?.faculty && typeof facultyState.faculty === 'object') {
+            return facultyState.faculty;
+        }
+        if (facultyState?.id || facultyState?.firstName || facultyState?.lastName) {
+            return facultyState;
+        }
+        return null;
+    }, [facultyState]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -80,7 +100,37 @@ const FacultyProfile = () => {
         }
     };
 
-    const faculty = getFacultyData(facultyname);
+    const fallbackFaculty = useMemo(() => {
+        if (!facultyPayload && !facultyState?.fullName) return null;
+
+        const fullName = facultyPayload
+            ? [facultyPayload?.firstName, facultyPayload?.lastName].filter(Boolean).join(' ')
+            : facultyState?.fullName;
+
+        const domainNames = Array.isArray(facultyPayload?.domains)
+            ? facultyPayload.domains.map((domain) => domain?.name).filter(Boolean)
+            : [];
+
+        const highlights = [];
+        if (facultyPayload?.designation) highlights.push(`Designation: ${facultyPayload.designation}`);
+        if (facultyPayload?.group) highlights.push(`Role: ${facultyPayload.group}`);
+        if (facultyPayload?.contact) highlights.push(`Contact: ${facultyPayload.contact}`);
+        if (facultyPayload?.email) highlights.push(`Email: ${facultyPayload.email}`);
+        if (domainNames.length > 0) highlights.push(`Domains: ${domainNames.join(', ')}`);
+
+        return {
+            name: fullName,
+            subtitle: facultyPayload?.designation || 'Faculty Mentor',
+            image: facultyPayload?.profile || facultyState?.image || '/nextgen/nextgenlogo.png',
+            description: facultyPayload?.description || (domainNames.length > 0 ? `Specialized in ${domainNames.join(', ')}.` : ''),
+            journey: facultyPayload?.joining ? `Joined on: ${new Date(facultyPayload.joining).toLocaleDateString()}` : '',
+            otherDes: facultyPayload?.address ? `Address: ${facultyPayload.address}` : '',
+            tagLine: facultyPayload?.userName ? `@${facultyPayload.userName}` : '',
+            highlights,
+        };
+    }, [facultyPayload, facultyState]);
+
+    const faculty = fallbackFaculty || getFacultyData(facultyname);
 
 
     if (!faculty) {

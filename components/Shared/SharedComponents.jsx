@@ -24,7 +24,7 @@ export const Footer = () => {
     router.push('/store');
   };
 
-  console.log('institute', institute);
+  // console.log('institute', institute);
 
 
 

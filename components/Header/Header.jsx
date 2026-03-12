@@ -117,8 +117,31 @@ export const Header = ({ cartCount }) => {
   const [booksSelectedParentDomain, setBooksSelectedParentDomain] = useState(null);
   const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
   const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
+  const [employees, setEmployees] = useState([]);
 
-  console.log('domains', domains, booksDomains);
+  // console.log('employees', employees);
+
+  const fetchEmployeeList = async () => {
+    try {
+      const response = await Network.fetchEmployee(instId);
+
+      if (response?.errorCode === 0 && response?.employees) {
+        const filteredEmployees = response.employees.filter(
+          emp => emp.showInApp === true
+        );
+
+        setEmployees(filteredEmployees);
+      } else {
+        console.log("Failed to fetch employee list:", response?.message || "Unknown error");
+      }
+    } catch (error) {
+      console.log("Error fetching employee list:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEmployeeList();
+  }, []);
 
 
   useEffect(() => {
@@ -190,7 +213,7 @@ export const Header = ({ cartCount }) => {
       setDomainLoading(true);
       const response = await Network.fetchDomain(instId);
       const availableDomains = response?.domains || [];
-      console.log('availableDomains', availableDomains);
+      // console.log('availableDomains', availableDomains);
       setDomains(availableDomains);
       setCurrentLevel('first');
       setSelectedParentDomain(null);
@@ -306,8 +329,25 @@ export const Header = ({ cartCount }) => {
   const booksSecondLevelDomains = booksSelectedParentDomain?.child || [];
 
   const handleFaculty = (faculty) => {
-    let facultyName = faculty.toLowerCase().replace(/\s+/g, '-');
-    router.push(`/faculty/${facultyName}`);
+    const fullName = typeof faculty === 'string'
+      ? faculty
+      : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
+
+    const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+    const facultyState = {
+      faculty: faculty,
+    };
+
+    router.push(
+      {
+        pathname: '/faculty/[facultyname]',
+        query: {
+          facultyname: facultyName,
+          state: JSON.stringify(facultyState),
+        },
+      },
+      `/faculty/${facultyName}`
+    );
   };
 
   const NavItem = ({ label, hasSub, subItems, onClick, onSubItemClick, onMouseEnter }) => (
@@ -354,34 +394,34 @@ export const Header = ({ cartCount }) => {
   return (
     <>
       <nav className={`sticky top-0 z-50 transition-all duration-300 border-b border-transparent ${scrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-0 border-slate-100' : 'bg-white py-0'}`}>
-      <button
-        onClick={() => router.push('/announcements')}
-        className="sticky top-0 z-50 bg-slate-900 text-white text-[14px] md:text-md font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
-        onMouseEnter={() => setIsMarqueeHovered(true)}
-        onMouseLeave={() => setIsMarqueeHovered(false)}
-      >
-        <div className={`whitespace-nowrap animate-marquee ${isMarqueeHovered ? 'animation-pause' : ''}`} style={{ animationPlayState: isMarqueeHovered ? 'paused' : 'running' }}>
-          {announcements.length > 0 && announcements[0]?.title ? (
-            <span className="inline-block">
-              📢 {announcements[0].title}
-            </span>
-          ) : (
-            <span className="inline-block">
-              📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              📚 Ind AS Brahmastra Books Now Available.
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              🎓 100% Concepts + Exam Oriented Approach.
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              📚 Ind AS Brahmastra Books Now Available.
-              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-              🎓 100% Concepts + Exam Oriented Approach.
-            </span>
-          )}
-        </div>
-      </button>
+        <button
+          onClick={() => router.push('/announcements')}
+          className="sticky top-0 z-50 bg-slate-900 text-white text-[14px] md:text-md font-medium py-1.5 overflow-hidden relative w-full hover:bg-slate-800 transition-colors cursor-pointer"
+          onMouseEnter={() => setIsMarqueeHovered(true)}
+          onMouseLeave={() => setIsMarqueeHovered(false)}
+        >
+          <div className={`whitespace-nowrap animate-marquee ${isMarqueeHovered ? 'animation-pause' : ''}`} style={{ animationPlayState: isMarqueeHovered ? 'paused' : 'running' }}>
+            {announcements.length > 0 && announcements[0]?.title ? (
+              <span className="inline-block">
+                📢 {announcements[0].title}
+              </span>
+            ) : (
+              <span className="inline-block">
+                📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                📚 Ind AS Brahmastra Books Now Available.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                🎓 100% Concepts + Exam Oriented Approach.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                📢 New CA Final Financial Reporting (FR) Batch Starting Soon!
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                📚 Ind AS Brahmastra Books Now Available.
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                🎓 100% Concepts + Exam Oriented Approach.
+              </span>
+            )}
+          </div>
+        </button>
         <div className={LAYOUT_PADDING}>
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-4">
@@ -589,30 +629,29 @@ export const Header = ({ cartCount }) => {
                   Faculty <Icons.ChevronDown />
                 </button>
                 <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === 'Faculty' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-                  <button
-                    onClick={() => handleFaculty("Sachin Raheja")}
-                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                    <span className="truncate">CA Sachin Raheja</span>
 
-                  </button>
-                  <button
-                    onClick={() => handleFaculty("Manas Arora")}
-                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                    <span className="truncate">CA Manas Arora</span>
-
-                  </button>
-                  <button
-                    onClick={() => handleFaculty("Tejinder Pal Singh")}
-                    className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}>
-                    <span className="truncate">CA Tejinder Pal Singh</span>
-
-                  </button>
+                  {employees.length > 0 ? (
+                    employees.map((e) => {
+                      const fullName = [e?.firstName, e?.lastName].filter(Boolean).join(' ');
+                      return (
+                        <button
+                          key={e?.id || fullName}
+                          onClick={() => handleFaculty(e)}
+                          className={`w-full text-left px-4 py-2.5 text-xs transition-all flex items-center justify-between group ${hoveredMenu === 'Faculty' ? `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}` : `text-slate-700 hover:bg-slate-50 hover:${theme.textClass}`}`}
+                        >
+                          <span className="truncate">{fullName}</span>
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="px-4 py-3 text-xs text-slate-500">No faculty available</div>
+                  )}
                 </div>
               </div>
               {/* <NavItem label="Announcement" onClick={() => router.push('/announcements')} /> */}
               <NavItem label="Free Resources" onClick={() => router.push('/free-resources')} />
               {user && <NavItem label="My Purchases" onClick={() => router.push('/my-purchases')} />}
-               {user ? (
+              {user ? (
                 <div className="relative group hidden md:block">
                   <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
                     <Icons.User size={16} />
@@ -659,8 +698,8 @@ export const Header = ({ cartCount }) => {
                 className={`hidden md:block ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-5 py-2 rounded-lg text-sm font-bold shadow-md transition-all`}>
                 Download App
               </button>
-              
-              
+
+
             </div>
 
             <div className="flex items-center gap-3">
@@ -729,9 +768,9 @@ export const Header = ({ cartCount }) => {
                 {cartCount > 0 && <span className="absolute top-0 right-0 h-4 w-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-in zoom-in">{cartCount}</span>}
               </button>
 
-             
 
-              
+
+
             </div>
           </div>
         </div>

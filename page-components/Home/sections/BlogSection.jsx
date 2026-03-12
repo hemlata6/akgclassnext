@@ -77,7 +77,7 @@ export const BlogSection = () => {
         );
     }
 
-    console.log('blogs', blogs);
+    // console.log('blogs', blogs);
     
 
     if (blogs.length === 0) {

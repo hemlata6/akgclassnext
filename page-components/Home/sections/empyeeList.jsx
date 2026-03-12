@@ -2,64 +2,39 @@ import React, { useEffect, useState } from 'react'
 import { Camera, Heart, Star, X, ZoomIn, ChevronLeft, ChevronRight, Users, Award, Briefcase, Phone } from 'lucide-react';
 import Endpoints from '@/config/endpoints';
 import { useRouter } from 'next/router';
+import Network from '@/config/Network';
+import instId from '@/config/instituteId';
 
 
 const EmployeeList = () => {
 
     const router = useRouter();
-    const [employees, setEmployees] = useState([{
-        value: "Sachin Raheja",
-        name: "CA Sachin Raheja",
-        subtitle: "GST & Economics Mentor",
-        image: "/nextgen/sachin-website-pic.jpg",
-        description:
-            "A Chartered Accountant in first sitting at just 21 years of age, CA Sachin Raheja represents clarity, discipline, and smart strategy. He secured exemptions in GST in both CA Inter and CA Final, reflecting deep conceptual strength and exam mastery.",
-        journey:
-            "With 1.5+ years of GST experience at EY, he combines practical exposure with academic precision. He is also the author of a concise 26-page GST Revision Book for CA/CMA Inter, designed to simplify complex provisions into exam-focused clarity.",
-        otherDes: "Passionate about teaching, his mission is simple: To help students build strong fundamentals, think analytically, and achieve success early — just like he did.",
-        highlights: [
-            "Complete PYQ, RTP & MTP Coverage",
-            "Concept Clarity with Strong Application & Logic",
-            "Practical Insights from Professional Experience",
-            "Consistent Mentorship for Confidence & Clarity"
-        ]
-    },
-    {
-        value: "Manas Arora",
-        name: "CA Manas Arora",
-        subtitle: "Accounts Faculty for All CA Levels",
-        image: "/nextgen/manas.png",
-        description:
-            "He is May-23 qualified Chartered Accountant with AIR-47. He has 2 years of post qualification experience at HSBC as a Global Corporate Banker. He has done his Industrial training from Hindalco Industries Limited. He cleared both groups of CA Inter in November 2019 with 7 exemption out of 8 subjects and cleared CA Foundation with AIR-44 in November 2018. He was invited by ICAI branches of Mumbai and Pune and has delivered Leactures on various public forums.",
-        journey:
-            "He has been teaching Advanced Accounts and Financial Management to CA Inter Students. ",
-        otherDes: "CA Manas Arora is of the view that today’s classroom students will be tomorrow’s board meeting attendees, so he teaches with the real life example and practical scenarios which he Learnt during his Banking Job.",
-        highlights: [
-            "Complete PYQ, RTP & MTP Coverage",
-            "Concept Clarity with Strong Application & Logic",
-            "Practical Insights from Professional Experience",
-            "Consistent Mentorship for Confidence & Clarity"
-        ]
-    },
-    {
-        value: "Tejinder Pal Singh",
-        name: "CA Tejinder Pal Singh",
-        subtitle: "Law Faculty | CA Foundation & CA Inter",
-        image: "/nextgen/talwinder.jpeg",
-        description:
-            "CA Tejinder Pal Singh is a Chartered Accountant known for his strong academic record and disciplined approach to excellence. He secured exemptions in all subjects at the CA Final level and was ranked among the Top 3 in Ludhiana — reflecting his conceptual strength and exam-focused preparation.",
-        journey:
-            "With 3 years of post-qualification experience at a reputed CA firm and at HDFC Bank, he brings valuable practical exposure to the classroom. His professional background enables him to bridge the gap between theory and real-world application, helping students understand not just the “what” of law, but also the “why” and “how.”",
-        otherDes: "His teaching philosophy is simple — make Law easy to understand, practical to relate to, and strategic to score in.",
-        highlights: [
-            "Learn Law with Logic.",
-            "Write with Precision.",
-            "Succeed with Confidence."
-        ]
-    }
-    ]);
+
+    const [employees, setEmployees] = useState([]);
     const [currentPosition, setCurrentPosition] = useState(0);
     const [itemsPerSlide, setItemsPerSlide] = useState(3);
+
+    const fetchEmployeeList = async () => {
+        try {
+            const response = await Network.fetchEmployee(instId);
+
+            if (response?.errorCode === 0 && response?.employees) {
+                const filteredEmployees = response.employees.filter(
+                    emp => emp.showInApp === true
+                );
+
+                setEmployees(filteredEmployees);
+            } else {
+                console.log("Failed to fetch employee list:", response?.message || "Unknown error");
+            }
+        } catch (error) {
+            console.log("Error fetching employee list:", error);
+        }
+    };
+
+    useEffect(() => {
+        fetchEmployeeList();
+    }, []);
 
     useEffect(() => {
 
@@ -177,7 +152,7 @@ const EmployeeList = () => {
                                             <div className="mb-5">
                                                 <div className="w-28 h-28 sm:w-32 sm:h-32 mx-auto rounded-full overflow-hidden">
                                                     <img
-                                                        src={employee.image}
+                                                        src={Endpoints.mediaBaseUrl + employee.profile}
                                                         alt={employee.name}
                                                         className="w-full h-full object-cover object-top"
                                                     />
@@ -186,13 +161,13 @@ const EmployeeList = () => {
 
                                             {/* INFO */}
                                             <h3 className="font-bold text-lg">
-                                                {employee.name}
+                                                {employee.firstName} {employee.lastName}
                                             </h3>
 
                                             <div className="flex justify-center gap-2 text-blue-600 mt-2">
                                                 <Briefcase size={16} />
                                                 <p className="text-sm">
-                                                    {employee.subtitle}
+                                                    {employee.designation}
                                                 </p>
                                             </div>
 
