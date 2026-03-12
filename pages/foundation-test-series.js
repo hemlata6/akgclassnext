@@ -77,31 +77,33 @@ const modernColors = {
     }
 };
 
-// Modern Plan Card Component
-const ModernPlanCard = styled(Card)(({ theme, isSelected, isPremium }) => ({
-    position: 'relative',
-    height: '100%',
-    minWidth: '300px',
-    borderRadius: '16px',
-    background: '#FFFFFF',
-    border: '1px solid #E5E7EB',
-    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    overflow: 'hidden',
-    cursor: 'pointer',
+const ModernPlanCard = styled(Card)(({ theme }) => ({
+    position: "relative",
+    height: "400px",
+    width: "300px",
+    borderRadius: "16px",
+    background: "#FFFFFF",
+    border: "1px solid #E5E7EB",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    overflow: "hidden",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
 
-    '&:hover': {
-        transform: 'translateY(-8px)',
-        boxShadow: '0 12px 24px rgba(0, 0, 0, 0.12)',
+    "&:hover": {
+        transform: "translateY(-8px)",
+        boxShadow: "0 12px 24px rgba(0, 0, 0, 0.12)",
     },
 
-    '&::before': {
+    "&::before": {
         content: '""',
-        position: 'absolute',
+        position: "absolute",
         top: 0,
         left: 0,
         right: 0,
-        height: '3px',
+        height: "3px",
         background: modernColors.primary.main,
     },
 }));
@@ -768,6 +770,10 @@ export default function FoundationTestSeries({
             setSelectCourse(JSON.parse(data['selectCourse']));
         }
 
+        if (data['selectedAotherSchedule'] !== undefined) {
+            setSelectedAotherSchedule(JSON.parse(data['selectedAotherSchedule']));
+        }
+
         if (data['activeStep'] !== undefined) {
             setActiveStep(data['activeStep']);
         }
@@ -870,6 +876,19 @@ export default function FoundationTestSeries({
             getCourseContentList(selectCourse?.id)
         }
     }, [selectCourse]);
+
+    // MUI Select compares object values by reference. After redirect, selected item object
+    // comes from query data and differs from freshly fetched option objects.
+    useEffect(() => {
+        if (!selectedAotherSchedule?.id || !Array.isArray(sheduleContentList) || sheduleContentList.length === 0) {
+            return;
+        }
+
+        const matchedPortion = sheduleContentList.find((item) => item?.id === selectedAotherSchedule?.id);
+        if (matchedPortion && matchedPortion !== selectedAotherSchedule) {
+            setSelectedAotherSchedule(matchedPortion);
+        }
+    }, [sheduleContentList, selectedAotherSchedule]);
 
     // useEffect(() => {
     //     if (schedule?.id) {
@@ -2588,11 +2607,11 @@ export default function FoundationTestSeries({
                                                             </ModernCheckoutButton>
                                                         </Box>
                                                     )}
-                                                    <Stack direction='row' spacing={2} sx={{ mb: 1, py: 1}}>
+                                                    <Stack direction='row' spacing={2} sx={{ mb: 1, py: 1 }}>
 
                                                         {
                                                             selectCourse?.id && (
-                                                                <Box sx={{display:'flex', flexWrap:'wrap', gap: 2, justifyContent: 'center'}}>
+                                                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: 'center' }}>
                                                                     {
                                                                         schedulePlans && schedulePlans.map((item, i) => {
                                                                             let object = getPlanPrice(item, activeBtn, selectSubjectWise);

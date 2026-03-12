@@ -500,6 +500,7 @@ const TestSeries = ({
     const [activeBtn, setActiveBtn] = useState('both');
     const [selectSubjectWise, setSelectSubjectWise] = useState([]);
     const [subjectWiseListRender, setSubjectWiseListRender] = useState([]);
+    // console.log('subjectWiseListRender', subjectWiseListRender)
     const [plansList, setPlansList] = useState([]);
     const [peviewImgVideo, setPeviewImgVideo] = useState({});
     const [checked, setChecked] = useState(false);
@@ -776,6 +777,72 @@ const TestSeries = ({
         }
     }
 
+    const fetchGroupChildrenForPlans = async (courseId, plans = []) => {
+        if (!courseId || !Array.isArray(plans) || plans.length === 0) {
+            setAlltreeList([]);
+            return;
+        }
+
+        const requestOptions = { withCredentials: false };
+
+        const groupNodes = [];
+        plans.forEach((plan) => {
+            // Shape A: Plan A -> children -> Group 1/Group 2
+            if (Array.isArray(plan?.children)) {
+                plan.children.forEach((group) => {
+                    if ((group?.title === 'Group 1' || group?.title === 'Group 2') && group?.id) {
+                        groupNodes.push(group);
+                    }
+                });
+            }
+
+            // Shape B: API already returns Group 1 / Group 2 directly
+            if ((plan?.title === 'Group 1' || plan?.title === 'Group 2') && plan?.id) {
+                groupNodes.push(plan);
+            }
+        });
+
+        const uniqueGroupNodes = groupNodes.filter(
+            (group, idx, arr) => arr.findIndex((g) => g.id === group.id) === idx
+        );
+
+        // Fallback to the raw list only when we cannot resolve any group ids.
+        if (uniqueGroupNodes.length === 0) {
+            setAlltreeList(plans);
+            return;
+        }
+
+        const responses = await Promise.all(
+            uniqueGroupNodes.map((group) =>
+                axios
+                    .get(BASE_URL + `admin/course/fetchContent-public/${courseId}/${group.id}`, requestOptions)
+                    .then((res) => ({ group, res }))
+                    .catch(() => ({ group, res: null }))
+            )
+        );
+
+        const mergedChildren = [];
+        responses.forEach(({ group, res }) => {
+            if (res?.data?.errorCode === 0 && Array.isArray(res?.data?.contentList)) {
+                res.data.contentList.forEach((item) => {
+                    mergedChildren.push({
+                        ...item,
+                        __groupTitle: group.title,
+                        __groupId: group.id,
+                    });
+                });
+            }
+        });
+
+        // If child responses are empty, at least keep Group 1 / Group 2 in list.
+        if (mergedChildren.length === 0) {
+            setAlltreeList(uniqueGroupNodes);
+            return;
+        }
+
+        setAlltreeList(mergedChildren);
+    };
+
     const getSheduleContentList = async (courseId, contentId, value) => {
         try {
             let requestOptions = {
@@ -793,14 +860,16 @@ const TestSeries = ({
                 }
                 if (value === "third") {
                     setSchedulePlans(filterCourseContent)
+                    // 2nd hit: from selected Portion Type -> resolve Group 1/Group 2 ids and fetch their children.
+                    await fetchGroupChildrenForPlans(courseId, filterCourseContent || [])
                 }
                 if (value === "fourth") {
                     setPlanList(filterCourseContent)
+                    setAlltreeList(filterCourseContent || [])
                 }
-                // if (value === "fifth") { 
-
-                //     // setAlltreeList(filterCourseContent)                                     
-                // }
+                if (value === "fifth") {
+                    setAlltreeList(filterCourseContent || [])
+                }
             };
         } catch (error) {
             console.log(error);
@@ -813,6 +882,7 @@ const TestSeries = ({
     };
 
     const handleAnotherSchedule = (e) => {
+        setSelectSubjectWise([]);
         setSelectedBasicPlan({});
         setSelectedForPlans({});
         const value = e.target.value
@@ -820,22 +890,23 @@ const TestSeries = ({
         getSheduleContentList(selectCourse?.id, value?.id, 'third');
     };
 
-    const handleBasicPlans = (e) => {
-        setSelectedForPlans({});
-        const value = e.target.value
-        setSelectedBasicPlan(value);
-        getSheduleContentList(selectCourse?.id, value?.id, 'fourth');
-        if ((selectedAotherSchedule?.title === "Full Length Test Series" || selectScheduleContentObj?.title === "Exam oriented Test Series") || (selectedAotherSchedule?.title === "Portion WiseTest Series" && selectCourse?.title === "CA Final")) {
-            fetchDripContent(value?.id)
-        }
-    };
+    // const handleBasicPlans = (e) => {
+    //     setSelectSubjectWise([]);
+    //     setSelectedForPlans({});
+    //     const value = e.target.value
+    //     setSelectedBasicPlan(value);
+    //     getSheduleContentList(selectCourse?.id, value?.id, 'fourth');
+    //     if ((selectedAotherSchedule?.title === "Full Length Test Series" || selectScheduleContentObj?.title === "Exam oriented Test Series") || (selectedAotherSchedule?.title === "Portion WiseTest Series" && selectCourse?.title === "CA Final")) {
+    //         fetchDripContent(value?.id)
+    //     }
+    // };
 
-    const handleSelecForPlan = (e) => {
-        const value = e.target.value
-        setSelectedForPlans(value);
-        fetchDripContent(value?.id)
-        getSheduleContentList(selectCourse?.id, value?.id, 'fifth');
-    };
+    // const handleSelecForPlan = (e) => {
+    //     const value = e.target.value
+    //     setSelectedForPlans(value);
+    //     fetchDripContent(value?.id)
+    //     getSheduleContentList(selectCourse?.id, value?.id, 'fifth');
+    // };
 
 
 
@@ -857,77 +928,56 @@ const TestSeries = ({
         let plans = [];
         let subjectTempList = [];
 
+        const matchGroup = (groupTitle) => {
+            if (selectBtnType === 'both') return groupTitle === 'Group 1' || groupTitle === 'Group 2';
+            if (selectBtnType === 'group1') return groupTitle === 'Group 1';
+            if (selectBtnType === 'group2') return groupTitle === 'Group 2';
+            return false;
+        };
 
         alltreeList.forEach((plan) => {
-            if (selectBtnType === 'group1') {
-                if (plan?.children?.length > 0) {
-                    plan?.children.forEach((group) => {
-                        if (group.title === 'Group 1') {
-                            if (!checkPlansExists(plans, plan.title)) {
-                                plans.push(plan);
-                            }
-                            if (group?.children?.length > 0) {
-                                group.children.forEach((subject) => {
-                                    if (!checkSubjectExists(subjectTempList, subject.title)) {
-                                        subjectTempList.push(subject);
-                                    }
-                                })
-                            }
-                        }
-                    })
-                } else {
-                    if (plan.title === 'Group 1') {
-                        plans.push(plan);
+            // Flattened child items from second API hits carry __groupTitle metadata.
+            if (plan?.__groupTitle) {
+                if (matchGroup(plan.__groupTitle)) {
+                    plans.push(plan);
+                    if (plan?.title && !checkSubjectExists(subjectTempList, plan.title)) {
+                        subjectTempList.push(plan);
                     }
                 }
+                return;
             }
-            if (selectBtnType === 'group2') {
-                if (plan?.children?.length > 0) {
-                    plan?.children.forEach((group) => {
-                        if (group.title === 'Group 2') {
-                            if (!checkPlansExists(plans, plan.title)) {
-                                plans.push(plan);
-                            }
-                            if (group?.children?.length > 0) {
-                                group.children.forEach((subject) => {
-                                    if (!checkSubjectExists(subjectTempList, subject.title)) {
-                                        subjectTempList.push(subject);
-                                    }
-                                })
-                            }
+
+            // Shape: Plan -> Group 1/Group 2 -> subjects
+            if (Array.isArray(plan?.children) && plan.children.length > 0) {
+                let groupMatched = false;
+                plan.children.forEach((group) => {
+                    if (matchGroup(group?.title)) {
+                        groupMatched = true;
+                        if (Array.isArray(group?.children)) {
+                            group.children.forEach((subject) => {
+                                if (!checkSubjectExists(subjectTempList, subject.title)) {
+                                    subjectTempList.push(subject);
+                                }
+                            });
                         }
-                    })
-                } else {
-                    if (plan.title === 'Group 2') {
-                        plans.push(plan);
                     }
-                }
-            }
-            if (selectBtnType === 'both') {
-                if (plan?.children?.length > 0) {
-                    plan?.children.forEach((group) => {
-                        if (group.title === 'Group 2' || group.title === 'Group 1') {
-                            if (!checkPlansExists(plans, plan.title)) {
-                                plans.push(plan);
-                            }
-                            if (group?.children?.length > 0) {
-                                group.children.forEach((subject) => {
-                                    if (!checkSubjectExists(subjectTempList, subject.title)) {
-                                        subjectTempList.push(subject);
-                                    }
-                                })
-                            }
-                        }
-                    })
-                } else {
+                });
+
+                if (groupMatched) {
                     plans.push(plan);
                 }
+                return;
             }
-            if (selectSubjectWise.length > 0) {
-                plans = filterPlansOnSelectedSubject(plans, selectSubjectWise);
 
+            // Shape: top-level Group 1 / Group 2 entries.
+            if (matchGroup(plan?.title)) {
+                plans.push(plan);
             }
-        })
+        });
+
+        if (selectSubjectWise.length > 0) {
+            plans = filterPlansOnSelectedSubject(plans, selectSubjectWise);
+        }
 
         setSubjectWiseListRender(subjectTempList);
         setPlansList(plans);
@@ -957,14 +1007,32 @@ const TestSeries = ({
     function filterPlansOnSelectedSubject(plans, selectedSubjects) {
         let planList = [];
         plans?.forEach((plan) => {
+            // Flattened second-hit entries can be direct subject items.
+            if (plan?.__groupTitle) {
+                selectedSubjects?.forEach((selectedSubject) => {
+                    if (selectedSubject?.title === plan?.title && !checkPlansExists(planList, plan.title)) {
+                        planList.push(plan);
+                    }
+                });
+                return;
+            }
+
             plan?.children?.forEach((group) => {
-                group?.children?.forEach((subject) => {
+                if (Array.isArray(group?.children)) {
+                    group.children.forEach((subject) => {
+                        selectedSubjects?.forEach((selectedSubject) => {
+                            if (selectedSubject.title === subject.title && !checkPlansExists(planList, plan.title)) {
+                                planList.push(plan);
+                            }
+                        })
+                    });
+                } else {
                     selectedSubjects?.forEach((selectedSubject) => {
-                        if (selectedSubject.title === subject.title && !checkPlansExists(planList, plan.title)) {
+                        if (selectedSubject.title === group?.title && !checkPlansExists(planList, plan.title)) {
                             planList.push(plan);
                         }
-                    })
-                })
+                    });
+                }
             })
         })
         return planList;
@@ -996,13 +1064,15 @@ const TestSeries = ({
         let selectedSubject = [];
         if (sltSubject?.length > 0) {
             sltSubject?.forEach((subject) => {
-                plan.children.forEach((group) => {
+                (plan?.children || []).forEach((group) => {
                     if (group?.children?.length > 0) {
                         group?.children?.forEach((subjectGroup) => {
                             if (subject?.title === subjectGroup?.title) {
                                 selectedSubject.push(subjectGroup);
                             }
                         })
+                    } else if (subject?.title === group?.title) {
+                        selectedSubject.push(group);
                     }
                 })
             })
@@ -1988,7 +2058,7 @@ const TestSeries = ({
                                                     )
                                                 }
 
-                                                {/* <FormControl
+                                                <FormControl
                                                     className='mobile-select-button'
                                                     sx={{
                                                         width: { xs: '100%', sm: 'auto' },
@@ -2090,7 +2160,7 @@ const TestSeries = ({
                                                             })
                                                         }
                                                     </Select>
-                                                </FormControl> */}
+                                                </FormControl>
                                                 {/* {
                                                     selectScheduleContentObj?.title !== "Test Series Plus Mentorship" && (
                                                         <FormControl className='mobile-select-button' sx={{

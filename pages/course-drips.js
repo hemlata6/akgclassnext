@@ -20,6 +20,7 @@ import {
     DialogContent,
     Fade,
     Grid,
+    Stack,
     Typography,
     useMediaQuery,
     useTheme,
@@ -96,7 +97,7 @@ const CourseDrips = () => {
         if (courseObj?.id) {
             getCourseSchedule(courseObj?.id, 0);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [courseObj]);
 
     // Load initial content list
@@ -164,7 +165,7 @@ const CourseDrips = () => {
     };
 
     const handleContentClick = (contentId) => {
-        // Redirect to foundation-test-series when portion type is selected
+        // Redirect based on selected course type when portion type is selected
         const testSeriesData = {
             courseObj: courseObj,
             selectedPlanData: '',
@@ -173,7 +174,11 @@ const CourseDrips = () => {
             basicPlan: '',
         };
         const encodedData = Base64.encode(JSON.stringify(testSeriesData), true);
-        router.push('/foundation-test-series?data=' + encodedData);
+        if (courseObj?.title === 'CA Foundation Test Series') {
+            router.push('/foundation-test-series?data=' + encodedData);
+        } else {
+            router.push('/test-series?data=' + encodedData);
+        }
     };
 
     const handleSelectPlan = (contentId) => {
@@ -216,6 +221,14 @@ const CourseDrips = () => {
     const toggleExpandDescription = (des) => {
         setFullDes(des);
         setCourseExpandedDescriptions(true);
+    };
+
+    const getDescriptionText = (description) => {
+        if (typeof description === 'string') return description;
+        if (description && typeof description === 'object' && typeof description.description === 'string') {
+            return description.description;
+        }
+        return '';
     };
 
     if (!courseObj) {
@@ -355,34 +368,72 @@ const CourseDrips = () => {
                                 </Box>
 
                                 <Grid container spacing={2}>
-                                    {selectedSceduleList?.map((content) => (
-                                        <Grid item key={content.id} xs={12} sm={6} md={3}>
-                                            <Button
-                                                fullWidth
-                                                onClick={() => handleContentClick(content)}
-                                                sx={{
-                                                    background: content.id === selectedContentId?.id
-                                                        ? 'linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #6366f1 100%)'
-                                                        : 'linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)',
-                                                    color: 'white',
-                                                    py: 1.5,
-                                                    px: 2,
-                                                    borderRadius: 3,
-                                                    fontSize: { xs: '0.9rem', md: '1rem' },
-                                                    fontWeight: 700,
-                                                    textTransform: 'none',
-                                                    '&:hover': {
-                                                        transform: 'translateY(-2px)',
-                                                    },
-                                                }}
-                                            >
-                                                {content.id === selectedContentId?.id && (
-                                                    <CheckCircleIcon sx={{ mr: 1, fontSize: 16 }} />
-                                                )}
-                                                {content.title}
-                                            </Button>
-                                        </Grid>
-                                    ))}
+                                    {selectedSceduleList?.map((content) => {
+                                        const contentDescription = getDescriptionText(content?.description);
+
+                                        return (
+                                            <Grid item key={content.id} xs={12} sm={6} md={3}>
+                                                <Card
+                                                    sx={{
+                                                        background: content.id === selectedContentId?.id
+                                                            ? 'linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #6366f1 100%)'
+                                                            : 'linear-gradient(135deg, #3b82f6 0%, #6366f1 50%, #8b5cf6 100%)',
+                                                        color: 'white',
+                                                        borderRadius: 3,
+                                                        '&:hover': {
+                                                            transform: 'translateY(-2px)',
+                                                        },
+                                                        width: '100%',
+                                                        maxWidth: { xs: '100%', md: '400px' },
+                                                        minHeight: 210,
+                                                        display: 'flex',
+                                                        alignItems: 'stretch',
+                                                    }}
+                                                >
+                                                    <Stack
+                                                        direction="column"
+                                                        alignItems="flex-start"
+                                                        spacing={1}
+                                                        sx={{ p: 2, width: '100%', justifyContent: 'space-between' }}
+                                                    >
+                                                        <Box>
+                                                        {content.id === selectedContentId?.id && (
+                                                            <CheckCircleIcon sx={{ mr: 1, fontSize: 16 }} />
+                                                        )}
+                                                        <Typography sx={{ fontSize: { xs: '0.9rem', md: '1rem' }, fontWeight: 700 }}>
+                                                            {content.title}
+                                                        </Typography>
+                                                        {contentDescription && (
+                                                            <Typography
+                                                                variant="caption"
+                                                                sx={{ display: 'block', mt: 0.5 }}
+                                                                textAlign={'justify'}
+                                                            >
+                                                                {parse(contentDescription)}
+                                                            </Typography>
+                                                        )}
+                                                        </Box>
+                                                        <Button
+                                                        fullWidth
+                                                            variant="contained"
+                                                            onClick={() => handleContentClick(content)}
+                                                            sx={{
+                                                                background: 'rgba(255, 255, 255, 0.2)',
+                                                                color: 'white',
+                                                                textTransform: 'none',
+                                                                fontWeight: 700,
+                                                                '&:hover': {
+                                                                    background: 'rgba(255, 255, 255, 0.3)',
+                                                                },
+                                                            }}
+                                                        >
+                                                            Explore more
+                                                        </Button>
+                                                    </Stack>
+                                                </Card>
+                                            </Grid>
+                                        );
+                                    })}
                                 </Grid>
                             </Card>
                         </Fade>
@@ -520,7 +571,7 @@ const CourseDrips = () => {
                         fullWidth
                     >
                         <DialogContent dividers sx={{ p: 4, fontSize: '1.1rem' }}>
-                            {parse(fullDes)}
+                            {parse(getDescriptionText(fullDes))}
                         </DialogContent>
                         <DialogActions sx={{ p: 4 }}>
                             <Button

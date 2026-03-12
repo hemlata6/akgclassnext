@@ -152,17 +152,17 @@ export const PromoBanners = () => {
                         <div
                             onClick={() => handleLinkClick(slide)}
                             key={index}
-                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[350px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl group cursor-pointer ${theme.primaryClass}`}
+                            className={`flex-shrink-0 w-[calc(100vw-24px)] sm:w-[calc(100vw-32px)] md:w-full h-[200px] sm:h-[240px] md:h-[400px] snap-center relative rounded-xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl group cursor-pointer ${theme.primaryClass}`}
                             style={{ boxShadow: `0 0 20px ${theme.primary}20` }}
                         >
                             <img
                                 src={slide.mobileSrc}
-                                className="md:hidden w-full h-full object-cover"
+                                className="md:hidden w-full h-full"
                                 alt={`${slide.alt} Mobile`}
                             />
                             <img
                                 src={slide.desktopSrc}
-                                className="hidden md:block w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                className="hidden md:block w-full h-full group-hover:scale-105 transition-transform duration-700"
                                 alt={`${slide.alt} Desktop`}
                             />
                         </div>
