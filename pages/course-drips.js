@@ -409,7 +409,8 @@ const CourseDrips = () => {
                                                                 sx={{ display: 'block', mt: 0.5 }}
                                                                 textAlign={'justify'}
                                                             >
-                                                                {parse(contentDescription)}
+                                                                {/* {parse(contentDescription)} */}
+                                                                <div className="description text-md text-white leading-relaxed" dangerouslySetInnerHTML={{ __html: contentDescription }} />
                                                             </Typography>
                                                         )}
                                                         </Box>

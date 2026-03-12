@@ -53,74 +53,56 @@ const modernColors = {
 };
 
 // Modern styled components
-const ModernPlanCard = styled(Card)(({ theme, isSelected, isPremium }) => ({
-    height: '100%',
-    display: 'flex',
-    minWidth: '260px',
-    flexDirection: 'column',
-    position: 'relative',
-    borderRadius: '20px',
-    background: isSelected
-        ? 'linear-gradient(135deg, rgba(19, 84, 193, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)'
-        : 'rgba(255, 255, 255, 0.95)',
-    backdropFilter: 'blur(20px)',
-    border: isSelected
-        ? '2px solid #1354C1'
-        : '1px solid rgba(255, 255, 255, 0.2)',
-    boxShadow: isSelected
-        ? '0 12px 40px rgba(19, 84, 193, 0.2)'
-        : '0 8px 32px rgba(0, 0, 0, 0.1)',
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    cursor: 'pointer',
-    overflow: 'hidden',
-    width: '100%',
-    maxWidth: '100%',
-    margin: '0 auto',
-    [theme.breakpoints.down('sm')]: {
-        borderRadius: '16px',
-        '&:hover': {
-            transform: 'translateY(-4px)'
-        }
+const ModernPlanCard = styled(Card)(({ theme }) => ({
+    position: "relative",
+    height: "400px",
+    width: "300px",
+    borderRadius: "16px",
+    background: "#FFFFFF",
+    border: "1px solid #E5E7EB",
+    boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    overflow: "hidden",
+    cursor: "pointer",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+
+    "&:hover": {
+        transform: "translateY(-8px)",
+        boxShadow: "0 12px 24px rgba(0, 0, 0, 0.12)",
     },
-    '&:hover': {
-        transform: 'translateY(-8px)',
-        boxShadow: '0 20px 60px rgba(19, 84, 193, 0.25)',
-        border: '1px solid rgba(19, 84, 193, 0.3)'
+
+    "&::before": {
+        content: '""',
+        position: "absolute",
+        top: 0,
+        left: 0,
+        right: 0,
+        height: "3px",
+        background: modernColors.primary.main,
     },
-    ...(isPremium && {
-        '&::before': {
-            content: '"POPULAR"',
-            position: 'absolute',
-            top: '16px',
-            right: '-30px',
-            background: modernColors.accent.main,
-            color: 'white',
-            padding: '4px 40px',
-            fontSize: '12px',
-            fontWeight: 'bold',
-            transform: 'rotate(45deg)',
-            zIndex: 1,
-            boxShadow: '0 2px 8px rgba(221, 42, 61, 0.3)'
-        }
-    })
 }));
 
-const ModernPlanImage = styled('div')(({ image, title }) => ({
+const ModernPlanImage = styled('div')(({ image }) => ({
     width: '100%',
-    height: '180px',
-    borderRadius: '16px 16px 0 0',
+    aspectRatio: '16 / 9',
     backgroundImage: `url(${image})`,
-    backgroundSize: 'cover',
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
+    borderRadius: '16px 16px 0 0',
     position: 'relative',
+    backgroundColor: '#f5f5f5',
+
     '&::after': {
         content: '""',
         position: 'absolute',
         bottom: 0,
         left: 0,
         right: 0,
-        height: '50%',
-        background: 'linear-gradient(transparent, rgba(0, 0, 0, 0.1))',
+        height: '40%',
+        background: 'linear-gradient(transparent, rgba(0,0,0,0.1))',
         borderRadius: '0 0 16px 16px'
     }
 }));
@@ -777,70 +759,36 @@ const TestSeries = ({
         }
     }
 
-    const fetchGroupChildrenForPlans = async (courseId, plans = []) => {
-        if (!courseId || !Array.isArray(plans) || plans.length === 0) {
-            setAlltreeList([]);
-            return;
-        }
+    const buildListFromFirstResponse = (items = []) => {
+        const mergedList = [];
 
-        const requestOptions = { withCredentials: false };
-
-        const groupNodes = [];
-        plans.forEach((plan) => {
-            // Shape A: Plan A -> children -> Group 1/Group 2
-            if (Array.isArray(plan?.children)) {
+        items.forEach((plan) => {
+            if (Array.isArray(plan?.children) && plan.children.length > 0) {
                 plan.children.forEach((group) => {
-                    if ((group?.title === 'Group 1' || group?.title === 'Group 2') && group?.id) {
-                        groupNodes.push(group);
+                    // If subjects are already present in first response, use them directly.
+                    if (Array.isArray(group?.children) && group.children.length > 0) {
+                        group.children.forEach((subject) => {
+                            mergedList.push({
+                                ...subject,
+                                __groupTitle: group?.title,
+                                __groupId: group?.id,
+                            });
+                        });
+                    } else {
+                        // Fallback: keep group item when subjects are not embedded.
+                        mergedList.push({
+                            ...group,
+                            __groupTitle: group?.title,
+                            __groupId: group?.id,
+                        });
                     }
                 });
-            }
-
-            // Shape B: API already returns Group 1 / Group 2 directly
-            if ((plan?.title === 'Group 1' || plan?.title === 'Group 2') && plan?.id) {
-                groupNodes.push(plan);
+            } else {
+                mergedList.push(plan);
             }
         });
 
-        const uniqueGroupNodes = groupNodes.filter(
-            (group, idx, arr) => arr.findIndex((g) => g.id === group.id) === idx
-        );
-
-        // Fallback to the raw list only when we cannot resolve any group ids.
-        if (uniqueGroupNodes.length === 0) {
-            setAlltreeList(plans);
-            return;
-        }
-
-        const responses = await Promise.all(
-            uniqueGroupNodes.map((group) =>
-                axios
-                    .get(BASE_URL + `admin/course/fetchContent-public/${courseId}/${group.id}`, requestOptions)
-                    .then((res) => ({ group, res }))
-                    .catch(() => ({ group, res: null }))
-            )
-        );
-
-        const mergedChildren = [];
-        responses.forEach(({ group, res }) => {
-            if (res?.data?.errorCode === 0 && Array.isArray(res?.data?.contentList)) {
-                res.data.contentList.forEach((item) => {
-                    mergedChildren.push({
-                        ...item,
-                        __groupTitle: group.title,
-                        __groupId: group.id,
-                    });
-                });
-            }
-        });
-
-        // If child responses are empty, at least keep Group 1 / Group 2 in list.
-        if (mergedChildren.length === 0) {
-            setAlltreeList(uniqueGroupNodes);
-            return;
-        }
-
-        setAlltreeList(mergedChildren);
+        return mergedList;
     };
 
     const getSheduleContentList = async (courseId, contentId, value) => {
@@ -860,8 +808,8 @@ const TestSeries = ({
                 }
                 if (value === "third") {
                     setSchedulePlans(filterCourseContent)
-                    // 2nd hit: from selected Portion Type -> resolve Group 1/Group 2 ids and fetch their children.
-                    await fetchGroupChildrenForPlans(courseId, filterCourseContent || [])
+                    // One-hit flow: show list from first response itself (children of selected plan).
+                    setAlltreeList(buildListFromFirstResponse(filterCourseContent || []))
                 }
                 if (value === "fourth") {
                     setPlanList(filterCourseContent)
@@ -971,6 +919,12 @@ const TestSeries = ({
 
             // Shape: top-level Group 1 / Group 2 entries.
             if (matchGroup(plan?.title)) {
+                plans.push(plan);
+                return;
+            }
+
+            // Flat content entries without group metadata should still show in Both mode.
+            if (selectBtnType === 'both') {
                 plans.push(plan);
             }
         });
@@ -1861,7 +1815,7 @@ const TestSeries = ({
                                     marginRight: "8px",
                                     fontWeight: "800",
                                     textShadow: '0 2px 10px rgba(102, 126, 234, 0.3)'
-                                }}>CAwallah</span>
+                                }}>CAWallah</span>
                                 Test Series Program ✨
                             </h2>
                             <p style={{
@@ -2058,7 +2012,7 @@ const TestSeries = ({
                                                     )
                                                 }
 
-                                                <FormControl
+                                                {/* <FormControl
                                                     className='mobile-select-button'
                                                     sx={{
                                                         width: { xs: '100%', sm: 'auto' },
@@ -2160,7 +2114,7 @@ const TestSeries = ({
                                                             })
                                                         }
                                                     </Select>
-                                                </FormControl>
+                                                </FormControl> */}
                                                 {/* {
                                                     selectScheduleContentObj?.title !== "Test Series Plus Mentorship" && (
                                                         <FormControl className='mobile-select-button' sx={{
@@ -2778,7 +2732,7 @@ const TestSeries = ({
                             activeStep === 0 && (
                                 <Grid item xs={12} sm={12} md={12} lg={12}>
                                     {/* Buttons Container - Consistent on mobile and desktop */}
-                                    <Box sx={{
+                                    {/* <Box sx={{
                                         mt: 5,
                                         ml: 1,
                                         width: '100%',
@@ -2841,10 +2795,10 @@ const TestSeries = ({
                                                 Subjects Wise
                                             </Button>
                                         </Box>
-                                    </Box>
+                                    </Box> */}
 
                                     {/* Subject Selection Dropdown - Consistent positioning on all devices */}
-                                    {filterGroupSubject === "subject" && (
+                                    {/* {filterGroupSubject === "subject" && (
                                         <Box sx={{
                                             mt: 2,
                                             ml: 1,
@@ -2886,9 +2840,9 @@ const TestSeries = ({
                                                 </Select>
                                             </FormControl>
                                         </Box>
-                                    )}
+                                    )} */}
 
-                                    <Box sx={{ mt: 0 }} className="filter-btn">
+                                    {/* <Box sx={{ mt: 0 }} className="filter-btn"> */}
                                         {/* {
                                             plansList?.length > 0 && (
                                                 <Box className="mobile-view-schedule">
@@ -2896,7 +2850,7 @@ const TestSeries = ({
                                                 </Box>
                                             )
                                         } */}
-                                    </Box>
+                                    {/* </Box> */}
                                     <Box sx={{ mt: 3, ml: 1 }} className="filter-btn">
                                         {/* {
                                             selectCourse?.id && (
@@ -2937,7 +2891,7 @@ const TestSeries = ({
                                             </Select>
                                         </FormControl> */}
 
-                                        {
+                                        {/* {
                                             filterGroupSubject === "group" && (
                                                 <Box className="mobile-filter-btn">
                                                     <Button onClick={() => handleButtonClick('both')} sx={{ background: activeBtn === "both" ? "#1354C1" : "", color: activeBtn === "both" ? "#fff" : "#1354C1", fontWeight: "bold", width: "fit-content", marginRight: '16px', padding: "14px 11px!important", border: "1px solid #c1c1c196", fontSize: "12px", width: "110px" }} className='mobile-group-btn button-hover'>Both Group</Button>
@@ -2945,7 +2899,7 @@ const TestSeries = ({
                                                     <Button onClick={() => handleButtonClick('group2')} sx={{ background: activeBtn === "group2" ? "#1354C1" : "", color: activeBtn === "group2" ? "#fff" : "#1354C1", fontWeight: "bold", width: "fit-content", marginRight: '16px', padding: "14px 11px!important", border: "1px solid #c1c1c196", fontSize: "12px", width: "110px" }} className='mobile-group-btn button-hover'>Group 2</Button>
                                                 </Box>
                                             )
-                                        }
+                                        } */}
                                     </Box>
                                 </Grid>
                             )
@@ -3021,7 +2975,7 @@ const TestSeries = ({
                                                                                                         {item?.title}
                                                                                                     </ModernPlanTitle>
 
-                                                                                                    {/* <Typography
+                                                                                                    <Typography
                                                                                                             variant="body2"
                                                                                                             sx={{
                                                                                                                 color: modernColors.neutral.gray,
@@ -3035,8 +2989,8 @@ const TestSeries = ({
                                                                                                                 lineHeight: '1.4',
                                                                                                             }}
                                                                                                         >
-                                                                                                            {fullDescription || "Premium test series for better preparation"}
-                                                                                                        </Typography> */}
+                                                                                                         <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: fullDescription }} />
+                                                                                                        </Typography>
 
                                                                                                     {selectSubjectWise?.length > 0 && (
                                                                                                         <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>

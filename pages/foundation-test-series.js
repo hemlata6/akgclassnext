@@ -108,19 +108,27 @@ const ModernPlanCard = styled(Card)(({ theme }) => ({
     },
 }));
 
-const ModernPlanImage = styled(CardMedia)(({ theme }) => ({
-    height: theme.breakpoints.down('sm') ? 120 : theme.breakpoints.down('md') ? 150 : 180,
-    backgroundSize: 'cover',
+const ModernPlanImage = styled('div')(({ image }) => ({
+    width: '100%',
+    aspectRatio: '16 / 9',
+    backgroundImage: `url(${image})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
     backgroundPosition: 'center',
+    borderRadius: '16px 16px 0 0',
     position: 'relative',
-    borderRadius: '0px',
-    margin: '0px',
-    marginBottom: '0px',
-    transition: 'transform 0.3s ease',
+    backgroundColor: '#f5f5f5',
 
-    '&:hover': {
-        transform: 'scale(1.02)',
-    },
+    '&::after': {
+        content: '""',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '40%',
+        background: 'linear-gradient(transparent, rgba(0,0,0,0.1))',
+        borderRadius: '0 0 16px 16px'
+    }
 }));
 
 const ModernPlanTitle = styled(Typography)(({ theme }) => ({
@@ -1860,7 +1868,7 @@ export default function FoundationTestSeries({
                                     fontWeight: "800",
                                     display: "inline-block",
                                     whiteSpace: "nowrap"
-                                }}>CAwallah</span>
+                                }}>CAWallah</span>
                                 Test Series Program ✨
                             </h2>
                             <p style={{
@@ -1878,31 +1886,32 @@ export default function FoundationTestSeries({
                                 🚀 Crack CA-CS with Our Trusted and Most Loved Test Series.
                             </p>
                         </div>
-
-                        <Grid container sx={{ pt: 2, pb: 1 }}>
-                            <Grid item xs={12} sm={8} md={8} lg={8}>
-                                <Stack
-                                    direction={{ xs: "column", sm: "row" }}
-                                    spacing={{ xs: 2, sm: 3 }}
-                                    className='stack-mobile'
-                                    sx={{
-                                        background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                        borderRadius: '24px',
-                                        padding: { xs: '16px', sm: '20px' },
-                                        border: '1px solid rgba(255, 255, 255, 0.4)',
-                                        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
-                                        // marginBottom: '24px',
-                                        flexWrap: 'wrap',
-                                        gap: { xs: '12px', sm: '16px' },
-                                        '& .mobile-select-button': {
-                                            minWidth: { xs: '100%', sm: 'auto' },
-                                            flex: { xs: '1 1 100%', sm: '1 1 auto' }
-                                        }
-                                    }}
-                                >
-                                    {activeStep === 0 && (
-                                        <>
-                                            {/* <FormControl className='mobile-select-button'>
+                        {
+                            courseContentList?.length > 1 && (
+                                <Grid container sx={{ pt: 2, pb: 0 }}>
+                                    <Grid item xs={12} sm={8} md={8} lg={8}>
+                                        <Stack
+                                            direction={{ xs: "column", sm: "row" }}
+                                            spacing={{ xs: 2, sm: 3 }}
+                                            className='stack-mobile'
+                                            sx={{
+                                                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                borderRadius: '24px',
+                                                padding: { xs: '16px', sm: '20px' },
+                                                border: '1px solid rgba(255, 255, 255, 0.4)',
+                                                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+                                                // marginBottom: '24px',
+                                                flexWrap: 'wrap',
+                                                gap: { xs: '12px', sm: '16px' },
+                                                '& .mobile-select-button': {
+                                                    minWidth: { xs: '100%', sm: 'auto' },
+                                                    flex: { xs: '1 1 100%', sm: '1 1 auto' }
+                                                }
+                                            }}
+                                        >
+                                            {activeStep === 0 && (
+                                                <>
+                                                    {/* <FormControl className='mobile-select-button'>
                                             <InputLabel id="demo-simple-select-label" sx={{ fontSize: "13px" }}>Select Exam</InputLabel>
                                             <Select
                                                 className='select-option'
@@ -1922,7 +1931,7 @@ export default function FoundationTestSeries({
                                                 }
                                             </Select>
                                         </FormControl> */}
-                                            {/* <FormControl className='mobile-select-button'>
+                                                    {/* <FormControl className='mobile-select-button'>
                                             <InputLabel id="demo-simple-select-label" sx={{ fontSize: "13px" }}>Select Course</InputLabel>
                                             <Select
                                                 className='select-option'
@@ -1941,104 +1950,104 @@ export default function FoundationTestSeries({
                                             </Select>
                                         </FormControl> */}
 
-                                            {
-                                                courseContentList?.length > 1 && (
-                                                    <FormControl className='mobile-select-button' sx={{
-                                                        '& .MuiOutlinedInput-root': {
-                                                            background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
-                                                            borderRadius: '16px',
-                                                            border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
-                                                            transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                                                            '&:hover': {
-                                                                boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
-                                                                transform: 'translateY(-2px)',
-                                                                '& .MuiOutlinedInput-notchedOutline': {
-                                                                    borderColor: 'rgba(102, 126, 234, 0.5)'
-                                                                }
-                                                            },
-                                                            '&.Mui-focused': {
-                                                                '& .MuiOutlinedInput-notchedOutline': {
-                                                                    borderColor: '#667eea',
-                                                                    borderWidth: '2px'
-                                                                }
-                                                            }
-                                                        },
-                                                        '& .MuiInputLabel-root': {
-                                                            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                            WebkitBackgroundClip: 'text',
-                                                            WebkitTextFillColor: 'transparent',
-                                                            fontWeight: 600,
-                                                            '&.Mui-focused': {
-                                                                background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                                                                WebkitBackgroundClip: 'text',
-                                                                WebkitTextFillColor: 'transparent'
-                                                            }
-                                                        }
-                                                    }}>
-                                                        <InputLabel
-                                                            id="demo-simple-select-label"
-                                                            sx={{
-                                                                fontSize: { xs: "14px", sm: "15px" },
-                                                                fontWeight: 600
-                                                            }}
-                                                        >
-                                                            Select Schedule
-                                                        </InputLabel>
-                                                        <Select
-                                                            className='select-option'
-                                                            sx={{
-                                                                mb: 2,
-                                                                minWidth: { xs: "120px", sm: "140px" },
-                                                                fontSize: { xs: "13px", sm: "14px" },
-                                                                '& .MuiSelect-select': {
-                                                                    display: 'flex',
-                                                                    alignItems: 'center',
-                                                                    gap: '8px'
-                                                                }
-                                                            }}
-                                                            labelId="demo-simple-select-label"
-                                                            id="demo-simple-select"
-                                                            renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
-                                                            value={selectedSchedule}
-                                                            label="Select Schedule"
-                                                            onChange={handleSchedule}
-                                                            MenuProps={{
-                                                                PaperProps: {
-                                                                    sx: {
-                                                                        background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
-                                                                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                                                                        borderRadius: '16px',
-                                                                        boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
-                                                                        '& .MuiMenuItem-root': {
-                                                                            borderRadius: '8px',
-                                                                            margin: '4px 8px',
-                                                                            transition: 'all 0.2s ease',
-                                                                            '&:hover': {
-                                                                                background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
-                                                                                transform: 'translateX(4px)'
-                                                                            }
+                                                    {
+                                                        courseContentList?.length > 1 && (
+                                                            <FormControl className='mobile-select-button' sx={{
+                                                                '& .MuiOutlinedInput-root': {
+                                                                    background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
+                                                                    borderRadius: '16px',
+                                                                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                                    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                                                                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                                                                    '&:hover': {
+                                                                        boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
+                                                                        transform: 'translateY(-2px)',
+                                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                                            borderColor: 'rgba(102, 126, 234, 0.5)'
+                                                                        }
+                                                                    },
+                                                                    '&.Mui-focused': {
+                                                                        '& .MuiOutlinedInput-notchedOutline': {
+                                                                            borderColor: '#667eea',
+                                                                            borderWidth: '2px'
                                                                         }
                                                                     }
-                                                                }
-                                                            }}
-                                                        >
-                                                            {
-                                                                courseContentList && courseContentList.map((data, index) => {
-                                                                    if (data?.active === true) {
-                                                                        return (
-                                                                            <MenuItem key={index} value={data}>{data?.title}</MenuItem>
-                                                                        )
+                                                                },
+                                                                '& .MuiInputLabel-root': {
+                                                                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                    WebkitBackgroundClip: 'text',
+                                                                    WebkitTextFillColor: 'transparent',
+                                                                    fontWeight: 600,
+                                                                    '&.Mui-focused': {
+                                                                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                                                                        WebkitBackgroundClip: 'text',
+                                                                        WebkitTextFillColor: 'transparent'
                                                                     }
+                                                                }
+                                                            }}>
+                                                                <InputLabel
+                                                                    id="demo-simple-select-label"
+                                                                    sx={{
+                                                                        fontSize: { xs: "14px", sm: "15px" },
+                                                                        fontWeight: 600
+                                                                    }}
+                                                                >
+                                                                    Select Schedule
+                                                                </InputLabel>
+                                                                <Select
+                                                                    className='select-option'
+                                                                    sx={{
+                                                                        mb: 2,
+                                                                        minWidth: { xs: "120px", sm: "140px" },
+                                                                        fontSize: { xs: "13px", sm: "14px" },
+                                                                        '& .MuiSelect-select': {
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            gap: '8px'
+                                                                        }
+                                                                    }}
+                                                                    labelId="demo-simple-select-label"
+                                                                    id="demo-simple-select"
+                                                                    renderValue={(val) => <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>{val.title}</div>}
+                                                                    value={selectedSchedule}
+                                                                    label="Select Schedule"
+                                                                    onChange={handleSchedule}
+                                                                    MenuProps={{
+                                                                        PaperProps: {
+                                                                            sx: {
+                                                                                background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.95) 100%)',
+                                                                                border: '1px solid rgba(255, 255, 255, 0.3)',
+                                                                                borderRadius: '16px',
+                                                                                boxShadow: '0 25px 50px rgba(0, 0, 0, 0.15)',
+                                                                                '& .MuiMenuItem-root': {
+                                                                                    borderRadius: '8px',
+                                                                                    margin: '4px 8px',
+                                                                                    transition: 'all 0.2s ease',
+                                                                                    '&:hover': {
+                                                                                        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+                                                                                        transform: 'translateX(4px)'
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }}
+                                                                >
+                                                                    {
+                                                                        courseContentList && courseContentList.map((data, index) => {
+                                                                            if (data?.active === true) {
+                                                                                return (
+                                                                                    <MenuItem key={index} value={data}>{data?.title}</MenuItem>
+                                                                                )
+                                                                            }
 
-                                                                })
-                                                            }
-                                                        </Select>
-                                                    </FormControl>
-                                                )
-                                            }
+                                                                        })
+                                                                    }
+                                                                </Select>
+                                                            </FormControl>
+                                                        )
+                                                    }
 
-                                            <FormControl className='mobile-select-button' sx={{
+                                                    {/* <FormControl className='mobile-select-button' sx={{
                                                 '& .MuiOutlinedInput-root': {
                                                     background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
                                                     borderRadius: '16px',
@@ -2129,9 +2138,9 @@ export default function FoundationTestSeries({
                                                         })
                                                     }
                                                 </Select>
-                                            </FormControl>
+                                            </FormControl> */}
 
-                                            {/* <FormControl className='mobile-select-button' sx={{
+                                                    {/* <FormControl className='mobile-select-button' sx={{
                                                 '& .MuiOutlinedInput-root': {
                                                     background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 250, 252, 0.9) 100%)',
                                                     borderRadius: '16px',
@@ -2223,7 +2232,7 @@ export default function FoundationTestSeries({
                                                     }
                                                 </Select>
                                             </FormControl> */}
-                                            {/* {
+                                                    {/* {
                                                 ((selectedAotherSchedule?.title !== "Full Length Test Series") && (selectedAotherSchedule?.title !== "Portion WiseTest Series" && selectCourse?.title !== "CA Final")) && (
                                                     <FormControl className='mobile-select-button' sx={{
                                                         '& .MuiOutlinedInput-root': {
@@ -2319,9 +2328,9 @@ export default function FoundationTestSeries({
                                                     </FormControl>
                                                 )
                                             } */}
-                                            {/* Removed duplicate commented View Schedules button */}
-                                        </>)}
-                                    {/* {
+                                                    {/* Removed duplicate commented View Schedules button */}
+                                                </>)}
+                                            {/* {
                                     activeStep === 1 && (
                                         <>
                                             {
@@ -2353,8 +2362,8 @@ export default function FoundationTestSeries({
                                     )
                                 } */}
 
-                                </Stack>
-                                {/* {
+                                        </Stack>
+                                        {/* {
                                 !isMobileDevice && activeStep === 0 && (
                                     <Grid container>
                                         <Grid item xs={12} sm={12} md={12} lg={12}>
@@ -2370,8 +2379,10 @@ export default function FoundationTestSeries({
                                 )
                             } */}
 
-                            </Grid>
-                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            )
+                        }
 
                         <Box>
                             <Grid item xs={12} sm={8} md={8} lg={8}>
@@ -2408,11 +2419,11 @@ export default function FoundationTestSeries({
                             {
                                 activeStep === 0 && (
                                     <Grid item xs={12} sm={12} md={12} lg={12}>
-                                        <Box sx={{ mt: 5, ml: 1 }} className="filter-btn">
+                                        <Box sx={{ mt: 1, ml: 1 }} className="filter-btn">
                                             {/* <Button onClick={() => handleFilter('group')} sx={{ background: filterGroupSubject === "group" ? "#1354C1" : "", color: filterGroupSubject === "group" ? "#fff" : "#1354C1", fontWeight: "bold", marginRight: '16px !important', border: "1px solid #c1c1c196", fontSize: "12px", padding: "14px 11px!important" }} className='mobile-group-btn button-hover'>Groups Wise</Button>
                                         <Button onClick={() => handleFilter('subject')} sx={{ background: filterGroupSubject === "subject" ? "#1354C1" : "", color: filterGroupSubject === "subject" ? "#fff" : "#1354C1", fontWeight: "bold", marginRight: '16px', border: "1px solid #c1c1c196", fontSize: "12px", padding: "14px 11px!important" }} className='mobile-group-btn button-hover'>Subjects Wise</Button> */}
 
-                                            <FormControl
+                                            {/* <FormControl
                                                 className='mobile-select-button'
                                                 sx={{
                                                     marginRight: '16px',
@@ -2517,7 +2528,7 @@ export default function FoundationTestSeries({
                                                             })
                                                     }
                                                 </Select>
-                                            </FormControl>
+                                            </FormControl> */}
                                             {/* Removed duplicate commented View Schedules button */}
                                         </Box>
                                         {/* <Box sx={{ mt: 5, ml: 1 }} className="filter-btn"> */}
