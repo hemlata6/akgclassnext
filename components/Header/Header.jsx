@@ -569,10 +569,10 @@ export const Header = ({ cartCount }) => {
                 )}
               </div>
 
-              <button onClick={() => router.push('/cart')} className={`p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors`}>
+              {/* <button onClick={() => router.push('/cart')} className={`p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors`}>
                 <Icons.Cart />
                 {cartCount > 0 && <span className="absolute top-0 right-0 h-4 w-4 bg-red-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center animate-in zoom-in">{cartCount}</span>}
-              </button>
+              </button> */}
 
               {user ? (
                 <div className="relative group hidden md:block">

@@ -47,39 +47,37 @@ const modernAnimations = `
 const modernColors = {
     primary: {
         main: '#1354C1',
-        light: '#4A90E2',
-        dark: '#0D3A8C',
-        gradient: 'linear-gradient(135deg, #1354C1 0%, #4A90E2 100%)',
+        light: '#667eea',
+        dark: '#0d47a1',
+        gradient: 'linear-gradient(135deg, #1354C1 0%, #667eea 100%)'
     },
     secondary: {
-        main: '#00BC78',
-        light: '#4ECDC4',
-        dark: '#00A86B',
-        gradient: 'linear-gradient(135deg, #00BC78 0%, #4ECDC4 100%)',
+        main: '#764ba2',
+        light: '#a18cd1',
+        dark: '#512da8',
+        gradient: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
     },
     accent: {
         main: '#DD2A3D',
-        light: '#FF6B7A',
-        dark: '#B91C2C',
-        gradient: 'linear-gradient(135deg, #DD2A3D 0%, #FF6B7A 100%)',
+        light: '#ff6b6b',
+        background: 'rgba(221, 42, 61, 0.1)'
+    },
+    success: {
+        main: '#00BC78',
+        light: '#4caf50',
+        background: 'rgba(0, 188, 120, 0.1)'
     },
     neutral: {
-        white: '#FFFFFF',
-        light: '#F8FAFC',
-        gray: '#64748B',
-        dark: '#1E293B',
-    },
-    status: {
-        success: '#10B981',
-        warning: '#F59E0B',
-        error: '#EF4444',
-        info: '#3B82F6',
+        white: '#ffffff',
+        light: '#f8fafc',
+        gray: '#64748b',
+        dark: '#1e293b'
     }
 };
 
 const ModernPlanCard = styled(Card)(({ theme }) => ({
     position: "relative",
-    height: "400px",
+    // height: "400px",
     width: "300px",
     borderRadius: "16px",
     background: "#FFFFFF",
@@ -152,9 +150,10 @@ const ModernPriceContainer = styled(Box)({
 });
 
 const ModernPrice = styled(Typography)(({ isDiscounted }) => ({
-    fontWeight: 800,
     fontSize: '1.5rem',
-    color: modernColors.secondary.main,
+    fontWeight: 700,
+    color: modernColors.success.main,
+    textAlign: 'center'
 }));
 
 const ModernOriginalPrice = styled(Typography)({
@@ -173,29 +172,53 @@ const ModernDiscountBadge = styled(Chip)({
     padding: '0 8px',
 });
 
-const ModernAddButton = styled(Button)(({ isAdded, theme }) => ({
+// const ModernAddButton = styled(Button)(({ isAdded }) => ({
+//     width: '100%',
+//     borderRadius: '12px',
+//     padding: '12px 20px',
+//     fontWeight: 600,
+//     fontSize: '1rem',
+//     textTransform: 'none',
+//     background: modernColors.primary.main,
+//     color: 'white',
+//     border: 'none',
+//     transition: 'all 0.3s ease',
+//     '&:hover': {
+//         background: modernColors.primary.dark,
+//         transform: 'translateY(-2px)',
+//         boxShadow: '0 8px 25px rgba(19, 84, 193, 0.3)'
+//     },
+//     '&:disabled': {
+//         background: modernColors.neutral.gray,
+//         color: 'white'
+//     }
+// }));
+const ModernAddButton = styled(Button)(({ isAdded }) => ({
     width: '100%',
-    padding: theme.breakpoints.down('sm') ? '10px 12px' : '12px 20px',
-    borderRadius: '10px',
-    fontWeight: 700,
-    fontSize: theme.breakpoints.down('sm') ? '0.75rem' : '0.95rem',
+    borderRadius: '12px',
+    padding: '12px 20px',
+    fontWeight: 600,
+    fontSize: '1rem',
     textTransform: 'none',
-    background: modernColors.primary.main,
+    background: isAdded
+        ? modernColors.success.main
+        : modernColors.primary.gradient,
     color: 'white',
     border: 'none',
-    boxShadow: `0 4px 12px ${modernColors.primary.main}30`,
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-
+    transition: 'all 0.3s ease',
     '&:hover': {
-        background: modernColors.primary.dark,
+        background: isAdded
+            ? modernColors.success.light
+            : 'linear-gradient(135deg, #0d47a1 0%, #5a6fc8 100%)',
         transform: 'translateY(-2px)',
-        boxShadow: `0 8px 16px ${modernColors.primary.main}40`,
+        boxShadow: '0 8px 25px rgba(19, 84, 193, 0.3)'
     },
-
-    '&:active': {
-        transform: 'translateY(0)',
-    },
+    '&:disabled': {
+        background: modernColors.neutral.gray,
+        color: 'white'
+    }
 }));
+
 
 const ModernChip = styled(Chip)(({ chipcolor = 'primary' }) => ({
     backgroundColor: chipcolor === 'primary' ? `${modernColors.primary.main}20` : `${modernColors.accent.main}20`,
@@ -344,8 +367,8 @@ const ModernStepper = styled(Stepper)(({ theme }) => ({
 const ModernStepIconRoot = styled('div')(({ theme, ownerState }) => ({
     color: modernColors.neutral.lightGray,
     display: 'flex',
-    height: 30,
-    width: 30,
+    height: 25,
+    width: 25,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '50%',
@@ -384,8 +407,8 @@ const ModernStepIconRoot = styled('div')(({ theme, ownerState }) => ({
     },
 
     '& .ModernStepIcon-number': {
-        fontSize: '1rem',
-        fontWeight: 700,
+        fontSize: '0.8rem',
+        fontWeight: 600,
     },
 }));
 
@@ -2750,7 +2773,7 @@ export default function FoundationTestSeries({
                                                                                                     }}
                                                                                                     startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
                                                                                                 >
-                                                                                                    {isAdded ? "✓ Added to Cart" : "Add to Cart"}
+                                                                                                    {isAdded ? "Added to Cart" : "Add to Cart"}
                                                                                                 </ModernAddButton>
                                                                                             </CardActions>
                                                                                         </ModernPlanCard>
@@ -2997,7 +3020,7 @@ export default function FoundationTestSeries({
                                                                                                 className='mobile-view-image'
                                                                                             />
                                                                                         </Box>
-                                                                                        {details?.description?.video && (
+                                                                                        {object?.video && (
                                                                                             <Box sx={{
                                                                                                 background: "linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)",
                                                                                                 borderRadius: "20px",

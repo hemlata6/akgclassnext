@@ -55,7 +55,7 @@ const modernColors = {
 // Modern styled components
 const ModernPlanCard = styled(Card)(({ theme }) => ({
     position: "relative",
-    height: "400px",
+    // height: "450px",
     width: "300px",
     borderRadius: "16px",
     background: "#FFFFFF",
@@ -109,7 +109,7 @@ const ModernPlanImage = styled('div')(({ image }) => ({
 
 const ModernPlanTitle = styled(Typography)(({ theme }) => ({
     fontWeight: 700,
-    fontSize: '1.4rem',
+    fontSize: '1rem',
     color: modernColors.neutral.dark,
     textAlign: 'center',
     marginBottom: '12px',
@@ -128,14 +128,14 @@ const ModernPriceContainer = styled(Box)({
 });
 
 const ModernPrice = styled(Typography)(({ isDiscounted }) => ({
-    fontSize: isDiscounted ? '2rem' : '1.8rem',
+    fontSize: '1.5rem',
     fontWeight: 700,
     color: modernColors.success.main,
     textAlign: 'center'
 }));
 
 const ModernOriginalPrice = styled(Typography)({
-    fontSize: '1.1rem',
+    fontSize: '1rem',
     color: modernColors.neutral.gray,
     textDecoration: 'line-through'
 });
@@ -143,7 +143,7 @@ const ModernOriginalPrice = styled(Typography)({
 const ModernDiscountBadge = styled(Chip)({
     background: modernColors.accent.main,
     color: 'white',
-    fontSize: '1rem',
+    fontSize: '0.8rem',
     fontWeight: 'bold',
     height: '28px'
 });
@@ -168,8 +168,8 @@ const ModernAddButton = styled(Button)(({ isAdded }) => ({
     width: '100%',
     borderRadius: '12px',
     padding: '12px 20px',
-    fontWeight: 700,
-    fontSize: '1.1rem',
+    fontWeight: 600,
+    fontSize: '1rem',
     textTransform: 'none',
     background: isAdded
         ? modernColors.success.main
@@ -305,8 +305,8 @@ const ModernStepper = styled(Stepper)(({ theme }) => ({
 const ModernStepIconRoot = styled('div')(({ theme, ownerState }) => ({
     color: modernColors.neutral.gray,
     display: 'flex',
-    height: 44,
-    width: 44,
+    height: 24,
+    width: 24,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: '50%',
@@ -338,15 +338,15 @@ const ModernStepIconRoot = styled('div')(({ theme, ownerState }) => ({
     },
 
     '& .ModernStepIcon-circle': {
-        width: 16,
-        height: 16,
+        width: 10,
+        height: 10,
         borderRadius: '50%',
         backgroundColor: 'currentColor',
     },
 
     '& .ModernStepIcon-number': {
-        fontSize: '1rem',
-        fontWeight: 700,
+        fontSize: '0.8rem',
+        fontWeight: 600,
     },
 }));
 
@@ -527,7 +527,7 @@ const TestSeries = ({
         setTotalPrice(totalPrice)
         setPurchaseArray(allEntityIds);
         localStorage.setItem("purchaseArray", JSON.stringify(allEntityIds));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [cartArray]);
 
     useEffect(() => {
@@ -540,7 +540,7 @@ const TestSeries = ({
             }
 
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [coursePublic])
     const updateCartAndPurchaseArrays = (plansList, addedCartPlans) => {
         //     const matchedPlans = [];
@@ -682,7 +682,7 @@ const TestSeries = ({
             }
         }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     function handleBackBrowserBack() {
@@ -725,7 +725,7 @@ const TestSeries = ({
             setSchedule("");
             // setSelectShedule('');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [courseContentList])
 
     useEffect(() => {
@@ -864,12 +864,12 @@ const TestSeries = ({
             // setActiveBtn('both')
             getPlans('both');
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alltreeList])
 
     useEffect(() => {
         getPlans(activeBtn);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectSubjectWise, activeBtn])
 
     function getPlans(selectBtnType) {
@@ -2308,10 +2308,10 @@ const TestSeries = ({
                                                         </FormControl>
                                                     )
                                                 } */}
-                                                {
+                                                {/* {
                                                     selectCourse?.title === "CA Inter" && selectedAotherSchedule?.title === "Portion wise Test Series" && selectedBasicPlan?.title ?
                                                         <>
-                                                            {/* Desktop: Add buttons to the same row */}
+                                                           
                                                             <Box sx={{
                                                                 display: { xs: 'none', sm: 'flex' },
                                                                 gap: 2,
@@ -2363,11 +2363,11 @@ const TestSeries = ({
                                                                 </Button>
                                                             </Box>
                                                         </> : ""
-                                                }
-                                                {
+                                                } */}
+                                                {/* {
                                                     selectCourse?.title === "CA Inter" && (selectedAotherSchedule?.title === "Full Length Test Series" || selectScheduleContentObj?.title === "Exam oriented Test Series") ?
                                                         <>
-                                                            {/* Desktop: Add button to the same row */}
+                                                           
                                                             <Box sx={{
                                                                 display: { xs: 'none', sm: 'flex' },
                                                                 gap: 2,
@@ -2421,11 +2421,10 @@ const TestSeries = ({
                                                                 }
                                                             </Box>
                                                         </> : ""
-                                                }
-                                                {
+                                                } */}
+                                                {/* {
                                                     selectedAotherSchedule?.title === "Portion WiseTest Series" && selectCourse?.title === "CA Final" && (
                                                         <>
-                                                            {/* Desktop: Add buttons to the same row */}
                                                             <Box sx={{
                                                                 display: { xs: 'none', sm: 'flex' },
                                                                 gap: 2,
@@ -2478,7 +2477,7 @@ const TestSeries = ({
                                                             </Box>
                                                         </>
                                                     )
-                                                }
+                                                } */}
                                                 {/* {
                                         plansList?.length > 0 && isMobileDevice && (
                                             <Box className="mobile-view-schedule">
@@ -2522,7 +2521,7 @@ const TestSeries = ({
                                     </Stack>
 
                                     {/* Mobile: Buttons in new row */}
-                                    {
+                                    {/* {
                                         selectCourse?.title === "CA Inter" && selectedAotherSchedule?.title === "Portion wise Test Series" && selectedBasicPlan?.title && (
                                             <Box sx={{
                                                 display: { xs: 'flex', sm: 'none' },
@@ -2577,9 +2576,9 @@ const TestSeries = ({
                                                 </Button>
                                             </Box>
                                         )
-                                    }
+                                    } */}
 
-                                    {
+                                    {/* {
                                         selectCourse?.title === "CA Inter" && (selectedAotherSchedule?.title === "Full Length Test Series" || selectScheduleContentObj?.title === "Exam oriented Test Series") && (
                                             <Box sx={{
                                                 display: { xs: 'flex', sm: 'none' },
@@ -2612,9 +2611,9 @@ const TestSeries = ({
                                                 </Button>
                                             </Box>
                                         )
-                                    }
+                                    } */}
 
-                                    {
+                                    {/* {
                                         selectedAotherSchedule?.title === "Portion WiseTest Series" && selectCourse?.title === "CA Final" && (
                                             <Box sx={{
                                                 display: { xs: 'flex', sm: 'none' },
@@ -2669,7 +2668,7 @@ const TestSeries = ({
                                                 </Button>
                                             </Box>
                                         )
-                                    }
+                                    } */}
                                 </Box>
                                 {/* {
                                 !isMobileDevice && activeStep === 0 && (
@@ -2714,7 +2713,7 @@ const TestSeries = ({
                                                     variant="body2"
                                                     fontWeight={600}
                                                     sx={{
-                                                        fontSize: { xs: '0.75rem', sm: '1rem', md: '1.375rem' },
+                                                        fontSize: { xs: '0.75rem', sm: '1rem', md: '1rem' },
                                                         color: activeStep === index ? modernColors.primary.main : modernColors.neutral.gray,
                                                         transition: 'color 0.3s ease',
                                                         whiteSpace: 'nowrap'
@@ -2843,7 +2842,7 @@ const TestSeries = ({
                                     )} */}
 
                                     {/* <Box sx={{ mt: 0 }} className="filter-btn"> */}
-                                        {/* {
+                                    {/* {
                                             plansList?.length > 0 && (
                                                 <Box className="mobile-view-schedule">
                                                     <Typography variant='p' onClick={handleViewPlan} sx={{ fontWeight: "bold", width: "fit-content", padding: "14px 2px !important", fontSize: "12px", color: "#DD2A3D", fontWeight: "bold", cursor: "pointer" }} >View Schedules</Typography>
@@ -2942,7 +2941,7 @@ const TestSeries = ({
                                                         <>
                                                             <div className='react-multi-carousel-list'>
                                                                 <Box sx={{ py: 2, width: '100%', maxWidth: '100%' }}>
-                                                                    <Grid container spacing={3}>
+                                                                    <Grid container spacing={3} display='flex' justifyContent={['center', 'start']}>
                                                                         {
                                                                             plansList && plansList.map((item, i) => {
                                                                                 let object = getPlanPrice(item, activeBtn, selectSubjectWise);
@@ -2976,21 +2975,21 @@ const TestSeries = ({
                                                                                                     </ModernPlanTitle>
 
                                                                                                     <Typography
-                                                                                                            variant="body2"
-                                                                                                            sx={{
-                                                                                                                color: modernColors.neutral.gray,
-                                                                                                                mb: 1.5,
-                                                                                                                display: '-webkit-box',
-                                                                                                                WebkitLineClamp: 2,
-                                                                                                                WebkitBoxOrient: 'vertical',
-                                                                                                                overflow: 'hidden',
-                                                                                                                textAlign: 'center',
-                                                                                                                fontSize: "13px",
-                                                                                                                lineHeight: '1.4',
-                                                                                                            }}
-                                                                                                        >
-                                                                                                         <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: fullDescription }} />
-                                                                                                        </Typography>
+                                                                                                        variant="body2"
+                                                                                                        sx={{
+                                                                                                            color: modernColors.neutral.gray,
+                                                                                                            mb: 1.5,
+                                                                                                            display: '-webkit-box',
+                                                                                                            WebkitLineClamp: 2,
+                                                                                                            WebkitBoxOrient: 'vertical',
+                                                                                                            overflow: 'hidden',
+                                                                                                            textAlign: 'center',
+                                                                                                            fontSize: "13px",
+                                                                                                            lineHeight: '1.4',
+                                                                                                        }}
+                                                                                                    >
+                                                                                                        <div className="description text-md text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: fullDescription }} />
+                                                                                                    </Typography>
 
                                                                                                     {selectSubjectWise?.length > 0 && (
                                                                                                         <Box sx={{ mb: 2, display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 0.5 }}>
@@ -3063,7 +3062,7 @@ const TestSeries = ({
                                                                                                         }}
                                                                                                         startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
                                                                                                     >
-                                                                                                        {isAdded ? "✓ Added to Cart" : "Add to Cart"}
+                                                                                                        {isAdded ? "Added to Cart" : "Add to Cart"}
                                                                                                     </ModernAddButton>
                                                                                                 </CardActions>
                                                                                             </ModernPlanCard>
@@ -3084,7 +3083,7 @@ const TestSeries = ({
                                     {
                                         activeStep === 1 && (
                                             <Typography sx={{ mt: 3, mb: 3, py: 1 }}>
-                                                <Box
+                                                {/* <Box
                                                     sx={{
                                                         padding: !isMobileDevice ? "0" : "0 2rem",
                                                         margin: isMobileDevice ? "0" : "0 2rem",
@@ -3101,9 +3100,9 @@ const TestSeries = ({
                                                         gap: '20px',
                                                         flexWrap: 'wrap'
                                                     }}
-                                                >
-                                                    {/* View Detailed Schedules Button - First (left) */}
-                                                    {
+                                                > */}
+                                                {/* View Detailed Schedules Button - First (left) */}
+                                                {/* {
                                                         plansList?.length > 0 && selectShedule?.title !== "UnScheduled" && (
                                                             <Typography
                                                                 variant='button'
@@ -3141,10 +3140,10 @@ const TestSeries = ({
                                                                 View Detailed Schedules
                                                             </Typography>
                                                         )
-                                                    }
+                                                    } */}
 
-                                                    {/* Select Schedule - Second (right) */}
-                                                    <FormControl className='mobile-select-button' sx={{
+                                                {/* Select Schedule - Second (right) */}
+                                                {/* <FormControl className='mobile-select-button' sx={{
                                                         minWidth: '250px',
                                                         '& .MuiOutlinedInput-root': {
                                                             background: 'rgba(255, 255, 255, 0.9)',
@@ -3197,8 +3196,8 @@ const TestSeries = ({
                                                                 })
                                                             }
                                                         </Select>
-                                                    </FormControl>
-                                                </Box>
+                                                    </FormControl> */}
+                                                {/* </Box> */}
 
                                                 {/* Remove the separate button container below */}
                                                 <Grid container sx={{
@@ -3312,7 +3311,7 @@ const TestSeries = ({
                                                                                             className='mobile-view-image'
                                                                                         />
                                                                                     </Box>
-                                                                                    {details?.description?.video && (
+                                                                                    {object?.video && (
                                                                                         <Box sx={{
                                                                                             background: "linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)",
                                                                                             borderRadius: "20px",
@@ -3639,7 +3638,7 @@ const TestSeries = ({
                                                             <ModernCheckoutButton
                                                                 onClick={handleCheckoutSubmit}
                                                                 className='button-hover mobile-buy-now'
-                                                                startIcon={<ArrowForwardIcon />}
+                                                                // startIcon={<ArrowForwardIcon />}
                                                             >
                                                                 🚀 Proceed to Checkout
                                                                 <span style={{ textTransform: "initial", color: "#fbff00", padding: 0, margin: 0 }}>
