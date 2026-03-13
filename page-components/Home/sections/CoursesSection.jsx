@@ -8,7 +8,7 @@ import instId from '../../../config/instituteId';
 import CourseConfigModal from './CourseConfigModal';
 import Endpoints from '../../../config/endpoints';
 
-export const CoursesSection = ({ onAddToCart }) => {
+export const CoursesSection = ({ employeeCourseId }) => {
     const router = useRouter();
     const { authToken } = useAuth();
     const { theme } = useTheme();
@@ -24,6 +24,14 @@ export const CoursesSection = ({ onAddToCart }) => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
+
+    const hasEmployeeCourseSelection = (() => {
+        if (!employeeCourseId) return false;
+        if (Array.isArray(employeeCourseId)) return employeeCourseId.length > 0;
+        if (Array.isArray(employeeCourseId?.courseIds)) return employeeCourseId.courseIds.length > 0;
+        if (typeof employeeCourseId === 'string') return employeeCourseId.trim().length > 0;
+        return false;
+    })();
 
     useEffect(() => {
         fetchTags();
@@ -45,7 +53,7 @@ export const CoursesSection = ({ onAddToCart }) => {
 
         // Call on initial mount
         handleResize();
-        
+
         // Add resize listener
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
@@ -114,35 +122,88 @@ export const CoursesSection = ({ onAddToCart }) => {
     useEffect(() => {
 
         fetchCourses();
-    }, [tags]);
+    }, [tags, employeeCourseId]);
 
-    const fetchCourses = async () => {
-        try {
-            setLoading(true);
-            const response = authToken ? await Network.getStudentAuthCourse(authToken) : await Network.getFreeCourseList(instId);
-            const courses = response?.courses || response || [];
+  const fetchCourses = async () => {
+    try {
+        setLoading(true);
 
-            // Filter courses that are active AND have "Featured Course" tag
-            const activeCourses = Array.isArray(courses)
-                ? courses.filter(c =>
-                    c.active && c.paid === true
-                    && c.type === 'lecture'
-                    // && c.tags &&
-                    // Array.isArray(c.tags)
-                    // && c.tags.some(tag => tag.tag === "Featured Course")
-                )
-                : [];
+        const response = authToken
+            ? await Network.getStudentAuthCourse(authToken)
+            : await Network.getFreeCourseList(instId);
 
-            setCoursesData(activeCourses);
-            setError(null);
-        } catch (err) {
-            console.error('Error fetching courses:', err);
-            setError('Failed to load courses');
-            setCoursesData([]);
-        } finally {
-            setLoading(false);
-        }
-    };
+        const courses = response?.courses || response || [];
+
+        // Normalize employee course IDs from multiple possible payload shapes
+        const normalizeEmployeeCourseIds = (value) => {
+            if (!value) return [];
+
+            if (Array.isArray(value)) {
+                return value
+                    .map((item) => {
+                        if (item == null) return null;
+                        if (typeof item === 'number' || typeof item === 'string') return Number(item);
+
+                        if (typeof item === 'object') {
+                            return Number(item.id ?? item.courseId ?? item._id ?? null);
+                        }
+
+                        return null;
+                    })
+                    .filter((id) => Number.isFinite(id));
+            }
+
+            if (Array.isArray(value?.courseIds)) {
+                return normalizeEmployeeCourseIds(value.courseIds);
+            }
+
+            if (typeof value === 'string') {
+                return value
+                    .split(',')
+                    .map((v) => Number(v.trim()))
+                    .filter((id) => Number.isFinite(id));
+            }
+
+            return [];
+        };
+
+        const employeeCourseIds = normalizeEmployeeCourseIds(employeeCourseId);
+        const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
+        const employeeCourseIdSet = new Set(employeeCourseIds);
+
+        // Base filter (your conditions)
+        const filteredCourses = Array.isArray(courses)
+            ? courses.filter(c =>
+                c.active &&
+                c.paid === true &&
+                c.type === 'lecture'
+            )
+            : [];
+
+        // Apply employee course filter only if IDs exist
+        const finalCourses = hasEmployeeCourseFilter
+            ? filteredCourses.filter((course) => {
+                const idCandidates = [
+                    Number(course?.id),
+                    Number(course?.courseId),
+                    Number(course?._id),
+                ].filter((id) => Number.isFinite(id));
+
+                return idCandidates.some((id) => employeeCourseIdSet.has(id));
+            })
+            : filteredCourses;
+
+        setCoursesData(finalCourses);
+        setError(null);
+
+    } catch (err) {
+        console.error('Error fetching courses:', err);
+        setError('Failed to load courses');
+        setCoursesData([]);
+    } finally {
+        setLoading(false);
+    }
+};
 
     const filtered = coursesData.filter(c => {
         // Filter by domain if selected
@@ -210,22 +271,30 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured Courses</h2>
                         </div>
                         {/* Mobile: Explore Store button next to title */}
-                        <button
-                            onClick={() => handleExploreMoreClick('lecture')}
-                            className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
-                        >
-                            Explore Store <Icons.ChevronRight size={16} />
-                        </button>
+                        {
+                            !hasEmployeeCourseSelection && (
+                                <button
+                                    onClick={() => handleExploreMoreClick('lecture')}
+                                    className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
+                                >
+                                    Explore Store <Icons.ChevronRight size={16} />
+                                </button>
+                            )
+                        }
                     </div>
                     <div className="flex justify-start md:justify-end">
                         <div className="flex items-center gap-4 w-full md:w-auto">
                             {/* Desktop: Explore Store button with filters */}
-                            <button
-                                onClick={() => handleExploreMoreClick('lecture')}
-                                className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
-                            >
-                                Explore Store <Icons.ChevronRight size={16} />
-                            </button>
+                            {
+                                !hasEmployeeCourseSelection && (
+                                    <button
+                                        onClick={() => handleExploreMoreClick('lecture')}
+                                        className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                    >
+                                        Explore Store <Icons.ChevronRight size={16} />
+                                    </button>
+                                )
+                            }
                             {/* Domain Filter */}
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button
@@ -300,89 +369,89 @@ export const CoursesSection = ({ onAddToCart }) => {
                                             <div
                                                 className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col h-full"
                                             >
-                                            <div
-                                                onClick={() => router.push(`/course/${course.id}`)}
-                                                className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
-                                                style={{ aspectRatio: '16/9' }}
-                                            >
-                                                {course.logo && (
-                                                    <img
-                                                        src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
-                                                        alt={course.title}
-                                                        className="absolute inset-0 object-cover"
-                                                    />
-                                                )}
-                                                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>
-                                                <div className="relative z-10 w-full">
-                                                    <span className="bg-white/20 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md border border-white/20 inline-block mb-1">
-                                                        {course.badge || "New"}
-                                                    </span>
-                                                    <div className="flex items-center gap-1.5 text-white/90 text-xs font-bold">
-                                                        <Icons.Clock /> {course.hours}
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="p-2 pt-3 flex-1 flex flex-col">
-                                                <h3 onClick={() => router.push(`/course/${course.id}`)} className={`text-sm font-bold text-slate-900 leading-snug mb-1 cursor-pointer hover:${theme.textClass}`}>
-                                                    {course.title}
-                                                </h3>
-                                                {/* <p className="text-[10px] text-slate-500 font-medium mb-3">GD / PD / App</p> */}
-                                                <div className="flex items-center justify-between border-t border-slate-50 pt-3">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="text-[9px] text-slate-500 font-medium">Starting Price</span>
-                                                        <div className="flex items-center gap-2 flex-wrap">
-                                                            {hasDiscount ? (
-                                                                <>
-                                                                    <span className="text-[11px] text-slate-400 line-through">
-                                                                        ₹{originalPrice.toLocaleString('en-IN')}
-                                                                    </span>
-                                                                    <span className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
-                                                                        {pricing.discount}% OFF
-                                                                    </span>
-                                                                    <span className="text-lg font-bold text-slate-900">
-                                                                        {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
-                                                                    </span>
-                                                                </>
-                                                            ) : (
-                                                                <span className="text-lg font-bold text-slate-900">
-                                                                    {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
-                                                                </span>
-                                                            )}
+                                                <div
+                                                    onClick={() => router.push(`/course/${course.id}`)}
+                                                    className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
+                                                    style={{ aspectRatio: '16/9' }}
+                                                >
+                                                    {course.logo && (
+                                                        <img
+                                                            src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
+                                                            alt={course.title}
+                                                            className="absolute inset-0 object-cover"
+                                                        />
+                                                    )}
+                                                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>
+                                                    <div className="relative z-10 w-full">
+                                                        <span className="bg-white/20 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md border border-white/20 inline-block mb-1">
+                                                            {course.badge || "New"}
+                                                        </span>
+                                                        <div className="flex items-center gap-1.5 text-white/90 text-xs font-bold">
+                                                            <Icons.Clock /> {course.hours}
                                                         </div>
                                                     </div>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
+                                                </div>
+                                                <div className="p-2 pt-3 flex-1 flex flex-col">
+                                                    <h3 onClick={() => router.push(`/course/${course.id}`)} className={`text-sm font-bold text-slate-900 leading-snug mb-1 cursor-pointer hover:${theme.textClass}`}>
+                                                        {course.title}
+                                                    </h3>
+                                                    {/* <p className="text-[10px] text-slate-500 font-medium mb-3">GD / PD / App</p> */}
+                                                    <div className="flex items-center justify-between border-t border-slate-50 pt-3">
+                                                        <div className="flex flex-col gap-1">
+                                                            <span className="text-[9px] text-slate-500 font-medium">Starting Price</span>
+                                                            <div className="flex items-center gap-2 flex-wrap">
+                                                                {hasDiscount ? (
+                                                                    <>
+                                                                        <span className="text-[11px] text-slate-400 line-through">
+                                                                            ₹{originalPrice.toLocaleString('en-IN')}
+                                                                        </span>
+                                                                        <span className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
+                                                                            {pricing.discount}% OFF
+                                                                        </span>
+                                                                        <span className="text-lg font-bold text-slate-900">
+                                                                            {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
+                                                                        </span>
+                                                                    </>
+                                                                ) : (
+                                                                    <span className="text-lg font-bold text-slate-900">
+                                                                        {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
 
-                                                            const isInCart = cartCourses.some(item => item.id === course.id);
+                                                                const isInCart = cartCourses.some(item => item.id === course.id);
 
-                                                            if (isInCart) {
-                                                                // Remove from cart
-                                                                const updatedCart = cartCourses.filter(item => item.id !== course.id);
-                                                                setCartCourses(updatedCart);
-                                                                localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                                                                window.dispatchEvent(new Event('cartUpdated'));
-                                                            } else {
-                                                                // Add to cart via modal
-                                                                if (!course.coursePricing || course.coursePricing.length === 0) {
-                                                                    return;
+                                                                if (isInCart) {
+                                                                    // Remove from cart
+                                                                    const updatedCart = cartCourses.filter(item => item.id !== course.id);
+                                                                    setCartCourses(updatedCart);
+                                                                    localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                                                                    window.dispatchEvent(new Event('cartUpdated'));
+                                                                } else {
+                                                                    // Add to cart via modal
+                                                                    if (!course.coursePricing || course.coursePricing.length === 0) {
+                                                                        return;
+                                                                    }
+                                                                    setSelectedCourse(course);
+                                                                    setShowConfigModal(true);
                                                                 }
-                                                                setSelectedCourse(course);
-                                                                setShowConfigModal(true);
-                                                            }
-                                                        }}
-                                                        className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                                                        style={{
-                                                            backgroundColor: theme?.primary || '#2196F3',
-                                                            transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
-                                                            boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                        }}
-                                                    >
-                                                        {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
-                                                    </button>
+                                                            }}
+                                                            className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                                                            style={{
+                                                                backgroundColor: theme?.primary || '#2196F3',
+                                                                transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
+                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                            }}
+                                                        >
+                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
                                         </div>
                                     );
                                 })}

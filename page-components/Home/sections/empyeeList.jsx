@@ -74,8 +74,25 @@ const EmployeeList = () => {
     };
 
     const handleFaculty = (faculty) => {
-        let facultyName = faculty.toLowerCase().replace(/\s+/g, '-');
-        router.push(`/faculty/${facultyName}`);
+        const fullName = typeof faculty === 'string'
+            ? faculty
+            : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
+
+        if (!fullName) return;
+
+        const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+        const facultyState = { faculty };
+
+        router.push(
+            {
+                pathname: '/faculty/[facultyname]',
+                query: {
+                    facultyname: facultyName,
+                    state: JSON.stringify(facultyState),
+                },
+            },
+            `/faculty/${facultyName}`
+        );
     };
 
     // console.log('employees', employees);
@@ -144,7 +161,7 @@ const EmployeeList = () => {
                                         }}
                                     >
                                         <div
-                                            onClick={() => handleFaculty(employee.value)}
+                                            onClick={() => handleFaculty(employee)}
                                             className="bg-white rounded-xl p-6 text-center shadow-md hover:shadow-xl transition-all cursor-pointer h-full"
                                         >
 
