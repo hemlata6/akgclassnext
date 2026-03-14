@@ -78,7 +78,7 @@ const modernColors = {
 const ModernPlanCard = styled(Card)(({ theme }) => ({
     position: "relative",
     // height: "400px",
-    width: "300px",
+    width: "350px",
     borderRadius: "16px",
     background: "#FFFFFF",
     border: "1px solid #E5E7EB",
@@ -1973,7 +1973,7 @@ export default function FoundationTestSeries({
                                             </Select>
                                         </FormControl> */}
 
-                                                    {
+                                                    {/* {
                                                         courseContentList?.length > 1 && (
                                                             <FormControl className='mobile-select-button' sx={{
                                                                 '& .MuiOutlinedInput-root': {
@@ -2068,7 +2068,7 @@ export default function FoundationTestSeries({
                                                                 </Select>
                                                             </FormControl>
                                                         )
-                                                    }
+                                                    } */}
 
                                                     {/* <FormControl className='mobile-select-button' sx={{
                                                 '& .MuiOutlinedInput-root': {
@@ -2811,7 +2811,7 @@ export default function FoundationTestSeries({
                                                         }}
                                                     >
                                                         {/* View Detailed Schedules Button - First (left) */}
-                                                        {
+                                                        {/* {
                                                             plansList?.length > 0 && selectShedule?.title !== "UnScheduled" && (
                                                                 <Typography
                                                                     variant='button'
@@ -2849,10 +2849,10 @@ export default function FoundationTestSeries({
                                                                     View Detailed Schedules
                                                                 </Typography>
                                                             )
-                                                        }
+                                                        } */}
 
                                                         {/* Select Schedule - Second (right) */}
-                                                        <FormControl className='mobile-select-button' sx={{
+                                                        {/* <FormControl className='mobile-select-button' sx={{
                                                             minWidth: '250px',
                                                             '& .MuiOutlinedInput-root': {
                                                                 background: 'rgba(255, 255, 255, 0.9)',
@@ -2905,7 +2905,7 @@ export default function FoundationTestSeries({
                                                                     })
                                                                 }
                                                             </Select>
-                                                        </FormControl>
+                                                        </FormControl> */}
                                                     </Box>
 
                                                     {/* Remove the separate button container below */}

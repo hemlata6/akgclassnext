@@ -56,7 +56,7 @@ const modernColors = {
 const ModernPlanCard = styled(Card)(({ theme }) => ({
     position: "relative",
     // height: "450px",
-    width: "300px",
+    width: "350px",
     borderRadius: "16px",
     background: "#FFFFFF",
     border: "1px solid #E5E7EB",
