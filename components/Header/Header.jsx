@@ -1007,33 +1007,26 @@ export const Header = ({ cartCount }) => {
                   </button>
                   {openMobileSubmenu === 'faculty' && (
                     <div className="space-y-1 mt-1 pl-2">
-                      <button
-                        onClick={() => handleFaculty("Sachin Raheja")}
-                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
-                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                          }`}
-                      >
-                        <span className="truncate">CA Sachin Raheja</span>
-                      </button>
-                      <button
-                        onClick={() => handleFaculty("Manas Arora")}
-                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
-                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                          }`}
-                      >
-                        <span className="truncate">CA Manas Arora</span>
-                      </button>
-                      <button
-                        onClick={() => handleFaculty("Tejinder Pal Singh")}
-                        className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${openMobileSubmenu === 'faculty'
-                          ? 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                          : 'text-slate-600 hover:bg-indigo-50 hover:text-indigo-700'
-                          }`}
-                      >
-                        <span className="truncate">CA Tejinder Pal Singh</span>
-                      </button>
+                      {employees.length > 0 ? (
+                        employees.map((e) => {
+                          const fullName = [e?.firstName, e?.lastName].filter(Boolean).join(' ');
+                          return (
+                            <button
+                              key={e?.id || fullName}
+                              onClick={() => {
+                                handleFaculty(e);
+                                setMobileMenuOpen(false);
+                                setOpenMobileSubmenu(null);
+                              }}
+                              className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+                            >
+                              <span className="truncate">{fullName}</span>
+                            </button>
+                          );
+                        })
+                      ) : (
+                        <div className="px-4 py-2 text-xs text-slate-400">No faculty available</div>
+                      )}
                     </div>
                   )}
                 </div>
