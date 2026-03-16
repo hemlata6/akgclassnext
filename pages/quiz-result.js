@@ -6,7 +6,7 @@ export default function QuizResult() {
   return (
     <>
       <Head>
-        <title>Quiz Result - NextGenCA</title>
+        <title>Quiz Result - MyEduNeeds</title>
         <meta name="description" content="View your quiz results" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

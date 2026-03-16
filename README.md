@@ -1,6 +1,6 @@
-# NextGenCA - Next.js Application
+# MyEduNeeds - Next.js Application
 
-This is a Next.js conversion of the original React app for NextGenCA - NextGenCA | NextGenCA - NextGenCA.
+This is a Next.js conversion of the original React app for MyEduNeeds - MyEduNeeds | MyEduNeeds - MyEduNeeds.
 
 ## Getting Started
 

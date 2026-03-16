@@ -3,23 +3,23 @@ import Layout from '../components/Layout';
 import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
-  const siteUrl = 'https://nextgencaclasses.netlify.app/';
+  const siteUrl = 'https://myeduneeds.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
-  const title = 'NextGenCA Academy | Professional Coaching for CA & CMA';
-  const description = 'NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, NextGenCA, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const title = 'MyEduNeeds | Professional Coaching for CA & CMA';
+  const description = 'MyEduNeeds is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, MyEduNeeds, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "NextGenCA",
+    "name": "MyEduNeeds",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
     "sameAs": [
-      "https://twitter.com/caclass",
-      "https://facebook.com/caclass",
-      "https://linkedin.com/company/caclass"
+      "https://twitter.com/myeduneeds",
+      "https://facebook.com/myeduneeds",
+      "https://linkedin.com/company/myeduneeds"
     ],
     "address": {
       "@type": "PostalAddress",
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="NextGenCA" />
+        <meta property="og:site_name" content="MyEduNeeds" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="NextGenCA" />
+        <meta name="author" content="MyEduNeeds" />
 
         {/* JSON-LD Structured Data */}
         <script

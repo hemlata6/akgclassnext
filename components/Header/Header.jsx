@@ -429,7 +429,7 @@ export const Header = ({ cartCount }) => {
                 <Icons.Menu />
               </button>
               <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                <img src="/nextgen/nextgenlogo.png" alt="NextGenCA" className="h-16 md:h-16 object-contain" />
+                <img src="/myeduneed/logo.png" alt="MyEduNeeds" className="h-16 md:h-16 object-contain" />
               </Link>
             </div>
 
@@ -792,9 +792,9 @@ export const Header = ({ cartCount }) => {
                   letterSpacing: '-0.5px'
                 }}
               >
-                NextGenCA
+                MyEduNeeds
               </Typography> */}
-              <img src='nextgen/nextgenlogo.png' alt="Logo" className="h-20" />
+              <img src='myeduneed/logo.png' alt="Logo" className="h-20" />
               <button onClick={() => setMobileMenuOpen(false)} className="p-2 hover:bg-slate-100 rounded-full transition">
                 <Icons.X />
               </button>

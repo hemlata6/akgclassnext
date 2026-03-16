@@ -1,7 +1,7 @@
 {
   "name": "caclass",
   "version": "1.0.0",
-  "description": "NextGenCA | NextGenCA - NextGenCA - Next.js",
+  "description": "MyEduNeeds | MyEduNeeds - MyEduNeeds - Next.js",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -9,7 +9,7 @@
     "start": "next start -p 8085",
     "lint": "next lint",
     "deploy:netlify": "netlify deploy --prod",
-    "deploy:preview": "netlify deploy",
+    "deploy:previewmyeduneeds": "netlify deploy",
     "pm2:start": "pm2 start ecosystem.config.js",
     "pm2:restart": "pm2 restart caclass",
     "pm2:stop": "pm2 stop caclass",

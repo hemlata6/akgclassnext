@@ -98,7 +98,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const handleShare = async () => {
     const baseUrl = window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
-      : 'https://nextgencaclass.netlify.app/';
+      : 'https://myeduneedsclass.netlify.app/';
 
     const shareUrl = `${baseUrl}/course/${courseData?.id}`;
     const shareData = {
@@ -243,7 +243,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
             </div>
             <div className="flex items-center gap-3">
               {/* <img
-                src="https://placehold.co/100x100/164e33/FFF?text=NextGenCA"
+                src="https://placehold.co/100x100/164e33/FFF?text=MyEduNeeds"
                 className="h-12 w-12 rounded-full object-cover border-2 border-white shadow-sm"
                 alt="Faculty"
               /> */}

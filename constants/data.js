@@ -18,7 +18,7 @@ export const BLOG_DATA = [
     id: 1, 
     title: "Ind AS 115: 5 Step Model Explained", 
     date: "Jan 10, 2026", 
-    author: "NextGenCA", 
+    author: "MyEduNeeds Team", 
     category: "Concept", 
     img: "https://placehold.co/600x400/164e33/FFF?text=Ind+AS+115", 
     desc: "Understanding Revenue Recognition isn't hard if you follow the logical 5-step framework. Here is a breakdown..." 
@@ -27,7 +27,7 @@ export const BLOG_DATA = [
     id: 2, 
     title: "How to Score Exemption in FR?", 
     date: "Jan 05, 2026", 
-    author: "Team ca class", 
+    author: "MyEduNeeds Team", 
     category: "Strategy", 
     img: "https://placehold.co/600x400/f1f5f9/1e293b?text=Strategy", 
     desc: "Tips from AIR 1 on how to present your answers, manage time, and prioritize standards for CA Final." 
@@ -36,7 +36,7 @@ export const BLOG_DATA = [
     id: 3, 
     title: "Changes in Ind AS for Nov 26 Exams", 
     date: "Dec 28, 2025", 
-    author: "NextGenCA", 
+    author: "MyEduNeeds Team", 
     category: "Updates", 
     img: "https://placehold.co/600x400/164e33/FFF?text=Amendments", 
     desc: "ICAI has introduced minor amendments in Ind AS 116 and 109. Check out the complete analysis here." 
@@ -45,7 +45,7 @@ export const BLOG_DATA = [
     id: 4, 
     title: "Self Study vs Coaching for FR", 
     date: "Dec 15, 2025", 
-    author: "Guest Faculty", 
+    author: "MyEduNeeds Team", 
     category: "Guidance", 
     img: "https://placehold.co/600x400/f1f5f9/1e293b?text=Comparison", 
     desc: "Confused between self-study and coaching? We analyze the pros and cons to help you decide." 

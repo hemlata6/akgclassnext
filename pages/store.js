@@ -6,7 +6,7 @@ export default function StorePage() {
   return (
     <>
       <Head>
-        <title>Store - NextGenCA</title>
+        <title>Store - MyEduNeeds</title>
         <meta name="description" content="Browse our collection of courses and books" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

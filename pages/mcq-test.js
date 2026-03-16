@@ -6,7 +6,7 @@ export default function McqTestPage() {
   return (
     <>
       <Head>
-        <title>MCQ Test - NextGenCA</title>
+        <title>MCQ Test - MyEduNeeds</title>
         <meta name="description" content="Test your knowledge with MCQ tests" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

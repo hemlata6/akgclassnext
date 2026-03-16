@@ -3,10 +3,10 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://nextgencaclasses.netlify.app/blog/';
-  const ogImage = 'public/nextgen/nextgenlogo.png';
-  const title = 'NextGenCA Academy | Professional Coaching for CA & CMA';
-  const description = 'NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.';
+  const siteUrl = 'https://myeduneeds.netlify.app/blog/';
+  const ogImage = 'public/myeduneeds/myeduneedslogo.png';
+  const title = 'MyEduNeeds | Professional Coaching for CA & CMA';
+  const description = 'MyEduNeeds is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.';
 
   return (
     <>

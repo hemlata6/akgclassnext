@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'NextGenCA Academy | Professional Coaching for CA & CMA',
-    description = 'NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.',
-    image = 'https://nextgencaclasses.netlify.app/logo.png',
-    url = 'https://nextgencaclasses.netlify.app',
+    title = 'MyEduNeeds | Professional Coaching for CA & CMA',
+    description = 'MyEduNeeds is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.',
+    image = 'https://myeduneeds.netlify.app/logo.png',
+    url = 'https://myeduneeds.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'NextGenCA Academy',
-    keywords = 'CA coaching, CMA coaching, CA exam preparation, professional coaching, accounting courses, NextGenCA Academy',
+    author = 'MyEduNeeds',
+    keywords = 'CA coaching, CMA coaching, CA exam preparation, professional coaching, accounting courses, MyEduNeeds',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'NextGenCA Academy',
+      site_name: 'MyEduNeeds',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -71,8 +71,8 @@ export const generateMetaTags = (options) => {
     },
     twitter: {
       card: 'summary_large_image',
-      site: '@caclass',
-      creator: '@caclass',
+      site: '@myeduneeds',
+      creator: '@myeduneeds',
       title,
       description,
       image,
@@ -105,10 +105,10 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://nextgencaclass.netlify.app/logo.png',
+    image = 'https://myeduneedsclass.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'CA Class',
+    author = 'MyEduNeeds',
   } = blog;
 
   return {
@@ -130,11 +130,11 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'CA Class',
-      url: 'https://caclassestest.netlify.app',
+      name: 'MyEduNeeds',
+      url: 'https://myeduneeds.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nextgencaclass.netlify.app/logo.png',
+        url: 'https://myeduneeds.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -152,10 +152,10 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'CA Class',
-    url: 'https://caclassestest.netlify.app',
-    logo: 'https://nextgencaclass.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by NextGenCA',
+    name: 'MyEduNeeds',
+    url: 'https://myeduneeds.netlify.app',
+    logo: 'https://myeduneeds.netlify.app/logo.png',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by MyEduNeeds',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/caclass',
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://nextgencaclass.netlify.app/logo.png';
+  if (!blog) return 'https://myeduneedsclass.netlify.app/logo.png';
 
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
 
   // Default fallback
-  return 'https://nextgencaclass.netlify.app/logo.png';
+  return 'https://myeduneedsclass.netlify.app/logo.png';
 };
 
 /**
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: NextGenCA)
+ * @param {string} siteName - Site name (default: MyEduNeeds)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'NextGenCA') => {
+export const generatePageTitle = (pageTitle, siteName = 'MyEduNeeds') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

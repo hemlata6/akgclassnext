@@ -31,8 +31,11 @@
 // pkj
 // const instId = 445;
 
+// myeduneeds
+const instId = 690;
+
 // nextgen
-const instId = 448;
+// const instId = 448;
 
 
 export default instId;

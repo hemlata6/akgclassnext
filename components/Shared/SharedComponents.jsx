@@ -37,9 +37,9 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue || "NextGenCA"}
+              {institute?.institue || "MyEduNeeds"}
             </div>
-            <p>NextGenCA is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
+            <p>MyEduNeeds is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
               Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “This attempt is last attempt”</p>
           </div>
           <div>
@@ -156,7 +156,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 NextGenCA Education. All rights reserved.
+          © 2026 MyEduNeeds Education. All rights reserved.
           <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>

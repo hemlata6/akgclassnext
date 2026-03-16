@@ -27,11 +27,11 @@ export default function Document() {
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
         
         {/* Global Meta Tags */}
-        <meta name="description" content="NextGenCA Academy is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams." />
-        <meta name="title" content="NextGenCA Academy | Professional Coaching for CA & CMA" />
-        <meta name="keywords" content="CA coaching, CMA coaching, CA exam preparation, professional coaching, accounting courses, NextGenCA Academy" />
+        <meta name="description" content="MyEduNeeds is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams." />
+        <meta name="title" content="MyEduNeeds | Professional Coaching for CA & CMA" />
+        <meta name="keywords" content="CA coaching, CMA coaching, CA exam preparation, professional coaching, accounting courses, MyEduNeeds" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="author" content="NextGenCA Academy" />
+        <meta name="author" content="MyEduNeeds" />
         
         {/* Global Site Verification (Add your codes here) */}
         {/* <meta name="google-site-verification" content="your-verification-code" /> */}

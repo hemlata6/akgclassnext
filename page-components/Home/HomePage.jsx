@@ -14,7 +14,7 @@ import { StudentHub } from './sections/StudentHub';
 import { AppDownload } from './sections/AppDownload';
 import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
-import { PromoBanners } from './sections/PromoBanners';
+import { MyEduNeedsPromoBanners } from './sections/MyEduNeedsPromoBanners';
 import EmployeeList from './sections/empyeeList';
 
 export default function HomePage() {
@@ -34,7 +34,7 @@ export default function HomePage() {
   return (
     <>
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
-      <PromoBanners />
+      <MyEduNeedsPromoBanners />
       {/* <HeroSection onExploreClick={handleScrollToCourses} /> */}
       {/* <WhyChooseUs /> */}
       <CoursesSection />
