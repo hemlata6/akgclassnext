@@ -3,26 +3,28 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
-import { useTheme } from '../../../config/ThemeContext';
+
+const FALLBACK_SLIDES = [
+    {
+        mobileSrc: 'https://placehold.co/800x1200/312e81/FFF?text=MyEduNeeds',
+        desktopSrc: 'https://placehold.co/1200x500/312e81/FFF?text=MyEduNeeds',
+        alt: 'MyEduNeeds Banner'
+    }
+];
+
+const resolveBannerSrc = (bannerPath) => {
+    if (!bannerPath) return FALLBACK_SLIDES[0].desktopSrc;
+    if (typeof bannerPath === 'string' && /^https?:\/\//i.test(bannerPath)) return bannerPath;
+    return `${Endpoints.mediaBaseUrl}${bannerPath}`;
+};
+
+const isBannerActive = (activeValue) => activeValue === true || activeValue === 1 || activeValue === '1' || activeValue === 'true';
 
 export const MyEduNeedsPromoBanners = () => {
-    const { theme } = useTheme();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
-    const [slides, setSlides] = useState([
-        {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=MyEduNeeds",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=MyEduNeeds",
-            alt: "Live Batch"
-        },
-        // {
-        //     mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
-        //     desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
-        //     alt: "Combo Offer",
-        //     bg: "bg-slate-900"
-        // }
-    ]);
+    const [slides, setSlides] = useState(FALLBACK_SLIDES);
 
     const totalSlides = slides.length;
 
@@ -31,26 +33,36 @@ export const MyEduNeedsPromoBanners = () => {
         fetchBanners();
     }, []);
 
-    const fetchBanners = async () => {
+    const fetchBanners = async (allowRetry = true) => {
         try {
             const response = await Network.getBannersApi(instId);
-            if (response && response.banners && response.banners.length > 0) {
-                const activeBanners = response.banners.filter(banner => banner.active);
+            const allBanners = Array.isArray(response?.banners) ? response.banners : [];
+            const activeBanners = allBanners.filter((banner) => isBannerActive(banner?.active));
+            const targetBanners = activeBanners.length > 0 ? activeBanners : allBanners;
 
-                if (activeBanners.length > 0) {
-                    const bannerSlides = activeBanners.map(banner => ({
+            if (targetBanners.length > 0) {
+                const bannerSlides = targetBanners
+                    .filter((banner) => banner?.banner)
+                    .map((banner) => ({
                         ...banner,
-                        mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
-                        desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
+                        mobileSrc: resolveBannerSrc(banner.banner),
+                        desktopSrc: resolveBannerSrc(banner.banner),
                         alt: banner.title || 'Banner'
                     }));
-                    setSlides(bannerSlides);
-                }
+
+                setSlides(bannerSlides.length > 0 ? bannerSlides : FALLBACK_SLIDES);
+            } else if (allowRetry) {
+                setTimeout(() => fetchBanners(false), 1200);
             }
         } catch (error) {
             console.error('Error fetching banners:', error);
+            if (allowRetry) setTimeout(() => fetchBanners(false), 1200);
         }
     };
+
+    useEffect(() => {
+        if (currentSlide >= slides.length) setCurrentSlide(0);
+    }, [slides.length, currentSlide]);
 
     // Auto-slide functionality
     useEffect(() => {
@@ -143,6 +155,10 @@ export const MyEduNeedsPromoBanners = () => {
                                 <img
                                     src={slide.desktopSrc}
                                     alt={slide.alt}
+                                    loading={index === 0 ? 'eager' : 'lazy'}
+                                    onError={(event) => {
+                                        event.currentTarget.src = FALLBACK_SLIDES[0].desktopSrc;
+                                    }}
                                     className={`
                                w-full
       h-auto
