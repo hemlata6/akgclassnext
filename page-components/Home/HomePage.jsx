@@ -16,6 +16,7 @@ import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
 import { MyEduNeedsPromoBanners } from './sections/MyEduNeedsPromoBanners';
 import EmployeeList from './sections/empyeeList';
+import TestSeriesSection from './sections/TestSeriesSection';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -39,6 +40,7 @@ export default function HomePage() {
       {/* <WhyChooseUs /> */}
       <CoursesSection />
       <BookStore />
+      <TestSeriesSection />
       {/* <AboutSection /> */}
       {/* <MarathonGallery /> */}
       <EmployeeList />

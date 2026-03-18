@@ -403,7 +403,7 @@ export default function CartPage() {
       setShowCheckoutModal(false);
     }
   };
-  console.log('isCouponValid', isCouponValid, couponNumber);
+  // console.log('isCouponValid', isCouponValid, couponNumber);
 
 
   const handleProceedToCheckout = async () => {
