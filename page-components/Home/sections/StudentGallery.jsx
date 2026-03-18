@@ -64,7 +64,7 @@ export const StudentGallery = () => {
 
         {/* Heading */}
         <div className="text-center mb-10">
-          <h2 className="text-2xl text-green-600 font-bold tracking-widest uppercase">
+          <h2 className="text-2xl font-bold tracking-widest uppercase" style={{color: '#D4AF37'}}>
             Student Testimonials
           </h2>
         </div>

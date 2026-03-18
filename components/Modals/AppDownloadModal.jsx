@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
+const AppDownloadModal = ({ open, onClose, brandColor = '#D4AF37' }) => {
   return (
     <Dialog 
       open={open} 
@@ -61,7 +61,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
           <Box sx={{ px: 4, pb: 4, space: 2 }}>
             {/* Google Play Store */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.myeduneedsca"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.percept&pcampaignid=web_share"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -103,6 +103,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* App Store (Coming Soon) */}
             <a
+            href='https://play.google.com/store/apps/details?id=com.classiolabs.percept&pcampaignid=web_share'
               style={{
                 display: 'flex',
                 alignItems: 'center',

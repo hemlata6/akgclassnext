@@ -9,9 +9,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        brandGreen: "#164e33",
-        brandGreenHover: "#0f3824",
-        brandGreenDark: "#0a2818",
+        brandGold: "#D4AF37",
+        brandGoldDark: "#B8960F",
+        brandGoldLight: "#E8C547",
       },
       animation: {
         marquee: 'marquee 20s linear infinite',

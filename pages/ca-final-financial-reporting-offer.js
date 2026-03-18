@@ -29,7 +29,7 @@ function FRCoursePage() {
             <div className="min-h-screen bg-[#020617] font-sans text-gray-300 selection:bg-green-500 selection:text-white pb-20 md:pb-0">
 
                 {/* --- TOP BANNER --- */}
-                <div className="bg-[#154734] text-white py-2 px-3 text-center text-xs font-medium sticky top-0 z-50 border-b border-green-800 shadow-xl">
+                <div className="bg-[#D4AF37] text-white py-2 px-3 text-center text-xs font-medium sticky top-0 z-50 border-b border-yellow-700 shadow-xl">
                     <div className="flex flex-col md:flex-row justify-center items-center gap-1 md:gap-6">
                         <div className="flex items-center gap-2">
                             <span className="bg-yellow-400 text-black px-1.5 py-0.5 rounded-[4px] text-[10px] font-bold animate-pulse">
@@ -76,7 +76,7 @@ function FRCoursePage() {
                                 <div className="flex flex-col gap-3 justify-center lg:justify-start">
                                     <a
                                         href="#pricing"
-                                        className="w-full md:w-auto inline-flex justify-center items-center px-8 py-3.5 text-base md:text-lg font-bold text-white bg-[#154734] rounded-xl hover:bg-green-700 transition-all border border-green-800 shadow-lg shadow-green-900/20"
+                                        className="w-full md:w-auto inline-flex justify-center items-center px-8 py-3.5 text-base md:text-lg font-bold text-white bg-[#D4AF37] rounded-xl hover:bg-yellow-700 transition-all border border-yellow-700 shadow-lg shadow-green-900/20"
                                     >
                                         Enroll Now
                                         <ArrowRight className="ml-2 w-5 h-5" />
@@ -373,7 +373,7 @@ function FRCoursePage() {
                                     <tr>
                                         <td className="px-6 py-4 font-bold text-white"></td>
                                         <td className="px-6 py-4 text-center">
-                                            <a href="https://caclasses.in/course/3400" target="_blank" rel="noreferrer" className="inline-block px-6 py-3 bg-[#154734] hover:bg-green-700 text-white font-bold text-lg rounded-lg transition-all border border-green-800 shadow-lg">
+                                            <a href="https://caclasses.in/course/3400" target="_blank" rel="noreferrer" className="inline-block px-6 py-3 bg-[#D4AF37] hover:bg-yellow-700 text-white font-bold text-lg rounded-lg transition-all border border-yellow-700 shadow-lg">
                                                 Enroll Now
                                             </a>
                                         </td>
@@ -486,7 +486,7 @@ function FRCoursePage() {
                             <span className="text-lg font-black text-white">Enroll Now</span>
                         </div>
                     </div>
-                    <a href="#pricing" className="bg-[#154734] text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg border border-green-700">
+                    <a href="#pricing" className="bg-[#D4AF37] text-white px-6 py-2.5 rounded-lg font-bold text-sm shadow-lg border border-green-700">
                         View Plans
                     </a>
                 </div>
@@ -589,7 +589,7 @@ function MobilePriceCard({ title, price, features, rec, url }) {
                 target="_blank"
                 rel="noreferrer"
                 className={`block w-full text-center px-4 py-3 font-bold text-sm rounded-lg transition-all shadow-lg ${rec
-                        ? 'bg-[#154734] hover:bg-green-700 text-white border border-green-800'
+                        ? 'bg-[#D4AF37] hover:bg-yellow-700 text-white border border-yellow-700'
                         : 'bg-gray-800 hover:bg-gray-700 text-white border border-gray-700'
                     }`}
             >

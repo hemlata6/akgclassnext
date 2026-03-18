@@ -32,7 +32,7 @@ export const Footer = () => {
     <footer className="bg-slate-950 text-slate-500 pt-10 pb-24 md:pb-10 border-t border-slate-900">
       <div className={LAYOUT_PADDING}>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-xs">
-          <div className="col-span-2 md:col-span-1">
+          <div className="col-span-2 md:col-span-2">
             <div className="text-white font-bold text-lg mb-2 flex items-center gap-2">
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
@@ -42,7 +42,7 @@ export const Footer = () => {
             <p>MyEduNeeds is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
               Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “This attempt is last attempt”</p>
           </div>
-          <div>
+          {/* <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
             <ul className="space-y-1.5">
               <li
@@ -64,7 +64,7 @@ export const Footer = () => {
                 CA Final
               </li>
             </ul>
-          </div>
+          </div> */}
           <div>
             <h4 className="text-white font-bold mb-3">Legal</h4>
             <ul className="space-y-1.5">
@@ -223,14 +223,14 @@ export const Loader = () => (
       <div style={{
         width: '10px',
         height: '10px',
-        backgroundColor: '#164e33',
+        backgroundColor: '#D4AF37',
         borderRadius: '50%',
         animation: 'loaderBounce 1s infinite'
       }}></div>
       <div style={{
         width: '10px',
         height: '10px',
-        backgroundColor: '#164e33',
+        backgroundColor: '#D4AF37',
         borderRadius: '50%',
         animation: 'loaderBounce 1s infinite',
         animationDelay: '0.1s'
@@ -238,7 +238,7 @@ export const Loader = () => (
       <div style={{
         width: '10px',
         height: '10px',
-        backgroundColor: '#164e33',
+        backgroundColor: '#D4AF37',
         borderRadius: '50%',
         animation: 'loaderBounce 1s infinite',
         animationDelay: '0.2s'

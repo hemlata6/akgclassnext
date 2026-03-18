@@ -104,7 +104,7 @@ const EmployeeList = () => {
 
                     {/* Heading */}
                     <div className="text-center mb-10 sm:mb-12">
-                        <h2 className="text-2xl md:text-2xl text-green-600 font-bold tracking-widest uppercase">
+                        <h2 className="text-2xl md:text-2xl font-bold tracking-widest uppercase" style={{color: '#D4AF37'}}>
                             Our Expert Faculty
                         </h2>
                         <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto font-medium">

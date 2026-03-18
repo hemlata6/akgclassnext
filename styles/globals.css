@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --theme-primary: #2196F3;
-  --theme-primary-hover: #1976D2;
-  --theme-primary-class: bg-[#2196F3];
-  --theme-primary-hover-class: hover:bg-[#1976D2];
-  --theme-text-class: text-[#2196F3];
-  --theme-border-class: border-[#2196F3];
+  --theme-primary: #D4AF37;
+  --theme-primary-hover: #B8960F;
+  --theme-primary-class: bg-[#D4AF37];
+  --theme-primary-hover-class: hover:bg-[#B8960F];
+  --theme-text-class: text-[#D4AF37];
+  --theme-border-class: border-[#D4AF37];
 }
 
 /* Theme-aware dynamic classes */
@@ -200,6 +200,39 @@
 }
 
 .to-emerald-800 {
+  --tw-gradient-to: var(--theme-primary-hover) !important;
+}
+
+/* Yellow/Gold color overrides */
+.bg-yellow-500,
+.bg-yellow-600,
+.bg-yellow-700 {
+  background-color: var(--theme-primary) !important;
+}
+
+.hover\:bg-yellow-600:hover,
+.hover\:bg-yellow-700:hover,
+.hover\:bg-yellow-600:hover {
+  background-color: var(--theme-primary-hover) !important;
+}
+
+.text-yellow-500,
+.text-yellow-600,
+.text-yellow-700 {
+  color: var(--theme-primary) !important;
+}
+
+.border-yellow-600,
+.border-yellow-700 {
+  border-color: var(--theme-primary) !important;
+}
+
+.from-yellow-500,
+.from-yellow-600 {
+  --tw-gradient-from: var(--theme-primary) !important;
+}
+
+.to-yellow-600 {
   --tw-gradient-to: var(--theme-primary-hover) !important;
 }
 

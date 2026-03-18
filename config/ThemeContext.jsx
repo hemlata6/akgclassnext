@@ -4,6 +4,16 @@ const ThemeContext = createContext();
 
 // Theme configurations
 export const THEMES = {
+  gold: {
+    name: 'Gold Academy',
+    primary: '#D4AF37',
+    primaryHover: '#B8960F',
+    primaryClass: 'bg-yellow-600',
+    primaryHoverClass: 'hover:bg-yellow-700',
+    textClass: 'text-yellow-600',
+    borderClass: 'border-yellow-600',
+    bgGradient: 'from-yellow-500 to-yellow-600',
+  },
   darkGreen: {
     name: 'Dark Green',
     primary: '#0d5a3e',
@@ -37,7 +47,7 @@ export const THEMES = {
 };
 
 export const ThemeProvider = ({ children }) => {
-  const [currentTheme, setCurrentTheme] = useState('darkGreen');
+  const [currentTheme, setCurrentTheme] = useState('gold');
 
   // Load theme from localStorage on mount
   useEffect(() => {
@@ -45,8 +55,8 @@ export const ThemeProvider = ({ children }) => {
     if (savedTheme && THEMES[savedTheme]) {
       setCurrentTheme(savedTheme);
     } else {
-      // Set darkGreen as default
-      setCurrentTheme('darkGreen');
+      // Set gold as default
+      setCurrentTheme('gold');
     }
   }, []);
 

@@ -9,7 +9,7 @@ export default function Document() {
         <link rel="apple-touch-icon" href="/nextgen/nextgenlogo.png" />
         
         {/* Theme Color */}
-        <meta name="theme-color" content="#164e33" />
+        <meta name="theme-color" content="#D4AF37" />
         
         {/* Preconnect to external domains for better performance */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />

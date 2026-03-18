@@ -170,8 +170,8 @@ function ContactUsPageContent() {
                     <div className="text-center max-w-xl">
                         <div className="mb-8 relative">
                             <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative" style={{backgroundColor: '#e8f3ee'}} >
-                                <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{backgroundColor: '#154734'}}></div>
-                                <svg className="w-20 h-20 relative z-10" style={{color: '#154734'}} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{backgroundColor: '#D4AF37'}}></div>
+                                <svg className="w-20 h-20 relative z-10" style={{color: '#D4AF37'}} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
@@ -185,9 +185,9 @@ function ContactUsPageContent() {
                                 router.push('/');
                             }}
                             className="inline-flex items-center gap-3 px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                            style={{backgroundColor: '#154734'}}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#0d3221'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = '#154734'}
+                            style={{backgroundColor: '#D4AF37'}}
+                            onMouseEnter={(e) => e.target.style.backgroundColor = '#B8960F'}
+                            onMouseLeave={(e) => e.target.style.backgroundColor = '#D4AF37'}
                         >
                             <Icons.Back />
                             Back to Home
@@ -207,7 +207,7 @@ function ContactUsPageContent() {
                         <button
                             onClick={() => router.push('/')}
                             className="inline-flex items-center gap-2 text-slate-600 mb-8 font-semibold transition-colors"
-                            onMouseEnter={(e) => e.target.style.color = '#154734'}
+                            onMouseEnter={(e) => e.target.style.color = '#D4AF37'}
                             onMouseLeave={(e) => e.target.style.color = ''}
                         >
                             <Icons.Back /> Back to Home
@@ -222,37 +222,37 @@ function ContactUsPageContent() {
                         {/* Contact Info Cards */}
                         <div className="lg:col-span-1 space-y-6">
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{backgroundColor: '#e8f3ee'}}>
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{backgroundColor: '#F4E4C1'}}>
                                     <Icons.Phone />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <a href="tel:9465829512" className="font-semibold" style={{color: '#154734'}}
-                                   onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                   onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                <a href="tel:9465829512" className="font-semibold" style={{color: '#D4AF37'}}
+                                   onMouseEnter={(e) => e.target.style.color = '#B8960F'}
+                                   onMouseLeave={(e) => e.target.style.color = '#D4AF37'}>
                                     9465829512
                                 </a>
                             </div>
 
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{backgroundColor: '#e8f3ee'}}>
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{backgroundColor: '#F4E4C1'}}>
                                     <Icons.Mail />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:myeduneedsacademy@gmail.com" className="font-semibold" style={{color: '#154734'}}
-                                   onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                   onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                <a href="mailto:myeduneedsacademy@gmail.com" className="font-semibold" style={{color: '#D4AF37'}}
+                                   onMouseEnter={(e) => e.target.style.color = '#B8960F'}
+                                   onMouseLeave={(e) => e.target.style.color = '#D4AF37'}>
                                     myeduneedsacademy@gmail.com
                                 </a>
                             </div>
 
-                            <div className="rounded-2xl p-6 shadow-md text-white" style={{backgroundColor: '#154734'}}>
+                            <div className="rounded-2xl p-6 shadow-md text-white" style={{backgroundColor: '#D4AF37'}}>
                                 <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                                     <Icons.BookOpen />
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
-                                <p className="text-sm" style={{color: '#e8f3ee'}}>
+                                <p className="text-sm" style={{color: '#FFF9E6'}}>
                                     LUDHIANA, India
                                 </p>
                             </div>
@@ -266,7 +266,7 @@ function ContactUsPageContent() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            First Name <span style={{color: '#154734'}}>*</span>
+                                            First Name <span style={{color: '#D4AF37'}}>*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -275,8 +275,8 @@ function ContactUsPageContent() {
                                             onChange={handleInputChange}
                                             placeholder="John"
                                             className={`w-full px-4 py-3 border ${errors.firstName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            style={{'--tw-ring-color': '#154734'}}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                            style={{'--tw-ring-color': '#D4AF37'}}
+                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
                                         />
                                         {errors.firstName && <p className="text-red-500 text-xs mt-1.5">{errors.firstName}</p>}
@@ -284,7 +284,7 @@ function ContactUsPageContent() {
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Last Name <span style={{color: '#154734'}}>*</span>
+                                            Last Name <span style={{color: '#D4AF37'}}>*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -293,7 +293,7 @@ function ContactUsPageContent() {
                                             onChange={handleInputChange}
                                             placeholder="Doe"
                                             className={`w-full px-4 py-3 border ${errors.lastName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
                                         />
                                         {errors.lastName && <p className="text-red-500 text-xs mt-1.5">{errors.lastName}</p>}
@@ -303,7 +303,7 @@ function ContactUsPageContent() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Phone <span style={{color: '#154734'}}>*</span>
+                                            Phone <span style={{color: '#D4AF37'}}>*</span>
                                         </label>
                                         <input
                                             type="tel"
@@ -312,7 +312,7 @@ function ContactUsPageContent() {
                                             onChange={handleInputChange}
                                             placeholder="+91 98765 43210"
                                             className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
                                         />
                                         {errors.phone && <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>}
@@ -320,7 +320,7 @@ function ContactUsPageContent() {
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Email <span style={{color: '#154734'}}>*</span>
+                                            Email <span style={{color: '#D4AF37'}}>*</span>
                                         </label>
                                         <input
                                             type="email"
@@ -329,7 +329,7 @@ function ContactUsPageContent() {
                                             onChange={handleInputChange}
                                             placeholder="john@example.com"
                                             className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
                                         />
                                         {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>}
@@ -338,14 +338,14 @@ function ContactUsPageContent() {
 
                                 <div className="mb-5">
                                     <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        Type <span style={{color: '#154734'}}>*</span>
+                                        Type <span style={{color: '#D4AF37'}}>*</span>
                                     </label>
                                     <select
                                         name="type"
                                         value={formData.type}
                                         onChange={handleTypeChange}
                                         className={`w-full px-4 py-3 border ${errors.type ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white cursor-pointer transition-all`}
-                                        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                         onBlur={(e) => e.target.style.boxShadow = ''}
                                     >
                                         <option value="">-- Select Your Type --</option>
@@ -358,13 +358,13 @@ function ContactUsPageContent() {
                                 {formData.type && (
                                     <div className="mb-5 animate-in slide-in-from-top duration-300">
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span style={{color: '#154734'}}>*</span>
+                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span style={{color: '#D4AF37'}}>*</span>
                                         </label>
                                         <select
                                             value={formData.selectedContent?.id || ''}
                                             onChange={handleContentChange}
                                             className={`w-full px-4 py-3 border ${errors.selectedContent ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white cursor-pointer transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
                                         >
                                             <option value="">-- Select {formData.type === 'course' ? 'Course' : 'Test Series'} --</option>
@@ -389,7 +389,7 @@ function ContactUsPageContent() {
                                         placeholder="Tell us more about your query..."
                                         rows="4"
                                         className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent resize-none transition-all"
-                                        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
+                                        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #D4AF37'}
                                         onBlur={(e) => e.target.style.boxShadow = ''}
                                     />
                                 </div>
@@ -398,9 +398,9 @@ function ContactUsPageContent() {
                                     type="submit"
                                     disabled={loading}
                                     className="w-full py-4 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-                                    style={{backgroundColor: loading ? '#154734' : '#154734'}}
-                                    onMouseEnter={(e) => !loading && (e.target.style.backgroundColor = '#0d3221')}
-                                    onMouseLeave={(e) => !loading && (e.target.style.backgroundColor = '#154734')}
+                                    style={{backgroundColor: loading ? '#D4AF37' : '#D4AF37'}}
+                                    onMouseEnter={(e) => !loading && (e.target.style.backgroundColor = '#B8960F')}
+                                    onMouseLeave={(e) => !loading && (e.target.style.backgroundColor = '#D4AF37')}
                                 >
                                     {loading ? (
                                         <>

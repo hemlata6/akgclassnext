@@ -42,7 +42,7 @@ export default function HomePage() {
       {/* <AboutSection /> */}
       {/* <MarathonGallery /> */}
       <EmployeeList />
-      <StudentGallery />
+      {/* <StudentGallery /> */}
       <BlogSection />
       {/* <FreeResources /> */}
       {/* <StudentSupportSection /> */}

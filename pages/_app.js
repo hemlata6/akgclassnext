@@ -58,17 +58,16 @@ function MyApp({ Component, pageProps }) {
           {/* Announcement Modal */}
           {showAnnouncementModal && announcements.length > 0 && announcements[0]?.image && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in duration-300">
-                <div className="relative">
-                  {/* Close Button */}
-                  <button
-                    onClick={() => setShowAnnouncementModal(false)}
-                    className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all hover:scale-110"
-                  >
-                    <Icons.X size={24} className="text-slate-900" />
-                  </button>
+              <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden animate-in fade-in zoom-in duration-300 relative">
+                <button
+                  onClick={() => setShowAnnouncementModal(false)}
+                  className="absolute top-0 right-3 z-20 bg-red-600 hover:bg-red-700 rounded-full p-0 shadow-lg transition-all hover:scale-110 flex items-center justify-center"
+                  title="Close"
+                >
+                  <Icons.X size={15} className="text-white font-bold" />
+                </button>
 
-                  {/* Image */}
+                <div className="relative">
                   <img
                     src={`${require('../config/endpoints').default?.mediaBaseUrl}${announcements[0]?.image}`}
                     alt="Announcement"
