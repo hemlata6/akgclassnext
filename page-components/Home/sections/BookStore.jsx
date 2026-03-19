@@ -108,86 +108,86 @@ export const BookStore = ({ employeeCourseId }) => {
         fetchCourses();
     }, [tags]);
 
-const fetchCourses = async () => {
-    try {
-        setLoading(true);
+    const fetchCourses = async () => {
+        try {
+            setLoading(true);
 
-        const response = authToken
-            ? await Network.getStudentAuthCourse(authToken)
-            : await Network.getFreeCourseList(instId);
+            const response = authToken
+                ? await Network.getStudentAuthCourse(authToken)
+                : await Network.getFreeCourseList(instId);
 
-        const courses = response?.courses || response || [];
+            const courses = response?.courses || response || [];
 
-        // Normalize employee course IDs from multiple possible payload shapes
-        const normalizeEmployeeCourseIds = (value) => {
-            if (!value) return [];
+            // Normalize employee course IDs from multiple possible payload shapes
+            const normalizeEmployeeCourseIds = (value) => {
+                if (!value) return [];
 
-            if (Array.isArray(value)) {
-                return value
-                    .map((item) => {
-                        if (item == null) return null;
-                        if (typeof item === 'number' || typeof item === 'string') return Number(item);
+                if (Array.isArray(value)) {
+                    return value
+                        .map((item) => {
+                            if (item == null) return null;
+                            if (typeof item === 'number' || typeof item === 'string') return Number(item);
 
-                        if (typeof item === 'object') {
-                            return Number(item.id ?? item.courseId ?? item._id ?? null);
-                        }
+                            if (typeof item === 'object') {
+                                return Number(item.id ?? item.courseId ?? item._id ?? null);
+                            }
 
-                        return null;
-                    })
-                    .filter((id) => Number.isFinite(id));
-            }
+                            return null;
+                        })
+                        .filter((id) => Number.isFinite(id));
+                }
 
-            if (Array.isArray(value?.courseIds)) {
-                return normalizeEmployeeCourseIds(value.courseIds);
-            }
+                if (Array.isArray(value?.courseIds)) {
+                    return normalizeEmployeeCourseIds(value.courseIds);
+                }
 
-            if (typeof value === 'string') {
-                return value
-                    .split(',')
-                    .map((v) => Number(v.trim()))
-                    .filter((id) => Number.isFinite(id));
-            }
+                if (typeof value === 'string') {
+                    return value
+                        .split(',')
+                        .map((v) => Number(v.trim()))
+                        .filter((id) => Number.isFinite(id));
+                }
 
-            return [];
-        };
+                return [];
+            };
 
-        const employeeCourseIds = normalizeEmployeeCourseIds(employeeCourseId);
-        const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
-        const employeeCourseIdSet = new Set(employeeCourseIds);
+            const employeeCourseIds = normalizeEmployeeCourseIds(employeeCourseId);
+            const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
+            const employeeCourseIdSet = new Set(employeeCourseIds);
 
-        // Base filter (your conditions)
-        const filteredCourses = Array.isArray(courses)
-            ? courses.filter(c =>
-                c.active &&
-                c.paid === true &&
-                c.type === 'books'
-            )
-            : [];
+            // Base filter (your conditions)
+            const filteredCourses = Array.isArray(courses)
+                ? courses.filter(c =>
+                    c.active &&
+                    c.paid === true &&
+                    c.type === 'books'
+                )
+                : [];
 
-        // Apply employee course filter only if IDs exist
-        const finalCourses = hasEmployeeCourseFilter
-            ? filteredCourses.filter((course) => {
-                const idCandidates = [
-                    Number(course?.id),
-                    Number(course?.courseId),
-                    Number(course?._id),
-                ].filter((id) => Number.isFinite(id));
+            // Apply employee course filter only if IDs exist
+            const finalCourses = hasEmployeeCourseFilter
+                ? filteredCourses.filter((course) => {
+                    const idCandidates = [
+                        Number(course?.id),
+                        Number(course?.courseId),
+                        Number(course?._id),
+                    ].filter((id) => Number.isFinite(id));
 
-                return idCandidates.some((id) => employeeCourseIdSet.has(id));
-            })
-            : filteredCourses;
+                    return idCandidates.some((id) => employeeCourseIdSet.has(id));
+                })
+                : filteredCourses;
 
-        setCoursesData(finalCourses);
-        setError(null);
+            setCoursesData(finalCourses);
+            setError(null);
 
-    } catch (err) {
-        console.error('Error fetching courses:', err);
-        setError('Failed to load courses');
-        setCoursesData([]);
-    } finally {
-        setLoading(false);
-    }
-};
+        } catch (err) {
+            console.error('Error fetching courses:', err);
+            setError('Failed to load courses');
+            setCoursesData([]);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const filtered = coursesData.filter(c => {
         // Filter by domain if selected
@@ -397,6 +397,7 @@ const fetchCourses = async () => {
                                                         </span>
                                                     )}
                                                 </div>
+                                                                                            <div className='flex items-center gap-2'>
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
@@ -415,13 +416,26 @@ const fetchCourses = async () => {
                                                             setShowConfigModal(true);
                                                         }
                                                     }}
-                                                    className={`text-[10px] font-bold px-3 py-0.5 rounded-full transition-all ${cartCourses.some(item => item.id === book.id)
-                                                        ? `${BRAND_GREEN_CLASS} text-white border-0`
+                                                    className={`text-[10px] font-bold px-3 py-1 rounded-full transition-all ${cartCourses.some(item => item.id === book.id)
+                                                        ? 'bg-red-500 text-white border-0 hover:bg-red-600 shadow-sm'
                                                         : 'border border-indigo-200 text-indigo-800 hover:bg-indigo-800 hover:text-white'
                                                         }`}
                                                 >
                                                     {cartCourses.some(item => item.id === book.id) ? 'Remove' : 'Add'}
                                                 </button>
+                                                {/* View Cart Button */}
+                                                {cartCourses.some(item => item.id === book.id) && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            router.push('/cart');
+                                                        }}
+                                                        className="bg-indigo-700 hover:bg-indigo-800 text-white text-[10px] font-bold px-3 py-1 rounded-full transition-all shadow-sm"
+                                                    >
+                                                        View Cart
+                                                    </button>
+                                                )}
+                                              </div>
                                             </div>
                                         </div>
                                     );

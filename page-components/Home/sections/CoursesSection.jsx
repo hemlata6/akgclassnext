@@ -419,6 +419,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                 )}
                                                             </div>
                                                         </div>
+                                                       <div className='flex items-center gap-2'>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -442,13 +443,27 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                             }}
                                                             className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
                                                             style={{
-                                                                backgroundColor: theme?.primary || '#2196F3',
+                                                                backgroundColor: cartCourses.some(item => item.id === course.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
                                                                 transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
-                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                                                             }}
                                                         >
-                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
+                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.X /> : <Icons.Cart />}
                                                         </button>
+                                                        {/* View Cart Button */}
+                                                        {cartCourses.some(item => item.id === course.id) && (
+                                                            <button
+                                                                onClick={() => router.push('/cart')}
+                                                                className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
+                                                                style={{
+                                                                    backgroundColor: theme?.primary || '#2196F3',
+                                                                }}
+                                                            >
+                                                                {/* <Icons.Cart /> */}
+                                                                View Cart
+                                                            </button>
+                                                        )}
+                                                       </div>
                                                     </div>
                                                 </div>
                                             </div>
