@@ -171,12 +171,34 @@ export const CoursesSection = ({ employeeCourseId }) => {
         const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
         const employeeCourseIdSet = new Set(employeeCourseIds);
 
+        // Hide courses that resolve to zero/invalid pricing in UI cards.
+        const hasNonZeroPrice = (course) => {
+            const pricingList = Array.isArray(course?.coursePricing) ? course.coursePricing : [];
+            if (pricingList.length === 0) return false;
+
+            const validFinalPrices = pricingList
+                .map((pricing) => {
+                    const basePrice = Number(pricing?.price);
+                    const discount = Number(pricing?.discount || 0);
+                    if (!Number.isFinite(basePrice) || basePrice <= 0) return null;
+
+                    const finalPrice = basePrice - (basePrice * discount / 100);
+                    return Number.isFinite(finalPrice) ? finalPrice : null;
+                })
+                .filter((price) => Number.isFinite(price));
+
+            if (validFinalPrices.length === 0) return false;
+            const lowestFinalPrice = Math.min(...validFinalPrices);
+            return lowestFinalPrice > 0;
+        };
+
         // Base filter (your conditions)
         const filteredCourses = Array.isArray(courses)
             ? courses.filter(c =>
                 c.active &&
                 c.paid === true &&
-                c.type === 'lecture'
+                c.type === 'lecture' &&
+                hasNonZeroPrice(c)
             )
             : [];
 
@@ -419,6 +441,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                 )}
                                                             </div>
                                                         </div>
+                                                        <div className='flex gap-1 items-center'>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -449,6 +472,19 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                         >
                                                             {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
                                                         </button>
+                                                        {/* View Cart Button */}
+                                                        {cartCourses.some(item => item.id === course.id) && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    router.push('/cart');
+                                                                }}
+                                                                className="h-8 px-3 rounded-full flex items-center justify-center text-xs font-bold transition-all shadow-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                                                            >
+                                                                View Cart
+                                                            </button>
+                                                        )}
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

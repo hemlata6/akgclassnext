@@ -3,28 +3,26 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
-
-const FALLBACK_SLIDES = [
-    {
-        mobileSrc: 'https://placehold.co/800x1200/312e81/FFF?text=MyEduNeeds',
-        desktopSrc: 'https://placehold.co/1200x500/312e81/FFF?text=MyEduNeeds',
-        alt: 'MyEduNeeds Banner'
-    }
-];
-
-const resolveBannerSrc = (bannerPath) => {
-    if (!bannerPath) return FALLBACK_SLIDES[0].desktopSrc;
-    if (typeof bannerPath === 'string' && /^https?:\/\//i.test(bannerPath)) return bannerPath;
-    return `${Endpoints.mediaBaseUrl}${bannerPath}`;
-};
-
-const isBannerActive = (activeValue) => activeValue === true || activeValue === 1 || activeValue === '1' || activeValue === 'true';
+import { useTheme } from '../../../config/ThemeContext';
 
 export const MyEduNeedsPromoBanners = () => {
+    const { theme } = useTheme();
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
-    const [slides, setSlides] = useState(FALLBACK_SLIDES);
+    const [slides, setSlides] = useState([
+        {
+            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=MyEduNeeds",
+            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=MyEduNeeds",
+            alt: "Live Batch"
+        },
+        // {
+        //     mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+        //     desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
+        //     alt: "Combo Offer",
+        //     bg: "bg-slate-900"
+        // }
+    ]);
 
     const totalSlides = slides.length;
 
@@ -33,36 +31,42 @@ export const MyEduNeedsPromoBanners = () => {
         fetchBanners();
     }, []);
 
-    const fetchBanners = async (allowRetry = true) => {
-        try {
-            const response = await Network.getBannersApi(instId);
-            const allBanners = Array.isArray(response?.banners) ? response.banners : [];
-            const activeBanners = allBanners.filter((banner) => isBannerActive(banner?.active));
-            const targetBanners = activeBanners.length > 0 ? activeBanners : allBanners;
+    const buildMediaUrl = (baseUrl, assetPath) => {
+        if (!assetPath) return '';
+        if (assetPath.startsWith('http://') || assetPath.startsWith('https://')) return assetPath;
 
-            if (targetBanners.length > 0) {
-                const bannerSlides = targetBanners
-                    .filter((banner) => banner?.banner)
-                    .map((banner) => ({
+        const normalizedBase = (baseUrl || Endpoints.mediaBaseUrl || '').replace(/\/$/, '');
+        const normalizedAsset = assetPath.startsWith('/') ? assetPath : `/${assetPath}`;
+        return `${normalizedBase}${normalizedAsset}`;
+    };
+
+    const fetchBanners = async () => {
+        try {
+            const [instituteResponse, bannersResponse] = await Promise.all([
+                Network.getInstitute().catch(() => null),
+                Network.getBannersApi(instId),
+            ]);
+
+            const resolvedMediaBaseUrl = instituteResponse?.instituteTechSetting?.mediaUrl || Endpoints.mediaBaseUrl;
+            Endpoints.mediaBaseUrl = resolvedMediaBaseUrl;
+
+            if (bannersResponse && bannersResponse.banners && bannersResponse.banners.length > 0) {
+                const activeBanners = bannersResponse.banners.filter(banner => banner.active);
+
+                if (activeBanners.length > 0) {
+                    const bannerSlides = activeBanners.map(banner => ({
                         ...banner,
-                        mobileSrc: resolveBannerSrc(banner.banner),
-                        desktopSrc: resolveBannerSrc(banner.banner),
+                        mobileSrc: buildMediaUrl(resolvedMediaBaseUrl, banner.banner),
+                        desktopSrc: buildMediaUrl(resolvedMediaBaseUrl, banner.banner),
                         alt: banner.title || 'Banner'
                     }));
-
-                setSlides(bannerSlides.length > 0 ? bannerSlides : FALLBACK_SLIDES);
-            } else if (allowRetry) {
-                setTimeout(() => fetchBanners(false), 1200);
+                    setSlides(bannerSlides);
+                }
             }
         } catch (error) {
             console.error('Error fetching banners:', error);
-            if (allowRetry) setTimeout(() => fetchBanners(false), 1200);
         }
     };
-
-    useEffect(() => {
-        if (currentSlide >= slides.length) setCurrentSlide(0);
-    }, [slides.length, currentSlide]);
 
     // Auto-slide functionality
     useEffect(() => {
@@ -155,10 +159,6 @@ export const MyEduNeedsPromoBanners = () => {
                                 <img
                                     src={slide.desktopSrc}
                                     alt={slide.alt}
-                                    loading={index === 0 ? 'eager' : 'lazy'}
-                                    onError={(event) => {
-                                        event.currentTarget.src = FALLBACK_SLIDES[0].desktopSrc;
-                                    }}
                                     className={`
                                w-full
       h-auto

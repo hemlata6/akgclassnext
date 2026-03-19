@@ -601,10 +601,25 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 		if (localPlansIds !== undefined && locaPurchase !== null) setAddtoCartIds(JSON.parse(localPlansIds));
 		if (locaPurchase !== undefined && locaPurchase !== null) setPurchaseArray(JSON.parse(locaPurchase));
 		if (cartRouteData === 'cartRoute') {
-			setActiveStep(1);
-			const localCartArray = localStorage.getItem('cartArray');
-			if (localCartArray !== undefined && localCartArray !== null) setCartArray(JSON.parse(localCartArray));
+			router.push('/cart');
 		}
+		// Always sync cartArray from localStorage on mount
+		const localCartArray = localStorage.getItem('cartArray');
+		if (localCartArray !== undefined && localCartArray !== null) setCartArray(JSON.parse(localCartArray));
+
+		// Keep cartArray in sync when items are removed from CartPage
+		const syncCartArray = () => {
+			try {
+				const globalCart = JSON.parse(localStorage.getItem('cartCourses') || '[]');
+				const globalIds = new Set(globalCart.map(c => c.id));
+				const storedCartArray = JSON.parse(localStorage.getItem('cartArray') || '[]');
+				const synced = storedCartArray.filter(c => globalIds.has(c.plan?.id));
+				localStorage.setItem('cartArray', JSON.stringify(synced));
+				setCartArray(synced);
+			} catch {}
+		};
+		window.addEventListener('cartUpdated', syncCartArray);
+		return () => window.removeEventListener('cartUpdated', syncCartArray);
 	}, []);
 
 	function handleBackBrowserBack() {
@@ -1101,16 +1116,43 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 	const handleEnrollNow = (item) => {
 		const id = item.id;
 		const isSelected = cartArray.some((cartItem) => cartItem.plan.id === id);
+
+		// Helper: read global cart safely
+		const getGlobalCart = () => {
+			try { return JSON.parse(localStorage.getItem('cartCourses') || '[]'); } catch { return []; }
+		};
+
 		if (isSelected) {
 			const updatedCartArray = cartArray.filter((cartItem) => cartItem.plan.id !== id);
 			setCartArray(updatedCartArray);
 			localStorage.setItem('cartArray', JSON.stringify(updatedCartArray));
+
+			// Sync removal to global cartCourses (Header badge + /cart page)
+			const updatedCartCourses = getGlobalCart().filter(c => c.id !== id);
+			localStorage.setItem('cartCourses', JSON.stringify(updatedCartCourses));
+			window.dispatchEvent(new Event('cartUpdated'));
+
 			if (typeof cartNumberUpdate === 'function') cartNumberUpdate();
 		} else {
 			const obj = { group: activeBtn, subject: selectSubjectWise, plan: item };
 			const updatedCartArray = [...cartArray, obj];
 			setCartArray(updatedCartArray);
 			localStorage.setItem('cartArray', JSON.stringify(updatedCartArray));
+
+			// Sync addition to global cartCourses (Header badge + /cart page)
+			const object = getPlanPrice(item, activeBtn, selectSubjectWise);
+			const globalCartItem = {
+				id: item.id,
+				title: item.title,
+				logo: object?.thumbLogo || item?.description?.thumb || '',
+				price: object?.price || 0,
+				finalPrice: Math.round(object?.finalPrice || 0),
+				type: 'TestSeries',
+			};
+			const updatedCartCourses = [...getGlobalCart().filter(c => c.id !== id), globalCartItem];
+			localStorage.setItem('cartCourses', JSON.stringify(updatedCartCourses));
+			window.dispatchEvent(new Event('cartUpdated'));
+
 			if (typeof cartNumberUpdate === 'function') cartNumberUpdate();
 		}
 	};
@@ -1426,24 +1468,7 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 							</Grid>
 						</Grid>
 
-						<Box sx={{ width: '100%', maxWidth: '100%', mb: 3, overflow: 'hidden', boxSizing: 'border-box' }}>
-							<ModernStepper activeStep={activeStep} connector={<ModernStepConnector />}>
-								{steps.map((label, index) => {
-									const stepProps = {};
-									const labelProps = {};
-									if (isStepSkipped(index)) stepProps.completed = false;
-									return (
-										<Step key={label} {...stepProps}>
-											<StepLabel {...labelProps} StepIconComponent={(props) => <ModernStepIcon {...props} icon={index + 1} />}>
-												<Typography variant="body2" fontWeight={600} sx={{ fontSize: { xs: '0.75rem', sm: '1rem', md: '1rem' }, color: activeStep === index ? modernColors.primary.main : modernColors.neutral.gray, transition: 'color 0.3s ease', whiteSpace: 'nowrap' }}>
-													{label}
-												</Typography>
-											</StepLabel>
-										</Step>
-									);
-								})}
-							</ModernStepper>
-						</Box>
+
 
 						{activeStep === 0 && selectedAotherSchedule?.id && (
 							<Grid item xs={12} sm={12} md={12} lg={12}>
@@ -1489,13 +1514,13 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 								<React.Fragment>
 									{activeStep === 0 && schedule?.id && (
 										<Typography sx={{ mb: 1, py: 1 }}>
-											{cartArray?.length > 0 && (
+											{/* {cartArray?.length > 0 && (
 												<Box sx={{ textAlign: 'right' }}>
-													<ModernCheckoutButton disabled={cartArray?.length === 0} onClick={handleShowCart} className="button-hover mobile-view-checkout" startIcon={<ArrowForwardIcon />} sx={{ fontSize: '14px', padding: '12px 20px', background: modernColors.secondary.gradient }}>
-														Go to Cart Details
+													<ModernCheckoutButton onClick={() => router.push('/cart')} sx={{ fontSize: '14px', padding: '12px 20px', background: modernColors.secondary.gradient }}>
+														View Cart
 													</ModernCheckoutButton>
 												</Box>
-											)}
+											)} */}
 											{selectCourse?.id && (
 												<div className="react-multi-carousel-list">
 													<Box sx={{ py: 2, width: '100%', maxWidth: '100%' }}>
@@ -1542,10 +1567,19 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 																						)}
 																					</ModernPriceContainer>
 																				</CardContent>
-																				<CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 } }}>
-																					<ModernAddButton isAdded={isAdded} onClick={(event) => { event.stopPropagation(); handleEnrollNow(item); }} startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}>
-																						{isAdded ? 'Added to Cart' : 'Add to Cart'}
+																				<CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 }, display: 'flex', flexDirection: 'row', gap: 1, alignItems: 'center' }}>
+																					<ModernAddButton isAdded={isAdded} onClick={(event) => { event.stopPropagation(); handleEnrollNow(item); }} startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: '16px' }} /> : <AddCircleIcon sx={{ fontSize: '16px' }} />} sx={{ flex: 1, fontSize: '13px', padding: '8px 12px', minHeight: '40px', height: '40px' }}>
+																						{isAdded ? 'Remove' : 'Add to Cart'}
 																					</ModernAddButton>
+																					{isAdded && (
+																						<Button
+																							variant="outlined"
+																							onClick={(event) => { event.stopPropagation(); router.push('/cart'); }}
+																							sx={{ flex: 1, textTransform: 'none', fontWeight: 700, fontSize: '13px', borderRadius: '12px', borderColor: modernColors.primary.main, color: modernColors.primary.main, minHeight: '40px', height: '40px', padding: '8px 12px', '&:hover': { borderColor: modernColors.primary.dark, background: 'rgba(212,175,55,0.06)' } }}
+																						>
+																							View Cart
+																						</Button>
+																					)}
 																				</CardActions>
 																			</ModernPlanCard>
 																		</Fade>
@@ -1563,7 +1597,7 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 										<Typography sx={{ mt: 3, mb: 3, py: 1 }}>
 											<Grid container sx={{ borderBottom: '1px solid rgba(128, 128, 128, 0.1)', background: 'linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.8) 100%)', borderRadius: '24px 24px 0 0', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.2)', boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)', overflow: 'hidden', position: 'relative' }}>
 												<Grid item xs={12} sm={9.5} md={9.5} lg={9.5} sx={{ padding: '24px', position: 'relative', zIndex: 1 }}>
-													<Typography variant="h5" sx={{ fontWeight: '800', mb: 3, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '12px' }}>
+													<Typography variant="h5" sx={{ fontWeight: '600', mb: 3, color: '#0F172A', display: 'flex', alignItems: 'center', gap: '12px' }}>
 														Your Selected Items
 													</Typography>
 													<Grid container>
@@ -1586,16 +1620,16 @@ const TestSeriesDetails = ({ cartNumberUpdate }) => {
 																				</Box>
 																			</Grid>
 																			<Grid item xs={12} sm={8} md={8} lg={8}>
-																				<Typography variant="h5" sx={{ fontWeight: '800', color: '#2d3748', mb: 2, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>{details?.title}</Typography>
+																				<Typography variant="h5" sx={{ fontWeight: '600', color: '#2d3748', mb: 2, fontSize: { xs: '1.25rem', md: '1.5rem' } }}>{details?.title}</Typography>
 																				<Box sx={{ textAlign: 'left', mb: 2, display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
 																					{item.subject?.length > 0 && item.subject.map((chipLebel, idx) => <Chip size="small" label={chipTitle(chipLebel?.title)} variant="outlined" key={idx} sx={{ background: 'rgba(212, 175, 55, 0.12)', color: modernColors.primary.dark, fontWeight: '700', fontSize: '12px', border: '1px solid rgba(212, 175, 55, 0.35)', borderRadius: '12px' }} />)}
 																				</Box>
 																				<Box sx={{ mb: 2 }}>
 																					{details?.paid ? (
 																						<Box>
-																							{discount > 0 ? <Typography sx={{ fontWeight: '800', fontSize: '18px', color: modernColors.primary.dark }}>Price: ₹{object?.finalPrice.toFixed(2)}</Typography> : <Typography sx={{ fontWeight: '800', fontSize: '18px', color: modernColors.primary.dark }}>Price: ₹{price?.toFixed(2)}</Typography>}
+																							{discount > 0 ? <Typography sx={{ fontWeight: '600', fontSize: '18px', color: modernColors.primary.dark }}>Price: ₹{object?.finalPrice.toFixed(2)}</Typography> : <Typography sx={{ fontWeight: '600', fontSize: '18px', color: modernColors.primary.dark }}>Price: ₹{price?.toFixed(2)}</Typography>}
 																						</Box>
-																					) : <Typography sx={{ fontWeight: '800', fontSize: '18px', color: modernColors.success.main }}>Free Course</Typography>}
+																					) : <Typography sx={{ fontWeight: '600', fontSize: '18px', color: modernColors.success.main }}>Free Course</Typography>}
 																				</Box>
 																				<Typography variant="body1" sx={{ color: '#4a5568', lineHeight: '1.6', mb: 2, fontSize: '14px' }} className="mobile-view-discrip">
 																					{truncateDescription(fullDescription)}

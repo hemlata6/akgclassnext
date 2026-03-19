@@ -139,7 +139,7 @@ export const AuthProvider = ({ children }) => {
       setInstitute(null);
       setInstituteAppSettingsModals(null);
       setGallery(null);
-      setInstituteModuleSettings(null);
+      setInstituteModuleSettings(null);A
       setInstituteTechSettingModals(null);
     };
 

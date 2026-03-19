@@ -324,9 +324,18 @@ export default function CartPage() {
   };
 
   const removeFromCart = (index) => {
+    const removedItem = cartItems[index];
     const updatedCart = cartItems.filter((_, i) => i !== index);
     setCartItems(updatedCart);
     localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+    // Also remove from cartArray (used by test_series_details page)
+    if (removedItem?.id) {
+      try {
+        const cartArray = JSON.parse(localStorage.getItem('cartArray') || '[]');
+        const updatedCartArray = cartArray.filter(c => c.plan?.id !== removedItem.id);
+        localStorage.setItem('cartArray', JSON.stringify(updatedCartArray));
+      } catch {}
+    }
     window.dispatchEvent(new Event('cartUpdated'));
   };
 
@@ -653,7 +662,7 @@ export default function CartPage() {
                     <div className="text-xs text-slate-500">
                       {item.selectedMode && <div>Mode: {item.selectedMode}</div>}
                       {item.selectedValidity && <div>Validity: {item.selectedValidity}</div>}
-                      {(() => {
+                      {item.type !== 'TestSeries' && item.type !== 'Test Series' && (() => {
                         const watchTime = item.watchTime || item.coursePricing?.[0]?.watchTime;
                         return <div>Watch Time: {watchTime && watchTime !== "Unlimited" ? `${watchTime}` : "Unlimited"}</div>;
                       })()}

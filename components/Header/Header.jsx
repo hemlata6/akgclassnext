@@ -171,8 +171,6 @@ export const Header = ({ cartCount }) => {
       // Filter active courses and separate by domain
       const activeCourses = Array.isArray(allCourses) ? allCourses.filter(c => c.active === true) : [];
 
-
-
       const courseList = Array.isArray(activeCourses)
         ? activeCourses.filter(c => c.type !== "books")
         : [];

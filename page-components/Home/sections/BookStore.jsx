@@ -397,6 +397,7 @@ const fetchCourses = async () => {
                                                         </span>
                                                     )}
                                                 </div>
+                                                <div className='flex items-center gap-1'>
                                                 <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
@@ -422,6 +423,18 @@ const fetchCourses = async () => {
                                                 >
                                                     {cartCourses.some(item => item.id === book.id) ? 'Remove' : 'Add'}
                                                 </button>
+                                                {cartCourses.some(item => item.id === book.id) && (
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            router.push('/cart');
+                                                        }}
+                                                        className="px-3 py-0.5 rounded-full flex items-center justify-center text-[10px] font-bold transition-all shadow-sm border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                                                    >
+                                                        View Cart
+                                                    </button>
+                                                )} 
+                                                </div>
                                             </div>
                                         </div>
                                     );
