@@ -886,11 +886,31 @@ const Store = () => {
         };
     }, [])
 
+    const hasPositiveStartingPrice = (course) => {
+        if (!course?.coursePricing || course.coursePricing.length === 0) {
+            return false;
+        }
+
+        const minFinalPrice = Math.min(
+            ...course.coursePricing.map((pricing) => {
+                const originalPrice = Number(pricing?.price || 0);
+                const discount = Number(pricing?.discount || 0);
+                return discount > 0
+                    ? originalPrice - (originalPrice * (discount / 100))
+                    : originalPrice;
+            })
+        );
+
+        return minFinalPrice > 0;
+    };
+
     const getAllCourses = async () => {
         try {
             setLoading(true);
             const response = await Network.getFreeCourseList(instId);
-            const activeCourses = (response?.courses || []).filter(c => c.active === true && c.paid === true);
+            const activeCourses = (response?.courses || []).filter(
+                c => c.active === true && c.paid === true && hasPositiveStartingPrice(c)
+            );
 
             setCourseList(activeCourses);
             setAllCourses(activeCourses);
