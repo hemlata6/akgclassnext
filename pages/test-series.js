@@ -3053,17 +3053,33 @@ const TestSeries = ({
                                                                                                     </ModernPriceContainer>
                                                                                                 </CardContent>
 
-                                                                                                <CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 } }}>
-                                                                                                    <ModernAddButton
-                                                                                                        isAdded={isAdded}
-                                                                                                        onClick={(e) => {
-                                                                                                            e.stopPropagation();
-                                                                                                            handleEnrollNow(item);
-                                                                                                        }}
-                                                                                                        startIcon={isAdded ? <CheckCircleRoundedIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} /> : <AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
-                                                                                                    >
-                                                                                                        {isAdded ? "Added to Cart" : "Add to Cart"}
-                                                                                                    </ModernAddButton>
+                                                                                                <CardActions sx={{ p: { xs: 1, sm: 1.5, md: 2 }, pt: { xs: 0.5, sm: 1, md: 1 }, gap: 1 }}>
+                                                                                                    {isAdded ? (
+                                                                                                        <>
+                                                                                                            <Button
+                                                                                                                variant="outlined"
+                                                                                                                onClick={(e) => { e.stopPropagation(); handleEnrollNow(item); }}
+                                                                                                                sx={{ flex: 1, textTransform: 'none', fontWeight: 700, fontSize: '13px', borderRadius: '12px', borderColor: '#e53935', color: '#e53935', minHeight: '40px', height: '40px', padding: '8px 12px', '&:hover': { borderColor: '#b71c1c', background: 'rgba(229,57,53,0.06)' } }}
+                                                                                                            >
+                                                                                                                Remove
+                                                                                                            </Button>
+                                                                                                            <Button
+                                                                                                                variant="contained"
+                                                                                                                    onClick={(e) => { e.stopPropagation(); handleShowCart(); }}
+                                                                                                                sx={{ flex: 1, textTransform: 'none', fontWeight: 700, fontSize: '13px', borderRadius: '12px', minHeight: '40px', height: '40px', padding: '8px 12px', background: 'linear-gradient(135deg, #D4AF37 0%, #B8860B 100%)', color: '#fff', '&:hover': { background: 'linear-gradient(135deg, #B8860B 0%, #8B6914 100%)' } }}
+                                                                                                            >
+                                                                                                                    View Cart
+                                                                                                            </Button>
+                                                                                                        </>
+                                                                                                    ) : (
+                                                                                                        <ModernAddButton
+                                                                                                            isAdded={false}
+                                                                                                            onClick={(e) => { e.stopPropagation(); handleEnrollNow(item); }}
+                                                                                                            startIcon={<AddCircleIcon sx={{ fontSize: { xs: '18px', sm: '20px' } }} />}
+                                                                                                        >
+                                                                                                            Add to Cart
+                                                                                                        </ModernAddButton>
+                                                                                                    )}
                                                                                                 </CardActions>
                                                                                             </ModernPlanCard>
                                                                                         </Fade>
