@@ -119,6 +119,8 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
     }
   };
 
+  // console.log('courseData?.setting?.duration', courseData?.setting?.duration);
+
 
   return (
     <div className="bg-slate-50 pt-8 pb-12 border-b border-slate-200">
@@ -218,14 +220,18 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
               {courseData?.shortDescription}
             </p>
             <div className="flex items-center gap-6 py-4 border-y border-slate-200">
-              <div className="flex items-center gap-2">
-                <div className="p-2 bg-emerald-50 rounded-lg text-emerald-700"><Icons.Clock /></div>
-                <div>
-                  <p className="text-[10px] text-slate-500 uppercase font-bold">Duration</p>
-                  <p className="text-sm font-bold text-slate-900">{formatDuration(courseData?.setting?.duration)}
-                  </p>
-                </div>
-              </div>
+              {
+                courseData?.setting?.duration !== 0 && (
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-emerald-50 rounded-lg text-emerald-700"><Icons.Clock /></div>
+                    <div>
+                      <p className="text-[10px] text-slate-500 uppercase font-bold">Duration</p>
+                      <p className="text-sm font-bold text-slate-900">{formatDuration(courseData?.setting?.duration)}
+                      </p>
+                    </div>
+                  </div>
+                )
+              }
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-blue-50 rounded-lg text-blue-700"><Icons.Eye /></div>
                 <div>
