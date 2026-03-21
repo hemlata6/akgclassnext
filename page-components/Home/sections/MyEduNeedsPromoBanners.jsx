@@ -109,8 +109,10 @@ export const MyEduNeedsPromoBanners = () => {
     };
 
     const handleClickOnImage = (slide) => {
-        if (slide.contentLink) {
-            window.open(slide.contentLink, '_blank');
+        const rawLink = slide?.contentLink || slide?.contentlink || slide?.link;
+        if (rawLink) {
+            const targetLink = /^https?:\/\//i.test(rawLink) ? rawLink : `https://${rawLink}`;
+            window.open(targetLink, '_blank', 'noopener,noreferrer');
         }
     };
 
@@ -142,6 +144,7 @@ export const MyEduNeedsPromoBanners = () => {
 
                         return (
                             <div
+                                onClick={() => handleClickOnImage(slide)}
                                 key={index}
                                 className={`
                 flex-shrink-0
@@ -151,6 +154,7 @@ export const MyEduNeedsPromoBanners = () => {
                 overflow-hidden
                 rounded-2xl
                 transition-all duration-1000
+                                ${(slide?.contentLink || slide?.contentlink || slide?.link) ? 'cursor-pointer' : 'cursor-default'}
                 ${active ? "z-10" : "z-0"}
               `}
                             >
@@ -163,6 +167,7 @@ export const MyEduNeedsPromoBanners = () => {
                                w-full
       h-auto
       object-contain
+                                    pointer-events-none
                   transition-all duration-500
                   opacity-100
                 `}
@@ -172,6 +177,7 @@ export const MyEduNeedsPromoBanners = () => {
                                 <div
                                     className={`
                   absolute inset-0
+                                    pointer-events-none
                   transition-all duration-500
                   bg-transparent
                 `}

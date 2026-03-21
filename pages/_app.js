@@ -49,6 +49,14 @@ function MyApp({ Component, pageProps }) {
     };
   }, [router.events]);
 
+    const handleRedirectAnnouncement = (link) => {
+        // const rawLink = slide?.contentLink || slide?.contentlink || slide?.link;
+        // if (rawLink) {
+            const targetLink = /^https?:\/\//i.test(link) ? link : `https://${link}`;
+            window.open(targetLink, '_blank', 'noopener,noreferrer');
+        // }
+    };
+
   return (
     <ThemeProvider>
       <AuthProvider>
@@ -69,6 +77,10 @@ function MyApp({ Component, pageProps }) {
 
                 <div className="relative">
                   <img
+                    style={{
+                      cursor: 'pointer'
+                    }}
+                    onClick={()=> handleRedirectAnnouncement(announcements[0]?.contentLink)}
                     src={`${require('../config/endpoints').default?.mediaBaseUrl}${announcements[0]?.image}`}
                     alt="Announcement"
                     className="w-full h-auto object-cover"

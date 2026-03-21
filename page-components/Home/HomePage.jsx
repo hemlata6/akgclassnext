@@ -19,7 +19,7 @@ import EmployeeList from './sections/empyeeList';
 import TestSeriesSection from './sections/TestSeriesSection';
 
 export default function HomePage() {
-  const { authToken, isAuthenticated } = useAuth();
+  const { authToken, isAuthenticated, institute } = useAuth();
   const [showPopup, setShowPopup] = React.useState(false);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function HomePage() {
       <AppDownload />
       <CounsellingStrip />
       <a
-        href="https://wa.me/919465829512?text=Hello%20I%20want%20to%20know%20about%20your%20courses"
+        href={`https://wa.me/91${institute?.contact}?text=Hello%20I%20want%20to%20know%20about%20your%20courses`}
         target="_blank"
         rel="noopener noreferrer"
         className="fixed z-40 right-4 bottom-24 md:bottom-12 group"
