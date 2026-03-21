@@ -5,8 +5,8 @@ import HomePage from '../page-components/Home/HomePage';
 export default function Home() {
   const siteUrl = 'https://myeduneeds.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/ca class-logo-circle-white.webp';
-  const title = 'MyEduNeeds | Professional Coaching for CA & CMA';
-  const description = 'MyEduNeeds is a comprehensive digital learning platform providing simplified lectures, structured study materials, and exam-focused preparation for CA and CMA aspirants, helping students achieve conceptual clarity and success in professional exams.';
+  const title = 'Myeduneeds - CA Prashant Sarda Academy';
+  const description = 'Best CA Foundation, Inter, Final Classes in Pune. CA Prashant Sarda is the renowned name in the field of CA Coaching. He is a specialist and expert in subjects like Finance, Business & Economics.';
   const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, MyEduNeeds, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start -p 8085",
+    "start": "next start -p 8089",
     "lint": "next lint",
     "deploy:netlify": "netlify deploy --prod",
     "deploy:previewmyeduneeds": "netlify deploy",

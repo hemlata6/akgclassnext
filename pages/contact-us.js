@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../constants/Icons';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
+import { useAuth } from '@/config/AuthContext';
 
 function ContactUsPageContent() {
     const router = useRouter();
@@ -22,6 +23,7 @@ function ContactUsPageContent() {
     const [loading, setLoading] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
+    const { institute } = useAuth();
 
     // Fetch courses when type is selected as "course"
     useEffect(() => {
@@ -227,10 +229,10 @@ function ContactUsPageContent() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <a href="tel:9465829512" className="font-semibold" style={{color: '#D4AF37'}}
+                                <a href={`tel:${institute?.contact || '-'}`} className="font-semibold" style={{color: '#D4AF37'}}
                                    onMouseEnter={(e) => e.target.style.color = '#B8960F'}
                                    onMouseLeave={(e) => e.target.style.color = '#D4AF37'}>
-                                    9465829512
+                                    +91-{institute?.contact || '-'}
                                 </a>
                             </div>
 
@@ -240,10 +242,10 @@ function ContactUsPageContent() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:myeduneedsacademy@gmail.com" className="font-semibold" style={{color: '#D4AF37'}}
+                                <a href={`mailto:${institute?.email || '-'}`} className="font-semibold" style={{color: '#D4AF37'}}
                                    onMouseEnter={(e) => e.target.style.color = '#B8960F'}
                                    onMouseLeave={(e) => e.target.style.color = '#D4AF37'}>
-                                    myeduneedsacademy@gmail.com
+                                    {institute?.email || '-'}
                                 </a>
                             </div>
 
@@ -253,7 +255,7 @@ function ContactUsPageContent() {
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
                                 <p className="text-sm" style={{color: '#FFF9E6'}}>
-                                    LUDHIANA, India
+                                    {institute?.address || 'Address not available'}
                                 </p>
                             </div>
                         </div>

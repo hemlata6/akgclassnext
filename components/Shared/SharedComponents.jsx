@@ -39,8 +39,7 @@ export const Footer = () => {
               </div> */}
               {institute?.institue || "MyEduNeeds"}
             </div>
-            <p>MyEduNeeds is a one-stop solution for CA Aspirants to get quality CA education at affordable prices.
-              Founded by 1st Attempt CAs, aiming to convert the fear of multiple attempts into a mindset of “This attempt is last attempt”</p>
+            <p>{institute?.instituteAppSettingsModals?.appBio}</p>
           </div>
           {/* <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>

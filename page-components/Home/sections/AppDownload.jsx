@@ -19,12 +19,22 @@ export const AppDownload = () => (
             >
               Google Play
             </a>
-            <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
+            <a
+              href="https://apps.apple.com/in/app/percept-ca/id6755762866"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-200 transition"
+            >
               App Store
-            </button>
-            <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
+            </a>
+            <a
+              href="https://apps.microsoft.com/detail/9pgmjkn44p1v?hl=en-US&gl=IN"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-200 transition"
+            >
               Window Store
-            </button>
+            </a>
           </div>
         </div>
 

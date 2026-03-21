@@ -17,7 +17,7 @@ export const TestSeriesSection = () => {
 
     const handleExploreNow = (card) => {
         router.push({
-            pathname: '/ca_inter_test_series',
+            pathname: '/course_drip',
             query: {
                 courseId: card.id,
                 courseTitle: encodeURIComponent(card.title || 'CA Inter Test Series'),
@@ -39,10 +39,17 @@ export const TestSeriesSection = () => {
 
             const courses = response?.courses || response || [];
 
-            // ✅ Only filter by title
+            // ✅ Only filter by tag
             const finalCourses = Array.isArray(courses)
                 ? courses.filter(
-                    (course) => course?.title === "CA Inter May 2026 Test Series"
+                    (course) => {
+                        const tags = course?.tags;
+                        if (Array.isArray(tags)) {
+                            return tags.some((tag) => tag?.tag === 'test series');
+                        }
+
+                        return tags?.tag === 'test series';
+                    }
                 )
                 : [];
 
