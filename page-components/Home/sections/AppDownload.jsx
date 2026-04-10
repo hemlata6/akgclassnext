@@ -19,12 +19,28 @@ export const AppDownload = () => (
             >
               Google Play
             </a>
-            <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
+            <a
+              href="https://apps.apple.com/in/app/nextgen-ca/id6759248050"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-200 transition"
+            >
               App Store
-            </button>
-            <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
+            </a>
+            {/* <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
+              App Store
+            </button> */}
+            <a
+              href="https://apps.microsoft.com/detail/9PG3KXKV4XKM?hl=en-us&gl=IN&ocid=pdpshare"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-200 transition"
+            >
+              Windows Store
+            </a>
+            {/* <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
               Window Store
-            </button>
+            </button> */}
           </div>
         </div>
 

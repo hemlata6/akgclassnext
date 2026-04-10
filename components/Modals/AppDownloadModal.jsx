@@ -6,11 +6,11 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      maxWidth="xs" 
-      fullWidth 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      maxWidth="xs"
+      fullWidth
       sx={{ zIndex: 1300 }}
     >
       <DialogContent sx={{ p: 0 }}>
@@ -35,16 +35,16 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
             >
               <CloseIcon sx={{ fontSize: 18, color: '#64748b' }} />
             </IconButton>
-            <Box 
-              sx={{ 
-                display: 'inline-flex', 
-                alignItems: 'center', 
-                justifyContent: 'center', 
-                width: 56, 
-                height: 56, 
-                backgroundColor: brandColor, 
-                borderRadius: '50%', 
-                mb: 1.5 
+            <Box
+              sx={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 56,
+                height: 56,
+                backgroundColor: brandColor,
+                borderRadius: '50%',
+                mb: 1.5
               }}
             >
               <DownloadIcon sx={{ fontSize: 20, color: 'white' }} />
@@ -101,8 +101,12 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
 
-            {/* App Store (Coming Soon) */}
+            {/* App Store */}
             <a
+              href='https://apps.apple.com/in/app/nextgen-ca/id6759248050'
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -114,8 +118,14 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
                 color: 'inherit',
                 marginBottom: 10,
                 transition: 'all 0.2s',
-                opacity: 0.6,
-                cursor: 'not-allowed',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#dbeafe';
+                e.currentTarget.style.backgroundColor = '#eff6ff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               <div style={{ flexShrink: 0 }}>
@@ -127,7 +137,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: '600', color: '#111827', fontSize: '14px' }}>App Store</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>Coming Soon</div>
+                <div style={{ fontSize: '12px', color: '#64748b' }}>IOS</div>
               </div>
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
