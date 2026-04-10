@@ -1,6 +1,6 @@
-# VG STUDY HUB - Next.js Application
+# Rahuls CA Academy - Next.js Application
 
-This is a Next.js conversion of the original React app for VG STUDY HUB - VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA.
+This is a Next.js conversion of the original React app for Rahuls CA Academy - Rahuls CA Academy | Rahuls CA Academy - CA Rahul Jain.
 
 ## Getting Started
 

@@ -52,11 +52,11 @@ export const StudentSupportSection = () => {
                                 <div className="mb-4 space-y-2 text-sm">
                                     <div className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4 text-emerald-400" />
-                                        <span className="text-slate-300">D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</span>
+                                        <span className="text-slate-300">3rd Floor, Legend Crystal, Above Federal Bank, Opp. Annapurna Residency, Near Paradise, PG Road, Secunderabad – 500 003</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href="mailto:info.vgsh@gmail.com" className="text-slate-300 hover:text-white">info.vgsh@gmail.com</a>
+                                        <a href="mailto:rahulscaacademy@gmail.com" className="text-slate-300 hover:text-white">rahulscaacademy@gmail.com</a>
                                     </div>
                                 </div>
 

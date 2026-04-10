@@ -6,7 +6,7 @@ const FacultyAndStatsSection = () => {
 
     const [faculties, setFaculties] = useState([]);
 
-    console.log('faculties', faculties);
+    // console.log('faculties', faculties);
     useEffect(() => {
         fetchFaculties();
     }, [])

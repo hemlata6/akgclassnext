@@ -88,7 +88,8 @@ export const StudentGallery = () => {
     };
 
     return (
-        <section className="py-12 bg-white border-t border-slate-200">
+       <>
+         <section className="py-12 bg-white border-t border-slate-200">
             <div className={LAYOUT_PADDING}>
                 <div className="text-center mb-10">
                     <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Hall of Fame</span>
@@ -198,5 +199,6 @@ export const StudentGallery = () => {
                 }
             `}</style>
         </section>
+       </>
     );
 };

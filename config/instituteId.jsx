@@ -25,10 +25,13 @@
 // akg
 // const instId = 376;
 
+// RCA Academy
+const instId = 5203;
+
 // anm
 // const instId = 367;
 
-// vghub
-const instId = 454;
+// // vghub
+// const instId = 454;
 
 export default instId;

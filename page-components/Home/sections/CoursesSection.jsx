@@ -113,7 +113,7 @@ export const CoursesSection = ({ onAddToCart }) => {
                     c.active && c.paid === true
                     // && c.tags &&
                     // Array.isArray(c.tags)
-                    // && c.tags.some(tag => tag.tag === "Featured Course")
+                    && c.tags.some(tag => tag.tag === "Featured Course")
                 )
                 : [];
 

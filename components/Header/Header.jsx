@@ -626,7 +626,7 @@ export const Header = ({ cartCount }) => {
             <div className="bg-white shadow-xl h-[calc(100%+16px)] flex items-center px-6 rounded-b-lg border-b-[3px] border-indigo-600 transform transition-transform hover:translate-y-1 duration-300 origin-top">
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  <img src="/vghub/bghublogo.jpeg" alt="Next Gen CA" className="h-16 md:h-16 object-contain" />
+                  <img src="/rca/logo.png" alt="Rahuls CA Academy" className="h-16 md:h-16 object-contain" />
 
                 </Link>
               </div>

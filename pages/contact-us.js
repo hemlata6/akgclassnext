@@ -242,10 +242,10 @@ export default function ContactUsPage() {
                                         +91-8882090148
                                     </a>
                                 </p>
-                                <p> <a href="tel:9318492718" className="font-semibold" style={{ color: '#154734' }}
+                                <p> <a href="tel:8712389894" className="font-semibold" style={{ color: '#154734' }}
                                     onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                     onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    +91-9318492718
+                                    +91-8712389894
                                 </a></p>
                             </div>
 
@@ -255,10 +255,10 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:info.vgsh@gmail.com" className="font-semibold" style={{ color: '#154734' }}
+                                <a href="mailto:rahulscaacademy@gmail.com" className="font-semibold" style={{ color: '#154734' }}
                                     onMouseEnter={(e) => e.target.style.color = '#0d3221'}
                                     onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    info.vgsh@gmail.com
+                                    rahulscaacademy@gmail.com
                                 </a>
                             </div>
 
@@ -268,7 +268,7 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
                                 <p className="text-sm" style={{ color: '#e8f3ee' }}>
-                                    D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092
+                                    3rd Floor, Legend Crystal, Above Federal Bank, Opp. Annapurna Residency, Near Paradise, PG Road, Secunderabad – 500 003
                                 </p>
                             </div>
                         </div>
@@ -342,7 +342,7 @@ export default function ContactUsPage() {
                                             name="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
-                                            placeholder=" info.vgsh@gmail.com"
+                                            placeholder=" rahulscaacademy@gmail.com"
                                             className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
                                             onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
                                             onBlur={(e) => e.target.style.boxShadow = ''}
