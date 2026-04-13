@@ -117,7 +117,7 @@ export const Header = ({ cartCount }) => {
 
 
 
-  console.log('domains', domains, booksDomains);
+  // console.log('domains', domains, booksDomains);
 
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export const Header = ({ cartCount }) => {
       setDomainLoading(true);
       const response = await Network.fetchDomain(instId);
       const availableDomains = response?.domains || [];
-      console.log('availableDomains', availableDomains);
+      // console.log('availableDomains', availableDomains);
       setDomains(availableDomains);
       setCurrentLevel('first');
       setSelectedParentDomain(null);
@@ -226,7 +226,7 @@ export const Header = ({ cartCount }) => {
         );
         setEmployees(filteredEmployees);
       } else {
-        console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
+        // console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
         setEmployees([]);
       }
     } catch (error) {
@@ -603,9 +603,6 @@ export const Header = ({ cartCount }) => {
                 </div>
               </div>
 
-
-              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
-
               {/* Faculty Menu */}
               <div
                 className="relative group h-full flex items-center"
@@ -645,6 +642,9 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
+              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
+
+
 
               <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Free Resources</button>
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
@@ -715,8 +715,7 @@ export const Header = ({ cartCount }) => {
             <div className="bg-white shadow-xl h-[calc(100%+16px)] flex items-center px-6 rounded-b-lg border-b-[3px] border-indigo-600 transform transition-transform hover:translate-y-1 duration-300 origin-top">
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  <img src="/rca/logo.png" alt="Rahuls CA Academy" className="h-16 md:h-16 object-contain" />
-
+                  <img src="/rca/logo.png" alt="Rahuls CA Academy" className="h-10 md:h-10 object-contain" />
                 </Link>
               </div>
             </div>
@@ -912,11 +911,7 @@ export const Header = ({ cartCount }) => {
                     </div>
                   )}
                 </div>
-
-                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
-                <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
-
-                {/* Faculty Menu Mobile */}
+{/* Faculty Menu Mobile */}
                 <div>
                   <button
                     onClick={() => setOpenMobileSubmenu(openMobileSubmenu === 'faculty' ? null : 'faculty')}
@@ -956,6 +951,10 @@ export const Header = ({ cartCount }) => {
                     </div>
                   )}
                 </div>
+                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+                <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
+
+                
 
                 <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
 
