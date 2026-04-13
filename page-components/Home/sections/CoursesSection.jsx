@@ -8,7 +8,7 @@ import instId from '../../../config/instituteId';
 import CourseConfigModal from './CourseConfigModal';
 import Endpoints from '../../../config/endpoints';
 
-export const CoursesSection = ({ onAddToCart }) => {
+export const CoursesSection = ({ employeeCourseId }) => {
     const router = useRouter();
     const { authToken } = useAuth();
     const { theme } = useTheme();
@@ -24,6 +24,16 @@ export const CoursesSection = ({ onAddToCart }) => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
+
+    console.log('employeeCourseId', employeeCourseId);
+
+     const hasEmployeeCourseSelection = (() => {
+        if (!employeeCourseId) return false;
+        if (Array.isArray(employeeCourseId)) return employeeCourseId.length > 0;
+        if (Array.isArray(employeeCourseId?.courseIds)) return employeeCourseId.courseIds.length > 0;
+        if (typeof employeeCourseId === 'string') return employeeCourseId.trim().length > 0;
+        return false;
+    })();
 
     useEffect(() => {
         fetchTags();
@@ -99,26 +109,80 @@ export const CoursesSection = ({ onAddToCart }) => {
     useEffect(() => {
 
         fetchCourses();
-    }, [tags]);
+    }, [tags, employeeCourseId]);
 
     const fetchCourses = async () => {
         try {
             setLoading(true);
-            const response = authToken ? await Network.getStudentAuthCourse(authToken) : await Network.getFreeCourseList(instId);
+
+            const response = authToken
+                ? await Network.getStudentAuthCourse(authToken)
+                : await Network.getFreeCourseList(instId);
+
             const courses = response?.courses || response || [];
 
-            // Filter courses that are active AND have "Featured Course" tag
-            const activeCourses = Array.isArray(courses)
+            // Normalize employee course IDs from multiple possible payload shapes
+            const normalizeEmployeeCourseIds = (value) => {
+                if (!value) return [];
+
+                if (Array.isArray(value)) {
+                    return value
+                        .map((item) => {
+                            if (item == null) return null;
+                            if (typeof item === 'number' || typeof item === 'string') return Number(item);
+
+                            if (typeof item === 'object') {
+                                return Number(item.id ?? item.courseId ?? item._id ?? null);
+                            }
+
+                            return null;
+                        })
+                        .filter((id) => Number.isFinite(id));
+                }
+
+                if (Array.isArray(value?.courseIds)) {
+                    return normalizeEmployeeCourseIds(value.courseIds);
+                }
+
+                if (typeof value === 'string') {
+                    return value
+                        .split(',')
+                        .map((v) => Number(v.trim()))
+                        .filter((id) => Number.isFinite(id));
+                }
+
+                return [];
+            };
+
+            const employeeCourseIds = normalizeEmployeeCourseIds(employeeCourseId);
+            const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
+            const employeeCourseIdSet = new Set(employeeCourseIds);
+
+            // Base filter (your conditions)
+            const filteredCourses = Array.isArray(courses)
                 ? courses.filter(c =>
-                    c.active && c.paid === true
-                    // && c.tags &&
-                    // Array.isArray(c.tags)
-                    && c.tags.some(tag => tag.tag === "Featured Course")
+                    c.active &&
+                    c.paid === true &&
+                    c.type === 'lecture'
                 )
                 : [];
 
-            setCoursesData(activeCourses);
+            // Apply employee course filter only if IDs exist
+            const finalCourses = hasEmployeeCourseFilter
+                ? filteredCourses.filter((course) => {
+                    const idCandidates = [
+                        Number(course?.id),
+                        Number(course?.courseId),
+                        Number(course?._id),
+                    ].filter((id) => Number.isFinite(id));
+
+                    return idCandidates.some((id) => employeeCourseIdSet.has(id));
+                })
+                : filteredCourses;
+
+            setCoursesData(finalCourses);
             setError(null);
+
         } catch (err) {
             console.error('Error fetching courses:', err);
             setError('Failed to load courses');
@@ -194,22 +258,30 @@ export const CoursesSection = ({ onAddToCart }) => {
                             <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured Courses</h2>
                         </div>
                         {/* Mobile: Explore Store button next to title */}
-                        <button
-                            onClick={() => handleExploreMoreClick('lecture')}
-                            className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
-                        >
-                            Explore Store <Icons.ChevronRight size={16} />
-                        </button>
+                        {
+                            !hasEmployeeCourseSelection && (
+                                <button
+                                    onClick={() => handleExploreMoreClick('lecture')}
+                                    className={`md:hidden ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
+                                >
+                                    Explore Store <Icons.ChevronRight size={16} />
+                                </button>
+                            )
+                        }
                     </div>
                     <div className="flex justify-start md:justify-end">
                         <div className="flex items-center gap-4 w-full md:w-auto">
                             {/* Desktop: Explore Store button with filters */}
-                            <button
-                                onClick={() => handleExploreMoreClick('lecture')}
-                                className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
-                            >
-                                Explore Store <Icons.ChevronRight size={16} />
-                            </button>
+                            {
+                                !hasEmployeeCourseSelection && (
+                                    <button
+                                        onClick={() => handleExploreMoreClick('lecture')}
+                                        className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                    >
+                                        Explore Store <Icons.ChevronRight size={16} />
+                                    </button>
+                                )
+                            }
                             {/* Domain Filter */}
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button

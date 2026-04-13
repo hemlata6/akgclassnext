@@ -2,7 +2,7 @@ export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || "https://prodapi
 
 const Endpoints = {
 	baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "https://prodapi.classiolabs.com/",
-	mediaBaseUrl: process.env.NEXT_PUBLIC_MEDIA_BASE_URL || "https://classiocafinal.in-maa-1.linodeobjects.com/",
+	mediaBaseUrl: process.env.NEXT_PUBLIC_MEDIA_BASE_URL || "https://classiorcamedia.classiolabs.com/",
 	base: "prodapi.classiolabs.com",
 };
 export default Endpoints;

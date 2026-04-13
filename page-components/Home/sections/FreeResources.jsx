@@ -3,10 +3,11 @@ import { FileText, PlayCircle, CheckCircle, Download } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
 
 const FREE_RESOURCES = [
-    { title: 'Ind AS Notes & MCQs', type: 'PDF' },
-    { title: 'IDT Revision Videos', type: 'Video' },
-    { title: 'Mock Test Series', type: 'Test' },
-    { title: 'Chapter-wise Practice Questions', type: 'PDF' }
+    { title: 'Important Notes & E-Books', type: 'PDF' },
+    { title: 'Revision Lectures, Marathon Classes', type: 'Video' },
+    { title: 'Objective Test-Series', type: 'Test' },
+    { title: 'Descriptive Test-Series', type: 'Test' },
+    { title: 'Chapter-wise Practice Questions', type: 'Test' }
 ];
 
 export const FreeResources = () => {

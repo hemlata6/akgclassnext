@@ -39,26 +39,56 @@ export const Footer = () => {
             <p>Best Rahuls CA Academy for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
           <div>
-            <h4 className="text-white font-bold mb-3">Courses</h4>
+            <h4 className="text-white font-bold mb-3">Important Links</h4>
             <ul className="space-y-1.5">
-              <li
-                onClick={() => handleCourseClick('CSEET')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CSEET
-              </li>
-              <li
-                onClick={() => handleCourseClick('CS Executive')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CS Executive
-              </li>
-              <li
-                onClick={() => handleCourseClick('CS Professional')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CS Professional
-              </li>
+              <a href='https://www.icai.org/' target="_blank" rel="noopener noreferrer" className='mb-2'>
+                <li
+                  // onClick={() => handleCourseClick('CSEET')}
+                  className="cursor-pointer hover:text-indigo-400 transition-colors mb-2"
+                >
+                  ICAI
+                </li>
+              </a>
+              <a href='https://www.icsi.edu/home/' target="_blank" rel="noopener noreferrer">
+                <li
+                  // onClick={() => handleCourseClick('CS Executive')}
+                   className="cursor-pointer hover:text-indigo-400 transition-colors mb-2"
+                >
+                  ICSI
+                </li>
+              </a>
+              <a href='https://www.icmai.in/icmai' target="_blank" rel="noopener noreferrer">
+                <li
+                  // onClick={() => handleCourseClick('CS Professional')}
+                   className="cursor-pointer hover:text-indigo-400 transition-colors mb-2"
+                >
+                  ICMAI
+                </li>
+              </a>
+              <a href='https://www.accaglobal.com/in/en.html' target="_blank" rel="noopener noreferrer">
+                <li
+                  // onClick={() => handleCourseClick('CS Professional')}
+                   className="cursor-pointer hover:text-indigo-400 transition-colors mb-2"
+                >
+                  ACCA
+                </li>
+              </a>
+              <a href='https://www.cpaaustralia.com.au/become-a-cpa?gclsrc=aw.ds&gad_source=1&gad_campaignid=20343277106&gclid=CjwKCAiAqprNBhB6EiwAMe3yhtopC_PkAX-7OPlz6utIBAdNW2g4uBZswV_WknxxbgU-HEOt-W8D9RoCRpsQAvD_BwE' target="_blank" rel="noopener noreferrer">
+                <li
+                  // onClick={() => handleCourseClick('CS Professional')}
+                   className="cursor-pointer hover:text-indigo-400 transition-colors mb-2"
+                >
+                  CPA Australia
+                </li>
+              </a>
+              <a href='https://www.cfainstitute.org/' target="_blank" rel="noopener noreferrer">
+                <li
+                  // onClick={() => handleCourseClick('CS Professional')}
+                   className="cursor-pointer hover:text-indigo-400 transition-colors mb-2"
+                >
+                  CFA
+                </li>
+              </a>
             </ul>
           </div>
           <div>

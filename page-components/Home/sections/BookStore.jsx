@@ -7,7 +7,7 @@ import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
 import CourseConfigModal from './CourseConfigModal';
 
-export const BookStore = () => {
+export const BookStore = ({ employeeCourseId }) => {
     const router = useRouter();
     const { authToken } = useAuth();
     const [active, setActive] = useState(null);
@@ -22,6 +22,14 @@ export const BookStore = () => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedBook, setSelectedBook] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
+
+    const hasEmployeeCourseSelection = (() => {
+        if (!employeeCourseId) return false;
+        if (Array.isArray(employeeCourseId)) return employeeCourseId.length > 0;
+        if (Array.isArray(employeeCourseId?.courseIds)) return employeeCourseId.courseIds.length > 0;
+        if (typeof employeeCourseId === 'string') return employeeCourseId.trim().length > 0;
+        return false;
+    })();
 
     useEffect(() => {
         fetchTags();
@@ -98,35 +106,82 @@ export const BookStore = () => {
 
     useEffect(() => {
         fetchCourses();
-    }, [tags]);
+    }, [tags, employeeCourseId]);
 
     const fetchCourses = async () => {
         try {
             setLoading(true);
-            const response = authToken ? await Network.getStudentAuthCourse(authToken) : await Network.getFreeCourseList(instId);
+
+            const response = authToken
+                ? await Network.getStudentAuthCourse(authToken)
+                : await Network.getFreeCourseList(instId);
+
             const courses = response?.courses || response || [];
 
-            // Filter courses that have "Book" domain, are active, AND have "Featured Course" tag
-            const bookCourses = Array.isArray(courses)
+            // Normalize employee course IDs from multiple possible payload shapes
+            const normalizeEmployeeCourseIds = (value) => {
+                if (!value) return [];
+
+                if (Array.isArray(value)) {
+                    return value
+                        .map((item) => {
+                            if (item == null) return null;
+                            if (typeof item === 'number' || typeof item === 'string') return Number(item);
+
+                            if (typeof item === 'object') {
+                                return Number(item.id ?? item.courseId ?? item._id ?? null);
+                            }
+
+                            return null;
+                        })
+                        .filter((id) => Number.isFinite(id));
+                }
+
+                if (Array.isArray(value?.courseIds)) {
+                    return normalizeEmployeeCourseIds(value.courseIds);
+                }
+
+                if (typeof value === 'string') {
+                    return value
+                        .split(',')
+                        .map((v) => Number(v.trim()))
+                        .filter((id) => Number.isFinite(id));
+                }
+
+                return [];
+            };
+
+            const employeeCourseIds = normalizeEmployeeCourseIds(employeeCourseId);
+            const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
+            const employeeCourseIdSet = new Set(employeeCourseIds);
+
+            // Base filter (your conditions)
+            const filteredCourses = Array.isArray(courses)
                 ? courses.filter(c =>
-                    c.active
-                    // && c.type === "books"
-                    && c.tags.some(tag => tag.tag === "Book")
+                    c.active &&
+                    c.paid === true &&
+                    c.type === 'books'
                 )
                 : [];
-            // const activeCourses = Array.isArray(courses)
-            //     ? courses.filter(c =>
-            //         c.active && c.paid === true
-            //         // && c.tags &&
-            //         // Array.isArray(c.tags)
-            //         && c.tags.some(tag => tag.tag === "Featured Course")
-            //     )
-            //     : [];
 
-            setCoursesData(bookCourses);
+            // Apply employee course filter only if IDs exist
+            const finalCourses = hasEmployeeCourseFilter
+                ? filteredCourses.filter((course) => {
+                    const idCandidates = [
+                        Number(course?.id),
+                        Number(course?.courseId),
+                        Number(course?._id),
+                    ].filter((id) => Number.isFinite(id));
+
+                    return idCandidates.some((id) => employeeCourseIdSet.has(id));
+                })
+                : filteredCourses;
+
+            setCoursesData(finalCourses);
             setError(null);
+
         } catch (err) {
-            console.error('Error fetching courses:', err);
+            console.error('Error fetching books:', err);
             setError('Failed to load books');
             setCoursesData([]);
         } finally {
