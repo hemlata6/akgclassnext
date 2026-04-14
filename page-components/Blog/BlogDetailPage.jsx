@@ -164,20 +164,20 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     };
 
     // Helper function to strip HTML tags and get plain text
-    const stripHtml = (html) => {
-        if (!html) return '';
-        return html
-            .replace(/<[^>]*>/g, '') // Remove HTML tags
-            .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
-            .replace(/&amp;/g, '&') // Replace &amp; with &
-            .replace(/&lt;/g, '<') // Replace &lt; with <
-            .replace(/&gt;/g, '>') // Replace &gt; with >
-            .replace(/&quot;/g, '"') // Replace &quot; with "
-            .replace(/&#39;/g, "'") // Replace &#39; with '
-            .replace(/\s+/g, ' ') // Replace multiple spaces with single space
-            .trim()
-            .substring(0, 200); // Limit to 200 characters
-    };
+    // const stripHtml = (html) => {
+    //     if (!html) return '';
+    //     return html
+    //         .replace(/<[^>]*>/g, '') // Remove HTML tags
+    //         .replace(/&nbsp;/g, ' ') // Replace &nbsp; with space
+    //         .replace(/&amp;/g, '&') // Replace &amp; with &
+    //         .replace(/&lt;/g, '<') // Replace &lt; with <
+    //         .replace(/&gt;/g, '>') // Replace &gt; with >
+    //         .replace(/&quot;/g, '"') // Replace &quot; with "
+    //         .replace(/&#39;/g, "'") // Replace &#39; with '
+    //         .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+    //         .trim()
+    //         .substring(0, 200); // Limit to 200 characters
+    // };
 
     // Share blog function
     const handleShare = async () => {
@@ -355,8 +355,9 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                             <div className="prose prose-slate prose-lg max-w-none prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
                                 <div
                                     className="blog-content"
-                                    dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(blog.body || blog?.blog?.blog || '') }}
+                                    dangerouslySetInnerHTML={{ __html: blog.body || blog?.blog?.blog }}
                                 />
+                                  {/* <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload?.address }} /> */}
                                 <style jsx>{`
                                     .blog-content {
                                         all: revert-layer;

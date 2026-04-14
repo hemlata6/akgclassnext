@@ -145,7 +145,7 @@ export const PromoBanners = () => {
                         />
 
                         {/* Content Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-start pl-6 md:pl-20 lg:pl-32 bg-gradient-to-r from-slate-900 via-slate-900/60 to-transparent">
+                        <div className="absolute inset-0 flex items-center justify-start pl-6 md:pl-20 lg:pl-32">
                             <div
                                 className="max-w-xl text-white opacity-0 animate-in slide-in-from-left-10 duration-700"
                                 style={{
