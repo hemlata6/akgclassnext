@@ -251,7 +251,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
             Add to Cart <Icons.Cart />
           </button>
 
-          <p className="text-xs text-center text-slate-400 mt-3">30-Day Money Back Guarantee</p>
+          {/* <p className="text-xs text-center text-slate-400 mt-3">30-Day Money Back Guarantee</p> */}
         </form>
       </div>
     </div>

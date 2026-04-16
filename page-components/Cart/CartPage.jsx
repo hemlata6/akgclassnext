@@ -5,6 +5,7 @@ import { Footer } from '../../components/Shared/SharedComponents';
 import { useAuth } from '../../config/AuthContext';
 import ProceedToCheckoutForm from './ProceedToCheckoutForm';
 import LoginModal from '../../components/Auth/LoginModal';
+import AppDownloadModal from '../../components/Modals/AppDownloadModal';
 import axios from 'axios';
 import instId from '../../config/instituteId';
 import Endpoints, { BASE_URL } from '../../config/endpoints';
@@ -28,6 +29,7 @@ export default function CartPage() {
   const [discountAmount, setDiscountAmount] = useState(0);
   const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
   const [showErrorBar, setShowErrorBar] = useState(false);
   const [errorBarMessage, setErrorBarMessage] = useState('');
   const [showSuccessBar, setShowSuccessBar] = useState(false);
@@ -298,13 +300,15 @@ export default function CartPage() {
         setSuccessBarMessage('Payment successful! Thank you for your purchase.');
         setShowSuccessBar(true);
 
-        // Open login modal for non-authenticated users after payment modal closes
-        if (!isAuthenticated && !authToken) {
+        // Post-payment: redirect authenticated users, show app download for guests
+        if (isAuthenticated && authToken) {
           setTimeout(() => {
-            setShowLoginModal(true);
+            router.push('/my-purchases');
           }, 1000);
         } else {
-          console.log('✓ User is already authenticated, skipping login modal');
+          setTimeout(() => {
+            setShowAppDownloadModal(true);
+          }, 1000);
         }
       } else if (response?.data?.paymentStatus === 'pending') {
         console.log('⏳ Payment still pending...');
@@ -600,7 +604,7 @@ export default function CartPage() {
     );
   }
 
-  // console.log('cartItems', cartItems);
+  console.log('cartItems', cartItems);
 
 
   return (
@@ -621,7 +625,7 @@ export default function CartPage() {
         </div>
       )}
       <div className={`py-12 ${LAYOUT_PADDING}`}>
-        <h1 className="text-2xl font-bold text-slate-900 mb-8">Shopping Cart ({cartItems.length})</h1>
+        <h1 className="text-2xl font-bold text-slate-900 mb-8">Your Cart ({cartItems.length})</h1>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 space-y-4">
             {cartItems.map((item, idx) => (
@@ -651,14 +655,19 @@ export default function CartPage() {
                     </button>
                   </div>
                   <div className="flex justify-between items-end mt-2">
-                    <div className="text-xs text-slate-500">
-                      {item.selectedMode && <div>Mode: {item.selectedMode}</div>}
-                      {item.selectedValidity && <div>Validity: {item.selectedValidity}</div>}
-                      {(() => {
-                        const watchTime = item.watchTime || item.coursePricing?.[0]?.watchTime;
-                        return <div>Watch Time: {watchTime && watchTime !== "Unlimited" ? `${watchTime}` : "Unlimited"}</div>;
-                      })()}
-                    </div>
+                    {
+                      item?.type === 'Course' ?
+                        <div className="text-xs text-slate-500">
+                          {item.selectedMode && <div>Mode: {item.selectedMode}</div>}
+                          {item.selectedVariation && <div>Variation: {item.selectedVariation}</div>}
+                          {item.selectedValidity && <div>Validity: {item.selectedValidity}</div>}
+                          {(() => {
+                            const watchTime = item.watchTime || item.coursePricing?.[0]?.watchTime;
+                            return <div>Watch Time: {watchTime && watchTime !== "Unlimited" ? `${watchTime}` : "Unlimited"}</div>;
+                          })()}
+                        </div> : <></>
+                    }
+
                     <div className="font-bold text-lg text-slate-900">₹{(item.finalPrice || parsePrice(item.price)).toLocaleString()}</div>
                   </div>
                 </div>
@@ -682,15 +691,19 @@ export default function CartPage() {
               </div>
 
               <div className="mb-6">
-                <button
-                  onClick={handleReedemCode}
-                  className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
-                >
-                  <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                  </svg>
-                  {reedemCode ? 'Hide' : 'Have a'} Coupon Code
-                </button>
+                {
+                  user && (
+                    <button
+                      onClick={handleReedemCode}
+                      className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                      </svg>
+                      {reedemCode ? 'Hide' : 'Have a'} Coupon Code
+                    </button>
+                  )
+                }
                 {reedemCode && (
                   <div className="space-y-2">
                     <div className="flex gap-2">
@@ -783,6 +796,12 @@ export default function CartPage() {
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
+      />
+
+      {/* App Download Modal */}
+      <AppDownloadModal
+        open={showAppDownloadModal}
+        onClose={() => setShowAppDownloadModal(false)}
       />
 
       {/* Mobile Payment Dialog */}

@@ -112,10 +112,56 @@ export const Header = ({ cartCount }) => {
   const [expandedLecture, setExpandedLecture] = useState(null);
   const [expandedBook, setExpandedBook] = useState(null);
 
+  const [employees, setEmployees] = useState([]);
+  const [employeesLoading, setEmployeesLoading] = useState(false);
 
+  // Fetch employee list for Faculty menu
+  const fetchEmployeeList = async () => {
+    try {
+      setEmployeesLoading(true);
+      const response = await Network.fetchEmployee(instId);
+      if (response?.errorCode === 0 && response?.employees) {
+        const filteredEmployees = response.employees.filter(
+          emp => emp.showInApp === true
+        );
+        // console.log('filteredEmployees', filteredEmployees, response)
+        setEmployees(filteredEmployees);
+      } else {
+        // console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
+        setEmployees([]);
+      }
+    } catch (error) {
+      console.error('Error fetching employee list:', error);
+      setEmployees([]);
+    } finally {
+      setEmployeesLoading(false);
+    }
+  };
 
+  // Handle faculty click
+  const handleFaculty = (faculty) => {
+    const fullName = typeof faculty === 'string'
+      ? faculty
+      : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
 
-  console.log('domains', domains, booksDomains);
+    const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+    const facultyState = {
+      faculty: faculty,
+    };
+
+    router.push(
+      {
+        pathname: '/faculty/[facultyname]',
+        query: {
+          facultyname: facultyName,
+          state: JSON.stringify(facultyState),
+        },
+      },
+      `/faculty/${facultyName}`
+    );
+  };
+
+  // console.log('domains', domains, booksDomains);
 
 
   useEffect(() => {
@@ -130,6 +176,11 @@ export const Header = ({ cartCount }) => {
     fetchCoursesData();
     fetchAnnouncements();
   }, [user]);
+
+  useEffect(() => {
+
+    fetchEmployeeList();
+  }, []);
 
   // Refresh student data when user changes (e.g., after signup/login)
   useEffect(() => {
@@ -557,6 +608,47 @@ export const Header = ({ cartCount }) => {
 
 
               <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
+
+              {/* Faculty Menu */}
+              <div
+                className="relative group h-full flex items-center"
+                onMouseEnter={() => {
+                  setHoveredMenu('Faculty');
+                }}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button
+                  className={`hover:text-slate-900 transition-colors whitespace-nowrap font-semibold text-slate-600 flex items-center gap-1 text-sm py-4`}
+                >
+                  Faculty <Icons.ChevronDown className="w-3 h-3" />
+                </button>
+                <div className={`absolute top-full left-0 w-64 bg-white border border-slate-200 shadow-xl rounded-lg overflow-y-auto max-h-[400px] transition-all duration-200 ${hoveredMenu === 'Faculty' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+
+                  {employeesLoading ? (
+                    <div className="px-4 py-3 text-xs text-slate-400 text-center">Loading faculty...</div>
+                  ) : employees.length > 0 ? (
+                    employees.map((e) => {
+                      const fullName = [e?.firstName, e?.lastName].filter(Boolean).join(' ');
+                      return (
+                        <button
+                          key={e?.id || fullName}
+                          onClick={() => {
+                            handleFaculty(e);
+                            setHoveredMenu(null);
+                          }}
+                          className={`w-full text-left px-4 py-3 text-sm transition-all flex items-center justify-between group hover:bg-slate-50 hover:text-indigo-700 border-b border-slate-100 last:border-0 text-slate-700`}
+                        >
+                          <span className="truncate font-semibold">{fullName}</span>
+                          <Icons.ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="px-4 py-3 text-xs text-slate-500 text-center">No faculty available</div>
+                  )}
+                </div>
+              </div>
+
               <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Free Resources</button>
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
             </nav>

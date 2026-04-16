@@ -7,6 +7,7 @@ import axios from 'axios';
 import instId from '../../config/instituteId';
 import Endpoints, { BASE_URL } from '../../config/endpoints';
 import { Dialog, DialogContent, IconButton } from '@mui/material';
+import AppDownloadModal from '../../components/Modals/AppDownloadModal';
 
 const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin, setCartItems, onSubmitCheckout }) => {
     const router = useRouter();
@@ -35,6 +36,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     const [errorBarMessage, setErrorBarMessage] = useState('');
     const [showSuccessBar, setShowSuccessBar] = useState(false);
     const [successBarMessage, setSuccessBarMessage] = useState('');
+    const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
 
     useEffect(() => {
         // Extract URL parameters
@@ -159,7 +161,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     // Payment polling - check payment status every 5 seconds
     useEffect(() => {
         if (!paymentDrawerOpen || !checkoutResponse?.transactionId) {
-            console.log('Payment polling stopped - Drawer closed or no transaction ID');
+            // console.log('Payment polling stopped - Drawer closed or no transaction ID');
             return;
         }
 
@@ -169,10 +171,9 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
 
         return () => {
             clearInterval(intervalApi);
-            console.log('Payment polling interval cleared');
+            // console.log('Payment polling interval cleared');
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paymentDrawerOpen, checkoutResponse?.transactionId]);
+    }, [paymentDrawerOpen, checkoutResponse?.transactionId, isAuthenticated, authToken]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -218,9 +219,9 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 `${Endpoints.baseURL}payment/check-payment-status/${checkoutResponse?.transactionId}`,
                 { headers: { "Authorization": `Bearer ${authToken}` } }
             );
-            console.log('💳 Payment Status Response:', response);
+            console.log('💳 Payment Status Response:', response?.data?.paymentStatus);
 
-            if (response?.data?.paymentStatus === "successful") {
+            if (response?.data?.paymentStatus === "initiated") {
                 console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
                 setShowSuccessBar(true);
                 setSuccessBarMessage('Payment successful! Thank you for your purchase.');
@@ -228,9 +229,17 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 setTimeout(() => {
                     setPaymentDrawerOpen(false);
                     onClose();
+                    console.log('Auth check - isAuthenticated:', isAuthenticated, 'authToken:', !!authToken);
+                    if (isAuthenticated && authToken) {
+                        console.log('✓ User authenticated, redirecting to my-purchases');
+                        router.push('/my-purchases');
+                    } else {
+                        console.log('✓ User not authenticated, showing app download modal');
+                        setShowAppDownloadModal(true);
+                    }
                 }, 2000);
             } else if (response?.data?.paymentStatus === 'pending') {
-                console.log('⏳ Payment still pending...');
+                // console.log('⏳ Payment still pending...');
             } else if (response?.data?.paymentStatus === 'failed') {
                 console.error('✗ PAYMENT FAILED');
                 setShowErrorBar(true);
@@ -247,7 +256,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         localStorage.removeItem('purchaseArray');
         window.dispatchEvent(new Event('cartUpdated'));
         // setCartItems([]);
-        console.log('Cart cleared');
+        // console.log('Cart cleared');
     };
 
     const handleCheckCoupon = async (e) => {
@@ -306,7 +315,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         }
     };
 
-    console.log('payloadCart', payloadCart, cartCourses);
+    // console.log('payloadCart', payloadCart, cartCourses);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -332,7 +341,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
 
             // Pass data back to CartPage for API call
             await onSubmitCheckout(checkoutData);
-            
+
             // Clear form
             setFormData({ fullName: '', email: '', phone: '' });
         } catch (error) {
@@ -423,56 +432,60 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                     </div>
 
                     {/* Coupon Section */}
-                    <div className="mt-4">
-                        <button
-                            type="button"
-                            onClick={handleReedemCode}
-                            className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
-                        >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                            </svg>
-                            {reedemCode ? 'Hide' : 'Have a'} Coupon Code
-                        </button>
-                        {reedemCode && (
-                            <div className="space-y-2">
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={couponNumber}
-                                        onChange={handleCoupon}
-                                        placeholder="Enter coupon code"
-                                        className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={handleCheckCoupon}
-                                        disabled={!couponNumber || !formData.phone}
-                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${isCouponValid === true
-                                            ? 'bg-indigo-600 text-white hover:bg-indigo-800'
-                                            : 'bg-indigo-700 text-white hover:bg-indigo-800 disabled:bg-slate-300 disabled:cursor-not-allowed'
-                                            }`}
-                                    >
-                                        {isCouponValid === true ? (
-                                            <span className="flex items-center gap-1">
-                                                <Icons.Check /> Applied
-                                            </span>
-                                        ) : (
-                                            'Apply'
+                    {
+                        user && (
+                            <div className="mt-4">
+                                <button
+                                    type="button"
+                                    onClick={handleReedemCode}
+                                    className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
+                                >
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                    {reedemCode ? 'Hide' : 'Have a'} Coupon Code
+                                </button>
+                                {reedemCode && (
+                                    <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={couponNumber}
+                                                onChange={handleCoupon}
+                                                placeholder="Enter coupon code"
+                                                className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleCheckCoupon}
+                                                disabled={!couponNumber || !formData.phone}
+                                                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${isCouponValid === true
+                                                    ? 'bg-indigo-600 text-white hover:bg-indigo-800'
+                                                    : 'bg-indigo-700 text-white hover:bg-indigo-800 disabled:bg-slate-300 disabled:cursor-not-allowed'
+                                                    }`}
+                                            >
+                                                {isCouponValid === true ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <Icons.Check /> Applied
+                                                    </span>
+                                                ) : (
+                                                    'Apply'
+                                                )}
+                                            </button>
+                                        </div>
+                                        {errorMessage && (
+                                            <p className="text-xs text-red-600">{errorMessage}</p>
                                         )}
-                                    </button>
-                                </div>
-                                {errorMessage && (
-                                    <p className="text-xs text-red-600">{errorMessage}</p>
-                                )}
-                                {isCouponValid === true && (
-                                    <p className="text-xs text-green-600 font-semibold">
-                                        ✓ Coupon applied successfully!
-                                    </p>
+                                        {isCouponValid === true && (
+                                            <p className="text-xs text-green-600 font-semibold">
+                                                ✓ Coupon applied successfully!
+                                            </p>
+                                        )}
+                                    </div>
                                 )}
                             </div>
-                        )}
-                    </div>
+                        )
+                    }
 
                     {/* Total Amount */}
                     <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mt-6">
@@ -631,6 +644,11 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                     </div>
                 </div>
             )}
+
+            <AppDownloadModal
+                open={showAppDownloadModal}
+                onClose={() => setShowAppDownloadModal(false)}
+            />
         </div>
     );
 };

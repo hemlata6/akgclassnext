@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import { ShoppingCart } from 'lucide-react';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, TEXT_GREEN } from '../../constants/Icons';
 import { SYLLABUS_DATA } from '../../constants/data';
@@ -8,10 +9,11 @@ import Endpoints from '../../config/endpoints';
 import CourseConfigModal from '../Home/sections/CourseConfigModal';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
+import { BASE_URL } from '../../config/endpoints';
 
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
-
+  const [allEmployee, setAllEmployee] = useState([]);
   // Format duration from coursePricing
   const formatDuration = (duration) => {
     if (!duration || isNaN(duration)) return "0 hr";
@@ -29,7 +31,17 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
     return parts.length ? parts.join(" ") : "0 hr";
   };
 
-
+  useEffect(() => {
+    const fetchAllEmployee = async () => {
+      try {
+        const response = await Network.fetchEmployee(instId);
+        setAllEmployee(response.employees || []);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    };
+    fetchAllEmployee();
+  }, []);
 
 
   // Format watchTime
@@ -76,7 +88,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const handleShare = async () => {
     const baseUrl = window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
-      : 'https://caclasses.in';
+      : 'https://vgstudyhub.netlify.app/';
 
     const shareUrl = `${baseUrl}/course/${courseData?.id}`;
     const shareData = {
@@ -199,7 +211,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
               </div> */}
             </div>
             <div className="flex items-center gap-3">
-              <img
+              {/* <img
                 src="https://placehold.co/100x100/164e33/FFF?text=VD"
                 className="h-12 w-12 rounded-full object-cover border-2 border-white shadow-sm"
                 alt="Faculty"
@@ -207,6 +219,23 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
               <div>
                 <p className="text-sm font-bold text-slate-900">CA VIVEK GABA</p>
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
+              </div> */}
+              <div>
+                <div className='md:flex gap-2'>
+                  {allEmployee
+                    ?.filter((employee) =>
+                      employee.courseIds?.includes(Number(courseData?.id))
+                    )
+                    .map((employee) => (
+                      <img
+                        key={employee.id}
+                        src={Endpoints.mediaBaseUrl + employee.profile}
+                        className="h-12 w-12 rounded-full object-cover border-2 border-white"
+                        alt={employee.firstName}
+                        title={`${employee.firstName} ${employee.lastName}`}
+                      />
+                    ))}
+                </div>
               </div>
               <button
                 onClick={handleShare}
@@ -223,15 +252,32 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 
 const CourseContent = ({ courseData, onAddToCart }) => {
   const router = useRouter();
+  const { authToken, user } = useAuth();
 
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
+  const [selectedVariant, setSelectedVariant] = useState(null);
   const [selectedValidity, setSelectedValidity] = useState(null);
   const [cartCourses, setCartCourses] = useState([]);
   const [showConfigModal, setShowConfigModal] = useState(false);
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [checkoutResponse, setCheckoutResponse] = useState("");
+  const [errorBarMessage, setErrorBarMessage] = useState('');
+  const [showErrorBar, setShowErrorBar] = useState(false);
+  const [showCheckoutFormModal, setShowCheckoutFormModal] = useState(false);
+  const [checkoutStep, setCheckoutStep] = useState('form');
+  const [checkoutForm, setCheckoutForm] = useState({ name: '', email: '', contact: '' });
+  const [checkoutFormError, setCheckoutFormError] = useState('');
+  const [paymentUrl, setPaymentUrl] = useState('');
+  const [showMobilePaymentModal, setShowMobilePaymentModal] = useState(false);
+  const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
+  const [routeData, setRouteData] = useState(null);
+  const [tokenFromUrl, setTokenFromUrl] = useState(null);
+
+  // console.log("CourseData", courseData)
 
   // Load cart from localStorage
   useEffect(() => {
@@ -295,6 +341,24 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     return Array.from(modeSet);
   };
 
+  const getUniqueVariants = () => {
+    const variantSet = new Set();
+
+    courseData?.coursePricing?.forEach(course => {
+      if (course.variation) {
+        variantSet.add(course.variation);
+      } else if (course.variantName) {
+        variantSet.add(course.variantName);
+      } else if (course.tier) {
+        variantSet.add(course.tier);
+      } else if (course.packageName) {
+        variantSet.add(course.packageName);
+      }
+    });
+
+    return Array.from(variantSet);
+  };
+
   const getValidityOptions = () => {
     if (!selectedMode) return [];
 
@@ -352,6 +416,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   };
 
   const modes = getUniqueLearningModes();
+  const variants = getUniqueVariants();
   const validityOptions = getValidityOptions();
 
   // Set default selections
@@ -362,14 +427,20 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   }, [modes]);
 
   React.useEffect(() => {
+    if (variants.length > 0 && !selectedVariant) {
+      setSelectedVariant(variants[0]);
+    }
+  }, [variants]);
+
+  React.useEffect(() => {
     if (validityOptions.length > 0 && !selectedValidity) {
       setSelectedValidity(validityOptions[0]);
     }
   }, [validityOptions]);
 
-  // Calculate price based on selected mode and validity
+  // Calculate price based on selected mode, variant and validity
   const getSelectedPrice = () => {
-    if (!selectedMode || !selectedValidity) return null;
+    if (!selectedMode || !selectedVariant || !selectedValidity) return null;
 
     const selectedModes = selectedMode.split(" + ");
 
@@ -383,20 +454,40 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
       );
 
+      // Match variant - check all possible variant field names
+      const variantMatch = (
+        pricing.variation === selectedVariant ||
+        pricing.variantName === selectedVariant ||
+        pricing.tier === selectedVariant ||
+        pricing.packageName === selectedVariant
+      );
+
       // Match validity
       const validityMatch = formatValidity(pricing) === formatValidity(selectedValidity);
 
-      return modeMatch && validityMatch;
+      return modeMatch && variantMatch && validityMatch;
     });
 
     if (selectedPricing) {
       const originalPrice = selectedPricing.price || 0;
       const discount = selectedPricing.discount || 0;
       const discountedPrice = originalPrice - (originalPrice * discount / 100);
+
       return {
         originalPrice,
         discountedPrice,
-        discount
+        discount,
+        // Include additional pricing details from coursePricing
+        pricingId: selectedPricing.id,
+        validityType: selectedPricing.validityType,
+        duration: selectedPricing.duration,
+        expiry: selectedPricing.expiry,
+        watchTime: selectedPricing.watchTime,
+        liveAccess: selectedPricing.liveAccess,
+        onlineContentAccess: selectedPricing.onlineContentAccess,
+        offlineContentAccess: selectedPricing.offlineContentAccess,
+        faceToFaceAccess: selectedPricing.faceToFaceAccess,
+        quizAccess: selectedPricing.quizAccess
       };
     }
 
@@ -404,6 +495,19 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   };
 
   const priceInfo = getSelectedPrice();
+
+  // Debug logging for price calculation
+  React.useEffect(() => {
+    if (selectedMode && selectedVariant && selectedValidity) {
+      console.log('Price Calculation Debug:', {
+        selectedMode,
+        selectedVariant,
+        selectedValidity: formatValidity(selectedValidity),
+        priceInfo,
+        totalCoursePricing: courseData?.coursePricing?.length
+      });
+    }
+  }, [selectedMode, selectedVariant, selectedValidity, priceInfo]);
 
   const handleSuggestedCourseAddToCart = (suggestedCourse) => {
     const isAlreadyInCart = cartCourses.some(item => item.id === suggestedCourse.id);
@@ -416,6 +520,165 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     } else {
       setSelectedCourse(suggestedCourse);
       setShowConfigModal(true);
+    }
+  };
+
+  // Build query string from route params to preserve across navigation
+  const getQueryString = () => {
+    const params = new URLSearchParams();
+    if (routeData) params.append('isMobile', routeData);
+    if (tokenFromUrl) params.append('token', tokenFromUrl);
+    const queryStr = params.toString();
+    return queryStr ? `?${queryStr}` : '';
+  };
+
+  const splitName = (fullName = '') => {
+    const parts = fullName.trim().split(/\s+/).filter(Boolean);
+    return {
+      firstName: parts[0] || 'Guest',
+      lastName: parts.slice(1).join(' ') || ''
+    };
+  };
+
+  const openCheckoutForm = () => {
+    const defaultName = user?.name || '';
+    const defaultEmail = user?.email || '';
+    const defaultContact = user?.phone || '';
+
+    setCheckoutForm({
+      name: defaultName,
+      email: defaultEmail,
+      contact: defaultContact
+    });
+    setCheckoutFormError('');
+    setCheckoutStep('form');
+    setShowCheckoutFormModal(true);
+  };
+
+  const validateCheckoutForm = () => {
+    const { name, email, contact } = checkoutForm;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name.trim()) return 'Name is required.';
+    if (!email.trim() || !emailRegex.test(email)) return 'Enter a valid email address.';
+    if (!contact.trim() || contact.replace(/\D/g, '').length !== 10) return 'Contact number must be exactly 10 digits.';
+    return '';
+  };
+
+  const queryString = getQueryString();
+
+  // Check if we should hide global footer
+  const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
+
+  // // Detect query params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isMobileParam = params.get('isMobile');
+      const tokenParam = params.get('token');
+
+      if (isMobileParam) setRouteData(isMobileParam);
+      if (tokenParam) setTokenFromUrl(tokenParam);
+    }
+  }, [router.asPath]);
+
+
+  const handleProceedToCheckout = async (customerDetails = checkoutForm) => {
+    if (!priceInfo?.pricingId || !courseData?.id) {
+      const errorMsg = 'Please select a valid mode, variant and validity before checkout.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+      return;
+    }
+
+    const urlToken = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('token')
+      : null;
+
+    const checkoutToken = tokenFromUrl || urlToken || authToken;
+
+    setIsProcessing(true);
+
+    try {
+      const entityModals = [{
+        purchaseType: 'course',
+        entityId: courseData.id,
+        campusId: 0,
+        courseId: 0,
+        coursePricingId: priceInfo.pricingId
+      }];
+
+      const mobileBody = {
+        getCheckoutUrls: entityModals,
+        coupon: ''
+      };
+
+      const { firstName, lastName } = splitName(customerDetails?.name);
+
+      const publicBody = {
+        firstName,
+        lastName,
+        contact: customerDetails?.contact || '',
+        email: customerDetails?.email || '',
+        instId: instId,
+        campaignId: null,
+        coupon: '',
+        coursePricingId: 0,
+        entityModals
+      };
+
+      const endpoint = checkoutToken
+        ? `${BASE_URL}payment/get-checkout-url`
+        : `${BASE_URL}/admin/payment/fetch-public-checkout-url`;
+
+      const payload = checkoutToken ? mobileBody : publicBody;
+
+      const config = checkoutToken
+        ? { headers: { 'X-Auth': checkoutToken } }
+        : undefined;
+
+      const response = await axios.post(
+        endpoint,
+        payload,
+        config
+      );
+
+      if (response?.data?.status === true && response?.data?.url) {
+        setCheckoutResponse(response.data);
+        setShowCheckoutFormModal(false);
+
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          setPaymentUrl(response.data.url);
+          setShowMobilePaymentModal(true);
+          setPaymentDrawerOpen(true);
+          window.dispatchEvent(new Event('hideFooter'));
+        } else {
+          const width = 480;
+          const height = 1080;
+          const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+          const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+          window.open(
+            response.data.url,
+            'payment',
+            `location=no,width=${width},height=${height},top=${top},left=${left}`
+          );
+        }
+
+        return;
+      }
+
+      const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+    } catch (error) {
+      console.error('Checkout error:', error);
+      const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'Failed to start checkout. Please try again.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+    } finally {
+      setIsProcessing(false);
     }
   };
 
@@ -468,7 +731,39 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       You save ({priceInfo.discount}% OFF)
                     </p>
                   )}
+                  {/* {showErrorBar && errorBarMessage && (
+                    <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700 border border-red-200">
+                      {errorBarMessage}
+                    </p>
+                  )} */}
                 </div>
+
+                {/* Pricing Breakdown */}
+                {/* {priceInfo && (
+                  <div className="bg-slate-50 rounded-xl p-4 mb-6 text-xs space-y-2 border border-slate-200">
+                    <div className="font-bold text-slate-700 mb-3">Price Details</div>
+                    <div className="flex justify-between text-slate-600">
+                      <span>Base Price:</span>
+                      <span>₹{priceInfo.originalPrice?.toLocaleString('en-IN')}</span>
+                    </div>
+                    {priceInfo.discount > 0 && (
+                      <div className="flex justify-between text-emerald-600 font-semibold">
+                        <span>Discount ({priceInfo.discount}%):</span>
+                        <span>-₹{((priceInfo.originalPrice * priceInfo.discount) / 100)?.toLocaleString('en-IN')}</span>
+                      </div>
+                    )}
+                    <div className="border-t border-slate-300 pt-2 flex justify-between font-bold text-slate-900">
+                      <span>Final Price:</span>
+                      <span className={BRAND_GREEN_CLASS.replace('bg-', 'text-')}>₹{priceInfo.discountedPrice?.toLocaleString('en-IN')}</span>
+                    </div>
+                    {priceInfo.validityType && (
+                      <div className="mt-3 pt-3 border-t border-slate-300 text-slate-600">
+                        <div>Validity: {formatValidity(selectedValidity)}</div>
+                      </div>
+                    )}
+                  </div>
+                )} */}
+
                 <div className="space-y-4 mb-6">
                   <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Mode</label>
@@ -488,6 +783,23 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                     </div>
                   </div>
                   <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Variant</label>
+                    <div className="flex flex-wrap gap-2">
+                      {getUniqueVariants().map((variant) => (
+                        <button
+                          key={variant}
+                          onClick={() => setSelectedVariant(variant)}
+                          className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedVariant === variant
+                            ? `border-2 ${BRAND_GREEN_CLASS} text-white`
+                            : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                            }`}
+                        >
+                          {variant}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                  <div>
                     <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
                     <select
                       className="w-full p-2.5 rounded-lg border border-slate-200 text-sm font-semibold outline-none focus:border-emerald-600 bg-white"
@@ -502,42 +814,136 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                     </select>
                   </div>
                 </div>
-                <button
-                  onClick={() => {
-                    const isInCart = cartCourses.some(item => item.id === courseData?.id);
+                <div className="flex flex-row gap-3">
+                  <button o
+                    onClick={() => {
+                      const isInCart = cartCourses.some(item => item.id === courseData?.id);
 
-                    if (isInCart) {
-                      // Remove from cart
-                      const updatedCart = cartCourses.filter(item => item.id !== courseData?.id);
-                      setCartCourses(updatedCart);
-                      localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                      window.dispatchEvent(new Event('cartUpdated'));
-                    } else {
-                      // Add to cart via modal
-                      if (!courseData?.coursePricing || courseData.coursePricing.length === 0) {
-                        console.error('No pricing available for this course');
-                        return;
+                      if (isInCart) {
+                        // Remove from cart
+                        const updatedCart = cartCourses.filter(item => item.id !== courseData?.id);
+                        setCartCourses(updatedCart);
+                        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                        window.dispatchEvent(new Event('cartUpdated'));
+                      } else {
+                        // Add to cart with complete pricing info
+                        if (!courseData?.coursePricing || courseData.coursePricing.length === 0) {
+                          console.error('No pricing available for this course');
+                          return;
+                        }
+
+                        if (!priceInfo) {
+                          console.error('No price info available');
+                          return;
+                        }
+
+                        // Create cart item with all pricing details
+                        const cartItem = {
+                          ...courseData,
+                          pricingId: priceInfo.pricingId,
+                          coursePricingId: priceInfo.pricingId,
+                          selectedMode: selectedMode || '',
+                          selectedVariant: selectedVariant || '',
+                          selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
+                          finalPrice: priceInfo.discountedPrice,
+                          originalPrice: priceInfo.originalPrice,
+                          discount: priceInfo.discount,
+                          validityType: priceInfo.validityType,
+                          watchTime: priceInfo.watchTime,
+                          type: "Course"
+                        };
+
+                        const updatedCart = [...cartCourses, cartItem];
+                        setCartCourses(updatedCart);
+                        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                        window.dispatchEvent(new Event('cartUpdated'));
                       }
-                      setShowConfigModal(true);
-                    }
-                  }}
-                  disabled={!selectedMode || !selectedValidity || !priceInfo}
-                  className={`w-full py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
-                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                    : cartCourses.some(item => item.id === courseData?.id)
-                      ? 'bg-slate-700 hover:bg-slate-800 text-white'
+                    }}
+                    disabled={!selectedMode || !selectedVariant || !selectedValidity || !priceInfo}
+                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedVariant || !selectedValidity || !priceInfo
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : cartCourses.some(item => item.id === courseData?.id)
+                        ? 'bg-slate-700 hover:bg-slate-800 text-white'
+                        : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
+                      }`}>
+                    {cartCourses.some(item => item.id === courseData?.id) ? (
+                      <>Remove from Cart <Icons.X /></>
+                    ) : (
+                      <>Add to Cart</>
+                    )}
+                  </button>
+                  {/* <button
+                    onClick={() => {
+                      const isInCart = cartCourses.some(item => item.id === courseData?.id);
+
+                      if (isInCart) {
+                        // Remove from cart
+                        const updatedCart = cartCourses.filter(item => item.id !== courseData?.id);
+                        setCartCourses(updatedCart);
+                        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                        window.dispatchEvent(new Event('cartUpdated'));
+                      } else {
+                        // Add to cart with complete pricing info
+                        if (!courseData?.coursePricing || courseData.coursePricing.length === 0) {
+                          console.error('No pricing available for this course');
+                          return;
+                        }
+
+                        if (!priceInfo) {
+                          console.error('No price info available');
+                          return;
+                        }
+
+                        // Create cart item with all pricing details
+                        const cartItem = {
+                          ...courseData,
+                          pricingId: priceInfo.pricingId,
+                          coursePricingId: priceInfo.pricingId,
+                          selectedMode: selectedMode || '',
+                          selectedVariant: selectedVariant || '',
+                          selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
+                          finalPrice: priceInfo.discountedPrice,
+                          originalPrice: priceInfo.originalPrice,
+                          discount: priceInfo.discount,
+                          validityType: priceInfo.validityType,
+                          watchTime: priceInfo.watchTime,
+                          type: "Course"
+                        };
+
+                        const updatedCart = [...cartCourses, cartItem];
+                        setCartCourses(updatedCart);
+                        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                        window.dispatchEvent(new Event('cartUpdated'));
+                      }
+                    }}
+                    disabled={!selectedMode || !selectedVariant || !selectedValidity || !priceInfo}
+                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedVariant || !selectedValidity || !priceInfo
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : cartCourses.some(item => item.id === courseData?.id)
+                        ? 'bg-slate-700 hover:bg-slate-800 text-white'
+                        : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
+                      }`}
+                  >
+                    {cartCourses.some(item => item.id === courseData?.id) ? (
+                      <>Remove from Cart <Icons.X /></>
+                    ) : (
+                      <>Buy Now</>
+                    )}
+                  </button> */}
+                  <button
+                    onClick={openCheckoutForm}
+                    disabled={!selectedMode || !selectedVariant || !selectedValidity || !priceInfo || isProcessing}
+                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedVariant || !selectedValidity || !priceInfo || isProcessing
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                       : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
-                    }`}
-                >
-                  {cartCourses.some(item => item.id === courseData?.id) ? (
-                    <>Remove from Cart <Icons.X /></>
-                  ) : (
-                    <>Enroll Now <Icons.Cart /></>
-                  )}
-                </button>
-                <p className="text-[10px] text-slate-400 text-center mt-3">
+                      }`}
+                  >
+                    {isProcessing ? 'Processing...' : 'Buy Now'}
+                  </button>
+                </div>
+                {/* <p className="text-[10px] text-slate-400 text-center mt-3">
                   30-Day Money Back Guarantee • Secure Payment
-                </p>
+                </p> */}
               </div>
               {/* <div className="mt-6 bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-center gap-4">
                 <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center shadow-sm text-emerald-700">
@@ -670,6 +1076,123 @@ const CourseContent = ({ courseData, onAddToCart }) => {
             window.dispatchEvent(new Event('cartUpdated'));
           }}
         />
+      )}
+
+      {showCheckoutFormModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className={`${BRAND_GREEN_CLASS} px-5 py-4 flex items-center justify-between`}>
+              <h3 className="text-white font-bold text-lg">
+                {checkoutStep === 'form' ? 'Checkout Details' : 'Confirm Order'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowCheckoutFormModal(false)}
+                className="text-white/90 hover:text-white"
+              >
+                <Icons.X />
+              </button>
+            </div>
+
+            <div className="p-5">
+              {checkoutStep === 'form' ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Name</label>
+                    <input
+                      type="text"
+                      value={checkoutForm.name}
+                      onChange={(e) => setCheckoutForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full p-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-emerald-600"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={checkoutForm.email}
+                      onChange={(e) => setCheckoutForm(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full p-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-emerald-600"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Contact</label>
+                    <input
+                      type="tel"
+                      value={checkoutForm.contact}
+                      onChange={(e) => {
+                        const onlyDigits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setCheckoutForm(prev => ({ ...prev, contact: onlyDigits }));
+                      }}
+                      maxLength={10}
+                      inputMode="numeric"
+                      className="w-full p-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-emerald-600"
+                      placeholder="Enter contact number"
+                    />
+                  </div>
+                  {checkoutFormError && (
+                    <p className="text-xs text-red-600 font-medium">{checkoutFormError}</p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const formError = validateCheckoutForm();
+                      if (formError) {
+                        setCheckoutFormError(formError);
+                        return;
+                      }
+                      setCheckoutFormError('');
+                      setCheckoutStep('confirm');
+                    }}
+                    className={`w-full py-3 rounded-xl font-bold text-sm text-white ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS}`}
+                  >
+                    Continue
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2">
+                    <p className="text-xs text-slate-500 uppercase font-bold">Final Price</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      ₹{priceInfo?.discountedPrice?.toLocaleString('en-IN') || 0}
+                    </p>
+                    {priceInfo?.originalPrice && priceInfo.originalPrice !== priceInfo.discountedPrice && (
+                      <p className="text-sm text-slate-400 line-through">
+                        ₹{priceInfo.originalPrice.toLocaleString('en-IN')}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 p-4 text-sm text-slate-700 space-y-1">
+                    <p><span className="font-semibold">Name:</span> {checkoutForm.name}</p>
+                    <p><span className="font-semibold">Email:</span> {checkoutForm.email}</p>
+                    <p><span className="font-semibold">Contact:</span> {checkoutForm.contact}</p>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep('form')}
+                      className="flex-1 py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleProceedToCheckout(checkoutForm)}
+                      disabled={isProcessing}
+                      className={`flex-1 py-3 rounded-xl font-bold text-sm text-white ${isProcessing ? 'bg-slate-300 cursor-not-allowed' : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS}`}`}
+                    >
+                      {isProcessing ? 'Processing...' : 'ssss'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

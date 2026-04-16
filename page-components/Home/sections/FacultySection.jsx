@@ -1,12 +1,14 @@
 import Endpoints from "@/config/endpoints";
 import instId from "@/config/instituteId";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 const FacultyAndStatsSection = () => {
+    const router = useRouter();
 
     const [faculties, setFaculties] = useState([]);
 
-    console.log('faculties', faculties);
+    // console.log('faculties', faculties);
     useEffect(() => {
         fetchFaculties();
     }, [])
@@ -64,6 +66,29 @@ const FacultyAndStatsSection = () => {
         } catch (error) {
             console.error('Error fetching faculties:', error);
         }
+    };
+
+    // Handle faculty click
+    const handleFacultyRedirect = (faculty) => {
+        const fullName = typeof faculty === 'string'
+            ? faculty
+            : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
+
+        const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+        const facultyState = {
+            faculty: faculty,
+        };
+
+        router.push(
+            {
+                pathname: '/faculty/[facultyname]',
+                query: {
+                    facultyname: facultyName,
+                    state: JSON.stringify(facultyState),
+                },
+            },
+            `/faculty/${facultyName}`
+        );
     };
 
     // const FACULTY_DATA = [
@@ -155,7 +180,8 @@ const FacultyAndStatsSection = () => {
                             faculties.map((f, index) => (
                                 <div
                                     key={`${f.id}-${index}`}
-                                    className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md"
+                                    onClick={() => handleFacultyRedirect(f)}
+                                    className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-md cursor-pointer"
                                 >
                                     <div className="relative w-full aspect-[3/4] bg-slate-100">
                                         <img
@@ -196,6 +222,7 @@ const FacultyAndStatsSection = () => {
                                 [...faculties, ...faculties].map((f, index) => (
                                     <div
                                         key={`${f.id}-${index}`}
+                                        onClick={() => handleFacultyRedirect(f)}
                                         className="w-72 md:w-80 mx-4 flex-shrink-0 bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-2xl hover:scale-105 transition-all duration-300 cursor-pointer"
                                     >
                                         <div className="relative w-full aspect-[3/4] bg-slate-100">
