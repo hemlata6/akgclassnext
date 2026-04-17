@@ -3,11 +3,32 @@ import { Phone, MapPin, Mail } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
 
 const FAQS = [
-    { q: 'What is the batch strength?', a: 'Our batches are designed to maintain optimal learning with 50-80 students per batch to ensure personalized attention.' },
-    { q: 'Do you provide recorded lectures?', a: 'Yes, all live lectures are recorded and made available on our app for unlimited revision.' },
-    { q: 'What is your success rate?', a: 'We proudly have 85%+ success rate with many All India Rankers from our institute.' },
-    { q: 'Do you provide study material?', a: 'Yes, comprehensive study material, notes, and practice questions are provided both in print and digital format.' },
-    { q: 'Can I join mid-batch?', a: 'Yes, you can join anytime. Previous recorded lectures will be made available to you.' }
+    { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
+    { q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
+Even average students can build strong clarity and confidently write exams.` },
+    { q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
+
+Concept notes (easy language)
+Exam-oriented question bank
+Past exam questions coverage
+Mock tests & revision support
+You don’t need to purchase anything separately.` },
+    { q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
+
+Structured study plan
+Proper syllabus coverage
+Exam-focused teaching
+Time-saving preparation strategy
+Students save months of confusion and study in the right direction from Day 1.` },
+    { q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
+You’ll get a clear roadmap so you can maximize marks in minimum time.` },
+    { q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
+
+Clear explanations
+Smart exam strategy
+Consistent results
+
+If you’re serious about clearing CS Executive or CS Professional, this course gives you the right guidance, structure and confidence to succeed.` }
 ];
 
 export const StudentSupportSection = () => {

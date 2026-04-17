@@ -3,13 +3,18 @@ import { FileText, PlayCircle, CheckCircle, Download } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
 
 const FREE_RESOURCES = [
-    { title: 'Ind AS Notes & MCQs', type: 'PDF' },
-    { title: 'IDT Revision Videos', type: 'Video' },
-    { title: 'Mock Test Series', type: 'Test' },
+    { title: 'Important Notes & MCQs', type: 'PDF' },
+    { title: 'Revision Videos & Marathon Classes', type: 'Video' },
+    { title: 'Mock Test Series & Guidance', type: 'Test' },
     { title: 'Chapter-wise Practice Questions', type: 'PDF' }
 ];
 
 export const FreeResources = () => {
+
+    const handleNavigate = () => {
+        window.location.href = '/free-resources';
+    };
+
     return (
         <section id="free-resources-section" className="py-6 bg-slate-50 border-t border-slate-200">
             <div className={LAYOUT_PADDING}>
@@ -19,7 +24,9 @@ export const FreeResources = () => {
                         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Free Resources</h2>
                         <div className="space-y-3">
                             {FREE_RESOURCES.map((res, i) => (
-                                <div key={i} className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between hover:border-slate-400 transition-all cursor-pointer group shadow-sm hover:shadow-md">
+                                <div 
+                                onClick={handleNavigate}
+                                 key={i} className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between hover:border-slate-400 transition-all cursor-pointer group shadow-sm hover:shadow-md">
                                     <div className="flex items-center gap-4">
                                         <div className="h-12 w-12 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0 text-emerald-700">
                                             {res.type === 'PDF' && <FileText />}

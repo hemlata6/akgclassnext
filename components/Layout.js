@@ -5,6 +5,7 @@ import { Header, StickyMobileFooter } from '../components/Header/Header';
 export default function Layout({ children }) {
   const [cartCount, setCartCount] = useState(0);
   const [shouldHideControls, setShouldHideControls] = useState(false);
+  const [isStorePage, setIsStorePage] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function Layout({ children }) {
       const tokenParam = params.get('token');
       
       setShouldHideControls(!!(isMobileParam || tokenParam));
+      setIsStorePage(router.pathname === '/store');
     }
   }, [router.asPath]);
 
@@ -55,7 +57,7 @@ export default function Layout({ children }) {
 
   return (
     <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
-      {!shouldHideControls && <Header cartCount={cartCount} />}
+      {!shouldHideControls && !isStorePage && <Header cartCount={cartCount} />}
       {children}
       {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}
     </div>
