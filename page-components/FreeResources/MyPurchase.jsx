@@ -145,7 +145,7 @@ const MyPurchases = () => {
     if (item?.entityType === "video" && authToken) {
       if (item?.video?.youtubeUrl) {
         setSelectedItem(item);
-        setopenDialog(true)
+        // setopenDialog(true)
       }
       return;
     }
