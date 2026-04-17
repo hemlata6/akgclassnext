@@ -207,8 +207,8 @@ export default function CartPage() {
 
   // Payment polling - check payment status every 5 seconds
   useEffect(() => {
-    if ((!paymentDrawerOpen && !showMobilePaymentModal) || !checkoutResponse?.transactionId) {
-      console.log('Payment polling stopped - Drawer/Modal closed or no transaction ID');
+    if (!checkoutResponse?.transactionId) {
+      // console.log('Payment polling stopped - Drawer/Modal closed or no transaction ID');
       return;
     }
 
@@ -218,10 +218,10 @@ export default function CartPage() {
 
     return () => {
       clearInterval(intervalApi);
-      console.log('Payment polling interval cleared');
+      // console.log('Payment polling interval cleared');
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [paymentDrawerOpen, showMobilePaymentModal, checkoutResponse?.transactionId]);
+  }, [checkoutResponse?.transactionId]);
 
   const getColor = () => {
     if (isCouponValid === null) return '#1e40af';
@@ -292,15 +292,6 @@ export default function CartPage() {
 
       if (response?.data?.paymentStatus === "successful") {
 
-        setShowMobilePaymentModal(false);
-        setPaymentDrawerOpen(false);
-        setPaymentUrl('');
-        window.dispatchEvent(new Event('showFooter'));
-        handleClearCart();
-        setSuccessBarMessage('Payment successful! Thank you for your purchase.');
-        setShowSuccessBar(true);
-
-        // Post-payment: redirect authenticated users, show app download for guests
         if (isAuthenticated && authToken) {
           setTimeout(() => {
             router.push('/my-purchases');
@@ -310,11 +301,20 @@ export default function CartPage() {
             setShowAppDownloadModal(true);
           }, 1000);
         }
+
+        // setShowMobilePaymentModal(false);
+        // setPaymentDrawerOpen(false);
+        setPaymentUrl('');
+        window.dispatchEvent(new Event('showFooter'));
+        handleClearCart();
+        setSuccessBarMessage('Payment successful! Thank you for your purchase.');
+        setShowSuccessBar(true);
+
       } else if (response?.data?.paymentStatus === 'pending') {
-        console.log('⏳ Payment still pending...');
+        // console.log('⏳ Payment still pending...');
       } else if (response?.data?.paymentStatus === 'failed') {
-        console.error('✗ PAYMENT FAILED');
-        setPaymentDrawerOpen(false);
+        // console.error('✗ PAYMENT FAILED');
+        // setPaymentDrawerOpen(false);
         // alert('Payment failed. Please try again.');
       }
     } catch (err) {
@@ -324,6 +324,7 @@ export default function CartPage() {
 
   const handleClearCart = () => {
     localStorage.removeItem('cartCourses');
+    localStorage.removeItem('purchaseArray');
     setCartItems([]);
     window.dispatchEvent(new Event('cartUpdated'));
   };
@@ -335,82 +336,101 @@ export default function CartPage() {
     window.dispatchEvent(new Event('cartUpdated'));
   };
 
-  const handlePublicCheckout = async (checkoutData) => {
-    try {
-      const body = {
-        firstName: checkoutData.firstName,
-        lastName: checkoutData.lastName,
-        contact: checkoutData.contact,
-        email: checkoutData.email,
-        instId: instId,
-        campaignId: null,
-        coupon: checkoutData.coupon,
-        coursePricingId: 0,
-        entityModals: checkoutData.entityModals
-      };
+  // const handlePublicCheckout = async (checkoutData) => {
+  //   try {
+  //     const body = {
+  //       firstName: checkoutData.firstName,
+  //       lastName: checkoutData.lastName,
+  //       contact: checkoutData.contact,
+  //       email: checkoutData.email,
+  //       instId: instId,
+  //       campaignId: null,
+  //       coupon: checkoutData.coupon,
+  //       coursePricingId: 0,
+  //       entityModals: checkoutData.entityModals
+  //     };
 
-      // Call public checkout API
-      const response = await axios.post(
-        `${BASE_URL}/admin/payment/fetch-public-checkout-url`,
-        body
-      );
+  //     // Call public checkout API
+  //     const response = await axios.post(
+  //       `${BASE_URL}/admin/payment/fetch-public-checkout-url`,
+  //       body
+  //     );
 
-      if (response?.data?.status === true && response?.data?.url) {
-        // Close checkout modal
-        setShowCheckoutModal(false);
+  //     if (response?.data?.status === true && response?.data?.url) {
+  //       // Close checkout modal
+  //       setShowCheckoutModal(false);
 
-        // Store checkout response for payment polling
-        setCheckoutResponse(response?.data);
+  //       // Store checkout response for payment polling
+  //       setCheckoutResponse(response?.data);
 
-        const isMobile = window.innerWidth <= 768;
+  //       const isMobile = window.innerWidth <= 768;
 
-        if (isMobile) {
-          setPaymentUrl(response.data.url);
-          setShowMobilePaymentModal(true);
-          setPaymentDrawerOpen(true);
-          window.dispatchEvent(new Event('hideFooter'));
-        } else {
-          // Open payment URL in popup for desktop
-          const width = 480;
-          const height = 1080;
-          const left = window.screenX + (window.outerWidth / 2) - (width / 2);
-          const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+  //       if (isMobile) {
+  //         setPaymentUrl(response.data.url);
+  //         setShowMobilePaymentModal(true);
+  //         setPaymentDrawerOpen(true);
+  //         window.dispatchEvent(new Event('hideFooter'));
+  //       } else {
+  //         // Open payment URL in popup for desktop
+  //         const width = 480;
+  //         const height = 1080;
+  //         const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+  //         const top = window.screenY + (window.outerHeight / 2) - (height / 2);
 
-          window.open(
-            response.data.url,
-            'payment',
-            `location=no,width=${width},height=${height},top=${top},left=${left}`
-          );
+  //         window.open(
+  //           response.data.url,
+  //           'payment',
+  //           `location=no,width=${width},height=${height},top=${top},left=${left}`
+  //         );
 
-          // Start payment polling
-          setPaymentDrawerOpen(true);
-        }
+  //         // Start payment polling
+  //         setPaymentDrawerOpen(true);
+  //       }
 
-        // Check if should show login modal after checkout
-        // if (!isAuthenticated && !authToken) {
-        //   setTimeout(() => {
-        //     setShowLoginModal(true);
-        //   }, 500);
-        // }
-      } else {
-        if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
-        const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
-        setErrorBarMessage(errorMsg);
-        setShowErrorBar(true);
-        setShowCheckoutModal(false);
-      }
-    } catch (error) {
-      console.error('Public checkout error:', error);
-      if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
-      const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
-      setErrorBarMessage(errorMsg);
-      setShowErrorBar(true);
-      setShowCheckoutModal(false);
-    }
-  };
+  //       // Check if should show login modal after checkout
+  //       if (!isAuthenticated && !authToken) {
+  //         setTimeout(() => {
+  //           setShowLoginModal(true);
+  //         }, 500);
+  //       } else {
+  //         setTimeout(() => {
+  //           router.push('/my-purchases');
+  //         }, 1000);
+  //       }
+  //       // Post-payment: redirect authenticated users, show app download for guests
+  //       // if (isAuthenticated && authToken) {
+  //       //   setTimeout(() => {
+  //       //     router.push('/my-purchases');
+  //       //   }, 1000);
+  //       // } else {
+  //       //   setTimeout(() => {
+  //       //     setShowAppDownloadModal(true);
+  //       //   }, 1000);
+  //       // }
+  //     } else {
+  //       if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
+  //       const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+  //       setErrorBarMessage(errorMsg);
+  //       setShowErrorBar(true);
+  //       setShowCheckoutModal(false);
+  //     }
+  //   } catch (error) {
+  //     console.error('Public checkout error:', error);
+  //     if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
+  //     const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+  //     setErrorBarMessage(errorMsg);
+  //     setShowErrorBar(true);
+  //     setShowCheckoutModal(false);
+  //   }
+  // };
 
+  // console.log('checkoutResponse', checkoutResponse);
+  // console.log('checkoutResponse', checkoutResponse);
 
   const handleProceedToCheckout = async () => {
+
+    // console.log('Proceeding to checkout with params - isAuthenticated:', isAuthenticated, 'authToken:', authToken, 'tokenFromUrl:', tokenFromUrl);
+
     if (queryString) {
       // Mobile mode (query params) - always call API with tokenParam
       setIsProcessing(true);
@@ -434,15 +454,26 @@ export default function CartPage() {
           { headers: { "X-Auth": tokenFromUrl } }
         );
 
+        // console.log('Mobile checkout response:', response);
+
+
         if (response?.data?.status === true && response?.data?.url) {
           setCheckoutResponse(response?.data);
-
+          // Post-payment: redirect authenticated users, show app download for guests
+          // if (isAuthenticated && authToken) {
+          //   setTimeout(() => {
+          //     router.push('/my-purchases');
+          //   }, 1000);
+          // } else {
+          //   setTimeout(() => {
+          //     setShowAppDownloadModal(true);
+          //   }, 1000);
+          // }
           const isMobile = window.innerWidth <= 768;
 
           if (isMobile) {
             setPaymentUrl(response.data.url);
             setShowMobilePaymentModal(true);
-            setPaymentDrawerOpen(true);
             window.dispatchEvent(new Event('hideFooter'));
           } else {
             const width = 480;
@@ -456,7 +487,18 @@ export default function CartPage() {
               `location=no,width=${width},height=${height},top=${top},left=${left}`
             );
 
-            setPaymentDrawerOpen(true);
+            // Post-payment: redirect authenticated users, show app download for guests
+            // if (isAuthenticated && authToken) {
+            //   setTimeout(() => {
+            //     router.push('/my-purchases');
+            //   }, 1000);
+            // } else {
+            //   setTimeout(() => {
+            //     setShowAppDownloadModal(true);
+            //   }, 1000);
+            // }
+
+            // setPaymentDrawerOpen(true);
           }
         } else {
           if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
@@ -488,17 +530,17 @@ export default function CartPage() {
           coursePricingId: item.coursePricingId || item.pricingId || 0
         }));
 
-        const body = {
-          firstName: studentData?.firstName || studentData?.name?.split(' ')[0] || 'User',
-          lastName: studentData?.lastName || studentData?.name?.split(' ').slice(1).join(' ') || '',
-          contact: studentData?.contact || studentData?.phone || '',
-          email: studentData?.email || '',
-          instId: instId,
-          campaignId: null,
-          coupon: isCouponValid ? couponNumber : "",
-          coursePricingId: 0,
-          entityModals
-        };
+        // const body = {
+        //   firstName: studentData?.firstName || studentData?.name?.split(' ')[0] || 'User',
+        //   lastName: studentData?.lastName || studentData?.name?.split(' ').slice(1).join(' ') || '',
+        //   contact: studentData?.contact || studentData?.phone || '',
+        //   email: studentData?.email || '',
+        //   instId: instId,
+        //   campaignId: null,
+        //   coupon: isCouponValid ? couponNumber : "",
+        //   coursePricingId: 0,
+        //   entityModals
+        // };
 
         const mobileBody = {
           "getCheckoutUrls": entityModals,
@@ -516,20 +558,42 @@ export default function CartPage() {
           // Store checkout response for payment polling
           setCheckoutResponse(response?.data);
 
+          // console.log('✓ PAYMENT SUCCESSFUL - Clearing cart 99');
+          // Post-payment: redirect authenticated users, show app download for guests
+          // if (isAuthenticated && authToken) {
+          //   setTimeout(() => {
+          //     router.push('/my-purchases');
+          //   }, 1000);
+          // } else {
+          //   setTimeout(() => {
+          //     setShowAppDownloadModal(true);
+          //   }, 1000);
+          // }
+
           // Check if mobile device
           const isMobile = window.innerWidth <= 768;
 
           if (isMobile) {
             setPaymentUrl(response.data.url);
             setShowMobilePaymentModal(true);
-            setPaymentDrawerOpen(true);
-            // Hide footer when payment modal opens
             window.dispatchEvent(new Event('hideFooter'));
           } else {
             const width = 480;
             const height = 1080;
             const left = window.screenX + (window.outerWidth / 2) - (width / 2);
             const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+            // console.log('✓ PAYMENT SUCCESSFUL - Clearing cart 99999');
+            // Post-payment: redirect authenticated users, show app download for guests
+            // if (isAuthenticated && authToken) {
+            //   setTimeout(() => {
+            //     router.push('/my-purchases');
+            //   }, 1000);
+            // } else {
+            //   setTimeout(() => {
+            //     setShowAppDownloadModal(true);
+            //   }, 1000);
+            // }
 
             window.open(
               response.data.url,
@@ -538,7 +602,7 @@ export default function CartPage() {
             );
 
             // Start payment polling for desktop
-            setPaymentDrawerOpen(true);
+            // setPaymentDrawerOpen(true);
           }
 
           // Don't clear cart here - will be cleared after successful payment
@@ -548,6 +612,7 @@ export default function CartPage() {
           setErrorBarMessage(errorMsg);
           setShowErrorBar(true);
         }
+
       } catch (error) {
         console.error('Checkout error:', error);
         if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
@@ -604,7 +669,7 @@ export default function CartPage() {
     );
   }
 
-  console.log('cartItems', cartItems);
+  // console.log('cartItems', cartItems);
 
 
   return (
@@ -788,7 +853,6 @@ export default function CartPage() {
           cartCourses={cartItems}
           onClose={() => setShowCheckoutModal(false)}
           totalAmount={total}
-          onSubmitCheckout={handlePublicCheckout}
         />
       </Dialog>
 
@@ -810,7 +874,7 @@ export default function CartPage() {
         onClose={() => {
           setShowMobilePaymentModal(false);
           setPaymentUrl('');
-          setPaymentDrawerOpen(false);
+          // setPaymentDrawerOpen(false);
           window.dispatchEvent(new Event('showFooter'));
         }}
         fullScreen

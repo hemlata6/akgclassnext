@@ -9,7 +9,7 @@ import Endpoints, { BASE_URL } from '../../config/endpoints';
 import { Dialog, DialogContent, IconButton } from '@mui/material';
 import AppDownloadModal from '../../components/Modals/AppDownloadModal';
 
-const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin, setCartItems, onSubmitCheckout }) => {
+const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount }) => {
     const router = useRouter();
 
     const { isAuthenticated, user, authToken } = useAuth();
@@ -91,16 +91,16 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     }, [showSuccessBar]);
 
     // Prevent body scroll when payment drawer is open
-    useEffect(() => {
-        if (paymentDrawerOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [paymentDrawerOpen]);
+    // useEffect(() => {
+    //     if (paymentDrawerOpen) {
+    //         document.body.style.overflow = 'hidden';
+    //     } else {
+    //         document.body.style.overflow = 'unset';
+    //     }
+    //     return () => {
+    //         document.body.style.overflow = 'unset';
+    //     };
+    // }, [paymentDrawerOpen]);
 
     useEffect(() => {
         if (cartCourses?.length > 0) {
@@ -158,9 +158,12 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         }
     }, [cartCourses]);
 
+    // console.log('isAuthenticated', isAuthenticated , 'authToken', authToken);
+
     // Payment polling - check payment status every 5 seconds
     useEffect(() => {
-        if (!paymentDrawerOpen || !checkoutResponse?.transactionId) {
+        // console.log('======', checkoutResponse);
+        if (!checkoutResponse?.transactionId) {
             // console.log('Payment polling stopped - Drawer closed or no transaction ID');
             return;
         }
@@ -173,7 +176,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
             clearInterval(intervalApi);
             // console.log('Payment polling interval cleared');
         };
-    }, [paymentDrawerOpen, checkoutResponse?.transactionId, isAuthenticated, authToken]);
+    }, [checkoutResponse?.transactionId, isAuthenticated, authToken]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -219,35 +222,37 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 `${Endpoints.baseURL}payment/check-payment-status/${checkoutResponse?.transactionId}`,
                 { headers: { "Authorization": `Bearer ${authToken}` } }
             );
-            console.log('💳 Payment Status Response:', response?.data?.paymentStatus);
+            // console.log('💳 Payment Status Response:', response?.data?.paymentStatus);
 
-            if (response?.data?.paymentStatus === "initiated") {
-                console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
+            if (response?.data?.paymentStatus === "successful") {
+                // console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
                 setShowSuccessBar(true);
                 setSuccessBarMessage('Payment successful! Thank you for your purchase.');
                 handleClearCart();
                 setTimeout(() => {
-                    setPaymentDrawerOpen(false);
-                    onClose();
-                    console.log('Auth check - isAuthenticated:', isAuthenticated, 'authToken:', !!authToken);
+                    // onClose();
+                    // setPaymentDrawerOpen(false);
+                    // console.log('Auth check - isAuthenticated:', isAuthenticated, 'authToken:', !!authToken);
                     if (isAuthenticated && authToken) {
-                        console.log('✓ User authenticated, redirecting to my-purchases');
+                        // console.log('✓ User authenticated, redirecting to my-purchases');
                         router.push('/my-purchases');
+                        // onClose();
                     } else {
-                        console.log('✓ User not authenticated, showing app download modal');
+                        // console.log('✓ User not authenticated, showing app download modal');
                         setShowAppDownloadModal(true);
+                        // onClose();
                     }
                 }, 2000);
             } else if (response?.data?.paymentStatus === 'pending') {
                 // console.log('⏳ Payment still pending...');
             } else if (response?.data?.paymentStatus === 'failed') {
-                console.error('✗ PAYMENT FAILED');
+                // console.error('✗ PAYMENT FAILED');
                 setShowErrorBar(true);
                 setErrorBarMessage('Payment failed. Please try again.');
-                setPaymentDrawerOpen(false);
+                // setPaymentDrawerOpen(false);
             }
         } catch (err) {
-            console.error('Error checking payment status:', err);
+            // console.error('Error checking payment status:', err);
         }
     };
 
@@ -327,33 +332,71 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         setIsSubmitting(true);
 
         try {
-            // Prepare payload data to send back to CartPage
             const nameParts = formData.fullName.split(' ');
-            const checkoutData = {
+            const body = {
                 firstName: nameParts[0] || 'User',
                 lastName: nameParts.slice(1).join(' ') || '',
                 contact: formData.phone,
                 email: formData.email,
+                instId: instId,
+                campaignId: null,
                 coupon: isCouponValid ? couponNumber : "",
-                entityModals: payloadCart,
-                urlParams: urlParams
+                coursePricingId: 0,
+                entityModals: payloadCart
             };
 
-            // Pass data back to CartPage for API call
-            await onSubmitCheckout(checkoutData);
+            const response = await axios.post(
+                `${BASE_URL}/admin/payment/fetch-public-checkout-url`,
+                body
+            );
 
-            // Clear form
-            setFormData({ fullName: '', email: '', phone: '' });
+            if (response?.data?.status === true && response?.data?.url) {
+                setCheckoutResponse(response.data);
+
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    setPaymentUrl(response.data.url);
+                    setPaymentDrawerOpen(true);
+                    window.dispatchEvent(new Event('hideFooter'));
+                } else {
+                    const width = 480;
+                    const height = 1080;
+                    const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+                    const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+                    window.open(
+                        response.data.url,
+                        'payment',
+                        `location=no,width=${width},height=${height},top=${top},left=${left}`
+                    );
+                    // setPaymentDrawerOpen(true);
+                }
+            } else {
+                const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+                setErrorBarMessage(errorMsg);
+                setShowErrorBar(true);
+            }
         } catch (error) {
-            console.error('Form submission error:', error);
+            console.error('Checkout error:', error);
+            const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+            setErrorBarMessage(errorMsg);
+            setShowErrorBar(true);
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const handleAppDownloadModalClose = () => {
+        setShowAppDownloadModal(false);
+        if (typeof onClose === 'function') {
+            onClose();
+        }
+    };
+
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+        <>
+            {!showAppDownloadModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+                    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className={`${BRAND_GREEN_CLASS} p-6 rounded-t-2xl relative`}>
                     <button
@@ -517,22 +560,22 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                         Secure Payment via Razorpay • 256-bit SSL Encrypted
                     </p>
                 </form>
-            </div>
+                    </div>
 
-            {/* Payment Dialog */}
-            <Dialog
-                open={paymentDrawerOpen}
-                onClose={() => setPaymentDrawerOpen(false)}
-                fullScreen
-                PaperProps={{
-                    sx: {
-                        margin: 0,
-                        maxHeight: '100vh',
-                        display: 'flex',
-                        flexDirection: 'column'
-                    }
-                }}
-            >
+                    {/* Payment Dialog */}
+                    <Dialog
+                        open={paymentDrawerOpen}
+                        onClose={() => setPaymentDrawerOpen(false)}
+                        fullScreen
+                        PaperProps={{
+                            sx: {
+                                margin: 0,
+                                maxHeight: '100vh',
+                                display: 'flex',
+                                flexDirection: 'column'
+                            }
+                        }}
+                    >
                 {/* Header */}
                 <div
                     className="flex items-center justify-between p-3 bg-emerald-800 flex-shrink-0"
@@ -591,65 +634,67 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                         scrolling="yes"
                     />
                 </DialogContent>
-            </Dialog>
+                    </Dialog>
 
-            {/* Error Notification Bar */}
-            {showErrorBar && (
-                <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
-                    <div className="bg-red-600 text-white px-4 py-4 shadow-2xl rounded-lg">
-                        <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-3 flex-1">
-                                <div className="flex-shrink-0">
-                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                    {/* Error Notification Bar */}
+                    {showErrorBar && (
+                        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+                            <div className="bg-red-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3 flex-1">
+                                        <div className="flex-shrink-0">
+                                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <p className="text-sm font-semibold">{errorBarMessage}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowErrorBar(false)}
+                                        className="flex-shrink-0 text-white hover:text-red-200 transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <p className="text-sm font-semibold">{errorBarMessage}</p>
                             </div>
-                            <button
-                                onClick={() => setShowErrorBar(false)}
-                                className="flex-shrink-0 text-white hover:text-red-200 transition-colors"
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
                         </div>
-                    </div>
-                </div>
-            )}
+                    )}
 
-            {/* Success Notification Bar */}
-            {showSuccessBar && (
-                <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
-                    <div className="bg-green-600 text-white px-4 py-4 shadow-2xl rounded-lg">
-                        <div className="flex items-center justify-between gap-4">
-                            <div className="flex items-center gap-3 flex-1">
-                                <div className="flex-shrink-0">
-                                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                    {/* Success Notification Bar */}
+                    {showSuccessBar && (
+                        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+                            <div className="bg-green-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+                                <div className="flex items-center justify-between gap-4">
+                                    <div className="flex items-center gap-3 flex-1">
+                                        <div className="flex-shrink-0">
+                                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                        <p className="text-sm font-semibold">{successBarMessage}</p>
+                                    </div>
+                                    <button
+                                        onClick={() => setShowSuccessBar(false)}
+                                        className="flex-shrink-0 text-white hover:text-green-200 transition-colors"
+                                    >
+                                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                                        </svg>
+                                    </button>
                                 </div>
-                                <p className="text-sm font-semibold">{successBarMessage}</p>
                             </div>
-                            <button
-                                onClick={() => setShowSuccessBar(false)}
-                                className="flex-shrink-0 text-white hover:text-green-200 transition-colors"
-                            >
-                                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-                                </svg>
-                            </button>
                         </div>
-                    </div>
+                    )}
                 </div>
             )}
 
             <AppDownloadModal
                 open={showAppDownloadModal}
-                onClose={() => setShowAppDownloadModal(false)}
+                onClose={handleAppDownloadModalClose}
             />
-        </div>
+        </>
     );
 };
 

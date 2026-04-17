@@ -328,7 +328,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                             <div
                                 className="flex gap-6 transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${1.5 / itemsPerView}rem)))`
                                 }}
                             >
                                 {filtered.map((course, i) => {

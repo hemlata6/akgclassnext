@@ -11,6 +11,7 @@ import instId from "../context/instituteId";
 import { BASE_URL } from "../context/endpoints";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTheme } from "../context/ThemeContext";
+import AppDownloadModal from '../../components/Modals/AppDownloadModal';
 
 const CartPageTest = ({ onQuizNavigation }) => {
 
@@ -40,6 +41,7 @@ const CartPageTest = ({ onQuizNavigation }) => {
     const [couponNumber, setCouponNumber] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [isCouponValid, setIsCouponValid] = useState(null);
+    const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
     const isLogoTheme = currentTheme === 'logo';
 
     useEffect(() => {
@@ -67,6 +69,8 @@ const CartPageTest = ({ onQuizNavigation }) => {
         }
 
     }, [tokenFromUrl]);
+
+    console.log('isAuthenticated', isAuthenticated, 'tokenFromUrl', tokenFromUrl, 'checkoutResponse', checkoutResponse);
 
     useEffect(() => {
         // Only poll if payment drawer is open and we have a transactionId
@@ -163,10 +167,18 @@ const CartPageTest = ({ onQuizNavigation }) => {
             );
             // console.log('💳 Payment Status Response:', response);
 
-            if (response?.data?.paymentStatus === "successful") {
 
-                handleClearCart();
-                setPaymentDrawerOpen(false);
+
+            if (response?.data?.paymentStatus === "initiated") {
+
+                // handleClearCart();
+                // setPaymentDrawerOpen(false);
+
+                if (isAuthenticated) {
+                    setTimeout(() => { router.push('/my-purchases'); }, 1000);
+                } else {
+                    setTimeout(() => { setShowAppDownloadModal(true); }, 1000);
+                }
 
             } else if (response?.data?.paymentStatus === 'pending') {
                 console.log('⏳ Payment still pending...');
@@ -586,6 +598,7 @@ const CartPageTest = ({ onQuizNavigation }) => {
     };
 
     return (
+        <>
         <Box
             className="cart-page-wrapper"
             sx={{
@@ -1541,6 +1554,12 @@ const CartPageTest = ({ onQuizNavigation }) => {
                 </Stack>
             </Backdrop>
         </Box>
+
+        <AppDownloadModal
+            open={showAppDownloadModal}
+            onClose={() => setShowAppDownloadModal(false)}
+        />
+        </>
     );
 };
 
