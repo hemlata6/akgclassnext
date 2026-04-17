@@ -61,7 +61,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
           <Box sx={{ px: 4, pb: 4, space: 2 }}>
             {/* Google Play Store */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.VG STUDY HUB"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -101,8 +101,12 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
 
-            {/* App Store (Coming Soon) */}
+            {/* App Store */}
             <a
+              href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -114,8 +118,14 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
                 color: 'inherit',
                 marginBottom: 10,
                 transition: 'all 0.2s',
-                opacity: 0.6,
-                cursor: 'not-allowed',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#e0e7ff';
+                e.currentTarget.style.backgroundColor = '#f0f4ff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               <div style={{ flexShrink: 0 }}>
@@ -127,14 +137,14 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: '600', color: '#111827', fontSize: '14px' }}>App Store</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>Coming Soon</div>
+                <div style={{ fontSize: '12px', color: '#64748b' }}>iOS</div>
               </div>
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
 
             {/* Microsoft Store */}
             <a
-              href="https://apps.microsoft.com/detail/9NXGR6JTHCKH?hl=en-us&gl=IN&ocid=pdpshare"
+              href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}

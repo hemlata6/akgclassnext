@@ -250,7 +250,7 @@ const MyPurchases = () => {
     });
   };
 
-  console.log('selectedSceduleList', selectedSceduleList);
+  // console.log('selectedSceduleList', selectedSceduleList);
 
   // console.log('mycourseList', mycourseList);
 
@@ -286,7 +286,7 @@ const MyPurchases = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         {/* Header Section */}
         <div className="text-center mb-6 sm:mb-8 lg:mb-12">
@@ -479,7 +479,15 @@ const MyPurchases = () => {
                       </div>
 
                       {/* Action Button */}
-                      <button className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 ${item?.entityType?.toLowerCase() === "folder"
+                      <button
+                        onClick={(e) => {
+                          if (item?.entityType === "video") {
+                            e.stopPropagation();
+                            setSelectedItem(item);
+                            setFormModalOpen(true);
+                          }
+                        }}
+                        className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 ${item?.entityType?.toLowerCase() === "folder"
                         ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 hover:shadow-amber-500/30"
                         : item?.entityType === "audio"
                           ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-green-500/30"
@@ -601,21 +609,32 @@ const MyPurchases = () => {
                 {/* Download Buttons */}
                 <div className="space-y-3">
                   <a
-                    href="https://play.google.com/store/apps/details?id=com.classio.quiz"
+                    href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-4 px-4 rounded-xl font-semibold text-base transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-3"
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/30 flex items-center justify-center gap-3"
                   >
-                    <Download className="w-5 h-5" />
-                    Download from Play Store
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.37.21.8.22 1.19.04l11.16-6.44-2.5-2.5-9.85 8.9zM.5 1.6C.19 1.99 0 2.56 0 3.28v17.44c0 .72.19 1.29.51 1.68l.09.08 9.77-9.77v-.23L.59 1.52l-.09.08zM20.33 10.3l-2.43-1.4-2.78 2.78 2.78 2.78 2.44-1.41c.7-.4.7-1.35-.01-1.75zM4.37.24L15.53 6.68l-2.5 2.5L3.18.28C3.57.1 4 .1 4.37.24z"/></svg>
+                    Google Play (Android)
                   </a>
-
-                  <button
-                    onClick={() => setShowAppDownloadDialog(false)}
-                    className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 py-3 px-4 rounded-xl font-medium text-sm transition-all duration-300"
+                  <a
+                    href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-3"
                   >
-                    Maybe Later
-                  </button>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    App Store (iOS)
+                  </a>
+                  <a
+                    href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-3"
+                  >
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.55H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                    Microsoft Store (Windows)
+                  </a>
                 </div>
 
                 {/* Note */}
