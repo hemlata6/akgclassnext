@@ -177,7 +177,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
             ? 'http://localhost:3000'
             : 'https://vgstudyhub.netlify.app/';
 
-        const shareUrl = `${baseUrl}/course/${bookData?.id}`;
+        const shareUrl = `${baseUrl}/book/${bookData?.id}`;
         const shareData = {
             title: bookData?.title || 'Book',
             url: shareUrl
