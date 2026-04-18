@@ -45,6 +45,28 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   }, []);
 
 
+  // Format validity from first pricing
+  const getHeaderValidity = () => {
+    const pricing = courseData?.coursePricing?.[0];
+    if (!pricing) return 'N/A';
+    if (pricing.validityType === 'expiry' && pricing.expiry) {
+      return new Date(pricing.expiry).toLocaleDateString('en-IN', { year: 'numeric', month: 'short', day: 'numeric' });
+    } else if (pricing.validityType === 'lifetime') {
+      return 'Lifetime';
+    } else if (pricing.validityType === 'validity' && pricing.duration) {
+      const totalDays = Math.floor(pricing.duration / (1000 * 60 * 60 * 24));
+      const yr = Math.floor(totalDays / 365);
+      const mon = Math.floor((totalDays % 365) / 30);
+      const days = (totalDays % 365) % 30;
+      const parts = [];
+      if (yr) parts.push(`${yr} Year${yr > 1 ? 's' : ''}`);
+      if (mon) parts.push(`${mon} Month${mon > 1 ? 's' : ''}`);
+      if (days) parts.push(`${days} Day${days > 1 ? 's' : ''}`);
+      return parts.length > 0 ? parts.join(' ') : 'N/A';
+    }
+    return 'N/A';
+  };
+
   // Format watchTime
   const formatWatchTime = () => {
     const firstPricing = courseData?.coursePricing?.[0];
@@ -201,6 +223,13 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                 <div>
                   <p className="text-[10px] text-slate-500 uppercase font-bold">Watch Time</p>
                   <p className="text-sm font-bold text-slate-900">{formatWatchTime()}</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="p-2 bg-emerald-50 rounded-lg text-emerald-700"><Icons.Clock /></div>
+                <div>
+                  <p className="text-[10px] text-slate-500 uppercase font-bold">Validity</p>
+                  <p className="text-sm font-bold text-slate-900">{getHeaderValidity()}</p>
                 </div>
               </div>
               {/* <div className="flex items-center gap-2">
@@ -421,6 +450,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const modes = getUniqueLearningModes();
   const variants = getUniqueVariants();
   const validityOptions = getValidityOptions();
+  const uniqueValidityLabels = Array.from(new Set(validityOptions.map((pricing) => formatValidity(pricing))));
+  const shouldShowValidityChip = validityOptions.length > 0 && uniqueValidityLabels.length === 1;
 
   // Set default selections
   React.useEffect(() => {
@@ -809,20 +840,31 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       ))}
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
-                    <select
-                      className="w-full p-2.5 rounded-lg border border-slate-200 text-sm font-semibold outline-none focus:border-emerald-600 bg-white"
-                      value={selectedValidity ? JSON.stringify(selectedValidity) : ''}
-                      onChange={(e) => setSelectedValidity(JSON.parse(e.target.value))}
-                    >
-                      {validityOptions.map((pricing, idx) => (
-                        <option key={idx} value={JSON.stringify(pricing)}>
-                          {formatValidity(pricing)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {validityOptions.length > 1 && !shouldShowValidityChip && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
+                      <select
+                        className="w-full p-2.5 rounded-lg border border-slate-200 text-sm font-semibold outline-none focus:border-emerald-600 bg-white"
+                        value={selectedValidity ? JSON.stringify(selectedValidity) : ''}
+                        onChange={(e) => setSelectedValidity(JSON.parse(e.target.value))}
+                      >
+                        {validityOptions.map((pricing, idx) => (
+                          <option key={idx} value={JSON.stringify(pricing)}>
+                            {formatValidity(pricing)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {shouldShowValidityChip && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Validity</label>
+                      <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all border-2 ${BRAND_GREEN_CLASS} text-white`}>
+                        {uniqueValidityLabels[0]}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="flex flex-row gap-3">
                   {cartCourses.some(item => item.id === courseData?.id) ? (

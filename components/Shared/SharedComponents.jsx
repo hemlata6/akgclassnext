@@ -88,6 +88,12 @@ export const Footer = () => {
               >
                 Contact us
               </li>
+              <li
+                onClick={() => router.push('/download-app')}
+                className="cursor-pointer hover:text-emerald-400 transition-colors"
+              >
+                Download App
+              </li>
             </ul>
           </div>
           <div>

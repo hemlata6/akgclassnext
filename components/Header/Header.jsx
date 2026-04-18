@@ -435,8 +435,8 @@ export const Header = ({ cartCount }) => {
             {/* Socials & Login */}
             <div className="flex items-center h-full">
               <div className="hidden md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
-                <a href="#" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
-                <a href="#" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
+                <a href="https://www.youtube.com/channel/UCrJOgw6aiIurQxfqriZ_-qQ" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
+                <a href="https://www.instagram.com/cavgtaxlife/" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
                 <a href="#" className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
                 <a href="#" className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
               </div>
@@ -604,10 +604,7 @@ export const Header = ({ cartCount }) => {
                     </>
                   )}
                 </div>
-              </div>
-
-
-              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
+              </div>  
 
               {/* Faculty Menu */}
               <div
@@ -650,6 +647,11 @@ export const Header = ({ cartCount }) => {
               </div>
 
               <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Free Resources</button>
+
+              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
+
+              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button>
+
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
             </nav>
 
@@ -692,9 +694,9 @@ export const Header = ({ cartCount }) => {
             </div>
 
             <div className="flex items-center gap-5 ml-auto">
-              <button className="hidden lg:flex items-center gap-2 bg-rose-50 text-rose-700 border border-rose-100 px-3 py-1.5 rounded-md text-[11px] font-bold hover:bg-rose-100 transition-colors animate-pulse">
+              {/* <button className="hidden lg:flex items-center gap-2 bg-rose-50 text-rose-700 border border-rose-100 px-3 py-1.5 rounded-md text-[11px] font-bold hover:bg-rose-100 transition-colors animate-pulse">
                 <Icons.Gift /> Birthday Offer
-              </button>
+              </button> */}
 
               <button
                 onClick={() => router.push('/cart')}
@@ -737,7 +739,7 @@ export const Header = ({ cartCount }) => {
               </div>
               <div className="flex flex-col gap-1">
                 <button onClick={() => router.push('/')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Home</button>
-                <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button>
+                {/* <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button> */}
                 <div className="">
                   <button
                     onClick={() => {
@@ -915,9 +917,61 @@ export const Header = ({ cartCount }) => {
                     </div>
                   )}
                 </div>
+                {/* Faculty Menu */}
+                <div className="">
+                  <button
+                    onClick={() => {
+                      if (openMobileSubmenu === 'faculty') {
+                        setOpenMobileSubmenu(null);
+                      } else {
+                        setOpenMobileSubmenu('faculty');
+                        if (employees.length === 0) {
+                          fetchEmployeeList();
+                        }
+                      }
+                    }}
+                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
+                  >
+                    <span>Faculty</span>
+                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'faculty' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {openMobileSubmenu === 'faculty' && (
+                    <div className="space-y-1 mt-1 pl-2">
+                      {employeesLoading ? (
+                        <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
+                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
+                          <span>Loading faculty...</span>
+                        </div>
+                      ) : employees.length > 0 ? (
+                        employees.map((e) => {
+                          const fullName = [e?.firstName, e?.lastName].filter(Boolean).join(' ');
+                          return (
+                            <button
+                              key={e?.id || fullName}
+                              onClick={() => {
+                                handleFaculty(e);
+                                setMobileMenuOpen(false);
+                                setOpenMobileSubmenu(null);
+                              }}
+                              className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
+                            >
+                              <span className="truncate">{fullName}</span>
+                              <Icons.ChevronRight size={16} />
+                            </button>
+                          );
+                        })
+                      ) : (
+                        <p className="px-4 py-2 text-xs text-slate-400">No faculty available</p>
+                      )}
+                    </div>
+                  )}
+                </div>
 
-                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
                 <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
+
+                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+
+                 <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 
