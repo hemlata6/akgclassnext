@@ -72,7 +72,12 @@ function MyApp({ Component, pageProps }) {
                   <img
                     src={`${Endpoints?.mediaBaseUrl}${announcements[0]?.image}`}
                     alt="Announcement"
-                    className="w-full h-auto object-cover"
+                    className={`w-full h-auto object-cover ${announcements[0]?.type === 'link' && announcements[0]?.contentLink ? 'cursor-pointer' : ''}`}
+                    onClick={() => {
+                      if (announcements[0]?.type === 'link' && announcements[0]?.contentLink) {
+                        window.open(announcements[0].contentLink, '_blank', 'noopener,noreferrer');
+                      }
+                    }}
                   />
                 </div>
               </div>

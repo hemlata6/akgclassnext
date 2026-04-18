@@ -51,6 +51,7 @@ export const PromoBanners = () => {
     const fetchBanners = async () => {
         try {
             const response = await Network.getBannersApi(instId);
+            console.log('API Response for Banners:', response);
             if (response && response.banners && response.banners.length > 0) {
                 const activeBanners = response.banners.filter(banner => banner.active);
 
@@ -62,6 +63,7 @@ export const PromoBanners = () => {
                         alt: banner.title || 'Banner',
                         bg: 'bg-slate-900'
                     }));
+                    console.log('Fetched Banners:', bannerSlides);
                     setSlides(bannerSlides);
                 }
             }
@@ -111,10 +113,13 @@ export const PromoBanners = () => {
     };
 
     const handleLinkClick = (slide) => {
-        if (slide?.contentLink) {
-            window.open(slide?.contentLink, '_blank');
+        const isRedirectBanner = String(slide?.link || '').toLowerCase() === 'link';
+        const targetUrl = slide?.contentLink;
+
+        if (isRedirectBanner && targetUrl) {
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
         }
-    }
+    };
 
     return (
         <section className="relative w-full group bg-slate-900 overflow-hidden">
