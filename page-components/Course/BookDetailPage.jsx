@@ -340,7 +340,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
 
                             {/* <div className="flex items-center gap-1.5 text-xs"> */}
                             <div>
-                                <div className='md:flex gap-2'>
+                                <div className='flex -space-x-2'>
                                     {allEmployee
                                         ?.filter((employee) =>
                                             employee.courseIds?.includes(Number(bookData?.id))

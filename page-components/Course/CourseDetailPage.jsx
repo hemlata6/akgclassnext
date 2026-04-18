@@ -251,7 +251,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                 <p className="text-xs text-emerald-600 font-medium">Core Faculty</p>
               </div> */}
               <div>
-                <div className='md:flex gap-2'>
+                <div className='flex -space-x-2'>
                   {allEmployee
                     ?.filter((employee) =>
                       employee.courseIds?.includes(Number(courseData?.id))
