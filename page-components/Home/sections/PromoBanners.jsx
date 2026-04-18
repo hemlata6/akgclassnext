@@ -51,7 +51,7 @@ export const PromoBanners = () => {
     const fetchBanners = async () => {
         try {
             const response = await Network.getBannersApi(instId);
-            console.log('API Response for Banners:', response);
+            // console.log('API Response for Banners:', response);
             if (response && response.banners && response.banners.length > 0) {
                 const activeBanners = response.banners.filter(banner => banner.active);
 
@@ -63,7 +63,7 @@ export const PromoBanners = () => {
                         alt: banner.title || 'Banner',
                         bg: 'bg-slate-900'
                     }));
-                    console.log('Fetched Banners:', bannerSlides);
+                    // console.log('Fetched Banners:', bannerSlides);
                     setSlides(bannerSlides);
                 }
             }
