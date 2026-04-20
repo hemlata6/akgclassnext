@@ -113,7 +113,8 @@ export const PromoBanners = () => {
     };
 
     const handleLinkClick = (slide) => {
-        const isRedirectBanner = String(slide?.link || '').toLowerCase() === 'link';
+        console.log('Banner clicked:', slide);
+        const isRedirectBanner = String(slide?.type || '').toLowerCase() === 'link';
         const targetUrl = slide?.contentLink;
 
         if (isRedirectBanner && targetUrl) {
@@ -122,15 +123,18 @@ export const PromoBanners = () => {
     };
 
     return (
-        <section className="relative w-full group bg-slate-900 overflow-hidden">
+        <section className="relative w-full group bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
 
-            <div className="w-full aspect-[2/1] md:aspect-[3/1] relative overflow-hidden">
+            <div className="w-full aspect-[2/1] md:aspect-[2.5/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
+
+                {/* Animated Background Gradient */}
+                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-transparent to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-5" />
 
                 {slides?.map((slide, index) => (
                     <div
                         onClick={() => handleLinkClick(slide)}
                         key={index}
-                        className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${index === currentSlide
+                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out cursor-pointer ${index === currentSlide
                             ? 'opacity-100 z-10'
                             : 'opacity-0 z-0'
                             }`}
@@ -139,31 +143,39 @@ export const PromoBanners = () => {
                         <img
                             src={slide.mobileSrc}
                             alt={slide.alt}
-                            className="md:hidden w-full h-full object-cover opacity-60"
+                            className="md:hidden w-full h-full object-cover"
                         />
 
                         {/* Desktop */}
                         <img
                             src={slide.desktopSrc}
                             alt={slide.alt}
-                            className="hidden md:block w-full h-full object-cover opacity-60"
+                            className="hidden md:block w-full h-full object-cover"
                         />
 
+                        {/* Gradient Overlay - focused at top-left so lower-left stays clean */}
+                        <div className="absolute inset-0" />
+
                         {/* Content Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-start pl-6 md:pl-20 lg:pl-32">
+                        <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 md:pl-12 lg:pl-24">
                             <div
-                                className="max-w-xl text-white opacity-0 animate-in slide-in-from-left-10 duration-700"
+                                className="max-w-lg md:max-w-2xl text-white opacity-0 animate-in slide-in-from-left-8 duration-800"
                                 style={{
-                                    animationDelay: '100ms',
+                                    animationDelay: '200ms',
                                     animationFillMode: 'forwards'
                                 }}
                             >
-                                <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold leading-tight mb-8 tracking-tight">
+                                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-3 sm:mb-4 md:mb-6 lg:mb-8 tracking-tight drop-shadow-lg">
                                     {slide.alt}
                                 </h2>
 
-                                <button className="bg-white text-slate-900 hover:bg-indigo-50 px-8 py-3.5 rounded-lg font-bold text-sm md:text-base transition-all hover:translate-x-1 flex items-center gap-2">
+                                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 mb-4 md:mb-6 max-w-md drop-shadow-md hidden sm:block">
+                                    Unlock your potential with expert guidance
+                                </p>
+
+                                <button className="group/btn bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg font-bold text-xs sm:text-sm md:text-base transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/50 flex items-center gap-2 w-fit transform hover:scale-105">
                                     Explore Now
+                                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
                                 </button>
                             </div>
                         </div>
@@ -173,28 +185,31 @@ export const PromoBanners = () => {
                 {/* Prev Button */}
                 <button
                     onClick={prevSlide}
-                    className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white p-3 border border-white/10 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300"
+                    aria-label="Previous slide"
+                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
                 >
-                    <ChevronLeft />
+                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
 
                 {/* Next Button */}
                 <button
                     onClick={nextSlide}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/5 hover:bg-white/10 text-white/70 hover:text-white p-3 border border-white/10 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300"
+                    aria-label="Next slide"
+                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
                 >
-                    <ChevronRight />
+                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
 
-                {/* Dots */}
-                <div className="absolute bottom-8 left-6 md:left-20 lg:left-32 flex gap-2 z-30">
+                {/* Dots Indicator */}
+                <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-12 lg:left-24 flex gap-1.5 sm:gap-2 z-30">
                     {slides.map((_, idx) => (
                         <button
                             key={idx}
                             onClick={() => goToSlide(idx)}
-                            className={`h-1.5 rounded-full transition-all duration-300 ${currentSlide === idx
-                                ? 'w-8 bg-indigo-500'
-                                : 'w-2 bg-white/30 hover:bg-white/60'
+                            aria-label={`Go to slide ${idx + 1}`}
+                            className={`rounded-full transition-all duration-300 ${currentSlide === idx
+                                ? 'w-8 h-2 bg-gradient-to-r from-indigo-400 to-indigo-600 shadow-lg shadow-indigo-500/50'
+                                : 'w-2 h-2 bg-white/40 hover:bg-white/70'
                                 }`}
                         />
                     ))}
