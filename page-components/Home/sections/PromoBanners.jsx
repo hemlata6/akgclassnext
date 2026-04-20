@@ -126,6 +126,7 @@ export const PromoBanners = () => {
 
                         return (
                             <div
+                            onClick={() => handleClickOnImage(slide)}
                                 key={index}
                                 className={`
                 flex-shrink-0

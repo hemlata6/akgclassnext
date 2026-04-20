@@ -31,6 +31,18 @@ function MyApp({ Component, pageProps }) {
     }
   };
 
+  const handleAnnouncementClick = () => {
+    if (announcements[0]?.type === 'link' && announcements[0]?.contentLink) {
+      // For internal links
+      if (announcements[0]?.contentLink.startsWith('/')) {
+        router.push(announcements[0]?.contentLink);
+      } else {
+        // For external links
+        window.open(announcements[0]?.contentLink, '_blank');
+      }
+    }
+  };
+
   useEffect(() => {
     // Fetch announcements on initial load
     fetchAnnouncements();
@@ -72,7 +84,10 @@ function MyApp({ Component, pageProps }) {
                   <img
                     src={`${require('../config/endpoints').default?.mediaBaseUrl}${announcements[0]?.image}`}
                     alt="Announcement"
-                    className="w-full h-auto object-cover"
+                    onClick={handleAnnouncementClick}
+                    className={`w-full h-auto object-cover ${
+                      announcements[0]?.type === 'link' ? 'cursor-pointer hover:opacity-90 transition-opacity' : ''
+                    }`}
                   />
                 </div>
               </div>
