@@ -292,7 +292,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                 </div>
                             </div> */}
                             <div>
-                                <div>
+                                <div className='flex -space-x-2'>
                                     {allEmployee
                                         ?.filter((employee) =>
                                             employee.courseIds?.includes(Number(bookData?.id))

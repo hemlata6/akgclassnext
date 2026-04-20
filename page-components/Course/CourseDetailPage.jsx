@@ -248,7 +248,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                 alt="Faculty"
               /> */}
               <div>
-                <div>
+                <div className="flex -space-x-2">
                   {allEmployee
                     ?.filter((employee) =>
                       employee.courseIds?.includes(Number(courseData?.id))
