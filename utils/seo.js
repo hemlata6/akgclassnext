@@ -37,7 +37,7 @@ export const generateMetaTags = (options) => {
   const {
     title = 'VG STUDY HUB',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
-    image = 'https://vgstudyhub.netlify.app/logo.png',
+    image = 'https://lpacacma.netlify.app/logo.png',
     url = 'https://vgstudyhub.netlify.app',
     type = 'website',
     publishedTime = null,
@@ -105,7 +105,7 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://vgstudyhub.netlify.app/logo.png',
+    image = 'https://lpacacma.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
     author = 'VG STUDY HUB',
@@ -134,7 +134,7 @@ export const generateBlogStructuredData = (blog, url) => {
       url: 'https://vgstudyhub.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://vgstudyhub.netlify.app/logo.png',
+        url: 'https://lpacacma.netlify.app/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -154,7 +154,7 @@ export const generateOrganizationStructuredData = () => {
     '@type': 'EducationalOrganization',
     name: 'VG STUDY HUB',
     url: 'https://vgstudyhub.netlify.app',
-    logo: 'https://vgstudyhub.netlify.app/logo.png',
+    logo: 'https://lpacacma.netlify.app/logo.png',
     description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA VIVEK GABA',
     sameAs: [
       // Add your social media URLs
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://vgstudyhub.netlify.app/logo.png';
+  if (!blog) return 'https://lpacacma.netlify.app/logo.png';
 
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
 
   // Default fallback
-  return 'https://vgstudyhub.netlify.app/logo.png';
+  return 'https://lpacacma.netlify.app/logo.png';
 };
 
 /**

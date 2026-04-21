@@ -111,7 +111,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const handleShare = async () => {
     const baseUrl = window.location.hostname === 'localhost'
       ? 'http://localhost:3000'
-      : 'https://vgstudyhub.netlify.app/';
+      : 'https://lpacacma.netlify.app/';
 
     const shareUrl = `${baseUrl}/course/${courseData?.id}`;
     const shareData = {
