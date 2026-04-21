@@ -436,9 +436,9 @@ export const Header = ({ cartCount }) => {
             <div className="flex items-center h-full">
               <div className="hidden md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
                 <a href="https://www.youtube.com/channel/UCrJOgw6aiIurQxfqriZ_-qQ" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
-                <a href="https://www.instagram.com/cavgtaxlife/" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
-                <a href="#" className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
-                <a href="#" className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
+                <a href={institute?.instituteAppSettingsModals?.instagramLink} className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
+                <a href={institute?.instituteAppSettingsModals?.instagramLink} className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
+                <a href={institute?.instituteAppSettingsModals?.instagramLink} className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
               </div>
               {user ? (
                 <div className="relative group hidden md:block">
@@ -650,7 +650,7 @@ export const Header = ({ cartCount }) => {
 
               <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
 
-              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button>
+              {/* <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button> */}
 
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
             </nav>
@@ -720,7 +720,7 @@ export const Header = ({ cartCount }) => {
             <div className="bg-white shadow-xl h-[calc(100%+16px)] flex items-center px-6 rounded-b-lg border-b-[3px] border-indigo-600 transform transition-transform hover:translate-y-1 duration-300 origin-top">
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  <img src="/vghub/bghublogo.jpeg" alt="Next Gen CA" className="h-16 md:h-16 object-contain" />
+                  <img src="/logo.png" alt="LPA CA CMA" className="h-16 md:h-16 object-contain" />
 
                 </Link>
               </div>

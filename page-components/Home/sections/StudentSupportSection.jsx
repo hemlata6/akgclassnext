@@ -1,28 +1,34 @@
 import React, { useState } from 'react';
 import { Phone, MapPin, Mail } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
+import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
     { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
-    { q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
+    {
+        q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
 Even average students can build strong clarity and confidently write exams.` },
-    { q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
+    {
+        q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
 
 Concept notes (easy language)
 Exam-oriented question bank
 Past exam questions coverage
 Mock tests & revision support
 You don’t need to purchase anything separately.` },
-    { q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
+    {
+        q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
 
 Structured study plan
 Proper syllabus coverage
 Exam-focused teaching
 Time-saving preparation strategy
 Students save months of confusion and study in the right direction from Day 1.` },
-    { q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
+    {
+        q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
 You’ll get a clear roadmap so you can maximize marks in minimum time.` },
-    { q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
+    {
+        q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
 
 Clear explanations
 Smart exam strategy
@@ -33,6 +39,8 @@ If you’re serious about clearing CS Executive or CS Professional, this course 
 
 export const StudentSupportSection = () => {
     const [open, setOpen] = useState(null);
+
+    const { institute } = useAuth();
 
     return (
         <section className="py-6 bg-white border-t border-slate-200">
@@ -73,23 +81,23 @@ export const StudentSupportSection = () => {
                                 <div className="mb-4 space-y-2 text-sm">
                                     <div className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4 text-emerald-400" />
-                                        <span className="text-slate-300">D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</span>
+                                        <span className="text-slate-300">{institute?.address === null ? '-' : institute?.address}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href="mailto:info.vgsh@gmail.com" className="text-slate-300 hover:text-white">info.vgsh@gmail.com</a>
+                                        <a href={`mailto:${institute?.email}`} className="text-slate-300 hover:text-white">{institute?.email === null ? '-' : institute?.email}</a>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <a
-                                        href="tel:+917703880232"
+                                        href={`tel:${institute?.contact}`}
                                         className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-md"
                                     >
-                                        <Phone /> Call: 7703880232
+                                        <Phone /> Call: {institute?.contact === null ? '-' : institute?.contact}
                                     </a>
                                     <a
-                                        href="https://wa.me/917703880232"
+                                        href={`https://wa.me/${institute?.contact}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-2 shadow-md border border-white/20"

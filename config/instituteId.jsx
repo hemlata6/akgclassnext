@@ -29,6 +29,9 @@
 // const instId = 367;
 
 // vghub
-const instId = 454;
+// const instId = 454;
+
+// lpa ca cma
+const instId = 5206;
 
 export default instId;

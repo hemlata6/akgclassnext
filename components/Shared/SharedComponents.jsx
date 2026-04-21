@@ -24,6 +24,8 @@ export const Footer = () => {
     router.push('/store');
   };
 
+  // console.log('institute', institute);
+
 
   return (
     <footer className="bg-slate-950 text-slate-500 pt-10 pb-24 md:pb-10 border-t border-slate-900">
@@ -36,7 +38,7 @@ export const Footer = () => {
               </div> */}
               {institute?.institue ? institute?.institue : "VG STUDY HUB"}
             </div>
-            <p>Best VG STUDY HUB for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
+            <p>{institute?.instituteAppSettingsModals?.appBio ? institute?.instituteAppSettingsModals?.appBio : "-"}</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
@@ -99,14 +101,14 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: 9318492718, 7703880232, 8882090148</li>
-              <li>info.vgsh@gmail.com</li>
-              <li>D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</li>
+              { institute?.institute &&  (<li>Call: {institute?.institute}</li>)}
+              { institute?.email &&  (<li>Email: {institute?.email}</li>)}
+              { institute?.address &&  (<li>{institute?.address}</li>)}
             </ul>
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 VG STUDY HUB Education. All rights reserved.
+          © 2026 LPA CA CMA. All rights reserved.
           <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
         </div>
       </div>

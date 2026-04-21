@@ -5,9 +5,9 @@ const ThemeContext = createContext();
 // Theme configurations
 export const THEMES = {
   darkBlue: {
-    name: 'Dark Blue',
-    primary: '#000d4e',
-    primaryHover: '#00135e',
+    name: 'LPA Navy',
+    primary: '#2b2973',
+    primaryHover: '#39378a',
     primaryClass: 'bg-indigo-700',
     primaryHoverClass: 'hover:bg-indigo-600',
     textClass: 'text-indigo-700',
@@ -55,7 +55,7 @@ export const ThemeProvider = ({ children }) => {
     if (savedTheme && THEMES[savedTheme]) {
       setCurrentTheme(savedTheme);
     } else {
-      // Set dark blue as default
+      // Use brand-aligned navy theme by default.
       setCurrentTheme('darkBlue');
     }
   }, []);

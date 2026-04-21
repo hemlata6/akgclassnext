@@ -15,7 +15,7 @@ const DownloadAppPage = () => {
             name: 'Google Play Store',
             platform: 'Android',
             description: 'Download for Android devices',
-            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub',
+            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.lpa',
             icon: (
                 <img src="/playStoreLogo.jpeg" alt="Google Play Store" className="w-20 h-20 object-contain" />
             ),
@@ -27,7 +27,7 @@ const DownloadAppPage = () => {
             name: 'App Store',
             platform: 'iOS',
             description: 'Download for iPhone & iPad',
-            url: 'https://apps.apple.com/in/app/vg-study-hub/id6759287172',
+            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.lpa',
             icon: (
                 <img src="/appstoreConnectLogo.png" alt="App Store" className="w-20 h-20 object-contain" />
             ),
@@ -39,7 +39,7 @@ const DownloadAppPage = () => {
             name: 'Microsoft Store',
             platform: 'Windows',
             description: 'Download for Windows PC',
-            url: 'https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare',
+            url: 'https://apps.microsoft.com/detail/9NSFM9ZHWDG6?hl=en-us&gl=IN&ocid=pdpshare',
             icon: (
                 <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 3.449L9.75 2.1v9.451H0z" fill="#F25022" />
@@ -51,18 +51,18 @@ const DownloadAppPage = () => {
             color: 'from-cyan-50 to-blue-50',
             accentColor: '#00A4EF'
         },
-        {
-            id: 'mac',
-            name: 'Mac Direct Download',
-            platform: 'macOS',
-            description: 'Download for Mac',
-            url: 'https://baseclassio.b-cdn.net/VG%20Study%20Hub.zip',
-            icon: (
-                <img src="/macLogo.png" alt="Mac Direct Download" className="w-20 h-20 object-contain" />
-            ),
-            color: 'from-gray-50 to-slate-50',
-            accentColor: '#000000'
-        }
+        // {
+        //     id: 'mac',
+        //     name: 'Mac Direct Download',
+        //     platform: 'macOS',
+        //     description: 'Download for Mac',
+        //     url: 'https://baseclassio.b-cdn.net/VG%20Study%20Hub.zip',
+        //     icon: (
+        //         <img src="/macLogo.png" alt="Mac Direct Download" className="w-20 h-20 object-contain" />
+        //     ),
+        //     color: 'from-gray-50 to-slate-50',
+        //     accentColor: '#000000'
+        // }
     ];
 
     const handleDownload = (url) => {
@@ -82,7 +82,7 @@ const DownloadAppPage = () => {
                         </div>
 
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
-                            Get VG Study Hub
+                            Get LPA CA CMA on Your Device!
                         </h1>
 
                         <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8">
@@ -106,7 +106,7 @@ const DownloadAppPage = () => {
                     </div>
 
                     {/* Download Cards Grid */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+                    <div className="flex flex-wrap justify-center gap-6 mb-16">
                         {downloadLinks.map((link) => (
                             <div
                                 key={link.id}

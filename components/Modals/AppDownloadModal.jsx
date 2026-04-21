@@ -61,7 +61,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
           <Box sx={{ px: 4, pb: 4, space: 2 }}>
             {/* Google Play Store */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.lpa"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -103,7 +103,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* App Store */}
             <a
-              href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.lpa"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -144,7 +144,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* Microsoft Store */}
             <a
-              href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
+              href="https://apps.microsoft.com/detail/9NSFM9ZHWDG6?hl=en-us&gl=IN&ocid=pdpshare"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -184,7 +184,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
             </a>
 
             {/* Mac Download */}
-            <a
+            {/* <a
               href="https://baseclassio.b-cdn.net/VG%20Study%20Hub.zip"
               target="_blank"
               rel="noopener noreferrer"
@@ -223,7 +223,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
                 <div style={{ fontSize: '12px', color: '#64748b' }}>macOS</div>
               </div>
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
-            </a>
+            </a> */}
           </Box>
 
           {/* Footer */}
