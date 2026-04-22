@@ -184,7 +184,7 @@ const FacultyProfile = ({ }) => {
                                     />
                                 </div>
                                 {/* Faculty Info Card */}
-                                <div className="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-100">
+                                {/* <div className="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-100">
                                     <h1 className="text-2xl font-bold text-slate-900 mb-1">{faculty?.name}</h1>
                                     <p className="text-teal-700 font-semibold mb-4" style={{ color: theme.primary }}>{faculty?.subtitle}</p>
                                     {faculty?.tagLine && (
@@ -200,7 +200,7 @@ const FacultyProfile = ({ }) => {
                                             ))}
                                         </div>
                                     )}
-                                </div>
+                                </div> */}
                             </div>
 
                             <div className="w-full md:w-2/3 md:overflow-y-auto md:pr-2">

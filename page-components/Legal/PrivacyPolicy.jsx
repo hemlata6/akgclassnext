@@ -2,9 +2,12 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { Footer } from '../../components/Shared/SharedComponents';
+import { useAuth } from '@/config/AuthContext';
 
 const PrivacyPolicy = () => {
     const router = useRouter();
+    const {institute} = useAuth();
+    console.log('institute in privacy policy', institute);
 
     return (
         <div className="bg-white min-h-screen pb-16 md:pb-0">
@@ -212,7 +215,7 @@ const PrivacyPolicy = () => {
                         <section className="mb-8">
                             <h2 className="text-2xl font-bold text-slate-900 mb-4">GRIEVANCES:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                If you have any questions about this Policy, wish to exercise your rights, concerns about privacy or grievances, please write to us with a thorough description via email to <strong>rahulscaacademy@gmail.com</strong>.
+                                If you have any questions about this Policy, wish to exercise your rights, concerns about privacy or grievances, please write to us with a thorough description via email to <strong>{institute?.email}</strong>.
                             </p>
                         </section>
 
@@ -280,7 +283,7 @@ const PrivacyPolicy = () => {
                             </div>
 
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                For complete details on CCPA data practices, consumer rights, and requests under the CCPA, please refer to the full policy document or contact us at <strong>rahulscaacademy@gmail.com</strong>.
+                                For complete details on CCPA data practices, consumer rights, and requests under the CCPA, please refer to the full policy document or contact us at <strong>{institute?.email}</strong>.
                             </p>
                         </section>
 

@@ -114,8 +114,54 @@ export const Header = ({ cartCount }) => {
   const [employees, setEmployees] = useState([]);
   const [employeesLoading, setEmployeesLoading] = useState(false);
 
+  const [employees, setEmployees] = useState([]);
+  const [employeesLoading, setEmployeesLoading] = useState(false);
 
+  // Fetch employee list for Faculty menu
+  const fetchEmployeeList = async () => {
+    try {
+      setEmployeesLoading(true);
+      const response = await Network.fetchEmployee(instId);
+      if (response?.errorCode === 0 && response?.employees) {
+        const filteredEmployees = response.employees.filter(
+          emp => emp.showInApp === true
+        );
+        // console.log('filteredEmployees', filteredEmployees, response)
+        setEmployees(filteredEmployees);
+      } else {
+        // console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
+        setEmployees([]);
+      }
+    } catch (error) {
+      console.error('Error fetching employee list:', error);
+      setEmployees([]);
+    } finally {
+      setEmployeesLoading(false);
+    }
+  };
 
+  // Handle faculty click
+  const handleFaculty = (faculty) => {
+    const fullName = typeof faculty === 'string'
+      ? faculty
+      : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
+
+    const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+    const facultyState = {
+      faculty: faculty,
+    };
+
+    router.push(
+      {
+        pathname: '/faculty/[facultyname]',
+        query: {
+          facultyname: facultyName,
+          state: JSON.stringify(facultyState),
+        },
+      },
+      `/faculty/${facultyName}`
+    );
+  };
 
   // console.log('domains', domains, booksDomains);
 
@@ -133,6 +179,11 @@ export const Header = ({ cartCount }) => {
     fetchAnnouncements();
     fetchEmployeeList();
   }, [user]);
+
+  useEffect(() => {
+
+    fetchEmployeeList();
+  }, []);
 
   // Refresh student data when user changes (e.g., after signup/login)
   useEffect(() => {
@@ -432,10 +483,10 @@ export const Header = ({ cartCount }) => {
             {/* Socials & Login */}
             <div className="flex items-center h-full">
               <div className="hidden md:flex items-center gap-4 mr-6 border-r border-slate-700 pr-6 h-5">
-                <a href="#" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
-                <a href="#" className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
-                <a href="#" className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
-                <a href="#" className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
+                <a href="https://www.youtube.com/channel/UCrJOgw6aiIurQxfqriZ_-qQ" className="text-slate-400 hover:text-red-500 transition-colors"><Icons.Youtube /></a>
+                <a href={institute?.instituteAppSettingsModals?.instagramLink} className="text-slate-400 hover:text-pink-500 transition-colors"><Icons.Instagram /></a>
+                <a href={institute?.instituteAppSettingsModals?.instagramLink} className="text-slate-400 hover:text-sky-400 transition-colors"><Icons.Telegram /></a>
+                <a href={institute?.instituteAppSettingsModals?.instagramLink} className="text-slate-400 hover:text-green-500 transition-colors"><Icons.Whatsapp /></a>
               </div>
               {user ? (
                 <div className="relative group hidden md:block">
@@ -601,7 +652,7 @@ export const Header = ({ cartCount }) => {
                     </>
                   )}
                 </div>
-              </div>
+              </div>  
 
               {/* Faculty Menu */}
               <div
@@ -642,11 +693,13 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
               </div>
-              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
-
-
 
               <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Free Resources</button>
+
+              <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
+
+              {/* <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button> */}
+
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
             </nav>
 
@@ -715,7 +768,8 @@ export const Header = ({ cartCount }) => {
             <div className="bg-white shadow-xl h-[calc(100%+16px)] flex items-center px-6 rounded-b-lg border-b-[3px] border-indigo-600 transform transition-transform hover:translate-y-1 duration-300 origin-top">
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  <img src="/rca/logo.png" alt="Rahuls CA Academy" className="h-10 md:h-10 object-contain" />
+                  <img src="/logo.png" alt="LPA CA CMA" className="h-16 md:h-16 object-contain" />
+
                 </Link>
               </div>
             </div>
@@ -911,10 +965,19 @@ export const Header = ({ cartCount }) => {
                     </div>
                   )}
                 </div>
-{/* Faculty Menu Mobile */}
-                <div>
+                {/* Faculty Menu */}
+                <div className="">
                   <button
-                    onClick={() => setOpenMobileSubmenu(openMobileSubmenu === 'faculty' ? null : 'faculty')}
+                    onClick={() => {
+                      if (openMobileSubmenu === 'faculty') {
+                        setOpenMobileSubmenu(null);
+                      } else {
+                        setOpenMobileSubmenu('faculty');
+                        if (employees.length === 0) {
+                          fetchEmployeeList();
+                        }
+                      }
+                    }}
                     className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
                   >
                     <span>Faculty</span>
@@ -924,8 +987,8 @@ export const Header = ({ cartCount }) => {
                     <div className="space-y-1 mt-1 pl-2">
                       {employeesLoading ? (
                         <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-bounce"></div>
-                          <span>Loading...</span>
+                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
+                          <span>Loading faculty...</span>
                         </div>
                       ) : employees.length > 0 ? (
                         employees.map((e) => {
@@ -938,25 +1001,25 @@ export const Header = ({ cartCount }) => {
                                 setMobileMenuOpen(false);
                                 setOpenMobileSubmenu(null);
                               }}
-                              className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 text-slate-600 hover:bg-slate-50 hover:text-indigo-700 rounded-lg"
+                              className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
                             >
-                              <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
-                              <span className="truncate font-semibold">{fullName}</span>
+                              <span className="truncate">{fullName}</span>
+                              <Icons.ChevronRight size={16} />
                             </button>
                           );
                         })
                       ) : (
-                        <div className="px-4 py-2 text-xs text-slate-400">No faculty available</div>
+                        <p className="px-4 py-2 text-xs text-slate-400">No faculty available</p>
                       )}
                     </div>
                   )}
                 </div>
-                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+
                 <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
 
-                
+                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
 
-                {/* <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button> */}
+                 <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 

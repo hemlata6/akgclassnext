@@ -25,7 +25,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
 
-    console.log('employeeCourseId', employeeCourseId);
+    // console.log('employeeCourseId', employeeCourseId);
 
      const hasEmployeeCourseSelection = (() => {
         if (!employeeCourseId) return false;
@@ -34,6 +34,24 @@ export const CoursesSection = ({ employeeCourseId }) => {
         if (typeof employeeCourseId === 'string') return employeeCourseId.trim().length > 0;
         return false;
     })();
+
+
+    // const hasEmployeeCourseSelection = (() => {
+    //     if (!employeeCourseId) return false;
+    //     if (Array.isArray(employeeCourseId)) return employeeCourseId.length > 0;
+    //     if (Array.isArray(employeeCourseId?.courseIds)) return employeeCourseId.courseIds.length > 0;
+    //     if (typeof employeeCourseId === 'string') return employeeCourseId.trim().length > 0;
+    //     return false;
+    // })();
+
+
+    // const hasEmployeeCourseSelection = (() => {
+    //     if (!employeeCourseId) return false;
+    //     if (Array.isArray(employeeCourseId)) return employeeCourseId.length > 0;
+    //     if (Array.isArray(employeeCourseId?.courseIds)) return employeeCourseId.courseIds.length > 0;
+    //     if (typeof employeeCourseId === 'string') return employeeCourseId.trim().length > 0;
+    //     return false;
+    // })();
 
     useEffect(() => {
         fetchTags();
@@ -329,7 +347,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                             <div
                                 className="flex gap-6 transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${1.5 / itemsPerView}rem)))`
                                 }}
                             >
                                 {filtered.map((course, i) => {
@@ -403,36 +421,52 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                             )}
                                                         </div>
                                                     </div>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
+                                                    <div className='flex items-center gap-2'>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
 
-                                                            const isInCart = cartCourses.some(item => item.id === course.id);
+                                                                const isInCart = cartCourses.some(item => item.id === course.id);
 
-                                                            if (isInCart) {
-                                                                // Remove from cart
-                                                                const updatedCart = cartCourses.filter(item => item.id !== course.id);
-                                                                setCartCourses(updatedCart);
-                                                                localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                                                                window.dispatchEvent(new Event('cartUpdated'));
-                                                            } else {
-                                                                // Add to cart via modal
-                                                                if (!course.coursePricing || course.coursePricing.length === 0) {
-                                                                    return;
+                                                                if (isInCart) {
+                                                                    // Remove from cart
+                                                                    const updatedCart = cartCourses.filter(item => item.id !== course.id);
+                                                                    setCartCourses(updatedCart);
+                                                                    localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                                                                    window.dispatchEvent(new Event('cartUpdated'));
+                                                                } else {
+                                                                    // Add to cart via modal
+                                                                    if (!course.coursePricing || course.coursePricing.length === 0) {
+                                                                        return;
+                                                                    }
+                                                                    setSelectedCourse(course);
+                                                                    setShowConfigModal(true);
                                                                 }
-                                                                setSelectedCourse(course);
-                                                                setShowConfigModal(true);
-                                                            }
-                                                        }}
-                                                        className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                                                        style={{
-                                                            backgroundColor: theme?.primary || '#2196F3',
-                                                            transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
-                                                            boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(0, 0, 0, 0.1)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                        }}
-                                                    >
-                                                        {cartCourses.some(item => item.id === course.id) ? <Icons.Check /> : <Icons.Cart />}
-                                                    </button>
+                                                            }}
+                                                            className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                                                            style={{
+                                                                backgroundColor: cartCourses.some(item => item.id === course.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
+                                                                transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
+                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                            }}
+                                                        >
+                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.X /> : <Icons.Cart />}
+                                                        </button>
+                                                        {cartCourses.some(item => item.id === course.id) && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    router.push('/cart');
+                                                                }}
+                                                                className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
+                                                                style={{
+                                                                    backgroundColor: theme?.primary || '#2196F3',
+                                                                }}
+                                                            >
+                                                                View Cart
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

@@ -101,8 +101,12 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
 
-            {/* App Store (Coming Soon) */}
+            {/* App Store */}
             <a
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.lpa"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
               style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -114,8 +118,14 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
                 color: 'inherit',
                 marginBottom: 10,
                 transition: 'all 0.2s',
-                opacity: 0.6,
-                cursor: 'not-allowed',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#e0e7ff';
+                e.currentTarget.style.backgroundColor = '#f0f4ff';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               <div style={{ flexShrink: 0 }}>
@@ -127,14 +137,14 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontWeight: '600', color: '#111827', fontSize: '14px' }}>App Store</div>
-                <div style={{ fontSize: '12px', color: '#64748b' }}>Coming Soon</div>
+                <div style={{ fontSize: '12px', color: '#64748b' }}>iOS</div>
               </div>
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
 
             {/* Microsoft Store */}
             <a
-              href="https://apps.microsoft.com/detail/9NXGR6JTHCKH?hl=en-us&gl=IN&ocid=pdpshare"
+              href="https://apps.microsoft.com/detail/9NSFM9ZHWDG6?hl=en-us&gl=IN&ocid=pdpshare"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -172,6 +182,48 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
               </div>
               <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
             </a>
+
+            {/* Mac Download */}
+            {/* <a
+              href="https://baseclassio.b-cdn.net/VG%20Study%20Hub.zip"
+              target="_blank"
+              rel="noopener noreferrer"
+              onClick={onClose}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '12px 14px',
+                border: '1px solid #e2e8f0',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                color: 'inherit',
+                marginTop: 10,
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = '#d1fae5';
+                e.currentTarget.style.backgroundColor = '#ecfdf5';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = '#e2e8f0';
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }}
+            >
+              <div style={{ flexShrink: 0 }}>
+                <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="4" width="18" height="13" rx="2" fill="#111827" />
+                  <rect x="9" y="18" width="6" height="1.5" rx="0.75" fill="#6B7280" />
+                  <path d="M8 20h8" stroke="#6B7280" strokeWidth="1.5" strokeLinecap="round" />
+                  <circle cx="12" cy="10.5" r="2" fill="#34D399" />
+                </svg>
+              </div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontWeight: '600', color: '#111827', fontSize: '14px' }}>MacOS</div>
+                <div style={{ fontSize: '12px', color: '#64748b' }}>macOS</div>
+              </div>
+              <ChevronRightIcon sx={{ color: '#cbd5e1', fontSize: 18 }} />
+            </a> */}
           </Box>
 
           {/* Footer */}

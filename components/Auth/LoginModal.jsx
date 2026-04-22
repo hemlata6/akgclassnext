@@ -6,7 +6,7 @@ import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
 import { useTheme } from '../../config/ThemeContext';
 
-const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
+const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   const { login } = useAuth();
   const { setStudentAuth } = useStudent();
   const { theme } = useTheme();
@@ -19,6 +19,14 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [isNewUser, setIsNewUser] = useState(false);
+
+  const handleNavigate = () => {
+    if (afterCheckout) {
+      window.location.href = '/my-purchases';
+    } else {
+      // window.location.href = '/';
+    }
+  };
 
   // Countdown timer
   useEffect(() => {
@@ -161,7 +169,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick }) => {
 
         if (loginVerifyResponse.status === true) {
           const success = setStudentAuth(loginVerifyResponse);
-
+          handleNavigate();
           if (success) {
             login(formData.phone, formData.otp);
             setFormData({ phone: '', otp: '' });

@@ -529,8 +529,8 @@ export default class Network {
   static async fetchEmployee(instId) {
     const response = await axios.get(this.FETCH_PUBLIC_EMPLOYEE + instId,);
     return response.data;
-  }
-  
+  };
+
   // static async fetchCourses(instId) {
   //   let requestOptions = {
   //     withCredentials: false,

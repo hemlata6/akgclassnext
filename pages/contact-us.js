@@ -3,11 +3,15 @@ import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../constants/Icons';
 import { Footer } from '../components/Shared/SharedComponents';
 import { Header } from '../components/Header/Header';
+import { useTheme } from '../config/ThemeContext';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
+import { useAuth } from '@/config/AuthContext';
 
 export default function ContactUsPage() {
     const router = useRouter();
+    const { theme, primaryClass, primaryHoverClass } = useTheme();
+    const { institute } = useAuth();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
@@ -64,9 +68,13 @@ export default function ContactUsPage() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
+        const normalizedValue = name === 'phone'
+            ? value.replace(/\D/g, '').slice(0, 10)
+            : value;
+
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            [name]: normalizedValue
         }));
         // Clear error for this field
         if (errors[name]) {
@@ -170,9 +178,9 @@ export default function ContactUsPage() {
                 <div className="flex-1 flex items-center justify-center py-20 px-4">
                     <div className="text-center max-w-xl">
                         <div className="mb-8 relative">
-                            <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative" style={{ backgroundColor: '#e8f3ee' }} >
-                                <div className="absolute inset-0 rounded-full animate-ping opacity-20" style={{ backgroundColor: '#154734' }}></div>
-                                <svg className="w-20 h-20 relative z-10" style={{ color: '#154734' }} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative bg-indigo-100">
+                                <div className="absolute inset-0 rounded-full animate-ping opacity-20 bg-indigo-600"></div>
+                                <svg className="w-20 h-20 relative z-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
@@ -185,10 +193,7 @@ export default function ContactUsPage() {
                                 setShowThankYou(false);
                                 router.push('/');
                             }}
-                            className="inline-flex items-center gap-3 px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl"
-                            style={{ backgroundColor: '#154734' }}
-                            onMouseEnter={(e) => e.target.style.backgroundColor = '#0d3221'}
-                            onMouseLeave={(e) => e.target.style.backgroundColor = '#154734'}
+                            className="inline-flex items-center gap-3 px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl bg-indigo-600 hover:bg-indigo-700"
                         >
                             <Icons.Back />
                             Back to Home
@@ -209,9 +214,7 @@ export default function ContactUsPage() {
                     <div className="text-center mb-12">
                         <button
                             onClick={() => router.push('/')}
-                            className="inline-flex items-center gap-2 text-slate-600 mb-8 font-semibold transition-colors"
-                            onMouseEnter={(e) => e.target.style.color = '#154734'}
-                            onMouseLeave={(e) => e.target.style.color = ''}
+                            className={`inline-flex items-center gap-2 text-indigo-600 mb-8 font-semibold transition-colors hover:opacity-80`}
                         >
                             <Icons.Back /> Back to Home
                         </button>
@@ -225,50 +228,42 @@ export default function ContactUsPage() {
                         {/* Contact Info Cards */}
                         <div className="lg:col-span-1 space-y-6">
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#e8f3ee' }}>
-                                    <Icons.Phone />
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-indigo-100">
+                                    <Icons.Phone className="text-indigo-600" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <p><a href="tel:7703880232" className="font-semibold" style={{ color: '#154734' }}
-                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    +91-7703880232
+                                <p><a href={`tel:${institute?.contact}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    {institute?.contact}
                                 </a></p>
-                                <p>
-                                    <a href="tel:8882090148" className="font-semibold" style={{ color: '#154734' }}
-                                        onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                        onMouseLeave={(e) => e.target.style.color = '#154734'}>
+                                {/* <p>
+                                    <a href="tel:8882090148" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
                                         +91-8882090148
                                     </a>
                                 </p>
-                                <p> <a href="tel:8712389894" className="font-semibold" style={{ color: '#154734' }}
-                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    +91-8712389894
-                                </a></p>
+                                <p> <a href="tel:9318492718" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-9318492718
+                                </a></p> */}
                             </div>
 
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4" style={{ backgroundColor: '#e8f3ee' }}>
-                                    <Icons.Mail />
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-indigo-100">
+                                    <Icons.Mail className="text-indigo-600" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:rahulscaacademy@gmail.com" className="font-semibold" style={{ color: '#154734' }}
-                                    onMouseEnter={(e) => e.target.style.color = '#0d3221'}
-                                    onMouseLeave={(e) => e.target.style.color = '#154734'}>
-                                    rahulscaacademy@gmail.com
+                                <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    {institute?.email}
                                 </a>
                             </div>
 
-                            <div className="rounded-2xl p-6 shadow-md text-white" style={{ backgroundColor: '#154734' }}>
+                            <div className="rounded-2xl p-6 shadow-md text-white bg-indigo-600">
                                 <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                                     <Icons.BookOpen />
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
-                                <p className="text-sm" style={{ color: '#e8f3ee' }}>
-                                    3rd Floor, Legend Crystal, Above Federal Bank, Opp. Annapurna Residency, Near Paradise, PG Road, Secunderabad – 500 003
+                                <p className="text-sm opacity-90">
+                                    {institute?.address === null ? '-' : institute?.address}
                                 </p>
                             </div>
                         </div>
@@ -281,7 +276,7 @@ export default function ContactUsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            First Name <span style={{ color: '#154734' }}>*</span>
+                                            First Name <span className="text-indigo-600">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -289,17 +284,14 @@ export default function ContactUsPage() {
                                             value={formData.firstName}
                                             onChange={handleInputChange}
                                             placeholder="First Name"
-                                            className={`w-full px-4 py-3 border ${errors.firstName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            style={{ '--tw-ring-color': '#154734' }}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
-                                            onBlur={(e) => e.target.style.boxShadow = ''}
+                                            className={`w-full px-4 py-3 border ${errors.firstName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                                         />
                                         {errors.firstName && <p className="text-red-500 text-xs mt-1.5">{errors.firstName}</p>}
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Last Name <span style={{ color: '#154734' }}>*</span>
+                                            Last Name <span className="text-indigo-600">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -307,9 +299,7 @@ export default function ContactUsPage() {
                                             value={formData.lastName}
                                             onChange={handleInputChange}
                                             placeholder="Last Name"
-                                            className={`w-full px-4 py-3 border ${errors.lastName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
-                                            onBlur={(e) => e.target.style.boxShadow = ''}
+                                            className={`w-full px-4 py-3 border ${errors.lastName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                                         />
                                         {errors.lastName && <p className="text-red-500 text-xs mt-1.5">{errors.lastName}</p>}
                                     </div>
@@ -318,24 +308,25 @@ export default function ContactUsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Phone <span style={{ color: '#154734' }}>*</span>
+                                            Phone <span className="text-indigo-600">*</span>
                                         </label>
                                         <input
                                             type="tel"
                                             name="phone"
                                             value={formData.phone}
                                             onChange={handleInputChange}
-                                            placeholder="+91 7703880232"
-                                            className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
-                                            onBlur={(e) => e.target.style.boxShadow = ''}
+                                            inputMode="numeric"
+                                            pattern="[0-9]{10}"
+                                            maxLength={10}
+                                            placeholder={institute?.contact === null ? 'Phone Number' : institute?.contact}
+                                            className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                                         />
                                         {errors.phone && <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>}
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Email <span style={{ color: '#154734' }}>*</span>
+                                            Email <span className="text-indigo-600">*</span>
                                         </label>
                                         <input
                                             type="email"
@@ -353,15 +344,13 @@ export default function ContactUsPage() {
 
                                 <div className="mb-5">
                                     <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        Type <span style={{ color: '#154734' }}>*</span>
+                                        Type <span className="text-indigo-600">*</span>
                                     </label>
                                     <select
                                         name="type"
                                         value={formData.type}
                                         onChange={handleTypeChange}
-                                        className={`w-full px-4 py-3 border ${errors.type ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white cursor-pointer transition-all`}
-                                        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
-                                        onBlur={(e) => e.target.style.boxShadow = ''}
+                                        className={`w-full px-4 py-3 border ${errors.type ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white cursor-pointer transition-all`}
                                     >
                                         <option value="">-- Select Your Type --</option>
                                         <option value="course">Course</option>
@@ -373,14 +362,12 @@ export default function ContactUsPage() {
                                 {formData.type && (
                                     <div className="mb-5 animate-in slide-in-from-top duration-300">
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span style={{ color: '#154734' }}>*</span>
+                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span className="text-indigo-600">*</span>
                                         </label>
                                         <select
                                             value={formData.selectedContent?.id || ''}
                                             onChange={handleContentChange}
-                                            className={`w-full px-4 py-3 border ${errors.selectedContent ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:border-transparent bg-white cursor-pointer transition-all`}
-                                            onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
-                                            onBlur={(e) => e.target.style.boxShadow = ''}
+                                            className={`w-full px-4 py-3 border ${errors.selectedContent ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white cursor-pointer transition-all`}
                                         >
                                             <option value="">-- Select {formData.type === 'course' ? 'Course' : 'Test Series'} --</option>
                                             {(formData.type === 'course' ? courses : testSeries).map(item => (
@@ -403,19 +390,14 @@ export default function ContactUsPage() {
                                         onChange={handleInputChange}
                                         placeholder="Tell us more about your query..."
                                         rows="4"
-                                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent resize-none transition-all"
-                                        onFocus={(e) => e.target.style.boxShadow = '0 0 0 2px #154734'}
-                                        onBlur={(e) => e.target.style.boxShadow = ''}
+                                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all"
                                     />
                                 </div>
 
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full py-4 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3"
-                                    style={{ backgroundColor: loading ? '#154734' : '#154734' }}
-                                    onMouseEnter={(e) => !loading && (e.target.style.backgroundColor = '#0d3221')}
-                                    onMouseLeave={(e) => !loading && (e.target.style.backgroundColor = '#154734')}
+                                    className="w-full py-4 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700"
                                 >
                                     {loading ? (
                                         <>

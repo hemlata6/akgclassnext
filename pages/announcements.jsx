@@ -234,7 +234,7 @@ const AnnouncementPage = () => {
                 <img
                   src={`${Endpoints?.mediaBaseUrl}${selectedAnnouncement.image}`}
                   alt={selectedAnnouncement.title}
-                  className="w-full rounded-xl mb-6 max-h-64 object-cover"
+                  className="w-full rounded-xl mb-6 object-cover"
                 />
               )}
 
@@ -258,7 +258,7 @@ const AnnouncementPage = () => {
             </div>
 
             {/* Footer */}
-            <div className="sticky bottom-0 bg-slate-50 p-6 sm:p-8 border-t flex justify-end">
+            {/* <div className="sticky bottom-0 bg-slate-50 p-6 sm:p-8 border-t flex justify-end">
               <button
                 onClick={closeDialog}
                 className="px-6 py-2 text-white rounded-lg font-medium transition-colors text-sm sm:text-base"
@@ -268,7 +268,7 @@ const AnnouncementPage = () => {
               >
                 Close
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       )}

@@ -205,7 +205,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
           )}
 
           {/* Validity Selection */}
-          {validityOptions.length > 0 && (
+          {validityOptions.length > 1 && (
             <div>
               <label className="block text-sm font-bold text-slate-700 mb-3">Select Validity</label>
               <select
@@ -219,6 +219,15 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
                   </option>
                 ))}
               </select>
+            </div>
+          )}
+
+          {validityOptions.length === 1 && (
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-3">Validity</label>
+              <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all ${BRAND_GREEN_CLASS} text-white`}>
+                {formatValidity(validityOptions[0])}
+              </div>
             </div>
           )}
 
@@ -251,7 +260,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
             Add to Cart <Icons.Cart />
           </button>
 
-          <p className="text-xs text-center text-slate-400 mt-3">30-Day Money Back Guarantee</p>
+          {/* <p className="text-xs text-center text-slate-400 mt-3">30-Day Money Back Guarantee</p> */}
         </form>
       </div>
     </div>

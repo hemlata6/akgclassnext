@@ -213,19 +213,22 @@ export const BookStore = ({ employeeCourseId }) => {
     const canGoNext = currentIndex < filtered.length - itemsPerView;
 
     const handleAddToCartFromModal = (cartItem) => {
+        // Preserve the actual book type from the source object
+        const itemWithType = { ...cartItem, type: selectedBook?.type || cartItem.type };
+
         // Check if already in cart
         const existingCartIndex = cartCourses.findIndex(
-            item => item.coursePricingId === cartItem.coursePricingId
+            item => item.coursePricingId === itemWithType.coursePricingId
         );
 
         let updatedCart;
         if (existingCartIndex !== -1) {
             // Update existing item
             updatedCart = [...cartCourses];
-            updatedCart[existingCartIndex] = cartItem;
+            updatedCart[existingCartIndex] = itemWithType;
         } else {
             // Add new item
-            updatedCart = [...cartCourses, cartItem];
+            updatedCart = [...cartCourses, itemWithType];
         }
 
         setCartCourses(updatedCart);
@@ -253,22 +256,26 @@ export const BookStore = ({ employeeCourseId }) => {
                             </h2>
                         </div>
                         {/* Mobile: Explore Store button next to title */}
-                        <button
-                            onClick={() => handleExploreMoreClick('books')}
-                            className={`md:hidden ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
-                        >
-                            Explore Store <Icons.ChevronRight size={16} />
-                        </button>
+                        {!hasEmployeeCourseSelection && (
+                            <button
+                                onClick={() => handleExploreMoreClick('books')}
+                                className={`md:hidden ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
+                            >
+                                Explore Store <Icons.ChevronRight size={16} />
+                            </button>
+                        )}
                     </div>
                     <div className="flex justify-start md:justify-end">
                         <div className="flex items-center gap-4 w-full md:w-auto">
                             {/* Desktop: Explore Store button with filters */}
-                            <button
-                                onClick={() => handleExploreMoreClick('books')}
-                                className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
-                            >
-                                Explore Store <Icons.ChevronRight size={16} />
-                            </button>
+                            {!hasEmployeeCourseSelection && (
+                                <button
+                                    onClick={() => handleExploreMoreClick('books')}
+                                    className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                >
+                                    Explore Store <Icons.ChevronRight size={16} />
+                                </button>
+                            )}
                             {/* Domain Filter */}
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button
@@ -316,7 +323,7 @@ export const BookStore = ({ employeeCourseId }) => {
                             <div
                                 className="flex gap-6 transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${1.5 / itemsPerView}rem)))`
                                 }}
                             >
                                 {filtered.map((book, i) => {
@@ -388,31 +395,49 @@ export const BookStore = ({ employeeCourseId }) => {
                                                         </span>
                                                     )}
                                                 </div>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
+                                                <div className='flex items-center gap-2'>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
 
-                                                        const isInCart = cartCourses.some(item => item.id === book.id);
+                                                            const isInCart = cartCourses.some(item => item.id === book.id);
 
-                                                        if (isInCart) {
-                                                            // Remove from cart
-                                                            const updatedCart = cartCourses.filter(item => item.id !== book.id);
-                                                            setCartCourses(updatedCart);
-                                                            localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                                                            window.dispatchEvent(new Event('cartUpdated'));
-                                                        } else {
-                                                            // Add to cart via modal
-                                                            setSelectedBook(book);
-                                                            setShowConfigModal(true);
-                                                        }
-                                                    }}
-                                                    className={`text-[10px] font-bold px-3 py-0.5 rounded-full transition-all ${cartCourses.some(item => item.id === book.id)
-                                                        ? `${BRAND_GREEN_CLASS} text-white border-0`
-                                                        : 'border border-indigo-200 text-indigo-800 hover:bg-indigo-800 hover:text-white'
-                                                        }`}
-                                                >
-                                                    {cartCourses.some(item => item.id === book.id) ? 'Remove' : 'Add'}
-                                                </button>
+                                                            if (isInCart) {
+                                                                // Remove from cart
+                                                                const updatedCart = cartCourses.filter(item => item.id !== book.id);
+                                                                setCartCourses(updatedCart);
+                                                                localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                                                                window.dispatchEvent(new Event('cartUpdated'));
+                                                            } else {
+                                                                // Add to cart via modal
+                                                                setSelectedBook(book);
+                                                                setShowConfigModal(true);
+                                                            }
+                                                        }}
+                                                        className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                                                        style={{
+                                                            backgroundColor: cartCourses.some(item => item.id === book.id) ? '#dc2626' : '#2196F3',
+                                                            transform: cartCourses.some(item => item.id === book.id) ? 'scale(1.1)' : 'scale(1)',
+                                                            boxShadow: cartCourses.some(item => item.id === book.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                        }}
+                                                    >
+                                                        {cartCourses.some(item => item.id === book.id) ? <Icons.X /> : <Icons.Cart />}
+                                                    </button>
+                                                    {cartCourses.some(item => item.id === book.id) && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                router.push('/cart');
+                                                            }}
+                                                            className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
+                                                            style={{
+                                                                backgroundColor: '#2196F3',
+                                                            }}
+                                                        >
+                                                            View Cart
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         </div>
                                     );
