@@ -1,6 +1,6 @@
-# VG STUDY HUB - Next.js Application
+# LPA CA CMA - Next.js Application
 
-This is a Next.js conversion of the original React app for VG STUDY HUB - VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA.
+This is a Next.js conversion of the original React app for LPA CA CMA - LPA CA CMA | LPA CA CMA - CA VIVEK GABA.
 
 ## Getting Started
 

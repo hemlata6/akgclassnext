@@ -4,15 +4,15 @@ import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
   const siteUrl = 'https://lpacacma.netlify.app/';
-  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/VG STUDY HUB-logo-circle-white.webp';
-  const title = 'VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA';
+  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/LPA CA CMA-logo-circle-white.webp';
+  const title = 'LPA CA CMA | LPA CA CMA - CA VIVEK GABA';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, VG STUDY HUB, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, LPA CA CMA, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "VG STUDY HUB",
+    "name": "LPA CA CMA",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="VG STUDY HUB" />
+        <meta property="og:site_name" content="LPA CA CMA" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="VG STUDY HUB" />
+        <meta name="author" content="LPA CA CMA" />
 
         {/* JSON-LD Structured Data */}
         <script

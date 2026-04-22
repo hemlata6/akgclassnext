@@ -7,7 +7,7 @@ export default function FreeResources() {
   return (
     <>
       <Head>
-        <title>Free Resources - VG STUDY HUB</title>
+        <title>Free Resources - LPA CA CMA</title>
         <meta name="description" content="Access free study materials and resources" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

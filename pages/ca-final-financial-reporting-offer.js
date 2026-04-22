@@ -10,7 +10,7 @@ export default function CAFinalFROfferPage() {
     return (
         <>
             <Head>
-                <title>CA Final FR Course - Financial Reporting by CA VIVEK GABA | VG STUDY HUB</title>
+                <title>CA Final FR Course - Financial Reporting by CA VIVEK GABA | LPA CA CMA</title>
                 <meta name="description" content="Master CA Final Financial Reporting with 100% LIVE batch by CA VIVEK GABA (AIR 43). Concept clarity, Test Series, Mentorship & 24x7 Doubt Support included." />
                 <meta property="og:title" content="CA Final FR Course - Master Financial Reporting" />
                 <meta property="og:description" content="Learn FR from CA VIVEK GABA - AIR 43. 100% LIVE Batch with 280 hours, Test Series & Career Mentorship." />
@@ -54,7 +54,7 @@ function FRCoursePage() {
                             {/* Text Content */}
                             <div className="text-center lg:text-left order-2 lg:order-1">
                                 <div className="inline-flex items-center gap-2 px-3 py-1.5 mb-4 md:mb-6 bg-white/5 border border-white/10 rounded-full backdrop-blur-sm">
-                                    <span className="text-green-400 font-bold text-xs tracking-widest uppercase">VG STUDY HUB by VG STUDY HUB</span>
+                                    <span className="text-green-400 font-bold text-xs tracking-widest uppercase">LPA CA CMA by LPA CA CMA</span>
                                     <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
                                     <span className="text-gray-400 text-xs font-medium">CA Final FR</span>
                                 </div>
@@ -215,7 +215,7 @@ function FRCoursePage() {
                 <section className="py-12 md:py-16 bg-[#0f172a]">
                     <div className="max-w-6xl mx-auto px-4">
                         <div className="text-center mb-8 md:mb-12">
-                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">VG STUDY HUB FR Books</h2>
+                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">LPA CA CMA FR Books</h2>
                             <p className="text-gray-400 text-xs md:text-sm mt-2">Hardcopy delivered to your doorstep</p>
                         </div>
 
@@ -406,7 +406,7 @@ function FRCoursePage() {
                 <footer className="bg-black text-white pt-12 pb-28 md:pb-10 border-t border-gray-900 relative">
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
 
-                        <h2 className="text-xl md:text-2xl font-bold mb-2 tracking-tight">VG STUDY HUB by VG STUDY HUB</h2>
+                        <h2 className="text-xl md:text-2xl font-bold mb-2 tracking-tight">LPA CA CMA by LPA CA CMA</h2>
                         <p className="text-gray-500 text-sm italic mb-8 max-w-md mx-auto">
                             "Together, we can achieve your career goals."
                         </p>
@@ -415,7 +415,7 @@ function FRCoursePage() {
                         <div className="flex justify-center gap-8 mb-10 items-center">
 
                             {/* YouTube - Official SVG */}
-                            <a href="https://youtube.com/@VG STUDY HUB" target="_blank" rel="noreferrer" className="hover:scale-110 transition-transform">
+                            <a href="https://youtube.com/@LPA CA CMA" target="_blank" rel="noreferrer" className="hover:scale-110 transition-transform">
                                 <svg width="32" height="32" viewBox="0 0 24 24" fill="#FF0000">
                                     <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
                                 </svg>
@@ -459,7 +459,7 @@ function FRCoursePage() {
 
                         {/* Bottom Legal Section */}
                         <div className="border-t border-gray-900 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-600 tracking-widest uppercase">
-                            <p>© 2026 VG STUDY HUB. All rights reserved.</p>
+                            <p>© 2026 LPA CA CMA. All rights reserved.</p>
                             <div className="flex gap-6">
                                 <a href="https://caclasses.in/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
                                 <a href="https://caclasses.in/terms-of-use" className="hover:text-white transition-colors">Terms of Service</a>

@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'VG STUDY HUB',
+    title = 'LPA CA CMA',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
     image = 'https://lpacacma.netlify.app/logo.png',
     url = 'https://vgstudyhub.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'VG STUDY HUB',
-    keywords = 'VG STUDY HUB, CA Final, Financial Reporting, Ind AS',
+    author = 'LPA CA CMA',
+    keywords = 'LPA CA CMA, CA Final, Financial Reporting, Ind AS',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'VG STUDY HUB',
+      site_name: 'LPA CA CMA',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -108,7 +108,7 @@ export const generateBlogStructuredData = (blog, url) => {
     image = 'https://lpacacma.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'VG STUDY HUB',
+    author = 'LPA CA CMA',
   } = blog;
 
   return {
@@ -130,7 +130,7 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'VG STUDY HUB',
+      name: 'LPA CA CMA',
       url: 'https://vgstudyhub.netlify.app',
       logo: {
         '@type': 'ImageObject',
@@ -152,7 +152,7 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'VG STUDY HUB',
+    name: 'LPA CA CMA',
     url: 'https://vgstudyhub.netlify.app',
     logo: 'https://lpacacma.netlify.app/logo.png',
     description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA VIVEK GABA',
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: VG STUDY HUB)
+ * @param {string} siteName - Site name (default: LPA CA CMA)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'VG STUDY HUB') => {
+export const generatePageTitle = (pageTitle, siteName = 'LPA CA CMA') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

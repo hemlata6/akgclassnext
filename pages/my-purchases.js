@@ -7,7 +7,7 @@ export default function MyPurchasesPage() {
   return (
     <>
       <Head>
-        <title>My Purchases - VG STUDY HUB</title>
+        <title>My Purchases - LPA CA CMA</title>
         <meta name="description" content="View your purchased courses and materials" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

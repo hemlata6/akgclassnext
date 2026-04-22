@@ -20,7 +20,7 @@ export const AboutSection = () => (
             </span>
           </h2>
           <p className="text-slate-600 text-sm leading-relaxed max-w-2xl">
-            <strong>At VG STUDY HUB , we don’t just teach Accounting & Financial Reporting; we decode it.</strong>, CA VIVEK GABA brings practical industry experience into the classroom, transforming complex accounting concepts and Ind AS into logical, easy-to-retain frameworks. Our goal is simple: to make you <strong>exam-ready and industry-ready</strong>at every stage of the CA journey.
+            <strong>At LPA CA CMA , we don’t just teach Accounting & Financial Reporting; we decode it.</strong>, CA VIVEK GABA brings practical industry experience into the classroom, transforming complex accounting concepts and Ind AS into logical, easy-to-retain frameworks. Our goal is simple: to make you <strong>exam-ready and industry-ready</strong>at every stage of the CA journey.
           </p>
           <div className="flex flex-wrap gap-4 pt-2">
             {["CA Foundation to CA Final Focus", "Concept-driven, Practical Learning", "Complete PYQ, RTP & MTP Coverage"].map((tag, i) => (

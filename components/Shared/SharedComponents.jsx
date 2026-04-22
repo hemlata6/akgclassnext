@@ -36,7 +36,7 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "VG STUDY HUB"}
+              {institute?.institue ? institute?.institue : "LPA CA CMA"}
             </div>
             <p>{institute?.instituteAppSettingsModals?.appBio ? institute?.instituteAppSettingsModals?.appBio : "-"}</p>
           </div>
@@ -153,7 +153,7 @@ export const Loader = () => (
     }}>
       <img
         src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/caclass-logo-circle-white.webp"
-        alt="VG STUDY HUB Logo"
+        alt="LPA CA CMA Logo"
         style={{
           height: '96px',
           width: 'auto',
