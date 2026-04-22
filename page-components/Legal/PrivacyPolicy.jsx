@@ -7,7 +7,7 @@ import { useAuth } from '@/config/AuthContext';
 const PrivacyPolicy = () => {
     const router = useRouter();
     const {institute} = useAuth();
-    console.log('institute in privacy policy', institute);
+    // console.log('institute in privacy policy', institute);
 
     return (
         <div className="bg-white min-h-screen pb-16 md:pb-0">
