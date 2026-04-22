@@ -449,6 +449,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
   const modes = getUniqueLearningModes();
   const variants = getUniqueVariants();
+  const hasVariants = variants.length > 0;
   const validityOptions = getValidityOptions();
   const uniqueValidityLabels = Array.from(new Set(validityOptions.map((pricing) => formatValidity(pricing))));
   const shouldShowValidityChip = validityOptions.length > 0 && uniqueValidityLabels.length === 1;
@@ -463,8 +464,10 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   React.useEffect(() => {
     if (variants.length > 0 && !selectedVariant) {
       setSelectedVariant(variants[0]);
+    } else if (variants.length === 0 && selectedVariant !== null) {
+      setSelectedVariant(null);
     }
-  }, [variants]);
+  }, [variants, selectedVariant]);
 
   React.useEffect(() => {
     if (validityOptions.length > 0 && !selectedValidity) {
@@ -474,7 +477,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
   // Calculate price based on selected mode, variant and validity
   const getSelectedPrice = () => {
-    if (!selectedMode || !selectedVariant || !selectedValidity) return null;
+    if (!selectedMode || !selectedValidity || (hasVariants && !selectedVariant)) return null;
 
     const selectedModes = selectedMode.split(" + ");
 
@@ -489,7 +492,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       );
 
       // Match variant - check all possible variant field names
-      const variantMatch = (
+      const variantMatch = !hasVariants || (
         pricing.variation === selectedVariant ||
         pricing.variantName === selectedVariant ||
         pricing.tier === selectedVariant ||
@@ -532,7 +535,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
   // Debug logging for price calculation
   React.useEffect(() => {
-    if (selectedMode && selectedVariant && selectedValidity) {
+    if (selectedMode && selectedValidity && (!hasVariants || selectedVariant)) {
       console.log('Price Calculation Debug:', {
         selectedMode,
         selectedVariant,
@@ -541,7 +544,9 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         totalCoursePricing: courseData?.coursePricing?.length
       });
     }
-  }, [selectedMode, selectedVariant, selectedValidity, priceInfo]);
+  }, [selectedMode, selectedVariant, selectedValidity, priceInfo, hasVariants, courseData?.coursePricing?.length]);
+
+  const isPurchaseSelectionIncomplete = !selectedMode || (hasVariants && !selectedVariant) || !selectedValidity || !priceInfo;
 
   const handleSuggestedCourseAddToCart = (suggestedCourse) => {
     const isAlreadyInCart = cartCourses.some(item => item.id === suggestedCourse.id);
@@ -823,23 +828,25 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       ))}
                     </div>
                   </div>
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Variant</label>
-                    <div className="flex flex-wrap gap-2">
-                      {getUniqueVariants().map((variant) => (
-                        <button
-                          key={variant}
-                          onClick={() => setSelectedVariant(variant)}
-                          className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedVariant === variant
-                            ? `border-2 ${BRAND_GREEN_CLASS} text-white`
-                            : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
-                            }`}
-                        >
-                          {variant}
-                        </button>
-                      ))}
+                  {hasVariants && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Variant</label>
+                      <div className="flex flex-wrap gap-2">
+                        {variants.map((variant) => (
+                          <button
+                            key={variant}
+                            onClick={() => setSelectedVariant(variant)}
+                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedVariant === variant
+                              ? `border-2 ${BRAND_GREEN_CLASS} text-white`
+                              : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                              }`}
+                          >
+                            {variant}
+                          </button>
+                        ))}
+                      </div>
                     </div>
-                  </div>
+                  )}
                   {validityOptions.length > 1 && !shouldShowValidityChip && (
                     <div>
                       <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
@@ -916,8 +923,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                         localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
                         window.dispatchEvent(new Event('cartUpdated'));
                       }}
-                      disabled={!selectedMode || !selectedVariant || !selectedValidity || !priceInfo}
-                      className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedVariant || !selectedValidity || !priceInfo
+                      disabled={isPurchaseSelectionIncomplete}
+                      className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${isPurchaseSelectionIncomplete
                         ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                         : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
                         }`}
@@ -927,8 +934,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                   )}
                   <button
                     onClick={openCheckoutForm}
-                    disabled={!selectedMode || !selectedVariant || !selectedValidity || !priceInfo || isProcessing}
-                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedVariant || !selectedValidity || !priceInfo || isProcessing
+                    disabled={isPurchaseSelectionIncomplete || isProcessing}
+                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${isPurchaseSelectionIncomplete || isProcessing
                       ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                       : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
                       }`}
