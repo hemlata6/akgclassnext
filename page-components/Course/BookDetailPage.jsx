@@ -4,6 +4,7 @@ import { ShoppingCart } from 'lucide-react';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN_CLASS, TEXT_GREEN } from '../../constants/Icons';
 import Endpoints from '../../config/endpoints';
 import CourseConfigModal from '../Home/sections/CourseConfigModal';
+import ProceedToCheckoutForm from '../Cart/ProceedToCheckoutForm';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 
@@ -18,6 +19,8 @@ const BookDetailPage = ({ bookData, onBack }) => {
     const [routeData, setRouteData] = useState(null);
     const [tokenFromUrl, setTokenFromUrl] = useState(null);
     const [allEmployee, setAllEmployee] = useState([]);
+    const [showProceedCheckout, setShowProceedCheckout] = useState(false);
+    const [checkoutCartItem, setCheckoutCartItem] = useState(null);
 
     // Detect query params on mount
     useEffect(() => {
@@ -96,6 +99,28 @@ const BookDetailPage = ({ bookData, onBack }) => {
 
     const isInCart = cartCourses.some(item => item.id === bookData?.id);
 
+    const openCheckoutForm = () => {
+        if (!pricing) return;
+
+        const cartItem = {
+            ...bookData,
+            pricingId: pricing.id,
+            coursePricingId: pricing.id,
+            selectedMode: pricing.mode || '',
+            selectedVariant: pricing.variant || '',
+            selectedValidity: pricing.validityType || '',
+            finalPrice: discountedPrice,
+            originalPrice,
+            discount: pricing.discount || 0,
+            validityType: pricing.validityType,
+            watchTime: pricing.watchTime,
+            type: 'Book'
+        };
+
+        setCheckoutCartItem(cartItem);
+        setShowProceedCheckout(true);
+    };
+
     const handleAddToCartFromModal = (cartItem) => {
         const existingCartIndex = cartCourses.findIndex(
             item => item.coursePricingId === cartItem.coursePricingId
@@ -132,6 +157,29 @@ const BookDetailPage = ({ bookData, onBack }) => {
         } else {
             setSelectedBook(suggestedCourse);
             setShowConfigModal(true);
+        }
+    };
+
+    const handleShare = async () => {
+        const baseUrl = window.location.hostname === 'localhost'
+            ? 'http://localhost:3000'
+            : 'https://vgstudyhub.netlify.app/';
+
+        const shareUrl = `${baseUrl}/book/${bookData?.id}`;
+        const shareData = {
+            title: bookData?.title || 'Book',
+            url: shareUrl
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(shareUrl);
+                setTimeout(() => {}, 2000);
+            }
+        } catch (err) {
+            console.error('Error sharing:', err);
         }
     };
 
@@ -210,22 +258,21 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                 {/* Action Buttons */}
                                 <div className="mt-3 space-y-1.5">
                                     {isInCart ? (
-                                        <>
-                                            <button
-                                                onClick={handleRemoveFromCart}
-                                                className="w-full bg-slate-600 hover:bg-slate-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5"
-                                            >
-                                                <Icons.X size={14} />
-                                                Remove from Cart
-                                            </button>
+                                        <div className="flex gap-2">
                                             <button
                                                 onClick={() => router.push(`/cart${getQueryString()}`)}
-                                                className={`w-full ${BRAND_GREEN_CLASS} hover:bg-indigo-700 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5`}
+                                                className="flex-1 bg-slate-700 hover:bg-slate-800 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5"
                                             >
-                                                <Icons.Cart size={14} />
                                                 View Cart
                                             </button>
-                                        </>
+                                            <button
+                                                onClick={handleRemoveFromCart}
+                                                className="px-3 py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-600"
+                                                title="Remove from cart"
+                                            >
+                                                <Icons.X size={14} />
+                                            </button>
+                                        </div>
                                     ) : (
                                         <button
                                             onClick={() => setShowConfigModal(true)}
@@ -236,7 +283,17 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                         </button>
                                     )}
 
-                                    <button className="w-full bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 py-2 rounded-lg font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5">
+                                    <button
+                                        onClick={openCheckoutForm}
+                                        disabled={!pricing}
+                                        className='w-full bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 py-2 rounded-lg font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5'
+                                    >
+                                        Buy Now
+                                    </button>
+
+                                    <button
+                                        onClick={handleShare}
+                                        className="w-full bg-white hover:bg-slate-50 text-slate-800 border-2 border-slate-200 py-2 rounded-lg font-bold text-xs transition-all active:scale-95 flex items-center justify-center gap-1.5">
                                         <Icons.Share size={14} />
                                         Share Book
                                     </button>
@@ -503,6 +560,17 @@ const BookDetailPage = ({ bookData, onBack }) => {
                         setSelectedBook(null);
                     }}
                     onAddToCart={handleAddToCartFromModal}
+                />
+            )}
+
+            {showProceedCheckout && checkoutCartItem && (
+                <ProceedToCheckoutForm
+                    cartCourses={[checkoutCartItem]}
+                    totalAmount={checkoutCartItem.finalPrice}
+                    onClose={() => {
+                        setShowProceedCheckout(false);
+                        setCheckoutCartItem(null);
+                    }}
                 />
             )}
         </div>

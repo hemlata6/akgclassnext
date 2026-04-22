@@ -6,6 +6,7 @@ import { SYLLABUS_DATA } from '../../constants/data';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
 import CourseConfigModal from '../Home/sections/CourseConfigModal';
+import ProceedToCheckoutForm from '../Cart/ProceedToCheckoutForm';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -278,6 +279,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 }
 
 const CourseContent = ({ courseData, onAddToCart }) => {
+  const router = useRouter();
 
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
@@ -291,6 +293,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
+  const [showProceedCheckout, setShowProceedCheckout] = useState(false);
+  const [checkoutCartItem, setCheckoutCartItem] = useState(null);
 
 
   // Load cart from localStorage
@@ -492,6 +496,10 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   };
 
   const priceInfo = getSelectedPrice();
+  
+  // Get unique validity labels
+  const uniqueValidityLabels = Array.from(new Set(validityOptions.map((pricing) => formatValidity(pricing))));
+  const shouldShowValidityChip = validityOptions.length > 0 && uniqueValidityLabels.length === 1;
 
   const handleSuggestedCourseAddToCart = (suggestedCourse) => {
     const isAlreadyInCart = cartCourses.some(item => item.id === suggestedCourse.id);
@@ -505,6 +513,28 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       setSelectedCourse(suggestedCourse);
       setShowConfigModal(true);
     }
+  };
+
+  const openCheckoutForm = () => {
+    if (!priceInfo) return;
+
+    const cartItem = {
+      ...courseData,
+      pricingId: priceInfo.pricingId,
+      coursePricingId: priceInfo.pricingId,
+      selectedMode: selectedMode || '',
+      selectedVariation: selectedVariation || '',
+      selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
+      finalPrice: priceInfo.discountedPrice,
+      originalPrice: priceInfo.originalPrice,
+      discount: priceInfo.discount,
+      validityType: priceInfo.validityType,
+      watchTime: priceInfo.watchTime,
+      type: 'Course'
+    };
+
+    setCheckoutCartItem(cartItem);
+    setShowProceedCheckout(true);
   };
 
 
@@ -595,20 +625,31 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       </div>
                     </div>
                   )}
-                  <div>
-                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
-                    <select
-                      className="w-full p-2.5 rounded-lg border border-slate-200 text-sm font-semibold outline-none focus:border-emerald-600 bg-white"
-                      value={selectedValidity ? JSON.stringify(selectedValidity) : ''}
-                      onChange={(e) => setSelectedValidity(JSON.parse(e.target.value))}
-                    >
-                      {validityOptions.map((pricing, idx) => (
-                        <option key={idx} value={JSON.stringify(pricing)}>
-                          {formatValidity(pricing)}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                  {validityOptions.length > 1 && !shouldShowValidityChip && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Validity</label>
+                      <select
+                        className="w-full p-2.5 rounded-lg border border-slate-200 text-sm font-semibold outline-none focus:border-emerald-600 bg-white"
+                        value={selectedValidity ? JSON.stringify(selectedValidity) : ''}
+                        onChange={(e) => setSelectedValidity(JSON.parse(e.target.value))}
+                      >
+                        {validityOptions.map((pricing, idx) => (
+                          <option key={idx} value={JSON.stringify(pricing)}>
+                            {formatValidity(pricing)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  {shouldShowValidityChip && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Validity</label>
+                      <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all border-2 ${BRAND_GREEN_CLASS} text-white`}>
+                        {uniqueValidityLabels[0]}
+                      </div>
+                    </div>
+                  )}
                 </div>
                 {/* Pricing Summary - Same as CourseConfigModal */}
                 {priceInfo && (
@@ -627,69 +668,76 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                     </div>
                   </div>
                 )}
-                <button
-                  onClick={() => {
-                    const isInCart = cartCourses.some(item => item.id === courseData?.id);
-
-                    if (isInCart) {
-                      // Remove from cart
-                      const updatedCart = cartCourses.filter(item => item.id !== courseData?.id);
-                      setCartCourses(updatedCart);
-                      localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                      window.dispatchEvent(new Event('cartUpdated'));
-                    } else {
-                      // Add to cart directly with selected options (no modal)
-                      const pricingToUse = selectedValidity || (courseData?.coursePricing && courseData.coursePricing.length > 0 ? courseData.coursePricing[0] : null);
-
-                      if (!pricingToUse) return;
-
-                      const cartItem = {
-                        ...courseData,
-                        pricingId: pricingToUse.id,
-                        coursePricingId: pricingToUse.id,
-                        selectedMode: selectedMode || '',
-                        selectedVariation: selectedVariation || '',
-                        selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
-                        finalPrice: Math.round(pricingToUse.price - (pricingToUse.price * (pricingToUse.discount || 0) / 100)),
-                        originalPrice: pricingToUse.price,
-                        discount: pricingToUse.discount || 0,
-                        type: "Course"
-                      };
-
-                      // Check if already in cart
-                      const existingCartIndex = cartCourses.findIndex(
-                        item => item.coursePricingId === cartItem.coursePricingId
-                      );
-
-                      let updatedCart;
-                      if (existingCartIndex !== -1) {
-                        // Update existing item
-                        updatedCart = [...cartCourses];
-                        updatedCart[existingCartIndex] = cartItem;
-                      } else {
-                        // Add new item
-                        updatedCart = [...cartCourses, cartItem];
-                      }
-
-                      setCartCourses(updatedCart);
-                      localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                      window.dispatchEvent(new Event('cartUpdated'));
-                    }
-                  }}
-                  disabled={!selectedMode || !selectedValidity || !priceInfo}
-                  className={`w-full py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
-                    ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                    : cartCourses.some(item => item.id === courseData?.id)
-                      ? 'bg-slate-700 hover:bg-slate-800 text-white'
-                      : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
-                    }`}
-                >
+                <div className="flex flex-row gap-3">
                   {cartCourses.some(item => item.id === courseData?.id) ? (
-                    <>Remove from Cart <Icons.X /></>
+                    <div className="flex flex-1 gap-2">
+                      {/* View Cart button */}
+                      <button
+                        onClick={() => router.push('/cart')}
+                        className="flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white"
+                      >
+                        View Cart
+                      </button>
+                      {/* Remove from cart X button */}
+                      <button
+                        onClick={() => {
+                          const updatedCart = cartCourses.filter(item => item.id !== courseData?.id);
+                          setCartCourses(updatedCart);
+                          localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                          window.dispatchEvent(new Event('cartUpdated'));
+                        }}
+                        className="py-4 px-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center bg-red-100 hover:bg-red-200 text-red-600"
+                        title="Remove from cart"
+                      >
+                        <Icons.X className="w-4 h-4" />
+                      </button>
+                    </div>
                   ) : (
-                    <>Enroll Now <Icons.Cart /></>
+                    <button
+                      onClick={() => {
+                        if (!courseData?.coursePricing || courseData.coursePricing.length === 0) return;
+                        if (!priceInfo) return;
+
+                        const cartItem = {
+                          ...courseData,
+                          pricingId: priceInfo.pricingId,
+                          coursePricingId: priceInfo.pricingId,
+                          selectedMode: selectedMode || '',
+                          selectedVariation: selectedVariation || '',
+                          selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
+                          finalPrice: priceInfo.discountedPrice,
+                          originalPrice: priceInfo.originalPrice,
+                          discount: priceInfo.discount,
+                          validityType: priceInfo.validityType,
+                          watchTime: priceInfo.watchTime,
+                          type: "Course"
+                        };
+
+                        const updatedCart = [...cartCourses, cartItem];
+                        setCartCourses(updatedCart);
+                        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                        window.dispatchEvent(new Event('cartUpdated'));
+                      }}
+                      disabled={!selectedMode || !selectedValidity || !priceInfo}
+                      className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
+                        ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                        : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
+                        }`}
+                    >
+                      Add to Cart
+                    </button>
                   )}
-                </button>
+                  <button
+                    onClick={openCheckoutForm}
+                    disabled={!selectedMode || !selectedValidity || !priceInfo}
+                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
+                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                      : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
+                      }`}
+                  >
+                    Buy Now
+                  </button>
+                </div>
                 {/* <p className="text-[10px] text-slate-400 text-center mt-3">
                   30-Day Money Back Guarantee • Secure Payment
                 </p> */}
@@ -823,6 +871,17 @@ const CourseContent = ({ courseData, onAddToCart }) => {
             setCartCourses(updatedCart);
             localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
             window.dispatchEvent(new Event('cartUpdated'));
+          }}
+        />
+      )}
+
+      {showProceedCheckout && checkoutCartItem && (
+        <ProceedToCheckoutForm
+          cartCourses={[checkoutCartItem]}
+          totalAmount={checkoutCartItem.finalPrice}
+          onClose={() => {
+            setShowProceedCheckout(false);
+            setCheckoutCartItem(null);
           }}
         />
       )}

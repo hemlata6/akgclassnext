@@ -5,6 +5,7 @@ import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import parse from "html-react-parser";
 import CourseConfigModal from '../Home/sections/CourseConfigModal';
+import BookConfigModal from '../Home/sections/BookConfigModal';
 import Endpoints from '../../config/endpoints';
 import { useRouter } from 'next/router';
 import axios from 'axios';
@@ -2450,11 +2451,26 @@ const Store = () => {
 
             {/* Modals */}
             {showConfigModal && (
-                <CourseConfigModal
-                    course={selectedCourse}
-                    onClose={() => setShowConfigModal(false)}
-                    onAddToCart={handleAddToCartFromModal}
-                />
+      <Dialog
+        open={showConfigModal}
+        onClose={() => setShowConfigModal(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        {selectedCourse?.type === 'books' ? (
+          <BookConfigModal
+            book={selectedCourse}
+            onClose={() => setShowConfigModal(false)}
+            onAddToCart={handleAddToCartFromModal}
+          />
+        ) : (
+          <CourseConfigModal
+            course={selectedCourse}
+            onClose={() => setShowConfigModal(false)}
+            onAddToCart={handleAddToCartFromModal}
+          />
+        )}
+      </Dialog>
             )}
 
             {/* Description Expanded Dialog */}

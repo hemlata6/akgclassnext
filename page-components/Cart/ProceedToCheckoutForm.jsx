@@ -7,8 +7,10 @@ import axios from 'axios';
 import instId from '../../config/instituteId';
 import Endpoints, { BASE_URL } from '../../config/endpoints';
 import { Dialog, DialogContent, IconButton } from '@mui/material';
+import AppDownloadModal from '../../components/Modals/AppDownloadModal';
+import LoginModal from '@/components/Auth/LoginModal';
 
-const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin, setCartItems, onSubmitCheckout }) => {
+const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount }) => {
     const router = useRouter();
 
     const { isAuthenticated, user, authToken } = useAuth();
@@ -35,7 +37,8 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     const [errorBarMessage, setErrorBarMessage] = useState('');
     const [showSuccessBar, setShowSuccessBar] = useState(false);
     const [successBarMessage, setSuccessBarMessage] = useState('');
-    const [discountAmount, setDiscountAmount] = useState(0);
+    const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
 
     useEffect(() => {
         // Extract URL parameters
@@ -90,16 +93,16 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     }, [showSuccessBar]);
 
     // Prevent body scroll when payment drawer is open
-    useEffect(() => {
-        if (paymentDrawerOpen) {
-            document.body.style.overflow = 'hidden';
-        } else {
-            document.body.style.overflow = 'unset';
-        }
-        return () => {
-            document.body.style.overflow = 'unset';
-        };
-    }, [paymentDrawerOpen]);
+    // useEffect(() => {
+    //     if (paymentDrawerOpen) {
+    //         document.body.style.overflow = 'hidden';
+    //     } else {
+    //         document.body.style.overflow = 'unset';
+    //     }
+    //     return () => {
+    //         document.body.style.overflow = 'unset';
+    //     };
+    // }, [paymentDrawerOpen]);
 
     useEffect(() => {
         if (cartCourses?.length > 0) {
@@ -157,10 +160,13 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         }
     }, [cartCourses]);
 
+    // console.log('isAuthenticated', isAuthenticated , 'authToken', authToken);
+
     // Payment polling - check payment status every 5 seconds
     useEffect(() => {
-        if (!paymentDrawerOpen || !checkoutResponse?.transactionId) {
-            console.log('Payment polling stopped - Drawer closed or no transaction ID');
+        // console.log('======', checkoutResponse);
+        if (!checkoutResponse?.transactionId) {
+            // console.log('Payment polling stopped - Drawer closed or no transaction ID');
             return;
         }
 
@@ -170,10 +176,9 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
 
         return () => {
             clearInterval(intervalApi);
-            console.log('Payment polling interval cleared');
+            // console.log('Payment polling interval cleared');
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [paymentDrawerOpen, checkoutResponse?.transactionId]);
+    }, [checkoutResponse?.transactionId, isAuthenticated, authToken]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -219,24 +224,37 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 `${Endpoints.baseURL}payment/check-payment-status/${checkoutResponse?.transactionId}`,
                 { headers: { "Authorization": `Bearer ${authToken}` } }
             );
+            // console.log('💳 Payment Status Response:', response?.data?.paymentStatus);
+
             if (response?.data?.paymentStatus === "successful") {
+                // console.log('✓ PAYMENT SUCCESSFUL - Clearing cart');
                 setShowSuccessBar(true);
                 setSuccessBarMessage('Payment successful! Thank you for your purchase.');
                 handleClearCart();
                 setTimeout(() => {
-                    setPaymentDrawerOpen(false);
-                    onClose();
+                    // onClose();
+                    // setPaymentDrawerOpen(false);
+                    // console.log('Auth check - isAuthenticated:', isAuthenticated, 'authToken:', !!authToken);
+                    if (isAuthenticated && authToken) {
+                        // console.log('✓ User authenticated, redirecting to my-purchases');
+                        router.push('/my-purchases');
+                        // onClose();
+                    } else {
+                        // console.log('✓ User not authenticated, showing login modal');
+                        setShowLoginModal(true);
+                        // onClose();
+                    }
                 }, 2000);
             } else if (response?.data?.paymentStatus === 'pending') {
-                console.log('⏳ Payment still pending...');
+                // console.log('⏳ Payment still pending...');
             } else if (response?.data?.paymentStatus === 'failed') {
-                console.error('✗ PAYMENT FAILED');
+                // console.error('✗ PAYMENT FAILED');
                 setShowErrorBar(true);
                 setErrorBarMessage('Payment failed. Please try again.');
-                setPaymentDrawerOpen(false);
+                // setPaymentDrawerOpen(false);
             }
         } catch (err) {
-            console.error('Error checking payment status:', err);
+            // console.error('Error checking payment status:', err);
         }
     };
 
@@ -262,13 +280,11 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
             if (response.data.errorCode === 0) {
                 setIsCouponValid(response.data?.valid);
                 if (response.data?.valid) {
-                    setDiscountAmount(response.data.discount);
                     setShowSuccessBar(true);
                     setSuccessBarMessage("✓ Coupon applied successfully!");
                 } else {
                     setShowErrorBar(true);
                     setErrorBarMessage("Invalid coupon code");
-                    setDiscountAmount(0);
                 }
                 setErrorMessage("");
             } else {
@@ -277,7 +293,6 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                 setErrorMessage(msg);
                 setShowErrorBar(true);
                 setErrorBarMessage(msg);
-                setDiscountAmount(0);
             }
         } catch (err) {
             console.log(err);
@@ -308,6 +323,8 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
     };
 
 
+    // console.log('payloadCart', payloadCart, cartCourses);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -318,32 +335,63 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
         setIsSubmitting(true);
 
         try {
-            // Prepare payload data to send back to CartPage
             const nameParts = formData.fullName.split(' ');
-            const checkoutData = {
+            const body = {
                 firstName: nameParts[0] || 'User',
                 lastName: nameParts.slice(1).join(' ') || '',
                 contact: formData.phone,
                 email: formData.email,
+                instId: instId,
+                campaignId: null,
                 coupon: isCouponValid ? couponNumber : "",
-                entityModals: payloadCart,
-                urlParams: urlParams
+                coursePricingId: 0,
+                entityModals: payloadCart
             };
 
-            // Pass data back to CartPage for API call
-            await onSubmitCheckout(checkoutData);
+            const response = await axios.post(
+                `${BASE_URL}/admin/payment/fetch-public-checkout-url`,
+                body
+            );
 
-            // Clear form
-            setFormData({ fullName: '', email: '', phone: '' });
+            if (response?.data?.status === true && response?.data?.url) {
+                setCheckoutResponse(response.data);
+
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile) {
+                    setPaymentUrl(response.data.url);
+                    setPaymentDrawerOpen(true);
+                    window.dispatchEvent(new Event('hideFooter'));
+                } else {
+                    const width = 480;
+                    const height = 1080;
+                    const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+                    const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+                    window.open(
+                        response.data.url,
+                        'payment',
+                        `location=no,width=${width},height=${height},top=${top},left=${left}`
+                    );
+                    // setPaymentDrawerOpen(true);
+                }
+            } else {
+                const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+                setErrorBarMessage(errorMsg);
+                setShowErrorBar(true);
+            }
         } catch (error) {
-            console.error('Form submission error:', error);
+            console.error('Checkout error:', error);
+            const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+            setErrorBarMessage(errorMsg);
+            setShowErrorBar(true);
         } finally {
             setIsSubmitting(false);
         }
     };
 
     return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+        <>
+            {!showAppDownloadModal && (
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
                 {/* Header */}
                 <div className={`${BRAND_GREEN_CLASS} p-6 rounded-t-2xl relative`}>
@@ -423,67 +471,55 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                     </div>
 
                     {/* Coupon Section */}
-                    <div className="mt-4">
-                        <button
-                            type="button"
-                            onClick={handleReedemCode}
-                            className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
-                        >
-                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-                            </svg>
-                            {reedemCode ? 'Hide' : 'Have a'} Coupon Code
-                        </button>
-                        {reedemCode && (
-                            <div className="space-y-2">
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={couponNumber}
-                                        onChange={handleCoupon}
-                                        placeholder="Enter coupon code"
-                                        className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500"
-                                    />
-                                    <button
-                                        type="button"
-                                        onClick={handleCheckCoupon}
-                                        disabled={!couponNumber || !formData.phone}
-                                        className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${isCouponValid === true
-                                            ? 'bg-indigo-600 text-white hover:bg-indigo-800'
-                                            : 'bg-indigo-700 text-white hover:bg-indigo-800 disabled:bg-slate-300 disabled:cursor-not-allowed'
-                                            }`}
-                                    >
-                                        {isCouponValid === true ? (
-                                            <span className="flex items-center gap-1">
-                                                <Icons.Check /> Applied
-                                            </span>
-                                        ) : (
-                                            'Apply'
-                                        )}
-                                    </button>
-                                </div>
-                                {errorMessage && (
-                                    <p className="text-xs text-red-600">{errorMessage}</p>
-                                )}
-                                {isCouponValid === true && (
-                                    <p className="text-xs text-green-600 font-semibold">
-                                        ✓ Coupon applied successfully!
-                                    </p>
-                                )}
-                            </div>
-                        )}
-                    </div>
                     {
-                        isCouponValid === true && (
-                            <div className="space-y-2 mb-3">
-                                <div className="flex justify-between text-slate-600 text-sm">
-                                    <span>Subtotal</span>
-                                    <span>₹{(finalAmounts || totalAmount).toLocaleString()}</span>
-                                </div>
-                                {discountAmount > 0 && (
-                                    <div className="flex justify-between text-green-600 font-semibold text-sm">
-                                        <span>Coupon Discount</span>
-                                        <span>- ₹{discountAmount.toLocaleString()}</span>
+                        user && (
+                            <div className="mt-4">
+                                <button
+                                    type="button"
+                                    onClick={handleReedemCode}
+                                    className="text-sm text-indigo-600 font-semibold hover:text-indigo-700 flex items-center gap-1 mb-2"
+                                >
+                                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+                                    </svg>
+                                    {reedemCode ? 'Hide' : 'Have a'} Coupon Code
+                                </button>
+                                {reedemCode && (
+                                    <div className="space-y-2">
+                                        <div className="flex gap-2">
+                                            <input
+                                                type="text"
+                                                value={couponNumber}
+                                                onChange={handleCoupon}
+                                                placeholder="Enter coupon code"
+                                                className="flex-1 px-3 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-emerald-500"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleCheckCoupon}
+                                                disabled={!couponNumber || !formData.phone}
+                                                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${isCouponValid === true
+                                                    ? 'bg-indigo-600 text-white hover:bg-indigo-800'
+                                                    : 'bg-indigo-700 text-white hover:bg-indigo-800 disabled:bg-slate-300 disabled:cursor-not-allowed'
+                                                    }`}
+                                            >
+                                                {isCouponValid === true ? (
+                                                    <span className="flex items-center gap-1">
+                                                        <Icons.Check /> Applied
+                                                    </span>
+                                                ) : (
+                                                    'Apply'
+                                                )}
+                                            </button>
+                                        </div>
+                                        {errorMessage && (
+                                            <p className="text-xs text-red-600">{errorMessage}</p>
+                                        )}
+                                        {isCouponValid === true && (
+                                            <p className="text-xs text-green-600 font-semibold">
+                                                ✓ Coupon applied successfully!
+                                            </p>
+                                        )}
                                     </div>
                                 )}
                             </div>
@@ -494,7 +530,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                     <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 mt-6">
                         <div className="flex justify-between items-center">
                             <span className="text-sm font-bold text-slate-700">Total Amount</span>
-                            <span className="text-2xl font-bold text-emerald-700">₹{((finalAmounts || totalAmount) - discountAmount).toLocaleString()}</span>
+                            <span className="text-2xl font-bold text-emerald-700">₹{(finalAmounts || totalAmount).toLocaleString()}</span>
                         </div>
                     </div>
 
@@ -647,7 +683,21 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount, onShowLogin,
                     </div>
                 </div>
             )}
-        </div>
+                </div>
+            )}
+
+            {/* <AppDownloadModal
+                open={showAppDownloadModal}
+                onClose={handleAppDownloadModalClose}
+            /> */}
+
+            {/* Login Modal */}
+            <LoginModal
+                isOpen={showLoginModal}
+                onClose={() => setShowLoginModal(false)}
+                afterCheckout={true}
+            />
+        </>
     );
 };
 

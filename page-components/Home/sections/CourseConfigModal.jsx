@@ -134,7 +134,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
       ),
       originalPrice: pricingToUse.price,
       discount: pricingToUse.discount || 0,
-      type: "Course"
+      type: course?.type || "Course"
     };
 
     onAddToCart(cartItem);
