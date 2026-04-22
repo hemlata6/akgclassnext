@@ -114,8 +114,8 @@ export const Header = ({ cartCount }) => {
   const [employees, setEmployees] = useState([]);
   const [employeesLoading, setEmployeesLoading] = useState(false);
 
-  const [employees, setEmployees] = useState([]);
-  const [employeesLoading, setEmployeesLoading] = useState(false);
+  // const [employees, setEmployees] = useState([]);
+  // const [employeesLoading, setEmployeesLoading] = useState(false);
 
   // Fetch employee list for Faculty menu
   const fetchEmployeeList = async () => {
@@ -177,7 +177,7 @@ export const Header = ({ cartCount }) => {
 
     fetchCoursesData();
     fetchAnnouncements();
-    fetchEmployeeList();
+    // fetchEmployeeList();
   }, [user]);
 
   useEffect(() => {
@@ -264,51 +264,6 @@ export const Header = ({ cartCount }) => {
       console.error('Error fetching book domains:', error);
       setBooksLoading(false);
     }
-  };
-
-  // Fetch employee list for Faculty menu
-  const fetchEmployeeList = async () => {
-    try {
-      setEmployeesLoading(true);
-      const response = await Network.fetchEmployee(instId);
-      if (response?.errorCode === 0 && response?.employees) {
-        const filteredEmployees = response.employees.filter(
-          emp => emp.showInApp === true
-        );
-        setEmployees(filteredEmployees);
-      } else {
-        // console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
-        setEmployees([]);
-      }
-    } catch (error) {
-      console.error('Error fetching employee list:', error);
-      setEmployees([]);
-    } finally {
-      setEmployeesLoading(false);
-    }
-  };
-
-  // Handle faculty click
-  const handleFaculty = (faculty) => {
-    const fullName = typeof faculty === 'string'
-      ? faculty
-      : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
-
-    const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
-    const facultyState = {
-      faculty: faculty,
-    };
-
-    router.push(
-      {
-        pathname: '/faculty/[facultyname]',
-        query: {
-          facultyname: facultyName,
-          state: JSON.stringify(facultyState),
-        },
-      },
-      `/faculty/${facultyName}`
-    );
   };
 
   // Handle back button for Lectures
