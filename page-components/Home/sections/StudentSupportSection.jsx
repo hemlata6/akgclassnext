@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Phone, MapPin, Mail } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
+import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
     { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
@@ -33,6 +34,7 @@ If you’re serious about clearing CS Executive or CS Professional, this course 
 
 export const StudentSupportSection = () => {
     const [open, setOpen] = useState(null);
+    const {institute } = useAuth();
 
     return (
         <section className="py-6 bg-white border-t border-slate-200">
@@ -73,11 +75,11 @@ export const StudentSupportSection = () => {
                                 <div className="mb-4 space-y-2 text-sm">
                                     <div className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4 text-emerald-400" />
-                                        <span className="text-slate-300">D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</span>
+                                        <span className="text-slate-300">{institute?.address}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href="mailto:info.vgsh@gmail.com" className="text-slate-300 hover:text-white">info.vgsh@gmail.com</a>
+                                        <a href={`mailto:${institute?.email}`} className="text-slate-300 hover:text-white">{institute?.email}</a>
                                     </div>
                                 </div>
 
@@ -86,10 +88,10 @@ export const StudentSupportSection = () => {
                                         href="tel:+917703880232"
                                         className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-md"
                                     >
-                                        <Phone /> Call: 7703880232
+                                        <Phone /> Call: +{institute?.instituteAppSettingsModals?.contact}
                                     </a>
                                     <a
-                                        href="https://wa.me/917703880232"
+                                        href={`https://wa.me/{institute?.instituteAppSettingsModals.contact}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-2 shadow-md border border-white/20"

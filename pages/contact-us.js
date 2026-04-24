@@ -6,6 +6,7 @@ import { Header } from '../components/Header/Header';
 import { useTheme } from '../config/ThemeContext';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
+import { useAuth } from '@/config/AuthContext';
 
 export default function ContactUsPage() {
     const router = useRouter();
@@ -24,6 +25,7 @@ export default function ContactUsPage() {
     const [loading, setLoading] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
+    const {institute} = useAuth();
 
     // Fetch courses when type is selected as "course"
     useEffect(() => {
@@ -226,17 +228,20 @@ export default function ContactUsPage() {
                                     <Icons.Phone className="text-indigo-600" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
-                                <p className="text-slate-600 text-sm mb-2">Mon-Sat from 10am to 7pm</p>
-                                <p><a href="tel:7703880232" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-7703880232
+                                <p className="text-slate-600 text-sm mb-2">Mon-Sat from 9am to 6pm</p>
+                                <p><a href="tel:9318492718" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-9318492718
                                 </a></p>
                                 <p>
-                                    <a href="tel:8882090148" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                        +91-8882090148
+                                    <a href="tel:7703880232" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                        +91-7703880232
                                     </a>
                                 </p>
-                                <p> <a href="tel:9318492718" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-9318492718
+                                <p> <a href="tel:8882090148" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-8882090148
+                                </a></p>
+                                <p> <a href="tel:9220362235" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-9220362235
                                 </a></p>
                             </div>
 
@@ -246,8 +251,8 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href="mailto:info.vgsh@gmail.com" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    info.vgsh@gmail.com
+                                <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    {institute?.email}
                                 </a>
                             </div>
 
@@ -257,7 +262,7 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
                                 <p className="text-sm opacity-90">
-                                    D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092
+                                    {institute?.address}
                                 </p>
                             </div>
                         </div>

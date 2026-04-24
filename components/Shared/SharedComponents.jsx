@@ -99,7 +99,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: 9318492718, 7703880232, 8882090148</li>
+              <li>Call: 9318492718 , 7703880232 , 8882090148 , 9220362235</li>
               <li>info.vgsh@gmail.com</li>
               <li>D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</li>
             </ul>

@@ -35,7 +35,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   return (
     <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
       {[
-        { l: "Call", i: <Icons.Phone />, a: `tel:+${institute?.contact}` },
+        { l: "Call", i: <Icons.Phone />, a: `tel:+${institute?.instituteAppSettingsModals?.contact}` },
         { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
         { l: "Store", i: <Icons.Cart />, action: () => router.push('/store'), h: true },
         { l: "Free", i: <Icons.Book />, action: () => { router.push('/free-resources') } },
