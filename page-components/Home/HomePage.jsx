@@ -17,6 +17,7 @@ import { CounsellingStrip } from './sections/CounsellingStrip';
 import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
 import FacultyAndStatsSection from './sections/FacultySection';
+import ContactSupportSection from './sections/ContactSupportSection';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -47,9 +48,11 @@ export default function HomePage() {
       <StudentGallery />
       <FreeResources />
       <StudentSupportSection />
+      <ContactSupportSection />
       {/* <StudentHub />
       <AppDownload />
       <CounsellingStrip /> */}
+
       <Footer />
 
       <a href={`https://wa.me/${institute?.instituteAppSettingsModals?.contact}`} target="_blank" rel="noopener noreferrer" className="fixed z-40 right-4 bottom-24 md:bottom-12 group">
