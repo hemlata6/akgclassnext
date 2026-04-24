@@ -15,12 +15,12 @@ const Store = () => {
 
     const { theme } = useTheme();
 
-    const FILTER_SELECTION_TYPE = {
-        paper: 'multiple',   // checkbox
-        product: 'single',   // radio
-        batch: 'single',     // radio
-        price: 'single',     // radio
-    };
+    // const FILTER_SELECTION_TYPE = {
+    //     paper: 'multiple',   // checkbox
+    //     product: 'single',   // radio
+    //     batch: 'single',     // radio
+    //     price: 'single',     // radio
+    // };
 
     const router = useRouter();
     const [isMobile, setIsMobile] = useState(false);
@@ -32,11 +32,11 @@ const Store = () => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
-    const [finalAmounts, setFinalAmounts] = useState(0);
-    const [finalAmountsss, setFinalAmountsss] = useState(0);
-    const [selectedSceduleList, setSelectedSceduleList] = useState([]);
+    // const [finalAmounts, setFinalAmounts] = useState(0);
+    // const [finalAmountsss, setFinalAmountsss] = useState(0);
+    // const [selectedSceduleList, setSelectedSceduleList] = useState([]);
     const [courseList, setCourseList] = useState([]);
-    const [showAllCourses, setShowAllCourses] = useState(false);
+    // const [showAllCourses, setShowAllCourses] = useState(false);
 
     // New filter states
     const [domains, setDomains] = useState([]);
@@ -891,7 +891,7 @@ const Store = () => {
             const response = await Network.getFreeCourseList(instId);
             const activeCourses = (response?.courses || []).filter(c => c.active === true && c.paid === true);
 
-            setCourseList(activeCourses);
+            // setCourseList(activeCourses);
             setAllCourses(activeCourses);
             setFilteredCourses(activeCourses);
 
@@ -908,13 +908,13 @@ const Store = () => {
     };
 
 
-    const handlePurchase = (item) => {
-        addPurchase(item);
-        setPurchaseSuccess(item.title);
-        setTimeout(() => {
-            setPurchaseSuccess(null);
-        }, 3000);
-    };
+    // const handlePurchase = (item) => {
+    //     addPurchase(item);
+    //     setPurchaseSuccess(item.title);
+    //     setTimeout(() => {
+    //         setPurchaseSuccess(null);
+    //     }, 3000);
+    // };
 
     const truncateDescription = (description) => {
         // Replace &nbsp; and other HTML entities with plain text equivalents
@@ -1934,7 +1934,7 @@ const Store = () => {
                     />
 
                     {/* Modal */}
-                    <div className="fixed bottom-0 left-0 right-0 rounded-t-3xl bg-white shadow-2xl max-h-[55vh] overflow-y-auto z-50">
+                    <div className="fixed bottom-14 left-0 right-0 rounded-t-3xl bg-white shadow-2xl max-h-[55vh] overflow-y-auto z-50">
                         <div className="flex flex-col h-full bg-white">
                             {/* Header */}
                             <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm border-b border-emerald-600/20 sticky top-0">

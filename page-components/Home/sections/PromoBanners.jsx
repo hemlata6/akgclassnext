@@ -125,7 +125,7 @@ export const PromoBanners = () => {
     return (
         <section className="relative w-full group bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
 
-            <div className="w-full aspect-[2/1] md:aspect-[2.5/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
+            <div className="w-full aspect-[3/1] md:aspect-[3/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
 
                 {/* Animated Background Gradient */}
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-transparent to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-5" />
