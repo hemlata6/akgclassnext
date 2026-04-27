@@ -209,7 +209,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
             <p className="text-slate-500 text-sm leading-relaxed">
               {courseData?.shortDescription}
             </p>
-            <div className="flex items-center gap-6 py-4 border-y border-slate-200">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 border-y border-slate-200">
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-emerald-50 rounded-lg text-emerald-700"><Icons.Clock /></div>
                 <div>

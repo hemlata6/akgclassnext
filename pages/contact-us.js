@@ -7,6 +7,7 @@ import { useTheme } from '../config/ThemeContext';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
 import { useAuth } from '@/config/AuthContext';
+import { useAuth } from '@/config/AuthContext';
 
 export default function ContactUsPage() {
     const router = useRouter();
@@ -26,6 +27,7 @@ export default function ContactUsPage() {
     const [loading, setLoading] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
+    const {institute} = useAuth();
 
     // Fetch courses when type is selected as "course"
     useEffect(() => {
@@ -252,6 +254,8 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
+                                <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    {institute?.email}
                                 <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
                                     {institute?.email}
                                 </a>

@@ -36,7 +36,7 @@ export default function Layout({ children }) {
       setShouldHideControls(!!(isMobileParam || tokenParam));
       setIsStorePage(router.pathname === '/store');
     }
-  }, [router.asPath]);
+  }, [router.pathname, router.asPath]);
 
   const updateCartCount = () => {
     if (typeof window !== 'undefined') {
