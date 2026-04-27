@@ -27,7 +27,7 @@ export default function ContactUsPage() {
     const [loading, setLoading] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
-    const {institute} = useAuth();
+    // const { institute } = useAuth();
 
     // Fetch courses when type is selected as "course"
     useEffect(() => {
@@ -256,6 +256,7 @@ export default function ContactUsPage() {
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
                                 <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
                                     {institute?.email}
+                                </a>
                                 <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
                                     {institute?.email}
                                 </a>
