@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    optimizeCss: false,
+  },
   // Dynamic deployment for SSR/ISR
   images: {
     domains: ['classiocafinal.in-maa-1.linodeobjects.com', 'lecturedekho.in'],
