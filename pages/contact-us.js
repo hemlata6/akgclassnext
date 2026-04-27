@@ -27,7 +27,6 @@ export default function ContactUsPage() {
     const [loading, setLoading] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
-    const {institute} = useAuth();
 
     // Fetch courses when type is selected as "course"
     useEffect(() => {
