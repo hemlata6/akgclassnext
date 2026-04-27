@@ -7,7 +7,6 @@ import { useTheme } from '../config/ThemeContext';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
 import { useAuth } from '@/config/AuthContext';
-import { useAuth } from '@/config/AuthContext';
 
 export default function ContactUsPage() {
     const router = useRouter();
