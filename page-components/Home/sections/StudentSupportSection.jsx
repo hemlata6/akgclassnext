@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Phone, MapPin, Mail } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
 import { useAuth } from '@/config/AuthContext';
+import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
     { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
