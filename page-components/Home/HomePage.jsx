@@ -44,7 +44,7 @@ export default function HomePage() {
       {/* <AboutSection /> */}
       <CoursesSection />
       <BookStore />
-      <MarathonGallery />
+      {/* <MarathonGallery /> */}
       <StudentGallery />
       <FreeResources />
       <StudentSupportSection />
