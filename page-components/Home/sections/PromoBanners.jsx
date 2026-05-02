@@ -186,7 +186,7 @@ export const PromoBanners = () => {
                 <button
                     onClick={prevSlide}
                     aria-label="Previous slide"
-                    className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
+                    className="hidden sm:flex absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
                 >
                     <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
@@ -195,7 +195,7 @@ export const PromoBanners = () => {
                 <button
                     onClick={nextSlide}
                     aria-label="Next slide"
-                    className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
+                    className="hidden sm:flex absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
                 >
                     <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
