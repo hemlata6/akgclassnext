@@ -207,7 +207,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={handleClose}>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 space-y-8 max-w-md w-full" onClick={(e) => e.stopPropagation()}>
         {/* Close Button */}
         <button
