@@ -55,7 +55,7 @@ export const StudentHub = () => {
                       <p className="font-bold text-xs leading-tight group-hover:text-indigo-300">
                         Ind AS 115 - Revenue (Part {i})
                       </p>
-                      <p className="text-[10px] text-slate-400">CA VIVEK GABA • 25k views</p>
+                      <p className="text-[10px] text-slate-400">CA Praveen Jain • 25k views</p>
                     </div>
                   </div>
                 ))}

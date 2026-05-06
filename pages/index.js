@@ -4,15 +4,15 @@ import HomePage from '../page-components/Home/HomePage';
 
 export default function Home() {
   const siteUrl = 'https://vgstudyhub.netlify.app/';
-  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/VG STUDY HUB-logo-circle-white.webp';
-  const title = 'VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, VG STUDY HUB, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/Fast Education-logo-circle-white.webp';
+  const title = 'Fast Education | Fast Education - CA Praveen Jain';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Praveen Jain';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, Fast Education, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "VG STUDY HUB",
+    "name": "Fast Education",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="VG STUDY HUB" />
+        <meta property="og:site_name" content="Fast Education" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="VG STUDY HUB" />
+        <meta name="author" content="Fast Education" />
 
         {/* JSON-LD Structured Data */}
         <script

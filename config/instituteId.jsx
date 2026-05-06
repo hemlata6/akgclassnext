@@ -29,6 +29,9 @@
 // const instId = 367;
 
 // vghub
-const instId = 454;
+// const instId = 454;
+
+// fast
+const instId = 119;
 
 export default instId;

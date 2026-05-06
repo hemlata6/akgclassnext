@@ -1,12 +1,12 @@
 {
   "name": "caclass",
   "version": "1.0.0",
-  "description": "VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA - Next.js",
+  "description": "Fast Education | Fast Education - CA Praveen Jain - Next.js",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3005",
+    "dev": "next dev -p 3119",
     "build": "next build",
-    "start": "next start -p 3005",
+    "start": "next start -p 3119",
     "lint": "next lint",
     "deploy:netlify": "netlify deploy --prod",
     "deploy:preview": "netlify deploy",

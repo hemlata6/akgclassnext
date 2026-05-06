@@ -1,6 +1,6 @@
-# VG STUDY HUB - Next.js Application
+# Fast Education - Next.js Application
 
-This is a Next.js conversion of the original React app for VG STUDY HUB - VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA.
+This is a Next.js conversion of the original React app for Fast Education - Fast Education | Fast Education - CA Praveen Jain.
 
 ## Getting Started
 

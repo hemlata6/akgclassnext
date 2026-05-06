@@ -23,7 +23,7 @@ export const PromoPopup = ({ onClose }) => {
         </div>
       </div>
       <div className="p-5 text-center space-y-4">
-        <p className="text-slate-600 text-sm">Master Ind AS with CA VIVEK GABA. Conceptual clarity guaranteed.</p>
+        <p className="text-slate-600 text-sm">Master Ind AS with CA Praveen Jain. Conceptual clarity guaranteed.</p>
         <button
           onClick={() => {
             onClose();
