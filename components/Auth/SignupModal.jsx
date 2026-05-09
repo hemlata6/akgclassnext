@@ -23,6 +23,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [tempSignupData, setTempSignupData] = useState(null);
   const { login, auth, stateList } = useAuth();
+  const { login, auth, stateList } = useAuth();
   const { theme } = useTheme();
   const { setStudentAuth } = useStudent();
 
@@ -126,6 +127,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         instId: instId,
         password: 123456,
         gender: "male",
+        cityId: addressForm.cityId,
+        address: addressForm.address,
         cityId: addressForm.cityId,
         address: addressForm.address,
         userName: `${formData.firstname} ${formData.lastname}`,
@@ -238,7 +241,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             </div>
           )}
 
-          {/* <p className="mt-2 text-center text-xs text-gray-500">
+          <p className="mt-4 text-center text-sm text-gray-500">
             Already have an account?{' '}
             <button
               onClick={() => {
@@ -254,72 +257,67 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         </div>
 
         {/* Form */}
-        <form className="space-y-3" onSubmit={handleSubmit}>
-          {/* First Name & Last Name - 2 Columns */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* First Name */}
-            <div className="space-y-1">
-              <label htmlFor="firstname" className="block text-sm font-semibold text-gray-700">
-                First Name
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
-                  <User className="h-5 w-5" />
-                </div>
-                <input
-                  id="firstname"
-                  name="firstname"
-                  type="text"
-                  autoComplete="given-name"
-                  required
-                  className={`block w-full pl-12 pr-4 py-2 border-2 ${errors.firstname
-                    ? 'border-red-300 focus:border-red-500'
-                    : `border-gray-300 focus:border-indigo-700`
-                    } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
-                  placeholder="First name"
-                  value={formData.firstname}
-                  onChange={handleChange}
-                />
+        <form className="space-y-5" onSubmit={handleSubmit}>
+          {/* First Name */}
+          <div className="space-y-1">
+            <label htmlFor="firstname" className="block text-sm font-semibold text-gray-700">
+              First Name
+            </label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
+                <User className="h-5 w-5" />
               </div>
-              {errors.firstname && (
-                <p className="text-sm text-red-600 flex items-center gap-1">
-                  <span className="w-1 h-1 bg-red-600 rounded-full"></span>
-                  {errors.firstname}
-                </p>
-              )}
+              <input
+                id="firstname"
+                name="firstname"
+                type="text"
+                autoComplete="given-name"
+                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.firstname
+                  ? 'border-red-300 focus:border-red-500'
+                  : `border-gray-300 focus:border-indigo-700`
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                placeholder="Enter your first name"
+                value={formData.firstname}
+                onChange={handleChange}
+              />
             </div>
+            {errors.firstname && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.firstname}
+              </p>
+            )}
+          </div>
 
-            {/* Last Name */}
-            <div className="space-y-1">
-              <label htmlFor="lastname" className="block text-sm font-semibold text-gray-700">
-                Last Name
-              </label>
-              <div className="relative group">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
-                  <User className="h-5 w-5" />
-                </div>
-                <input
-                  id="lastname"
-                  name="lastname"
-                  type="text"
-                  autoComplete="family-name"
-                  required
-                  className={`block w-full pl-12 pr-4 py-2 border-2 ${errors.lastname
-                    ? 'border-red-300 focus:border-red-500'
-                    : 'border-gray-300 focus:border-indigo-700'
-                    } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
-                  placeholder="Last name"
-                  value={formData.lastname}
-                  onChange={handleChange}
-                />
+          {/* Last Name */}
+          <div className="space-y-1">
+            <label htmlFor="lastname" className="block text-sm font-semibold text-gray-700">
+              Last Name
+            </label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
+                <User className="h-5 w-5" />
               </div>
-              {errors.lastname && (
-                <p className="text-sm text-red-600 flex items-center gap-1">
-                  <span className="w-1 h-1 bg-red-600 rounded-full"></span>
-                  {errors.lastname}
-                </p>
-              )}
+              <input
+                id="lastname"
+                name="lastname"
+                type="text"
+                autoComplete="family-name"
+                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.lastname
+                  ? 'border-red-300 focus:border-red-500'
+                  : 'border-gray-300 focus:border-indigo-700'
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                placeholder="Enter your last name"
+                value={formData.lastname}
+                onChange={handleChange}
+              />
             </div>
+            {errors.lastname && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.lastname}
+              </p>
+            )}
           </div>
 
           {/* Email */}
@@ -336,8 +334,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                required
-                className={`block w-full pl-12 pr-4 py-2 border-2 ${errors.email
+                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.email
                   ? 'border-red-300 focus:border-red-500'
                   : `border-gray-300 focus:border-indigo-700`
                   } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
@@ -352,69 +349,6 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
                 {errors.email}
               </p>
             )}
-          </div>
-
-          {/* Address */}
-          <div className="space-y-1">
-            <label className="block text-sm font-semibold text-slate-700">Address</label>
-            <textarea
-              value={addressForm.address}
-              onChange={(e) => handleAddressInputChange('address', e.target.value)}
-              rows={2}
-              required
-              className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 resize-none"
-              placeholder="Enter your full delivery address"
-            />
-            <p className="mt-2 text-xs text-slate-600 leading-relaxed">
-              Note: Kindly enter your complete and correct dispatch address, including your house number, street/locality, city, state, and PIN code. Your books will be delivered to this address only. Incorrect or incomplete address details may lead to delivery delays, failed delivery attempts, or cancellation of shipment. Please verify all details carefully before submitting your order.
-            </p>
-            {addressErrors.address && <p className="mt-2 text-xs text-red-600">{addressErrors.address}</p>}
-          </div>
-
-          {/* State & City - 2 Columns */}
-          <div className="grid grid-cols-2 gap-4">
-            {/* State */}
-            <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">State</label>
-              <select
-                value={addressForm.stateName}
-                onChange={(e) => {
-                  handleAddressInputChange('stateName', e.target.value);
-                  handleAddressInputChange('cityName', '');
-                  handleAddressInputChange('cityId', '');
-                }}
-                required
-                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-              >
-                <option value="">Select state</option>
-                {stateList && stateList.map((state) => (
-                  <option key={state.name} value={state.name}>{state.name}</option>
-                ))}
-              </select>
-              {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
-            </div>
-
-            {/* City */}
-            <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">City</label>
-              <select
-                value={addressForm.cityId}
-                onChange={(e) => {
-                  const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
-                  handleAddressInputChange('cityId', e.target.value);
-                  handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
-                }}
-                required
-                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                disabled={!addressForm.stateName}
-              >
-                <option value="">Select city</option>
-                {(stateList && stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
-                  <option key={city.id} value={city.id}>{city.city}</option>
-                ))}
-              </select>
-              {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
-            </div>
           </div>
 
           {/* Error Message */}
@@ -435,8 +369,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="pt-1">
             <button
               type="submit"
-              disabled={isLoading || isFormIncomplete}
-              className={`group relative w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
+              disabled={isLoading}
+              className={`group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
             >
               {isLoading ? (
                 <>
