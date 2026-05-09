@@ -23,7 +23,6 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [tempSignupData, setTempSignupData] = useState(null);
   const { login, auth, stateList } = useAuth();
-  const { login, auth, stateList } = useAuth();
   const { theme } = useTheme();
   const { setStudentAuth } = useStudent();
 
@@ -127,8 +126,6 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         instId: instId,
         password: 123456,
         gender: "male",
-        cityId: addressForm.cityId,
-        address: addressForm.address,
         cityId: addressForm.cityId,
         address: addressForm.address,
         userName: `${formData.firstname} ${formData.lastname}`,
@@ -241,7 +238,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             </div>
           )}
 
-          <p className="mt-4 text-center text-sm text-gray-500">
+          {/* <p className="mt-4 text-center text-sm text-gray-500">
             Already have an account?{' '}
             <button
               onClick={() => {
@@ -253,7 +250,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             >
               Sign in here
             </button>
-          </p> */}
+          </p>  */}
         </div>
 
         {/* Form */}
