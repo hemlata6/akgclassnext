@@ -5,6 +5,7 @@ import instId from '../../config/instituteId';
 import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
 import { useTheme } from '../../config/ThemeContext';
+import SignupModal from './SignupModal';
 
 const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   const { login } = useAuth();
@@ -19,6 +20,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [openSignUpModel, setOpenSignUpModal] = useState(false);
 
   const handleNavigate = () => {
     if (afterCheckout) {
@@ -151,8 +153,9 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
             phone: formData.phone,
             otp: formData.otp
           }));
-          handleClose();
-          onSignupClick();
+          // handleClose();
+          // onSignupClick();
+          setOpenSignUpModal(true);
         } else {
           setErrors({ submit: verifyResponse.message || 'OTP verification failed. Please try again.' });
         }
@@ -398,6 +401,12 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
           </p>
         </div>
       </div>
+
+      <SignupModal 
+        isOpen={openSignUpModel}
+        onClose={() => setOpenSignUpModal(false)}
+        handleLoginClose={handleClose}
+      />
     </div>
   );
 };
