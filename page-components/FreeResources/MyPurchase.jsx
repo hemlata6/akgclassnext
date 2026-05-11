@@ -435,7 +435,7 @@ const MyPurchases = () => {
               <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-emerald-100 mb-2">Dispatch Address Required</p>
               <h3 className="text-2xl font-bold mb-2">Add your delivery address</h3>
               <p className="text-sm text-emerald-50 leading-relaxed">
-                Note: Kindly enter your correct dispatch address, including all necessary details such as house number, street, city, and PIN code. Your books will be delivered to this address, so please double-check before submitting.
+                Note: Kindly enter your complete and correct dispatch address, including your house number, street/locality, city, state, and PIN code. Your books will be delivered to this address only. Incorrect or incomplete address details may lead to delivery delays, failed delivery attempts, or cancellation of shipment. Please verify all details carefully before submitting your order.
               </p>
             </div>
 
