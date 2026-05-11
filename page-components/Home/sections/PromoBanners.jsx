@@ -113,7 +113,7 @@ export const PromoBanners = () => {
     };
 
     const handleLinkClick = (slide) => {
-        console.log('Banner clicked:', slide);
+        // console.log('Banner clicked:', slide);
         const isRedirectBanner = String(slide?.type || '').toLowerCase() === 'link';
         const targetUrl = slide?.contentLink;
 

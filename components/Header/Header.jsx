@@ -238,7 +238,7 @@ export const Header = ({ cartCount }) => {
       setDomainLoading(true);
       const response = await Network.fetchDomain(instId);
       const availableDomains = response?.domains || [];
-      console.log('availableDomains', availableDomains);
+      // console.log('availableDomains', availableDomains);
       setDomains(availableDomains);
       setCurrentLevel('first');
       setSelectedParentDomain(null);
