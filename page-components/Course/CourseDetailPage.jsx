@@ -1,14 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
+import axios from 'axios';
 import { ShoppingCart } from 'lucide-react';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS, TEXT_GREEN } from '../../constants/Icons';
 import { SYLLABUS_DATA } from '../../constants/data';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
 import CourseConfigModal from '../Home/sections/CourseConfigModal';
-import ProceedToCheckoutForm from '../Cart/ProceedToCheckoutForm';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
+import { BASE_URL } from '../../config/endpoints';
+import ProceedToCheckoutForm from '../Cart/ProceedToCheckoutForm';
+import LoginModal from '@/components/Auth/LoginModal';
+import AppDownloadModal from '@/components/Modals/AppDownloadModal';
+import { Dialog, DialogContent, IconButton } from '@mui/material';
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 
@@ -280,7 +285,8 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 
 const CourseContent = ({ courseData, onAddToCart }) => {
   const router = useRouter();
-
+  const { authToken, user } = useAuth();
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
   const [selectedVariation, setSelectedVariation] = useState('');
@@ -293,9 +299,43 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const [suggestedCourses, setSuggestedCourses] = useState([]);
   const [selectedCourse, setSelectedCourse] = useState(null);
   const [allCourses, setAllCourses] = useState([]);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [checkoutResponse, setCheckoutResponse] = useState("");
+  const [errorBarMessage, setErrorBarMessage] = useState('');
+  const [showErrorBar, setShowErrorBar] = useState(false);
+  const [showCheckoutFormModal, setShowCheckoutFormModal] = useState(false);
   const [showProceedCheckout, setShowProceedCheckout] = useState(false);
   const [checkoutCartItem, setCheckoutCartItem] = useState(null);
+  const [checkoutStep, setCheckoutStep] = useState('form');
+  const [checkoutForm, setCheckoutForm] = useState({ name: '', email: '', contact: '' });
+  const [checkoutFormError, setCheckoutFormError] = useState('');
+  const [paymentUrl, setPaymentUrl] = useState('');
+  const [showMobilePaymentModal, setShowMobilePaymentModal] = useState(false);
+  const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
+  const [routeData, setRouteData] = useState(null);
+  const [tokenFromUrl, setTokenFromUrl] = useState(null);
+  const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
+  const [showSuccessBar, setShowSuccessBar] = useState(false);
+  const [successBarMessage, setSuccessBarMessage] = useState('');
+  const [showCopyAlert, setShowCopyAlert] = useState(false);
 
+  const LOGOUT_ERROR_CODES = new Set([100, 101, 102, 103, 104, 401]);
+
+  const handleLogoutError = (errorCode, errorDescription) => {
+    if (!LOGOUT_ERROR_CODES.has(errorCode)) return false;
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('studentAuth');
+    localStorage.removeItem('studentData');
+    const message = `You have been logged out. ${errorDescription || 'Session expired'}`;
+    setErrorBarMessage(message);
+    setShowErrorBar(true);
+    setShowLoginModal(true);
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+    return true;
+  };
 
   // Load cart from localStorage
   useEffect(() => {
@@ -533,8 +573,287 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       type: 'Course'
     };
 
-    setCheckoutCartItem(cartItem);
-    setShowProceedCheckout(true);
+    const queryString = getQueryString();
+
+    if (queryString) {
+      // Mobile mode (query params) - always call API with tokenParam
+      setIsProcessing(true);
+      try {
+        const entityModals = [{
+          purchaseType: "course",
+          entityId: courseData.id,
+          campusId: 0,
+          courseId: 0,
+          coursePricingId: priceInfo.pricingId
+        }];
+
+        const mobileBody = {
+          "getCheckoutUrls": entityModals,
+          "coupon": ""
+        };
+
+        axios.post(
+          `${BASE_URL}payment/get-checkout-url`,
+          mobileBody,
+          { headers: { "X-Auth": tokenFromUrl } }
+        ).then(response => {
+          if (response?.data?.status === true && response?.data?.url) {
+            setCheckoutResponse(response?.data);
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+              setPaymentUrl(response.data.url);
+              setShowMobilePaymentModal(true);
+              window.dispatchEvent(new Event('hideFooter'));
+            } else {
+              const width = 480;
+              const height = 1080;
+              const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+              const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+              window.open(
+                response.data.url,
+                'payment',
+                `location=no,width=${width},height=${height},top=${top},left=${left}`
+              );
+            }
+          } else {
+            if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
+            const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+            setErrorBarMessage(errorMsg);
+            setShowErrorBar(true);
+          }
+        }).catch(error => {
+          console.error('Mobile checkout error:', error);
+          if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
+          const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'Token expired or invalid. Please login again from the app.';
+          setErrorBarMessage(errorMsg);
+          setShowErrorBar(true);
+        }).finally(() => {
+          setIsProcessing(false);
+        });
+        return;
+      } catch (error) {
+        setIsProcessing(false);
+      }
+    }
+
+    if (authToken) {
+      // User is logged in - call API directly
+      setIsProcessing(true);
+      try {
+        const entityModals = [{
+          purchaseType: "course",
+          entityId: courseData.id,
+          campusId: 0,
+          courseId: 0,
+          coursePricingId: priceInfo.pricingId
+        }];
+
+        const mobileBody = {
+          "getCheckoutUrls": entityModals,
+          "coupon": ""
+        };
+
+        axios.post(
+          `${BASE_URL}payment/get-checkout-url`,
+          mobileBody,
+          { headers: { "X-Auth": authToken } }
+        ).then(response => {
+          if (response?.data?.status === true && response?.data?.url) {
+            setCheckoutResponse(response?.data);
+            const isMobile = window.innerWidth <= 768;
+
+            if (isMobile) {
+              setPaymentUrl(response.data.url);
+              setShowMobilePaymentModal(true);
+              window.dispatchEvent(new Event('hideFooter'));
+            } else {
+              const width = 480;
+              const height = 1080;
+              const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+              const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+              window.open(
+                response.data.url,
+                'payment',
+                `location=no,width=${width},height=${height},top=${top},left=${left}`
+              );
+            }
+          } else {
+            if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
+            const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+            setErrorBarMessage(errorMsg);
+            setShowErrorBar(true);
+          }
+        }).catch(error => {
+          console.error('Checkout error:', error);
+          if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
+          const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+          setErrorBarMessage(errorMsg);
+          setShowErrorBar(true);
+        }).finally(() => {
+          setIsProcessing(false);
+        });
+      } catch (error) {
+        setIsProcessing(false);
+      }
+    } else {
+      // User is not authenticated - show login modal
+      setCheckoutCartItem(cartItem);
+      setShowLoginModal(true);
+    }
+  };
+
+  // Auto-trigger checkout after login
+  useEffect(() => {
+    if (authToken && checkoutCartItem && !showLoginModal) {
+      openCheckoutForm();
+      setCheckoutCartItem(null);
+    }
+  }, [authToken, showLoginModal, checkoutCartItem]);
+
+  const validateCheckoutForm = () => {
+    const { name, email, contact } = checkoutForm;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!name.trim()) return 'Name is required.';
+    if (!email.trim() || !emailRegex.test(email)) return 'Enter a valid email address.';
+    if (!contact.trim() || contact.replace(/\D/g, '').length !== 10) return 'Contact number must be exactly 10 digits.';
+    return '';
+  };
+
+  // Build query string from route params to preserve across navigation
+  const getQueryString = () => {
+    const params = new URLSearchParams();
+    if (routeData) params.append('isMobile', routeData);
+    if (tokenFromUrl) params.append('token', tokenFromUrl);
+    const queryStr = params.toString();
+    return queryStr ? `?${queryStr}` : '';
+  };
+
+  const queryString = getQueryString();
+
+  // Check if we should hide global footer
+  const shouldHideGlobalControls = !!(routeData || tokenFromUrl);
+
+  // // Detect query params on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const isMobileParam = params.get('isMobile');
+      const tokenParam = params.get('token');
+
+      if (isMobileParam) setRouteData(isMobileParam);
+      if (tokenParam) setTokenFromUrl(tokenParam);
+    }
+  }, [router.asPath]);
+
+  const splitName = (fullName = '') => {
+    const parts = fullName.trim().split(/\s+/).filter(Boolean);
+    return {
+      firstName: parts[0] || 'Guest',
+      lastName: parts.slice(1).join(' ') || ''
+    };
+  };
+
+  const handleProceedToCheckout = async (customerDetails = checkoutForm) => {
+    if (!priceInfo?.pricingId || !courseData?.id) {
+      const errorMsg = 'Please select a valid mode, variant and validity before checkout.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+      return;
+    }
+
+    const urlToken = typeof window !== 'undefined'
+      ? new URLSearchParams(window.location.search).get('token')
+      : null;
+
+    const checkoutToken = tokenFromUrl || urlToken || authToken;
+
+    setIsProcessing(true);
+
+    try {
+      const entityModals = [{
+        purchaseType: 'course',
+        entityId: courseData.id,
+        campusId: 0,
+        courseId: 0,
+        coursePricingId: priceInfo.pricingId
+      }];
+
+      const mobileBody = {
+        getCheckoutUrls: entityModals,
+        coupon: ''
+      };
+
+      const { firstName, lastName } = splitName(customerDetails?.name);
+
+      const publicBody = {
+        firstName,
+        lastName,
+        contact: customerDetails?.contact || '',
+        email: customerDetails?.email || '',
+        instId: instId,
+        campaignId: null,
+        coupon: '',
+        coursePricingId: 0,
+        entityModals
+      };
+
+      const endpoint = checkoutToken
+        ? `${BASE_URL}payment/get-checkout-url`
+        : `${BASE_URL}/admin/payment/fetch-public-checkout-url`;
+
+      const payload = checkoutToken ? mobileBody : publicBody;
+
+      const config = checkoutToken
+        ? { headers: { 'X-Auth': checkoutToken } }
+        : undefined;
+
+      const response = await axios.post(
+        endpoint,
+        payload,
+        config
+      );
+
+      if (response?.data?.status === true && response?.data?.url) {
+        setCheckoutResponse(response.data);
+        setShowCheckoutFormModal(false);
+
+        const isMobile = window.innerWidth <= 768;
+        if (isMobile) {
+          setPaymentUrl(response.data.url);
+          setShowMobilePaymentModal(true);
+          setPaymentDrawerOpen(true);
+          window.dispatchEvent(new Event('hideFooter'));
+        } else {
+          const width = 480;
+          const height = 1080;
+          const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+          const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+          window.open(
+            response.data.url,
+            'payment',
+            `location=no,width=${width},height=${height},top=${top},left=${left}`
+          );
+        }
+
+        return;
+      }
+
+      const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+    } catch (error) {
+      console.error('Checkout error:', error);
+      const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'Failed to start checkout. Please try again.';
+      setErrorBarMessage(errorMsg);
+      setShowErrorBar(true);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
 
@@ -729,13 +1048,20 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                   )}
                   <button
                     onClick={openCheckoutForm}
-                    disabled={!selectedMode || !selectedValidity || !priceInfo}
-                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo
+                    disabled={!selectedMode || !selectedValidity || !priceInfo || isProcessing}
+                    className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${!selectedMode || !selectedValidity || !priceInfo || isProcessing
                       ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                       : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
                       }`}
                   >
-                    Buy Now
+                    {isProcessing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      'Buy Now'
+                    )}
                   </button>
                 </div>
                 {/* <p className="text-[10px] text-slate-400 text-center mt-3">
@@ -884,6 +1210,270 @@ const CourseContent = ({ courseData, onAddToCart }) => {
             setCheckoutCartItem(null);
           }}
         />
+      )}
+
+      {showLoginModal && checkoutCartItem && (
+        <LoginModal
+          isOpen={showLoginModal}
+          onClose={() => {
+            setShowLoginModal(false);
+            setCheckoutCartItem(null);
+          }}
+        />
+      )}
+
+      {/* Mobile Payment Dialog */}
+      <Dialog
+        open={showMobilePaymentModal}
+        onClose={() => {
+          setShowMobilePaymentModal(false);
+          setPaymentUrl('');
+          window.dispatchEvent(new Event('showFooter'));
+        }}
+        fullScreen
+        PaperProps={{
+          sx: {
+            margin: 0,
+            maxHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column'
+          }
+        }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between p-3 bg-emerald-800 flex-shrink-0"
+          style={{ minHeight: '56px' }}
+        >
+          <h2 className="text-white font-bold text-sm truncate flex-1">Complete Payment</h2>
+          <IconButton
+            onClick={() => {
+              setShowMobilePaymentModal(false);
+              setPaymentUrl('');
+              setPaymentDrawerOpen(false);
+              window.dispatchEvent(new Event('showFooter'));
+            }}
+            sx={{
+              color: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.3)'
+              },
+              width: 32,
+              height: 32
+            }}
+          >
+            ✕
+          </IconButton>
+        </div>
+
+        {/* Content */}
+        <DialogContent
+          sx={{
+            padding: 0,
+            overflow: 'auto',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            flex: 1,
+            position: 'relative',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
+          }}
+        >
+          <iframe
+            src={paymentUrl}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 20,
+            }}
+            title="Payment Gateway"
+            allow="payment"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+            scrolling="yes"
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* App Download Modal */}
+      <AppDownloadModal
+        open={showAppDownloadModal}
+        onClose={() => setShowAppDownloadModal(false)}
+      />
+
+      {/* Error Notification Bar */}
+      {showErrorBar && (
+        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+          <div className="bg-red-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold">{errorBarMessage}</p>
+              </div>
+              <button
+                onClick={() => setShowErrorBar(false)}
+                className="flex-shrink-0 text-white hover:text-red-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Notification Bar */}
+      {showSuccessBar && (
+        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+          <div className="bg-green-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold">{successBarMessage}</p>
+              </div>
+              <button
+                onClick={() => setShowSuccessBar(false)}
+                className="flex-shrink-0 text-white hover:text-green-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showCheckoutFormModal && (
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <div className={`${BRAND_GREEN_CLASS} px-5 py-4 flex items-center justify-between`}>
+              <h3 className="text-white font-bold text-lg">
+                {checkoutStep === 'form' ? 'Checkout Details' : 'Confirm Order'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setShowCheckoutFormModal(false)}
+                className="text-white/90 hover:text-white"
+              >
+                <Icons.X />
+              </button>
+            </div>
+
+            <div className="p-5">
+              {checkoutStep === 'form' ? (
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Name</label>
+                    <input
+                      type="text"
+                      value={checkoutForm.name}
+                      onChange={(e) => setCheckoutForm(prev => ({ ...prev, name: e.target.value }))}
+                      className="w-full p-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-emerald-600"
+                      placeholder="Enter your full name"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Email</label>
+                    <input
+                      type="email"
+                      value={checkoutForm.email}
+                      onChange={(e) => setCheckoutForm(prev => ({ ...prev, email: e.target.value }))}
+                      className="w-full p-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-emerald-600"
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Contact</label>
+                    <input
+                      type="tel"
+                      value={checkoutForm.contact}
+                      onChange={(e) => {
+                        const onlyDigits = e.target.value.replace(/\D/g, '').slice(0, 10);
+                        setCheckoutForm(prev => ({ ...prev, contact: onlyDigits }));
+                      }}
+                      maxLength={10}
+                      inputMode="numeric"
+                      className="w-full p-3 rounded-lg border border-slate-200 text-sm outline-none focus:border-emerald-600"
+                      placeholder="Enter contact number"
+                    />
+                  </div>
+                  {checkoutFormError && (
+                    <p className="text-xs text-red-600 font-medium">{checkoutFormError}</p>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const formError = validateCheckoutForm();
+                      if (formError) {
+                        setCheckoutFormError(formError);
+                        return;
+                      }
+                      setCheckoutFormError('');
+                      setCheckoutStep('confirm');
+                    }}
+                    className={`w-full py-3 rounded-xl font-bold text-sm text-white ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS}`}
+                  >
+                    Continue
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-2">
+                    <p className="text-xs text-slate-500 uppercase font-bold">Final Price</p>
+                    <p className="text-2xl font-bold text-slate-900">
+                      ₹{priceInfo?.discountedPrice?.toLocaleString('en-IN') || 0}
+                    </p>
+                    {priceInfo?.originalPrice && priceInfo.originalPrice !== priceInfo.discountedPrice && (
+                      <p className="text-sm text-slate-400 line-through">
+                        ₹{priceInfo.originalPrice.toLocaleString('en-IN')}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="rounded-xl border border-slate-200 p-4 text-sm text-slate-700 space-y-1">
+                    <p><span className="font-semibold">Name:</span> {checkoutForm.name}</p>
+                    <p><span className="font-semibold">Email:</span> {checkoutForm.email}</p>
+                    <p><span className="font-semibold">Contact:</span> {checkoutForm.contact}</p>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setCheckoutStep('form')}
+                      className="flex-1 py-3 rounded-xl font-bold text-sm bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleProceedToCheckout(checkoutForm)}
+                      disabled={isProcessing}
+                      className={`flex-1 py-3 rounded-xl font-bold text-sm text-white ${isProcessing ? 'bg-slate-300 cursor-not-allowed' : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS}`}`}
+                    >
+                      {isProcessing ? 'Processing...' : 'Pay Now'}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

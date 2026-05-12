@@ -51,7 +51,8 @@ export default function CartPage() {
     const message = `You have been logged out. ${errorDescription || 'Session expired'}`;
     setErrorBarMessage(message);
     setShowErrorBar(true);
-    setShowCheckoutModal(false);
+    // setShowCheckoutModal(false);
+    setShowLoginModal(true);
     setTimeout(() => {
       window.location.reload();
     }, 2000);
@@ -625,7 +626,8 @@ export default function CartPage() {
       }
     } else {
       // User is not authenticated - show checkout modal
-      setShowCheckoutModal(true);
+      // setShowCheckoutModal(true);
+      setShowLoginModal(true);
     }
   };
 
@@ -709,7 +711,7 @@ export default function CartPage() {
                     <div className="flex justify-between items-start">
                       <div>
                         <span className="text-[10px] uppercase font-bold text-emerald-600 tracking-wider">
-                          {item.type === 'books' ? 'Book' : 'Course'}
+                          {item.type}
                         </span>
                         <h3 className="font-bold text-slate-900 text-sm md:text-base leading-tight">
                           {item.title}
@@ -863,6 +865,7 @@ export default function CartPage() {
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
+        isAuthenticated={isAuthenticated}
       />
 
       {/* App Download Modal */}
