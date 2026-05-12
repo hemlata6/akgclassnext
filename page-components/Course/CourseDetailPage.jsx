@@ -11,6 +11,7 @@ import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { BASE_URL } from '../../config/endpoints';
 import ProceedToCheckoutForm from '../Cart/ProceedToCheckoutForm';
+import LoginModal from '@/components/Auth/LoginModal';
 
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -283,7 +284,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 const CourseContent = ({ courseData, onAddToCart }) => {
   const router = useRouter();
   const { authToken, user } = useAuth();
-
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -598,7 +599,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     };
 
     setCheckoutCartItem(cartItem);
-    setShowProceedCheckout(true);
+    // setShowProceedCheckout(true);
+    setShowLoginModal(true);
   };
 
   const validateCheckoutForm = () => {
@@ -1080,12 +1082,12 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         />
       )}
 
-      {showProceedCheckout && checkoutCartItem && (
-        <ProceedToCheckoutForm
-          cartCourses={[checkoutCartItem]}
-          totalAmount={checkoutCartItem.finalPrice}
+      {showLoginModal && checkoutCartItem && (
+        <LoginModal
+          isOpen={showLoginModal}
           onClose={() => {
-            setShowProceedCheckout(false);
+            // setShowProceedCheckout(false);
+            setShowLoginModal(false);
             setCheckoutCartItem(null);
           }}
         />

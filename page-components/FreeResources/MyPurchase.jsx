@@ -11,9 +11,9 @@ import { Footer } from '../../components/Shared/SharedComponents';
 
 const MyPurchases = () => {
   const router = useRouter();
-  const { user, authToken } = useAuth();
-  const { isAuthenticated } = useStudent();
-  const purchases = user?.purchases || [];
+  const { user, authToken, stateList } = useAuth();
+  const { isAuthenticated, studentData, updateStudentData } = useStudent();
+  // const purchases = user?.purchases || [];
   const [mycourseList, setMyCourseList] = useState([]);
   const [selectedSceduleList, setSelectedSceduleList] = useState([]);
   const [courseId, setCourseId] = useState(null);
@@ -32,6 +32,24 @@ const MyPurchases = () => {
   const [openDialog, setopenDialog] = useState(false);
   const [selectedAudio, setSelectedAudio] = useState(null);
   const [showAudioModal, setShowAudioModal] = useState(false);
+  const [showAddressDialog, setShowAddressDialog] = useState(false);
+  const [addressForm, setAddressForm] = useState({
+    address: '',
+    stateName: '',
+    cityName: '',
+    cityId: ''
+  });
+  const [addressErrors, setAddressErrors] = useState({});
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+  const [pendingCourse, setPendingCourse] = useState(null);
+
+  const isEmptyValue = (value) => !String(value || '').trim();
+
+  const hasMissingDispatchAddress = Boolean(
+    isAuthenticated &&
+    studentData &&
+    isEmptyValue(studentData?.address)
+  );
 
   const handleCloseVideo = () => {
     setopenDialog(false)
@@ -110,6 +128,11 @@ const MyPurchases = () => {
   const handleCardClick = (item) => {
 
     if (currentView === 'courses') {
+      if (hasMissingDispatchAddress) {
+        setPendingCourse(item);
+        setShowAddressDialog(true);
+        return;
+      }
       setSelectedCourse(item);
       setCourseId(item?.id);
       setCurrentView('content');
@@ -241,6 +264,25 @@ const MyPurchases = () => {
     setIsVisible(true);
   }, []);
 
+  useEffect(() => {
+    if (!studentData) {
+      return;
+    }
+
+    setAddressForm({
+      address: studentData?.address || '',
+      stateName: studentData?.stateName || '',
+      cityName: studentData?.cityName || '',
+      cityId: studentData?.cityId || ''
+    });
+  }, [studentData]);
+
+  useEffect(() => {
+    if (hasMissingDispatchAddress) {
+      setShowAddressDialog(true);
+    }
+  }, [hasMissingDispatchAddress]);
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -257,6 +299,105 @@ const MyPurchases = () => {
   const getProgressPercentage = () => {
     // Mock progress - in a real app, this would come from user progress data
     return Math.floor(Math.random() * 100);
+  };
+
+  const handleAddressInputChange = (field, value) => {
+    setAddressForm((prev) => ({
+      ...prev,
+      [field]: value
+    }));
+
+    if (addressErrors[field]) {
+      setAddressErrors((prev) => ({
+        ...prev,
+        [field]: ''
+      }));
+    }
+  };
+
+  const validateAddressForm = () => {
+    const nextErrors = {};
+
+    if (isEmptyValue(addressForm.address)) {
+      nextErrors.address = 'Address is required.';
+    }
+
+    if (isEmptyValue(addressForm.stateName)) {
+      nextErrors.stateName = 'State is required.';
+    }
+
+    if (isEmptyValue(addressForm.cityId)) {
+      nextErrors.cityName = 'City is required.';
+    }
+
+    setAddressErrors(nextErrors);
+    return Object.keys(nextErrors).length === 0;
+  };
+
+  const handleAddressDialogClose = () => {
+    setShowAddressDialog(false);
+    setAddressErrors({});
+    setPendingCourse(null);
+    setAddressForm({
+      address: studentData?.address || '',
+      stateName: studentData?.stateName || '',
+      cityName: studentData?.cityName || '',
+      cityId: studentData?.cityId || ''
+    });
+  };
+
+  const handleSaveAddress = async () => {
+    if (!validateAddressForm() || !authToken || !studentData) {
+      return;
+    }
+
+    setIsSavingAddress(true);
+
+    try {
+      const body = {
+        firstName: studentData?.firstName || '',
+        lastName: studentData?.lastName || studentData?.firstName,
+        userName: studentData?.userName || studentData?.contact || '',
+        email: studentData?.email || '',
+        dob: studentData?.dob ? new Date(studentData.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        address: addressForm.address.trim(),
+        cityId: Number(addressForm.cityId),
+        bio: studentData?.bio || studentData?.firstName,
+        gender: (studentData?.gender || 'male').toLowerCase(),
+        zipCode: studentData?.zipCode || studentData?.firstName,
+      };
+
+      const response = await Network.editStudentProfile(authToken, body);
+
+      if (response?.errorCode === 0 || response?.status) {
+        updateStudentData({
+          address: body.address,
+          // stateName: body.stateName,
+          // cityName: addressForm.cityName,
+          cityId: Number(addressForm.cityId),
+        });
+        setAddressErrors({});
+        setShowAddressDialog(false);
+        if (pendingCourse) {
+          setSelectedCourse(pendingCourse);
+          setCourseId(pendingCourse?.id);
+          setCurrentView('content');
+          getMergedSchedules(pendingCourse?.id, 0);
+          setPendingCourse(null);
+        }
+        return;
+      }
+
+      setAddressErrors({
+        submit: response?.message || response?.errorDescription || 'Unable to save delivery address.'
+      });
+    } catch (error) {
+      setAddressErrors({
+        submit: error?.response?.data?.message || 'Unable to save delivery address.'
+      });
+    } finally {
+      setIsSavingAddress(false);
+    }
   };
 
   if (mycourseList.length === 0) {
@@ -287,6 +428,99 @@ const MyPurchases = () => {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      {showAddressDialog && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden border border-slate-200">
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-5 text-white">
+              <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-emerald-100 mb-2">Dispatch Address Required</p>
+              <h3 className="text-2xl font-bold mb-2">Add your delivery address</h3>
+              <p className="text-sm text-emerald-50 leading-relaxed">
+                Note: Kindly enter your complete and correct dispatch address, including your house number, street/locality, city, state, and PIN code. Your books will be delivered to this address only. Incorrect or incomplete address details may lead to delivery delays, failed delivery attempts, or cancellation of shipment. Please verify all details carefully before submitting your order.
+              </p>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Address</label>
+                <textarea
+                  value={addressForm.address}
+                  onChange={(e) => handleAddressInputChange('address', e.target.value)}
+                  rows={3}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 resize-none"
+                  placeholder="Enter your full delivery address"
+                />
+                {addressErrors.address && <p className="mt-2 text-xs text-red-600">{addressErrors.address}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">State</label>
+                <select
+                  value={addressForm.stateName}
+                  onChange={(e) => {
+                    handleAddressInputChange('stateName', e.target.value);
+                    handleAddressInputChange('cityName', '');
+                    handleAddressInputChange('cityId', '');
+                  }}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
+                >
+                  <option value="">Select your state</option>
+                  {stateList.map((state) => (
+                    <option key={state.name} value={state.name}>{state.name}</option>
+                  ))}
+                </select>
+                {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
+              </div>
+
+              {addressForm.stateName && (
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">City</label>
+                  <select
+                    value={addressForm.cityId}
+                    onChange={(e) => {
+                      const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
+                      handleAddressInputChange('cityId', e.target.value);
+                      handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
+                    }}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
+                  >
+                    <option value="">Select your city</option>
+                    {(stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
+                      <option key={city.id} value={city.id}>{city.city}</option>
+                    ))}
+                  </select>
+                  {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
+                </div>
+              )}
+
+              {addressErrors.submit && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {addressErrors.submit}
+                </div>
+              )}
+
+              <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleAddressDialogClose}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  disabled={isSavingAddress}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveAddress}
+                  className="w-full rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={isSavingAddress}
+                >
+                  {isSavingAddress ? 'Saving...' : 'Save Address'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
         {/* Header Section */}
         <div className="text-center mb-6 sm:mb-8 lg:mb-12">
@@ -488,13 +722,13 @@ const MyPurchases = () => {
                           }
                         }}
                         className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 ${item?.entityType?.toLowerCase() === "folder"
-                        ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 hover:shadow-amber-500/30"
-                        : item?.entityType === "audio"
-                          ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-green-500/30"
-                          : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz")
-                            ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:shadow-purple-500/30"
-                            : "bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-emerald-500/30"
-                        } text-white`}>
+                          ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 hover:shadow-amber-500/30"
+                          : item?.entityType === "audio"
+                            ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-green-500/30"
+                            : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz")
+                              ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:shadow-purple-500/30"
+                              : "bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-emerald-500/30"
+                          } text-white`}>
                         {item?.entityType?.toLowerCase() === "folder" ? (
                           <>
                             <FolderOpen className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -614,7 +848,7 @@ const MyPurchases = () => {
                     rel="noopener noreferrer"
                     className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/30 flex items-center justify-center gap-3"
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.37.21.8.22 1.19.04l11.16-6.44-2.5-2.5-9.85 8.9zM.5 1.6C.19 1.99 0 2.56 0 3.28v17.44c0 .72.19 1.29.51 1.68l.09.08 9.77-9.77v-.23L.59 1.52l-.09.08zM20.33 10.3l-2.43-1.4-2.78 2.78 2.78 2.78 2.44-1.41c.7-.4.7-1.35-.01-1.75zM4.37.24L15.53 6.68l-2.5 2.5L3.18.28C3.57.1 4 .1 4.37.24z"/></svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.37.21.8.22 1.19.04l11.16-6.44-2.5-2.5-9.85 8.9zM.5 1.6C.19 1.99 0 2.56 0 3.28v17.44c0 .72.19 1.29.51 1.68l.09.08 9.77-9.77v-.23L.59 1.52l-.09.08zM20.33 10.3l-2.43-1.4-2.78 2.78 2.78 2.78 2.44-1.41c.7-.4.7-1.35-.01-1.75zM4.37.24L15.53 6.68l-2.5 2.5L3.18.28C3.57.1 4 .1 4.37.24z" /></svg>
                     Google Play (Android)
                   </a>
                   <a
@@ -623,7 +857,7 @@ const MyPurchases = () => {
                     rel="noopener noreferrer"
                     className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-3"
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
                     App Store (iOS)
                   </a>
                   <a
@@ -632,7 +866,7 @@ const MyPurchases = () => {
                     rel="noopener noreferrer"
                     className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-3"
                   >
-                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.55H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/></svg>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.55H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" /></svg>
                     Microsoft Store (Windows)
                   </a>
                   <a
@@ -648,7 +882,7 @@ const MyPurchases = () => {
                     </svg>
                     MacOS (macOS)
                   </a>
-                  
+
                 </div>
 
                 {/* Note */}

@@ -116,9 +116,10 @@ export default class Network {
   static studentFetchAllContentUrl = Endpoints.baseURL + "admin/course/fetch-content";
   static studentFetchBlogContentUrl = Endpoints.baseURL + "student/course/fetchCourseContent/";
   static studentEnrolledAccessUrl = Endpoints.baseURL + "student/get-access";
+  static updateStudentProfileUrl = Endpoints.baseURL + "admin/student/edit";
    static studentFetchAttachment = Endpoints.baseURL + "student/course/fetch-attachment/";
 
-   static async fetchBlogAttachment(contentId) {
+  static async fetchBlogAttachment(contentId) {
     let requestOptions = {
       withCredentials: false,
     };
