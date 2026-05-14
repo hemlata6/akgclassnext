@@ -4,43 +4,17 @@ import { LAYOUT_PADDING } from '../../../constants/Icons';
 import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
-    { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
-    {
-        q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
-Even average students can build strong clarity and confidently write exams.` },
-    {
-        q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
-
-Concept notes (easy language)
-Exam-oriented question bank
-Past exam questions coverage
-Mock tests & revision support
-You don’t need to purchase anything separately.` },
-    {
-        q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
-
-Structured study plan
-Proper syllabus coverage
-Exam-focused teaching
-Time-saving preparation strategy
-Students save months of confusion and study in the right direction from Day 1.` },
-    {
-        q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
-You’ll get a clear roadmap so you can maximize marks in minimum time.` },
-    {
-        q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
-
-Clear explanations
-Smart exam strategy
-Consistent results
-
-If you’re serious about clearing CS Executive or CS Professional, this course gives you the right guidance, structure and confidence to succeed.` }
+    { q: 'Why is RCA considered the best CA coaching institutes in Hyderabad?', a: 'RCA has been a trusted name in CA coaching since 2015, known for experienced faculty, structured preparation, conceptual teaching, and consistent student results across CA Foundation, Inter, and Final.' },
+    { q: 'Does RCA conduct regular tests and revision exams?', a: 'Yes. RCA conducts periodic tests - chapter-wise along with the batch and Mock exams after the syllabus completion. The tests help the students to get more clarity, improve speed, presentation, and confidence before the main exams.' },
+    { q: 'Does RCA provide coaching in English Language?', a: 'Yes. RCA offers complete CA coaching in English medium with conceptual clarity, exam-oriented preparation, and practical problem-solving approach. The jokes cracked in class may be in Hindi / Telugu or if a student requires further explanation in Hindi / Telugu, these language may be used.' },
+    { q: 'What makes Rahul Sir\'s Costing coaching different from others?', a: 'RCA is known for strong conceptual teaching in Costing, extensive practice sessions, exam-focused revisions, and multiple student success stories including high scores and 100/100 results.' },
+    { q: 'Does RCA help students who are attempting CA exams again?', a: 'Absolutely. RCA has guided many repeat-attempt students with strategic preparation plans, conceptual rebuilding, revision support, and exam-writing techniques.' },
+    { q: 'How does RCA help students score high marks in CA exams?', a: 'RCA emphasizes conceptual clarity, repeated revisions, exam-oriented practice, presentation techniques, and strategic preparation methods to help students perform better.' }
 ];
 
 export const StudentSupportSection = () => {
     const [open, setOpen] = useState(null);
-
-    const { institute } = useAuth();
+    const {institute } = useAuth();
 
     return (
         <section className="py-6 bg-white border-t border-slate-200">
@@ -81,23 +55,23 @@ export const StudentSupportSection = () => {
                                 <div className="mb-4 space-y-2 text-sm">
                                     <div className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4 text-emerald-400" />
-                                        <span className="text-slate-300">{institute?.address === null ? '-' : institute?.address}</span>
+                                        <span className="text-slate-300">{institute?.address}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href={`mailto:${institute?.email}`} className="text-slate-300 hover:text-white">{institute?.email === null ? '-' : institute?.email}</a>
+                                        <a href={`mailto:${institute?.email}`} className="text-slate-300 hover:text-white">{institute?.email}</a>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <a
-                                        href={`tel:${institute?.contact}`}
+                                        href="tel:+917703880232"
                                         className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-md"
                                     >
-                                        <Phone /> Call: {institute?.contact === null ? '-' : institute?.contact}
+                                        <Phone /> Call: +{institute?.instituteAppSettingsModals?.contact}
                                     </a>
                                     <a
-                                        href={`https://wa.me/${institute?.contact}`}
+                                        href={`https://wa.me/{institute?.instituteAppSettingsModals.contact}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-2 shadow-md border border-white/20"
