@@ -886,8 +886,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   return (
     <section className="py-12 bg-white relative">
       <div className={LAYOUT_PADDING}>
-        <div className="flex flex-col lg:flex-row gap-12">
-          <div className={`w-full ${suggestedCourses.length > 0 ? 'lg:w-7/12' : 'lg:w-8/12'}`}>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-12">
+          <div className={`w-full min-w-0 ${suggestedCourses.length > 0 ? 'lg:col-span-7' : 'lg:col-span-8'}`}>
             {/* <div className="flex border-b border-slate-200 mb-8 overflow-x-auto hide-scrollbar sticky top-[108px] bg-white z-40">
               {['Overview', 'Syllabus', 'Books', 'Instructor', 'FAQ'].map((tab) => (
                 <button
@@ -899,18 +899,43 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                 </button>
               ))}
             </div> */}
-            <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100">
+            <div className="bg-emerald-50 p-6 rounded-2xl border border-emerald-100 overflow-hidden">
               <h3 className="font-bold text-lg text-emerald-900 mb-4">Course Description</h3>
+              <style>{`
+                .course-description,
+                .course-description *,
+                .course-description p,
+                .course-description div,
+                .course-description span,
+                .course-description li,
+                .course-description td,
+                .course-description th {
+                  max-width: 100% !important;
+                  overflow-wrap: anywhere !important;
+                  word-break: break-word !important;
+                  word-wrap: break-word !important;
+                  white-space: normal !important;
+                }
+
+                .course-description table,
+                .course-description img,
+                .course-description iframe,
+                .course-description video,
+                .course-description canvas,
+                .course-description svg {
+                  max-width: 100% !important;
+                }
+              `}</style>
               <div
-                className="display-none text-sm text-emerald-800 leading-relaxed break-words prose prose-sm max-w-none [&>*]:max-w-full [&_img]:max-w-full [&_table]:max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_*]:break-words"
-                style={{ wordWrap: 'break-word', overflowWrap: 'break-word', wordBreak: 'break-word' }}
+                className="course-description display-none min-w-0 max-w-full overflow-x-auto text-sm text-emerald-800 leading-relaxed prose prose-sm max-w-none [&>*]:max-w-full [&_img]:h-auto [&_img]:max-w-full [&_table]:block [&_table]:max-w-full [&_table]:overflow-x-auto [&_iframe]:max-w-full [&_video]:h-auto [&_video]:max-w-full [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_*]:break-words"
+                style={{ wordWrap: 'break-word', overflowWrap: 'anywhere', wordBreak: 'break-word', whiteSpace: 'normal', maxWidth: '100%' }}
                 dangerouslySetInnerHTML={{
                   __html: courseData?.description || courseData?.longDescription || "No description available for this course."
                 }}
               />
             </div>
           </div>
-          <div className={`w-full ${suggestedCourses.length > 0 ? 'lg:w-5/12' : 'lg:w-4/12'} relative`}>
+          <div className={`w-full min-w-0 ${suggestedCourses.length > 0 ? 'lg:col-span-5' : 'lg:col-span-4'} relative`}>
             <div className="sticky top-28">
               <div className="bg-white border border-slate-200 rounded-3xl shadow-2xl p-6">
                 <div className="mb-6">

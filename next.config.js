@@ -1,3 +1,5 @@
+const isNetlify = process.env.NETLIFY === 'true';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -21,8 +23,8 @@ const nextConfig = {
   swcMinify: true,
   // Compression
   compress: true,
-  // Enable standalone output for Docker/Nginx deployment
-  output: 'standalone',
+  // Netlify's Next plugin manages the server output during deployment.
+  ...(isNetlify ? {} : { output: 'standalone' }),
   // Optimize production builds
   poweredByHeader: false,
   // Security headers
