@@ -43,7 +43,7 @@ export default function HomePage() {
       {/* <WhyChooseUs /> */}
       {/* <AboutSection /> */}
       <CoursesSection />
-      <BookStore />
+      {/* <BookStore /> */}
       {/* <MarathonGallery /> */}
       <StudentGallery />
       <BlogSection />

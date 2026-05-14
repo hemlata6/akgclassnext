@@ -547,7 +547,7 @@ export const Header = ({ cartCount }) => {
               </div>
 
 
-              <div
+              {/* <div
                 className="relative group h-full flex items-center"
                 onMouseEnter={() => {
                   setHoveredMenu('Books');
@@ -573,7 +573,7 @@ export const Header = ({ cartCount }) => {
                     </div>
                   ) : (
                     <>
-                      {/* BACK */}
+                     
                       {booksCurrentLevel === 'second' && (
                         <button
                           onClick={handleBooksBackToFirstLevel}
@@ -583,7 +583,7 @@ export const Header = ({ cartCount }) => {
                         </button>
                       )}
 
-                      {/* FIRST LEVEL */}
+                     
                       {booksCurrentLevel === 'first' &&
                         booksFirstLevelDomains.map((domain) => (
                           <button
@@ -595,7 +595,7 @@ export const Header = ({ cartCount }) => {
                           </button>
                         ))}
 
-                      {/* SECOND LEVEL */}
+                      
                       {booksCurrentLevel === 'second' &&
                         booksSecondLevelDomains.map((domain) => (
                           <button
@@ -609,7 +609,7 @@ export const Header = ({ cartCount }) => {
                     </>
                   )}
                 </div>
-              </div>  
+              </div>   */}
 
               {/* Faculty Menu */}
               <div
@@ -834,7 +834,7 @@ export const Header = ({ cartCount }) => {
                   )}
                 </div>
 
-                <div className="">
+                {/* <div className="">
                   <button
                     onClick={() => {
                       if (openMobileSubmenu === 'books') {
@@ -921,7 +921,7 @@ export const Header = ({ cartCount }) => {
                       )}
                     </div>
                   )}
-                </div>
+                </div> */}
                 {/* Faculty Menu */}
                 <div className="">
                   <button

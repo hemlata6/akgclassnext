@@ -244,7 +244,7 @@ const FacultyProfile = ({ }) => {
                 {employeeCourseIds && employeeCourseIds.length > 0 && (
                     <>
                         <CoursesSection employeeCourseId={employeeCourseIds} />
-                        <BookStore employeeCourseId={employeeCourseIds} />
+                        {/* <BookStore employeeCourseId={employeeCourseIds} /> */}
                     </>
                 )}
 
