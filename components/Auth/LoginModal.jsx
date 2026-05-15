@@ -587,7 +587,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
                 <div>
                   <label className="block text-sm font-semibold text-slate-700 mb-2">Zip Code</label>
                   <input
-                    type="text"
+                    type="number"
                     value={addressForm.zipCode}
                     onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
                     required
