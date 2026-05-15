@@ -382,7 +382,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             <div className="space-y-1">
               <label className="block text-sm font-semibold text-slate-700">Zip Code</label>
               <input
-                type="text"
+                type="number"
                 value={addressForm.zipCode}
                 onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
                 className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
