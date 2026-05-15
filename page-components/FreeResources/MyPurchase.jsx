@@ -34,6 +34,8 @@ const MyPurchases = () => {
   const [showAudioModal, setShowAudioModal] = useState(false);
   const [showAddressDialog, setShowAddressDialog] = useState(false);
   const [addressForm, setAddressForm] = useState({
+    houseNumber: '',
+    zipCode: '',
     address: '',
     stateName: '',
     cityName: '',
@@ -270,6 +272,8 @@ const MyPurchases = () => {
     }
 
     setAddressForm({
+      houseNumber: studentData?.houseNumber || '',
+      zipCode: studentData?.zipCode || '',
       address: studentData?.address || '',
       stateName: studentData?.stateName || '',
       cityName: studentData?.cityName || '',
@@ -318,6 +322,14 @@ const MyPurchases = () => {
   const validateAddressForm = () => {
     const nextErrors = {};
 
+    if (isEmptyValue(addressForm.houseNumber)) {
+      nextErrors.houseNumber = 'House number is required.';
+    }
+
+    if (isEmptyValue(addressForm.zipCode)) {
+      nextErrors.zipCode = 'Zip code is required.';
+    }
+
     if (isEmptyValue(addressForm.address)) {
       nextErrors.address = 'Address is required.';
     }
@@ -339,6 +351,8 @@ const MyPurchases = () => {
     setAddressErrors({});
     setPendingCourse(null);
     setAddressForm({
+      houseNumber: studentData?.houseNumber || '',
+      zipCode: studentData?.zipCode || '',
       address: studentData?.address || '',
       stateName: studentData?.stateName || '',
       cityName: studentData?.cityName || '',
@@ -354,13 +368,15 @@ const MyPurchases = () => {
     setIsSavingAddress(true);
 
     try {
+      const fullAddress = `${addressForm.houseNumber}, ${addressForm.zipCode}, ${addressForm.address}`;
+      
       const body = {
         firstName: studentData?.firstName || '',
         lastName: studentData?.lastName || studentData?.firstName,
         userName: studentData?.userName || studentData?.contact || '',
         email: studentData?.email || '',
         dob: studentData?.dob ? new Date(studentData.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
-        address: addressForm.address.trim(),
+        address: fullAddress.trim(),
         cityId: Number(addressForm.cityId),
         bio: studentData?.bio || studentData?.firstName,
         gender: (studentData?.gender || 'male').toLowerCase(),
@@ -372,8 +388,6 @@ const MyPurchases = () => {
       if (response?.errorCode === 0 || response?.status) {
         updateStudentData({
           address: body.address,
-          // stateName: body.stateName,
-          // cityName: addressForm.cityName,
           cityId: Number(addressForm.cityId),
         });
         setAddressErrors({});
@@ -440,6 +454,30 @@ const MyPurchases = () => {
             </div>
 
             <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">House Number</label>
+                <input
+                  type="text"
+                  value={addressForm.houseNumber}
+                  onChange={(e) => handleAddressInputChange('houseNumber', e.target.value)}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                  placeholder="Enter house number"
+                />
+                {addressErrors.houseNumber && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNumber}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Zip Code</label>
+                <input
+                  type="text"
+                  value={addressForm.zipCode}
+                  onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                  placeholder="Enter zip code"
+                />
+                {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
+              </div>
+
               <div>
                 <label className="block text-sm font-semibold text-slate-700 mb-2">Address</label>
                 <textarea

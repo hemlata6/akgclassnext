@@ -13,6 +13,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     email: '',
   });
   const [addressForm, setAddressForm] = useState({
+    houseNumber: '',
+    zipCode: '',
     address: '',
     stateName: '',
     cityId: '',
@@ -93,6 +95,14 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newErrors.email = 'Please enter a valid email address';
     }
 
+    if (!addressForm.houseNumber.trim()) {
+      newAddressErrors.houseNumber = 'House number is required';
+    }
+
+    if (!addressForm.zipCode.trim()) {
+      newAddressErrors.zipCode = 'Zip code is required';
+    }
+
     if (!addressForm.address.trim()) {
       newAddressErrors.address = 'Address is required';
     }
@@ -118,6 +128,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     }
 
     try {
+      const fullAddress = `${addressForm.houseNumber}, ${addressForm.zipCode}, ${addressForm.address}`;
+      
       const registrationBody = {
         contact: tempSignupData?.phone,
         firstName: formData.firstname,
@@ -127,7 +139,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         password: 123456,
         gender: "male",
         cityId: addressForm.cityId,
-        address: addressForm.address,
+        address: fullAddress,
         userName: `${formData.firstname} ${formData.lastname}`,
       };
 
@@ -183,6 +195,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       email: '',
     });
     setAddressForm({
+      houseNumber: '',
+      zipCode: '',
       address: '',
       stateName: '',
       cityId: '',
@@ -343,6 +357,35 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             )}
           </div>
 
+          {/* House Number & Zip Code - 2 Columns */}
+          <div className="grid grid-cols-2 gap-4">
+            {/* House Number */}
+            <div className="space-y-1">
+              <label className="block text-sm font-semibold text-slate-700">House Number</label>
+              <input
+                type="text"
+                value={addressForm.houseNumber}
+                onChange={(e) => handleAddressInputChange('houseNumber', e.target.value)}
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter house number"
+              />
+              {addressErrors.houseNumber && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNumber}</p>}
+            </div>
+
+            {/* Zip Code */}
+            <div className="space-y-1">
+              <label className="block text-sm font-semibold text-slate-700">Zip Code</label>
+              <input
+                type="text"
+                value={addressForm.zipCode}
+                onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter zip code"
+              />
+              {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
+            </div>
+          </div>
+
           {/* Address */}
           <div className="space-y-1">
             <label className="block text-sm font-semibold text-slate-700">Address</label>
@@ -418,7 +461,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="pt-1">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !formData.firstname.trim() || !formData.lastname.trim() || !formData.email.trim() || !addressForm.houseNumber.trim() || !addressForm.zipCode.trim() || !addressForm.address.trim() || !addressForm.stateName || !addressForm.cityId}
               className={`group relative w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
             >
               {isLoading ? (
