@@ -13,6 +13,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     email: '',
   });
   const [addressForm, setAddressForm] = useState({
+    houseNo: '',
+    zipCode: '',
     address: '',
     stateName: '',
     cityId: '',
@@ -97,6 +99,14 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newAddressErrors.address = 'Address is required';
     }
 
+    if (!addressForm.houseNo.trim()) {
+      newAddressErrors.houseNo = 'House No is required';
+    }
+
+    if (!addressForm.zipCode.trim()) {
+      newAddressErrors.zipCode = 'Zipcode is required';
+    }
+
     if (!addressForm.stateName) {
       newAddressErrors.stateName = 'State is required';
     }
@@ -118,6 +128,12 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     }
 
     try {
+      const fullAddress = [
+        addressForm.houseNo.trim(),
+        addressForm.zipCode.trim(),
+        addressForm.address.trim()
+      ].filter(Boolean).join(', ');
+
       const registrationBody = {
         contact: tempSignupData?.phone,
         firstName: formData.firstname,
@@ -127,7 +143,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         password: 123456,
         gender: "male",
         cityId: addressForm.cityId,
-        address: addressForm.address,
+        address: fullAddress,
+        zipCode: addressForm.zipCode.trim(),
         userName: `${formData.firstname} ${formData.lastname}`,
       };
 
@@ -183,6 +200,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       email: '',
     });
     setAddressForm({
+      houseNo: '',
+      zipCode: '',
       address: '',
       stateName: '',
       cityId: '',
@@ -230,7 +249,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             </div>
           )}
 
-          <p className="mt-2 text-center text-xs text-gray-500">
+          {/* <p className="mt-2 text-center text-xs text-gray-500">
             Already have an account?{' '}
             <button
               onClick={() => {
@@ -242,11 +261,17 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             >
               Sign in here
             </button>
-          </p>
+          </p> */}
         </div>
 
         {/* Form */}
         <form className="space-y-3" onSubmit={handleSubmit}>
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2">
+            <p className="text-xs text-emerald-800 leading-relaxed">
+              Note: Kindly enter your correct dispatch address, including all necessary details such as house number, street, city, and PIN code. Your books will be delivered to this address, so please double-check before submitting.
+            </p>
+          </div>
+
           {/* First Name & Last Name - 2 Columns */}
           <div className="grid grid-cols-2 gap-4">
             {/* First Name */}
@@ -341,6 +366,33 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
                 {errors.email}
               </p>
             )}
+          </div>
+
+          {/* House No & Zipcode */}
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <label className="block text-sm font-semibold text-slate-700">House No.</label>
+              <input
+                type="text"
+                value={addressForm.houseNo}
+                onChange={(e) => handleAddressInputChange('houseNo', e.target.value)}
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="e.g. 12A"
+              />
+              {addressErrors.houseNo && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNo}</p>}
+            </div>
+
+            <div className="space-y-1">
+              <label className="block text-sm font-semibold text-slate-700">Zipcode</label>
+              <input
+                type="number"
+                value={addressForm.zipCode}
+                onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="e.g. 500001"
+              />
+              {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
+            </div>
           </div>
 
           {/* Address */}
