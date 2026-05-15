@@ -129,7 +129,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
 
     try {
       const fullAddress = `${addressForm.houseNumber}, ${addressForm.zipCode}, ${addressForm.address}`;
-      
+
       const registrationBody = {
         contact: tempSignupData?.phone,
         firstName: formData.firstname,
@@ -244,7 +244,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             </div>
           )}
 
-          <p className="mt-2 text-center text-xs text-gray-500">
+          {/* <p className="mt-2 text-center text-xs text-gray-500">
             Already have an account?{' '}
             <button
               onClick={() => {
@@ -256,11 +256,17 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             >
               Sign in here
             </button>
-          </p>
+          </p> */}
         </div>
 
         {/* Form */}
         <form className="space-y-3" onSubmit={handleSubmit}>
+          {/* Address Information Note */}
+          <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-4">
+            <p className="text-xs text-emerald-700 leading-relaxed">
+              <span className="font-semibold">Note:</span> Kindly enter your correct dispatch address, including all necessary details such as house number, street, city, and PIN code. Your books will be delivered to this address, so please double-check before submitting.
+            </p>
+          </div>
           {/* First Name & Last Name - 2 Columns */}
           <div className="grid grid-cols-2 gap-4">
             {/* First Name */}
