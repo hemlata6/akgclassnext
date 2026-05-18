@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { LogIn, Phone, MessageCircle, Timer, Sparkles, X } from 'lucide-react';
+import { LogIn, Phone, MessageCircle, Timer, Sparkles, X, MapPin } from 'lucide-react';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
 import { useTheme } from '../../config/ThemeContext';
+import SignupModal from './SignupModal';
 
 const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
-  const { login } = useAuth();
-  const { setStudentAuth } = useStudent();
+  const { login, stateList} = useAuth();
+  const { setStudentAuth, studentData, updateStudentData, authToken} = useStudent();
   const { theme } = useTheme();
   const [formData, setFormData] = useState({
     phone: '',
@@ -19,6 +20,21 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   const [otpSent, setOtpSent] = useState(false);
   const [countdown, setCountdown] = useState(0);
   const [isNewUser, setIsNewUser] = useState(false);
+  const [openSignUpModel, setOpenSignUpModal] = useState(false);
+
+  // Address form state
+  const [showAddressDialog, setShowAddressDialog] = useState(false);
+  const [addressForm, setAddressForm] = useState({
+    houseNumber: '',
+    zipCode: '',
+    address: '',
+    stateName: '',
+    cityId: '',
+    cityName: ''
+  });
+  const [addressErrors, setAddressErrors] = useState({});
+  const [isSavingAddress, setIsSavingAddress] = useState(false);
+  // const [stateList, setStateList] = useState([]);
 
   const handleNavigate = () => {
     if (afterCheckout) {
@@ -37,11 +53,124 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
     return () => clearTimeout(timer);
   }, [countdown]);
 
+  // Fetch states list
+  // useEffect(() => {
+  //   const fetchStates = async () => {
+  //     try {
+  //       const response = await Network.getStates();
+  //       if (response?.data) {
+  //         setStateList(response.data);
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to fetch states:', error);
+  //     }
+  //   };
+  //   fetchStates();
+  // }, []);
+
   if (!isOpen) return null;
 
   const validatePhone = (phone) => {
     const phoneRegex = /^[0-9]{10,15}$/;
     return phoneRegex.test(phone.replace(/\s/g, ''));
+  };
+
+  const validateAddressForm = () => {
+    const newErrors = {};
+
+    if (!addressForm.houseNumber.trim()) {
+      newErrors.houseNumber = 'House Number is required';
+    }
+
+    if (!addressForm.zipCode.trim()) {
+      newErrors.zipCode = 'Zip Code is required';
+    }
+
+    if (!addressForm.address.trim()) {
+      newErrors.address = 'Address is required';
+    }
+
+    if (!addressForm.stateName) {
+      newErrors.stateName = 'State is required';
+    }
+
+    if (!addressForm.cityId) {
+      newErrors.cityName = 'City is required';
+    }
+
+    setAddressErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleAddressInputChange = (field, value) => {
+    setAddressForm(prev => ({ ...prev, [field]: value }));
+    if (addressErrors[field]) {
+      setAddressErrors(prev => ({ ...prev, [field]: '' }));
+    }
+  };
+
+  const handleAddressDialogClose = () => {
+    setAddressForm({
+      houseNumber: '',
+      zipCode: '',
+      address: '',
+      stateName: '',
+      cityId: '',
+      cityName: ''
+    });
+    setAddressErrors({});
+    setShowAddressDialog(false);
+    // onClose();
+  };
+
+  const handleSaveAddress = async () => {
+    if (!validateAddressForm() || !authToken || !studentData) {
+      return;
+    }
+
+    setIsSavingAddress(true);
+
+    try {
+      const fullAddress = `${addressForm.houseNumber.trim()}, ${addressForm.zipCode.trim()}, ${addressForm.address.trim()}`;
+      
+      const body = {
+        firstName: studentData?.firstName || '',
+        lastName: studentData?.lastName || studentData?.firstName,
+        userName: studentData?.userName || studentData?.contact || '',
+        email: studentData?.email || '',
+        dob: studentData?.dob ? new Date(studentData.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+        address: fullAddress,
+        cityId: Number(addressForm.cityId),
+        bio: studentData?.bio || studentData?.firstName,
+        gender: (studentData?.gender || 'male').toLowerCase(),
+        zipCode: addressForm.zipCode.trim(),
+      };
+
+      const response = await Network.editStudentProfile(authToken, body);
+
+      if (response?.errorCode === 0 || response?.status) {
+        updateStudentData({
+          address: body.address,
+          cityId: Number(addressForm.cityId),
+        });
+        setAddressErrors({});
+        setShowAddressDialog(false);
+        // Navigate after address is saved
+        handleNavigate();
+        onClose();
+        return;
+      }
+
+      setAddressErrors({
+        submit: response?.message || response?.errorDescription || 'Unable to save delivery address.'
+      });
+    } catch (error) {
+      setAddressErrors({
+        submit: error?.response?.data?.message || 'Unable to save delivery address.'
+      });
+    } finally {
+      setIsSavingAddress(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -78,6 +207,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
     try {
       const response = await Network.sendLoginOtp(formData.phone);
+
+      //  console.log("Signup OTP verification response:", response);
 
       if (response.status === true || response.errorCode === 0) {
         setIsNewUser(false);
@@ -146,14 +277,23 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
         };
 
         const verifyResponse = await Network.signUpVerifyOtp(body);
+        // console.log("Signup OTP verification response:", verifyResponse);
         if (verifyResponse.status === true) {
           localStorage.setItem('tempSignup', JSON.stringify({
             phone: formData.phone,
             otp: formData.otp
           }));
-          handleClose();
-          onSignupClick();
+          // handleClose();
+          // onSignupClick();
+
+           // Check if address is empty
+            // if (studentData?.address || studentData?.address.trim() === '') {
+            //   setShowAddressDialog(true);
+            // }
+
+          setOpenSignUpModal(true);
         } else {
+          
           setErrors({ submit: verifyResponse.message || 'OTP verification failed. Please try again.' });
         }
       } else {
@@ -167,15 +307,26 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
         const loginVerifyResponse = await Network.verifyLoginOtp(body);
 
+        // console.log("Login successful, auth token:", loginVerifyResponse.data);
         if (loginVerifyResponse.status === true) {
           const success = setStudentAuth(loginVerifyResponse);
-          handleNavigate();
           if (success) {
             login(formData.phone, formData.otp);
             setFormData({ phone: '', otp: '' });
             setOtpSent(false);
             setErrors({});
-            onClose();
+
+            // console.log("Login successful, loginVerifyResponse data:", loginVerifyResponse?.student);
+
+            // Check if student has address
+            if (!loginVerifyResponse?.student?.address || loginVerifyResponse?.student?.address.trim() === '') {
+              // Show address dialog if address is empty
+              setShowAddressDialog(true);
+            } else {
+              // Proceed with navigation if address exists
+              handleNavigate();
+              onClose();
+            }
           }
         } else {
           setErrors({ submit: loginVerifyResponse.message || 'OTP verification failed. Please try again.' });
@@ -398,6 +549,138 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
           </p>
         </div>
       </div>
+
+      <SignupModal 
+        isOpen={openSignUpModel}
+        onClose={() => setOpenSignUpModal(false)}
+        handleLoginClose={handleClose}
+      />
+
+      {showAddressDialog && (
+        <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+          <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden border border-slate-200">
+            <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-5 text-white">
+              <div className="flex items-center gap-2 mb-2">
+                <MapPin className="h-4 w-4 text-emerald-100" />
+                <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-emerald-100">Dispatch Address Required</p>
+              </div>
+              <h3 className="text-2xl font-bold mb-2">Add your delivery address</h3>
+              <p className="text-sm text-emerald-50 leading-relaxed">
+                Note: Kindly enter your correct dispatch address, including all necessary details such as house number, street, city, and PIN code. Your books will be delivered to this address, so please double-check before submitting.
+              </p>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">House Number</label>
+                  <input
+                    type="text"
+                    value={addressForm.houseNumber}
+                    onChange={(e) => handleAddressInputChange('houseNumber', e.target.value)}
+                    required
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter house number"
+                  />
+                  {addressErrors.houseNumber && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNumber}</p>}
+                </div>
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Zip Code</label>
+                  <input
+                    type="number"
+                    value={addressForm.zipCode}
+                    onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
+                    required
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter zip code"
+                  />
+                  {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">Address</label>
+                <textarea
+                  value={addressForm.address}
+                  onChange={(e) => handleAddressInputChange('address', e.target.value)}
+                  rows={3}
+                  required
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 resize-none"
+                  placeholder="Enter your full delivery address"
+                />
+                {addressErrors.address && <p className="mt-2 text-xs text-red-600">{addressErrors.address}</p>}
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-slate-700 mb-2">State</label>
+                <select
+                  value={addressForm.stateName}
+                  onChange={(e) => {
+                    handleAddressInputChange('stateName', e.target.value);
+                    handleAddressInputChange('cityName', '');
+                    handleAddressInputChange('cityId', '');
+                  }}
+                  required
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
+                >
+                  <option value="">Select your state</option>
+                  {stateList.map((state) => (
+                    <option key={state.name} value={state.name}>{state.name}</option>
+                  ))}
+                </select>
+                {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
+              </div>
+
+              {addressForm.stateName && (
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">City</label>
+                  <select
+                    value={addressForm.cityId}
+                    onChange={(e) => {
+                      const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
+                      handleAddressInputChange('cityId', e.target.value);
+                      handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
+                    }}
+                    required
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
+                  >
+                    <option value="">Select your city</option>
+                    {(stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
+                      <option key={city.id} value={city.id}>{city.city}</option>
+                    ))}
+                  </select>
+                  {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
+                </div>
+              )}
+
+              {addressErrors.submit && (
+                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                  {addressErrors.submit}
+                </div>
+              )}
+
+              <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={handleAddressDialogClose}
+                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
+                  disabled={isSavingAddress}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveAddress}
+                  className="w-full rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
+                  disabled={isSavingAddress || !addressForm.houseNumber.trim() || !addressForm.zipCode.trim() || !addressForm.address.trim() || !addressForm.stateName || !addressForm.cityId}
+                >
+                  {isSavingAddress ? 'Saving...' : 'Save Address'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

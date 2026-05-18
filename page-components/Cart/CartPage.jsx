@@ -51,7 +51,8 @@ export default function CartPage() {
     const message = `You have been logged out. ${errorDescription || 'Session expired'}`;
     setErrorBarMessage(message);
     setShowErrorBar(true);
-    setShowCheckoutModal(false);
+    // setShowCheckoutModal(false);
+    setShowLoginModal(true);
     setTimeout(() => {
       window.location.reload();
     }, 2000);
@@ -624,7 +625,8 @@ export default function CartPage() {
       }
     } else {
       // User is not authenticated - show checkout modal
-      setShowCheckoutModal(true);
+      // setShowCheckoutModal(true);
+      setShowLoginModal(true);
     }
   };
 
@@ -856,10 +858,24 @@ export default function CartPage() {
         />
       </Dialog>
 
+      {/* <Dialog
+        open={showLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        maxWidth="sm"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            margin: 2
+          }
+        }}
+      ></Dialog> */}
+
       {/* Login Modal */}
       <LoginModal
         isOpen={showLoginModal}
         onClose={() => setShowLoginModal(false)}
+        isAuthenticated={isAuthenticated}
       />
 
       {/* App Download Modal */}

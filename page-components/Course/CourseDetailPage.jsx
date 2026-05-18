@@ -11,6 +11,9 @@ import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { BASE_URL } from '../../config/endpoints';
 import ProceedToCheckoutForm from '../Cart/ProceedToCheckoutForm';
+import LoginModal from '@/components/Auth/LoginModal';
+import AppDownloadModal from '@/components/Modals/AppDownloadModal';
+import { Dialog, DialogContent, IconButton } from '@mui/material';
 
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
@@ -283,7 +286,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 const CourseContent = ({ courseData, onAddToCart }) => {
   const router = useRouter();
   const { authToken, user } = useAuth();
-
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
@@ -308,8 +311,30 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
   const [routeData, setRouteData] = useState(null);
   const [tokenFromUrl, setTokenFromUrl] = useState(null);
+  const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
+  const [showSuccessBar, setShowSuccessBar] = useState(false);
+  const [successBarMessage, setSuccessBarMessage] = useState('');
+  const [showCopyAlert, setShowCopyAlert] = useState(false);
 
   // console.log("CourseData", courseData)
+
+  const LOGOUT_ERROR_CODES = new Set([100, 101, 102, 103, 104, 401]);
+
+  const handleLogoutError = (errorCode, errorDescription) => {
+    if (!LOGOUT_ERROR_CODES.has(errorCode)) return false;
+    localStorage.removeItem('authToken');
+    localStorage.removeItem('userData');
+    localStorage.removeItem('studentAuth');
+    localStorage.removeItem('studentData');
+    const message = `You have been logged out. ${errorDescription || 'Session expired'}`;
+    setErrorBarMessage(message);
+    setShowErrorBar(true);
+    setShowLoginModal(true);
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+    return true;
+  };
 
   // Load cart from localStorage
   useEffect(() => {
@@ -579,7 +604,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     };
   };
 
-  const openCheckoutForm = () => {
+  const handleProceedToCheckoutDirect = async () => {
     if (!priceInfo) return;
 
     const cartItem = {
@@ -597,9 +622,139 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       type: 'Course'
     };
 
-    setCheckoutCartItem(cartItem);
-    setShowProceedCheckout(true);
+    if (queryString) {
+      // Mobile mode (query params) - always call API with tokenParam
+      setIsProcessing(true);
+      try {
+        const entityModals = [{
+          purchaseType: "course",
+          entityId: courseData.id,
+          campusId: 0,
+          courseId: 0,
+          coursePricingId: priceInfo.pricingId
+        }];
+
+        const mobileBody = {
+          "getCheckoutUrls": entityModals,
+          "coupon": ""
+        };
+
+        const response = await axios.post(
+          `${BASE_URL}payment/get-checkout-url`,
+          mobileBody,
+          { headers: { "X-Auth": tokenFromUrl } }
+        );
+
+        if (response?.data?.status === true && response?.data?.url) {
+          setCheckoutResponse(response?.data);
+          const isMobile = window.innerWidth <= 768;
+
+          if (isMobile) {
+            setPaymentUrl(response.data.url);
+            setShowMobilePaymentModal(true);
+            window.dispatchEvent(new Event('hideFooter'));
+          } else {
+            const width = 480;
+            const height = 1080;
+            const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+            const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+            window.open(
+              response.data.url,
+              'payment',
+              `location=no,width=${width},height=${height},top=${top},left=${left}`
+            );
+          }
+        } else {
+          if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
+          const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+          setErrorBarMessage(errorMsg);
+          setShowErrorBar(true);
+        }
+      } catch (error) {
+        console.error('Mobile checkout error:', error);
+        if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
+        const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'Token expired or invalid. Please login again from the app.';
+        setErrorBarMessage(errorMsg);
+        setShowErrorBar(true);
+      } finally {
+        setIsProcessing(false);
+      }
+      return;
+    }
+
+    if (authToken) {
+      // User is logged in - call API directly
+      setIsProcessing(true);
+      try {
+        const entityModals = [{
+          purchaseType: "course",
+          entityId: courseData.id,
+          campusId: 0,
+          courseId: 0,
+          coursePricingId: priceInfo.pricingId
+        }];
+
+        const mobileBody = {
+          "getCheckoutUrls": entityModals,
+          "coupon": ""
+        };
+
+        const response = await axios.post(
+          `${BASE_URL}payment/get-checkout-url`,
+          mobileBody,
+          { headers: { "X-Auth": authToken } }
+        );
+
+        if (response?.data?.status === true && response?.data?.url) {
+          setCheckoutResponse(response?.data);
+          const isMobile = window.innerWidth <= 768;
+
+          if (isMobile) {
+            setPaymentUrl(response.data.url);
+            setShowMobilePaymentModal(true);
+            window.dispatchEvent(new Event('hideFooter'));
+          } else {
+            const width = 480;
+            const height = 1080;
+            const left = window.screenX + (window.outerWidth / 2) - (width / 2);
+            const top = window.screenY + (window.outerHeight / 2) - (height / 2);
+
+            window.open(
+              response.data.url,
+              'payment',
+              `location=no,width=${width},height=${height},top=${top},left=${left}`
+            );
+          }
+        } else {
+          if (handleLogoutError(response?.data?.errorCode, response?.data?.errorDescription)) return;
+          const errorMsg = response?.data?.errorDescription || response?.data?.message || 'Failed to generate checkout URL. Please try again.';
+          setErrorBarMessage(errorMsg);
+          setShowErrorBar(true);
+        }
+      } catch (error) {
+        console.error('Checkout error:', error);
+        if (handleLogoutError(error?.response?.data?.errorCode, error?.response?.data?.errorDescription)) return;
+        const errorMsg = error?.response?.data?.errorDescription || error?.response?.data?.message || 'An error occurred during checkout. Please try again.';
+        setErrorBarMessage(errorMsg);
+        setShowErrorBar(true);
+      } finally {
+        setIsProcessing(false);
+      }
+    } else {
+      // User is not authenticated - show login modal
+      setCheckoutCartItem(cartItem);
+      setShowLoginModal(true);
+    }
   };
+
+  // Auto-trigger checkout after login
+  useEffect(() => {
+    if (authToken && checkoutCartItem && !showLoginModal) {
+      handleProceedToCheckoutDirect();
+      setCheckoutCartItem(null);
+    }
+  }, [authToken, showLoginModal, checkoutCartItem]);
 
   const validateCheckoutForm = () => {
     const { name, email, contact } = checkoutForm;
@@ -933,14 +1088,21 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                     </button>
                   )}
                   <button
-                    onClick={openCheckoutForm}
+                    onClick={handleProceedToCheckoutDirect}
                     disabled={isPurchaseSelectionIncomplete || isProcessing}
                     className={`flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 ${isPurchaseSelectionIncomplete || isProcessing
                       ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                       : `${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`
                       }`}
                   >
-                    {isProcessing ? 'Processing...' : 'Buy Now'}
+                    {isProcessing ? (
+                      <>
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        Processing...
+                      </>
+                    ) : (
+                      'Buy Now'
+                    )}
                   </button>
                 </div>
                 {/* <p className="text-[10px] text-slate-400 text-center mt-3">
@@ -1080,15 +1242,151 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         />
       )}
 
-      {showProceedCheckout && checkoutCartItem && (
-        <ProceedToCheckoutForm
-          cartCourses={[checkoutCartItem]}
-          totalAmount={checkoutCartItem.finalPrice}
+      {showLoginModal && checkoutCartItem && (
+        <LoginModal
+          isOpen={showLoginModal}
           onClose={() => {
-            setShowProceedCheckout(false);
+            setShowLoginModal(false);
             setCheckoutCartItem(null);
           }}
         />
+      )}
+
+      {/* Mobile Payment Dialog */}
+      <Dialog
+        open={showMobilePaymentModal}
+        onClose={() => {
+          setShowMobilePaymentModal(false);
+          setPaymentUrl('');
+          window.dispatchEvent(new Event('showFooter'));
+        }}
+        fullScreen
+        PaperProps={{
+          sx: {
+            margin: 0,
+            maxHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column'
+          }
+        }}
+      >
+        {/* Header */}
+        <div
+          className="flex items-center justify-between p-3 bg-emerald-800 flex-shrink-0"
+          style={{ minHeight: '56px' }}
+        >
+          <h2 className="text-white font-bold text-sm truncate flex-1">Complete Payment</h2>
+          <IconButton
+            onClick={() => {
+              setShowMobilePaymentModal(false);
+              setPaymentUrl('');
+              setPaymentDrawerOpen(false);
+              window.dispatchEvent(new Event('showFooter'));
+            }}
+            sx={{
+              color: 'white',
+              backgroundColor: 'rgba(255, 255, 255, 0.2)',
+              '&:hover': {
+                backgroundColor: 'rgba(255, 255, 255, 0.3)'
+              },
+              width: 32,
+              height: 32
+            }}
+          >
+            ✕
+          </IconButton>
+        </div>
+
+        {/* Content */}
+        <DialogContent
+          sx={{
+            padding: 0,
+            overflow: 'auto',
+            overflowX: 'hidden',
+            WebkitOverflowScrolling: 'touch',
+            flex: 1,
+            position: 'relative',
+            '&::-webkit-scrollbar': {
+              display: 'none'
+            }
+          }}
+        >
+          <iframe
+            src={paymentUrl}
+            style={{
+              width: '100%',
+              height: '100%',
+              border: 'none',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              bottom: 20,
+            }}
+            title="Payment Gateway"
+            allow="payment"
+            sandbox="allow-same-origin allow-scripts allow-forms allow-popups allow-top-navigation"
+            scrolling="yes"
+          />
+        </DialogContent>
+      </Dialog>
+
+      {/* App Download Modal */}
+      <AppDownloadModal
+        open={showAppDownloadModal}
+        onClose={() => setShowAppDownloadModal(false)}
+      />
+
+      {/* Error Notification Bar */}
+      {showErrorBar && (
+        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+          <div className="bg-red-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold">{errorBarMessage}</p>
+              </div>
+              <button
+                onClick={() => setShowErrorBar(false)}
+                className="flex-shrink-0 text-white hover:text-red-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Success Notification Bar */}
+      {showSuccessBar && (
+        <div className="fixed bottom-4 left-4 z-[60] animate-slide-up max-w-md">
+          <div className="bg-green-600 text-white px-4 py-4 shadow-2xl rounded-lg">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3 flex-1">
+                <div className="flex-shrink-0">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </div>
+                <p className="text-sm font-semibold">{successBarMessage}</p>
+              </div>
+              <button
+                onClick={() => setShowSuccessBar(false)}
+                className="flex-shrink-0 text-white hover:text-green-200 transition-colors"
+              >
+                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {showCheckoutFormModal && (
