@@ -328,7 +328,8 @@ export const CoursesSection = ({ employeeCourseId }) => {
                             <div
                                 className="flex gap-6 transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${1.5 / itemsPerView}rem)))`
+                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`,
+                                    flexWrap: 'nowrap',
                                 }}
                             >
                                 {filtered.map((course, i) => {
@@ -344,62 +345,57 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                     const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
                                     const hasDiscount = pricing && pricing.discount > 0;
                                     const isInCart = cartCourses.some(item => item.id === course.id);
-                                    {/* const cardGradients = [
-                                        'bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-700',
-                                        'bg-gradient-to-br from-rose-700 via-red-600 to-orange-600',
-                                        'bg-gradient-to-br from-cyan-700 via-sky-600 to-blue-700',
-                                        'bg-gradient-to-br from-emerald-700 via-green-600 to-teal-700',
-                                        'bg-gradient-to-br from-violet-700 via-fuchsia-600 to-pink-700'
-                                    ]; */}
-                                    {/* const cardColor = cardGradients[i % cardGradients.length];
-                                    const courseTag = (course.badge || course.title || 'CA').toString().split(' ')[0].slice(0, 8).toUpperCase();
-                                    const facultyName = course?.faculty || course?.teacherName || course?.employeeName || 'Expert Faculty';
-                                    const durationText = course?.hours || 'N/A'; */}
 
                                     return (
                                         <div
                                             key={i}
-                                            className="group bg-white rounded-[2rem] border border-gray-100 overflow-hidden hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col h-full shadow-sm"
+                                            className="group bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-[0_16px_32px_-8px_rgba(0,0,0,0.08)] transition-all duration-500 flex flex-col shadow-sm"
                                             style={{
-                                                minWidth: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
+                                                width: 'calc(25% - 1.125rem)',
+                                                minWidth: 'calc(25% - 1.125rem)',
+                                                maxWidth: 'calc(25% - 1.125rem)',
+                                                height: '360px', // reduced height
+                                                flex: '0 0 auto',
+                                                margin: 0,
                                             }}
                                         >
                                             <div
                                                 onClick={() => router.push(`/course/${course.id}`)}
-                                                className="aspect-[3/2] bg-white relative overflow-hidden cursor-pointer"
+                                                className="aspect-[3/2] bg-white relative overflow-hidden cursor-pointer flex items-center justify-center"
+                                                style={{marginBottom: 0}}
                                             >
                                                 {course.logo && (
                                                     <img
                                                         src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
                                                         alt={course.title}
-                                                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                                                        className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
                                                     />
                                                 )}
                                             </div>
-                                            <div className="p-6 flex-grow flex flex-col justify-between">
-                                                <h4 onClick={() => router.push(`/course/${course.id}`)} className="text-[#111827] font-black text-[14px] leading-tight group-hover:text-[#e11d48] transition-colors uppercase tracking-tighter cursor-pointer">
+                                            <div className="px-4 pt-3 pb-2 flex-grow flex flex-col justify-between">
+                                                <h4 onClick={() => router.push(`/course/${course.id}`)} className="text-[#111827] font-black text-[13px] leading-tight group-hover:text-[#e11d48] transition-colors uppercase tracking-tighter cursor-pointer mb-1">
                                                     {course.title}
                                                 </h4>
-                                                <div className="mt-6 pt-5 border-t border-gray-100 flex justify-between items-center">
+                                                <div className="pt-2 border-t border-gray-100 flex justify-between items-center mt-auto">
                                                     <div className="flex flex-col">
-                                                        <div className="flex items-center gap-2 flex-wrap">
+                                                        <div className="flex items-center gap-1 flex-wrap">
                                                             {hasDiscount ? (
                                                                 <>
-                                                                    <span className="text-[#e11d48] font-black text-xl tracking-tighter">
+                                                                    <span className="text-[#e11d48] font-black text-base tracking-tighter">
                                                                         {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
                                                                     </span>
-                                                                    <span className="text-gray-300 text-[12px] line-through font-bold tracking-tighter">
+                                                                    <span className="text-gray-300 text-[11px] line-through font-bold tracking-tighter">
                                                                         ₹{originalPrice.toLocaleString('en-IN')}
                                                                     </span>
                                                                 </>
                                                             ) : (
-                                                                <span className="text-[#e11d48] font-black text-xl tracking-tighter">
+                                                                <span className="text-[#e11d48] font-black text-base tracking-tighter">
                                                                     {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
                                                                 </span>
                                                             )}
                                                         </div>
                                                     </div>
-                                                    <div className="flex items-center gap-2">
+                                                    <div className="flex items-center gap-1">
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
@@ -419,8 +415,8 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                     setShowConfigModal(true);
                                                                 }
                                                             }}
-                                                            className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md"
-                                                            style={{ backgroundColor: isInCart ? '#111827' : '#f8fafc', color: isInCart ? '#ffffff' : '#9ca3af' }}
+                                                            className="w-10 h-10 rounded-xl flex items-center justify-center transition-all shadow-md"
+                                                            style={{ backgroundColor: isInCart ? '#111827' : '#f8fafc', color: isInCart ? '#ffffff' : '#9ca3af', margin: 0 }}
                                                         >
                                                             {isInCart ? <Icons.X /> : <Icons.Cart />}
                                                         </button>
@@ -430,7 +426,8 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                     e.stopPropagation();
                                                                     router.push('/cart');
                                                                 }}
-                                                                className="h-10 px-3 text-white rounded-xl flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold bg-[#111827]"
+                                                                className="h-8 px-2 text-white rounded-lg flex items-center justify-center gap-1 hover:scale-105 transition-all shadow-md text-xs font-semibold bg-[#111827]"
+                                                                style={{margin: 0}}
                                                             >
                                                                 View Cart
                                                             </button>
@@ -449,16 +446,14 @@ export const CoursesSection = ({ employeeCourseId }) => {
                             <button
                                 onClick={handlePrev}
                                 disabled={!canGoPrev}
-                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                    }`}
+                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'}`}
                             >
                                 <Icons.ChevronLeft />
                             </button>
                             <button
                                 onClick={handleNext}
                                 disabled={!canGoNext}
-                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                    }`}
+                                className={`${theme.primaryClass} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'}`}
                             >
                                 <Icons.ChevronRight />
                             </button>
