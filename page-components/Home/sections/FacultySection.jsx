@@ -147,7 +147,7 @@ const FacultyAndStatsSection = () => {
         <section className="bg-slate-50">
 
             {/* Part 1: Tagline & Stats */}
-            <div className="py-16 text-center border-b border-slate-200/60 bg-white">
+            {/* <div className="py-16 text-center border-b border-slate-200/60 bg-white">
                 <div className="max-w-4xl mx-auto px-4">
                     <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 leading-tight">
                         India ke Best Faculty! <br />
@@ -162,7 +162,7 @@ const FacultyAndStatsSection = () => {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div> */}
 
             {/* Part 2: Faculty Marquee (No Gap from above) */}
             <div className="pt-12 pb-20 overflow-hidden">

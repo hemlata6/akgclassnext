@@ -1,49 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Endpoints from '@/config/endpoints';
+import React, { useEffect, useState } from 'react';
 import Network from '../../../config/Network';
-import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
 
 export const PromoBanners = () => {
-    const [currentSlide, setCurrentSlide] = useState(0);
-    const [isAutoPlaying, setIsAutoPlaying] = useState(true);
-    const scrollContainerRef = useRef(null);
-    const [slides, setSlides] = useState([
+    const fallbackBanners = [
         {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA Praveen Jain",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA Praveen Jain",
-            alt: "Live Batch",
-            bg: "bg-indigo-900"
+            desktopSrc: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1920&q=80',
+            mobileSrc: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1080&q=80',
+            alt: 'Banner'
         },
         {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA ARUN SETIA",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA ARUN SETIA",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CS ANKUSH BANSAL",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CS ANKUSH BANSAL",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA CS HARSH GUPTA",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA CS HARSH GUPTA",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CS GD SALUJA",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CS GD SALUJA",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
+            desktopSrc: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1920&q=80',
+            mobileSrc: 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=1080&q=80',
+            alt: 'Banner'
         }
-    ]);
+    ];
+    const [current, setCurrent] = useState(0);
+    const [banners, setBanners] = useState([]);
 
-    const totalSlides = slides.length;
-
-    // Fetch banners from API
     useEffect(() => {
         fetchBanners();
     }, []);
@@ -64,159 +39,48 @@ export const PromoBanners = () => {
                         bg: 'bg-slate-900'
                     }));
                     // console.log('Fetched Banners:', bannerSlides);
-                    setSlides(bannerSlides);
+                    setBanners(bannerSlides);
+                } else {
+                    setBanners(fallbackBanners);
                 }
+            } else {
+                setBanners(fallbackBanners);
             }
         } catch (error) {
             console.error('Error fetching banners:', error);
+            setBanners(fallbackBanners);
         }
     };
 
-    // Auto-slide functionality
     useEffect(() => {
-        if (!isAutoPlaying) return;
+        if (!banners.length) return undefined;
 
-        const interval = setInterval(() => {
-            setCurrentSlide((prev) => (prev + 1) % totalSlides);
-        }, 5000); // Change slide every 5 seconds
-
-        return () => clearInterval(interval);
-    }, [isAutoPlaying, totalSlides]);
-
-    // Scroll to slide when currentSlide changes
-    useEffect(() => {
-        if (scrollContainerRef.current) {
-            const slideWidth = scrollContainerRef.current.offsetWidth;
-            scrollContainerRef.current.scrollTo({
-                left: slideWidth * currentSlide,
-                behavior: 'smooth'
-            });
-        }
-    }, [currentSlide]);
-
-    const goToSlide = (index) => {
-        setCurrentSlide(index);
-        setIsAutoPlaying(false);
-        setTimeout(() => setIsAutoPlaying(true), 10000); // Resume auto-play after 10 seconds
-    };
-
-    const nextSlide = () => {
-        setCurrentSlide((prev) => (prev + 1) % totalSlides);
-        setIsAutoPlaying(false);
-        setTimeout(() => setIsAutoPlaying(true), 10000);
-    };
-
-    const prevSlide = () => {
-        setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
-        setIsAutoPlaying(false);
-        setTimeout(() => setIsAutoPlaying(true), 10000);
-    };
-
-    const handleLinkClick = (slide) => {
-        // console.log('Banner clicked:', slide);
-        const isRedirectBanner = String(slide?.type || '').toLowerCase() === 'link';
-        const targetUrl = slide?.contentLink;
-
-        if (isRedirectBanner && targetUrl) {
-            window.open(targetUrl, '_blank', 'noopener,noreferrer');
-        }
-    };
+        const timer = setInterval(() => setCurrent((prev) => (prev + 1) % banners.length), 6000);
+        return () => clearInterval(timer);
+    }, [banners.length]);
 
     return (
-        <section className="relative w-full group bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
-
-            <div className="w-full aspect-[3/1] md:aspect-[3/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
-
-                {/* Animated Background Gradient */}
-                <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-transparent to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-5" />
-
-                {slides?.map((slide, index) => (
+        <section className="w-full relative overflow-hidden bg-gray-900 group shadow-2xl">
+            <div className="relative w-full h-[450px] md:h-[550px]">
+                {banners.map((banner, i) => (
                     <div
-                        onClick={() => handleLinkClick(slide)}
-                        key={index}
-                        className={`absolute inset-0 transition-opacity duration-1000 ease-in-out cursor-pointer ${index === currentSlide
-                            ? 'opacity-100 z-10'
-                            : 'opacity-0 z-0'
+                        key={i}
+                        className={`w-full h-full transition-all duration-1000 ease-in-out ${i === current
+                            ? 'opacity-100 scale-100 relative'
+                            : 'opacity-0 scale-105 absolute top-0 left-0'
                             }`}
                     >
-                        {/* Mobile */}
-                        <img
-                            src={slide.mobileSrc}
-                            alt={slide.alt}
-                            className="md:hidden w-full h-full object-cover"
-                        />
-
-                        {/* Desktop */}
-                        <img
-                            src={slide.desktopSrc}
-                            alt={slide.alt}
-                            className="hidden md:block w-full h-full object-cover"
-                        />
-
-                        {/* Gradient Overlay - focused at top-left so lower-left stays clean */}
-                        <div className="absolute inset-0" />
-
-                        {/* Content Overlay */}
-                        <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 md:pl-12 lg:pl-24">
-                            <div
-                                className="max-w-lg md:max-w-2xl text-white opacity-0 animate-in slide-in-from-left-8 duration-800"
-                                style={{
-                                    animationDelay: '200ms',
-                                    animationFillMode: 'forwards'
-                                }}
-                            >
-                                <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-3 sm:mb-4 md:mb-6 lg:mb-8 tracking-tight drop-shadow-lg">
-                                    {slide.alt}
-                                </h2>
-
-                                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-white/80 mb-4 md:mb-6 max-w-md drop-shadow-md hidden sm:block">
-                                    Unlock your potential with expert guidance
-                                </p>
-
-                                <button className="group/btn bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white px-4 sm:px-6 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-lg font-bold text-xs sm:text-sm md:text-base transition-all duration-300 hover:shadow-lg hover:shadow-indigo-500/50 flex items-center gap-2 w-fit transform hover:scale-105">
-                                    Explore Now
-                                    <ChevronRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                                </button>
+                        <img src={banner.desktopSrc || banner.mobileSrc} alt={banner.alt || 'Banner'} className="w-full h-full object-cover filter brightness-75" />
+                        {/* <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent flex items-center px-12">
+                            <div className="max-w-xl text-white space-y-4">
+                                <span className="bg-[#e11d48] text-white px-3 py-1 rounded-md text-xs font-black uppercase tracking-widest">Admissions Open 2026</span>
+                                <h1 className="text-4xl md:text-6xl font-black leading-tight tracking-tight">India's Premier CA & CMA Academy</h1>
+                                <p className="text-gray-300 font-medium">Learn from India's most celebrated faculties with updated 2026 standard materials.</p>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 ))}
-
-                {/* Prev Button */}
-                <button
-                    onClick={prevSlide}
-                    aria-label="Previous slide"
-                    className="hidden sm:flex absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
-                >
-                    <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-
-                {/* Next Button */}
-                <button
-                    onClick={nextSlide}
-                    aria-label="Next slide"
-                    className="hidden sm:flex absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 z-30 bg-white/10 hover:bg-white/20 text-white p-2 sm:p-3 border border-white/20 rounded-full backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/30"
-                >
-                    <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
-                </button>
-
-                {/* Dots Indicator */}
-                <div className="absolute bottom-4 sm:bottom-6 md:bottom-8 left-4 sm:left-6 md:left-12 lg:left-24 flex gap-1.5 sm:gap-2 z-30">
-                    {slides.map((_, idx) => (
-                        <button
-                            key={idx}
-                            onClick={() => goToSlide(idx)}
-                            aria-label={`Go to slide ${idx + 1}`}
-                            className={`rounded-full transition-all duration-300 ${currentSlide === idx
-                                ? 'w-8 h-2 bg-gradient-to-r from-indigo-400 to-indigo-600 shadow-lg shadow-indigo-500/50'
-                                : 'w-2 h-2 bg-white/40 hover:bg-white/70'
-                                }`}
-                        />
-                    ))}
-                </div>
-
             </div>
         </section>
     );
-
 };

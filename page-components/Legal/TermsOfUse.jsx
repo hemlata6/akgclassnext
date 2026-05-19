@@ -2,9 +2,11 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { Footer } from '../../components/Shared/SharedComponents';
+import { useAuth } from '@/config/AuthContext';
 
 const TermsOfUse = () => {
   const router = useRouter();
+  const { institute } = useAuth();
 
   return (
     <div className="bg-white min-h-screen pb-16 md:pb-0">
@@ -93,9 +95,9 @@ const TermsOfUse = () => {
                 If you have any questions about these Terms of Use, please contact us at:
               </p>
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <p className="text-slate-700 mb-2"><strong>Email:</strong> info.vgsh@gmail.com</p>
-                <p className="text-slate-700 mb-2"><strong>Phone:</strong> 7703880232</p>
-                <p className="text-slate-700"><strong>Location:</strong> D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092, India</p>
+                <p className="text-slate-700 mb-2"><strong>Email:</strong> {institute?.email}</p>
+                <p className="text-slate-700 mb-2"><strong>Phone:</strong> {institute?.phone}</p>
+                <p className="text-slate-700"><strong>Location:</strong> {institute?.location}</p>
               </div>
             </section>
 

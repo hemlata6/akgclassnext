@@ -284,104 +284,94 @@ export const BookStore = ({ employeeCourseId }) => {
                                     const originalPrice = pricing ? pricing.price : 0;
                                     const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
                                     const hasDiscount = pricing && pricing.discount > 0;
+                                    const isInCart = cartCourses.some(item => item.id === book.id);
+                                    const bookColors = [
+                                        'bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-700',
+                                        'bg-gradient-to-br from-rose-700 via-red-600 to-orange-600',
+                                        'bg-gradient-to-br from-cyan-700 via-sky-600 to-blue-700',
+                                        'bg-gradient-to-br from-emerald-700 via-green-600 to-teal-700',
+                                        'bg-gradient-to-br from-violet-700 via-fuchsia-600 to-pink-700'
+                                    ];
+                                    const bookColor = bookColors[i % bookColors.length];
+                                    const authorName = book?.author || book?.faculty || book?.teacherName || 'FAST Faculty';
 
                                     return (
                                         <div
                                             key={i}
-                                            className="group flex-shrink-0"
+                                            className="group flex flex-col h-full [perspective:1000px] flex-shrink-0"
                                             style={{
                                                 width: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
                                             }}
                                         >
                                             <div
                                                 onClick={() => router.push(`/book/${book.id}`)}
-                                                className="relative bg-slate-50 rounded-lg shadow-md mb-2 overflow-hidden border-l-4 border-emerald-900 transition-transform duration-300 group-hover:-translate-y-1 cursor-pointer"
-                                                style={{
-                                                    aspectRatio: '16/9'
-                                                }}
+                                                className="relative aspect-[3/2] mb-6 transition-all duration-500 hover:scale-105 cursor-pointer"
                                             >
-                                                {book.logo ? (
-                                                    <img
-                                                        src={`${Endpoints?.mediaBaseUrl}${book.logo}`}
-                                                        alt={book.title}
-                                                        className="w-full h-full object-cover"
-                                                        onError={(e) => {
-                                                            e.target.style.display = 'none';
-                                                            e.target.nextElementSibling.style.display = 'flex';
-                                                        }}
-                                                    />
-                                                ) : null}
-                                                <div className="w-full h-full flex flex-col items-center justify-center bg-white p-2 text-center border border-slate-100" style={{ display: book.logo ? 'none' : 'flex' }}>
-                                                    <div className="h-8 w-8 md:h-10 md:w-10 bg-emerald-50 rounded-full flex items-center justify-center text-sm md:text-lg mb-1 md:mb-2">
-                                                        📚
-                                                    </div>
-                                                    <span className="text-[10px] md:text-xs font-bold text-slate-800 leading-tight px-1 line-clamp-3">
-                                                        {book.title}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                            <div className="flex items-center justify-between px-1">
-                                                <div className="flex items-center gap-1 flex-wrap">
-                                                    {hasDiscount ? (
-                                                        <>
-                                                            <span className="text-[10px] text-slate-400 line-through">
-                                                                ₹{originalPrice.toLocaleString('en-IN')}
-                                                            </span>
-                                                            <span className="text-[8px] font-bold text-green-600 bg-green-50 px-1 py-0.5 rounded">
-                                                                {pricing.discount}% OFF
-                                                            </span>
-                                                            <span className="font-bold text-slate-900 text-sm">
-                                                                {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
-                                                            </span>
-                                                        </>
-                                                    ) : (
-                                                        <span className="font-bold text-slate-900 text-sm">
-                                                            {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
-                                                        </span>
+                                                <div className={`w-full h-full rounded-r-2xl shadow-[20px_20px_50px_-10px_rgba(0,0,0,0.3)] relative overflow-hidden transition-transform duration-700 group-hover:[transform:rotateY(-25deg)] origin-left border-l-[12px] border-black/30 flex items-center justify-center`}>
+                                                    {book.logo && (
+                                                        <img
+                                                            src={`${Endpoints?.mediaBaseUrl}${book.logo}`}
+                                                            alt={book.title}
+                                                            className="w-full h-full object-contain p-3 group-hover:scale-105 transition-transform duration-700"
+                                                        />
+                                                    )}
+                                                    {!book.logo && (
+                                                        <div className="w-full h-full flex flex-col items-center justify-center text-white/90 p-3 text-center">
+                                                            <div className="h-10 w-10 rounded-full bg-white/20 border border-white/30 flex items-center justify-center mb-2">📘</div>
+                                                            <span className="text-xs font-black line-clamp-2">{book.title}</span>
+                                                        </div>
                                                     )}
                                                 </div>
-                                                <div className='flex items-center gap-2'>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
-
-                                                            const isInCart = cartCourses.some(item => item.id === book.id);
-
-                                                            if (isInCart) {
-                                                                // Remove from cart
-                                                                const updatedCart = cartCourses.filter(item => item.id !== book.id);
-                                                                setCartCourses(updatedCart);
-                                                                localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                                                                window.dispatchEvent(new Event('cartUpdated'));
-                                                            } else {
-                                                                // Add to cart via modal
-                                                                setSelectedBook(book);
-                                                                setShowConfigModal(true);
-                                                            }
-                                                        }}
-                                                        className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                                                        style={{
-                                                            backgroundColor: cartCourses.some(item => item.id === book.id) ? '#dc2626' : '#2196F3',
-                                                            transform: cartCourses.some(item => item.id === book.id) ? 'scale(1.1)' : 'scale(1)',
-                                                            boxShadow: cartCourses.some(item => item.id === book.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                        }}
-                                                    >
-                                                        {cartCourses.some(item => item.id === book.id) ? <Icons.X /> : <Icons.Cart />}
-                                                    </button>
-                                                    {cartCourses.some(item => item.id === book.id) && (
+                                                <div className="absolute bottom-[-15px] left-4 right-4 h-6 bg-black/20 blur-xl rounded-full -z-10 group-hover:scale-125 transition-transform duration-500"></div>
+                                            </div>
+                                            <div className="px-2 space-y-4">
+                                                <h4 onClick={() => router.push(`/book/${book.id}`)} className="text-[#111827] font-black text-[15px] uppercase tracking-tighter leading-tight group-hover:text-[#e11d48] transition-colors cursor-pointer">
+                                                    {book.title}
+                                                </h4>
+                                                <div className="flex justify-between items-center">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[#e11d48] font-black text-xl tracking-tighter">
+                                                            {hasDiscount ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`) : (originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`)}
+                                                        </span>
+                                                        {hasDiscount && (
+                                                            <span className="text-gray-300 text-[12px] line-through font-bold tracking-tighter">
+                                                                ₹{originalPrice.toLocaleString('en-IN')}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className='flex items-center gap-2'>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                router.push('/cart');
+
+                                                                if (isInCart) {
+                                                                    // Remove from cart
+                                                                    const updatedCart = cartCourses.filter(item => item.id !== book.id);
+                                                                    setCartCourses(updatedCart);
+                                                                    localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                                                                    window.dispatchEvent(new Event('cartUpdated'));
+                                                                } else {
+                                                                    // Add to cart via modal
+                                                                    setSelectedBook(book);
+                                                                    setShowConfigModal(true);
+                                                                }
                                                             }}
-                                                            className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
-                                                            style={{
-                                                                backgroundColor: '#2196F3',
-                                                            }}
+                                                            className="bg-[#111827] hover:bg-[#e11d48] text-white px-5 py-2.5 rounded-xl font-black text-[10px] uppercase transition-all shadow-xl"
                                                         >
-                                                            View Cart
+                                                            {isInCart ? 'Remove' : '+ Cart'}
                                                         </button>
-                                                    )}
+                                                        {isInCart && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    router.push('/cart');
+                                                                }}
+                                                                className="h-10 px-3 text-white rounded-xl flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold bg-[#111827]"
+                                                            >
+                                                                View Cart
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

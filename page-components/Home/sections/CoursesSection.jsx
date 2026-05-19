@@ -343,71 +343,66 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                     const originalPrice = pricing ? pricing.price : 0;
                                     const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
                                     const hasDiscount = pricing && pricing.discount > 0;
+                                    const isInCart = cartCourses.some(item => item.id === course.id);
+                                    {/* const cardGradients = [
+                                        'bg-gradient-to-br from-indigo-700 via-indigo-600 to-purple-700',
+                                        'bg-gradient-to-br from-rose-700 via-red-600 to-orange-600',
+                                        'bg-gradient-to-br from-cyan-700 via-sky-600 to-blue-700',
+                                        'bg-gradient-to-br from-emerald-700 via-green-600 to-teal-700',
+                                        'bg-gradient-to-br from-violet-700 via-fuchsia-600 to-pink-700'
+                                    ]; */}
+                                    {/* const cardColor = cardGradients[i % cardGradients.length];
+                                    const courseTag = (course.badge || course.title || 'CA').toString().split(' ')[0].slice(0, 8).toUpperCase();
+                                    const facultyName = course?.faculty || course?.teacherName || course?.employeeName || 'Expert Faculty';
+                                    const durationText = course?.hours || 'N/A'; */}
 
                                     return (
                                         <div
                                             key={i}
-                                            className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col"
+                                            className="group bg-white rounded-[2rem] border border-gray-100 overflow-hidden hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] transition-all duration-700 flex flex-col h-full shadow-sm"
                                             style={{
                                                 minWidth: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
                                             }}
                                         >
                                             <div
                                                 onClick={() => router.push(`/course/${course.id}`)}
-                                                className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
-                                                style={{ aspectRatio: '16/9' }}
+                                                className="aspect-[3/2] bg-white relative overflow-hidden cursor-pointer"
                                             >
                                                 {course.logo && (
                                                     <img
                                                         src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
                                                         alt={course.title}
-                                                        className="absolute inset-0 w-full h-full object-cover"
+                                                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                                                     />
                                                 )}
-                                                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>
-                                                <div className="relative z-10 w-full">
-                                                    <span className="bg-white/20 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md border border-white/20 inline-block mb-1">
-                                                        {course.badge || "New"}
-                                                    </span>
-                                                    <div className="flex items-center gap-1.5 text-white/90 text-xs font-bold">
-                                                        <Icons.Clock /> {course.hours}
-                                                    </div>
-                                                </div>
                                             </div>
-                                            <div className="p-2 pt-3 flex-1 flex flex-col">
-                                                <h3 onClick={() => router.push(`/course/${course.id}`)} className={`text-sm font-bold text-slate-900 leading-snug mb-1 cursor-pointer hover:${theme.textClass}`}>
+                                            <div className="p-6 flex-grow flex flex-col justify-between">
+                                                <h4 onClick={() => router.push(`/course/${course.id}`)} className="text-[#111827] font-black text-[14px] leading-tight group-hover:text-[#e11d48] transition-colors uppercase tracking-tighter cursor-pointer">
                                                     {course.title}
-                                                </h3>
-                                                {/* <p className="text-[10px] text-slate-500 font-medium mb-3">GD / PD / App</p> */}
-                                                <div className="flex items-center justify-between border-t border-slate-50 pt-3">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="text-[9px] text-slate-500 font-medium">Starting Price</span>
+                                                </h4>
+                                                <div className="mt-6 pt-5 border-t border-gray-100 flex justify-between items-center">
+                                                    <div className="flex flex-col">
                                                         <div className="flex items-center gap-2 flex-wrap">
                                                             {hasDiscount ? (
                                                                 <>
-                                                                    <span className="text-[11px] text-slate-400 line-through">
-                                                                        ₹{originalPrice.toLocaleString('en-IN')}
-                                                                    </span>
-                                                                    <span className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
-                                                                        {pricing.discount}% OFF
-                                                                    </span>
-                                                                    <span className="text-lg font-bold text-slate-900">
+                                                                    <span className="text-[#e11d48] font-black text-xl tracking-tighter">
                                                                         {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
+                                                                    </span>
+                                                                    <span className="text-gray-300 text-[12px] line-through font-bold tracking-tighter">
+                                                                        ₹{originalPrice.toLocaleString('en-IN')}
                                                                     </span>
                                                                 </>
                                                             ) : (
-                                                                <span className="text-lg font-bold text-slate-900">
+                                                                <span className="text-[#e11d48] font-black text-xl tracking-tighter">
                                                                     {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
                                                                 </span>
                                                             )}
                                                         </div>
                                                     </div>
-                                                    <div className='flex items-center gap-2'>
+                                                    <div className="flex items-center gap-2">
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-
-                                                                const isInCart = cartCourses.some(item => item.id === course.id);
 
                                                                 if (isInCart) {
                                                                     // Remove from cart
@@ -424,25 +419,18 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                     setShowConfigModal(true);
                                                                 }
                                                             }}
-                                                            className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                                                            style={{
-                                                                backgroundColor: cartCourses.some(item => item.id === course.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
-                                                                transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
-                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                            }}
+                                                            className="w-12 h-12 rounded-2xl flex items-center justify-center transition-all shadow-md"
+                                                            style={{ backgroundColor: isInCart ? '#111827' : '#f8fafc', color: isInCart ? '#ffffff' : '#9ca3af' }}
                                                         >
-                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.X /> : <Icons.Cart />}
+                                                            {isInCart ? <Icons.X /> : <Icons.Cart />}
                                                         </button>
-                                                        {cartCourses.some(item => item.id === course.id) && (
+                                                        {isInCart && (
                                                             <button
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();
                                                                     router.push('/cart');
                                                                 }}
-                                                                className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
-                                                                style={{
-                                                                    backgroundColor: theme?.primary || '#2196F3',
-                                                                }}
+                                                                className="h-10 px-3 text-white rounded-xl flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold bg-[#111827]"
                                                             >
                                                                 View Cart
                                                             </button>

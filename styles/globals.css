@@ -3,12 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --theme-primary: #2196F3;
-  --theme-primary-hover: #1976D2;
-  --theme-primary-class: bg-[#2196F3];
-  --theme-primary-hover-class: hover:bg-[#1976D2];
-  --theme-text-class: text-[#2196F3];
-  --theme-border-class: border-[#2196F3];
+  --theme-primary: #dc2626;
+  --theme-primary-hover: #b91c1c;
+  --theme-primary-rgb: 220, 38, 38;
+  --theme-primary-class: bg-[#dc2626];
+  --theme-primary-hover-class: hover:bg-[#b91c1c];
+  --theme-text-class: text-[#dc2626];
+  --theme-border-class: border-[#dc2626];
 }
 
 /* Theme-aware dynamic classes */
@@ -91,15 +92,15 @@
 
 /* Light indigo/violet background tints */
 .bg-indigo-50 {
-  background-color: rgba(var(--tw-rgb-indigo-50) / 0.3) !important;
+  background-color: rgba(var(--theme-primary-rgb), 0.06) !important;
 }
 
 .via-indigo-50 {
-  --tw-gradient-stops: var(--theme-primary), rgba(var(--tw-rgb-indigo-50) / 0.3) var(--tw-gradient-to-pos) !important;
+  --tw-gradient-stops: var(--theme-primary), rgba(var(--theme-primary-rgb), 0.06) var(--tw-gradient-to-pos) !important;
 }
 
 .border-indigo-100 {
-  border-color: rgba(var(--theme-primary) / 0.1) !important;
+  border-color: rgba(var(--theme-primary-rgb), 0.15) !important;
 }
 
 /* Blue color overrides for production builds */
@@ -188,7 +189,7 @@
 }
 
 .border-emerald-100 {
-  border-color: rgba(var(--theme-primary) / 0.1) !important;
+  border-color: rgba(var(--theme-primary-rgb), 0.15) !important;
 }
 
 .from-emerald-900 {
@@ -371,4 +372,9 @@ html {
     transform: translate(0) scale(1);
     opacity: 1;
   }
+}
+
+::selection {
+  background-color: rgba(var(--theme-primary-rgb), 0.2);
+  color: #111827;
 }

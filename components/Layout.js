@@ -56,7 +56,7 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
+    <div className="font-sans text-slate-900 bg-white min-h-screen">
       {!shouldHideControls && !isStorePage && <Header cartCount={cartCount} />}
       {children}
       {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}

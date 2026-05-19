@@ -1704,14 +1704,14 @@ const Store = () => {
                             >
                                 {filteredCourses?.length > 0 && (
                                     <div className="mb-5">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2 md:gap-2.5">
                                             {filteredCourses.map((item) => (
                                                 <div
                                                     onClick={() => handleCardClick(item)}
                                                     key={item.id}
-                                                    className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
-                                                        ? 'border-amber-200 hover:border-amber-400'
-                                                        : 'border-indigo-100 hover:border-indigo-400'
+                                                    className={`group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-transparent ring-1 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
+                                                        ? 'ring-amber-100 hover:ring-amber-300'
+                                                        : 'ring-indigo-100 hover:ring-indigo-300'
                                                         }`}
                                                 >
                                                     {/* Course Image with Overlay */}
@@ -1719,7 +1719,7 @@ const Store = () => {
                                                         <img
                                                             src={Endpoints?.mediaBaseUrl + item.logo}
                                                             alt={item.title}
-                                                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
+                                                            className="w-[100%] h-42 object-contain group-hover:scale-105 transition-transform duration-500"
                                                         />
                                                     </div>
 
@@ -1887,7 +1887,7 @@ const Store = () => {
                                                                 }}
                                                             >
                                                                 <ShoppingCart className="h-4 w-4" />
-                                                                {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to cart"}
+                                                                {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add cart"}
                                                             </button>
                                                         </div>
                                                     </div>

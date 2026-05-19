@@ -1,14 +1,64 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
+import Network from '../../config/Network';
+import instId from '../../config/instituteId';
 
 export const Footer = () => {
   const router = useRouter();
   const { institute } = useAuth();
-  // console.log('institute', institute?.logo);
+  // console.log('institute', institute);
+
+  const [domains, setDomains] = useState([]);
+
+
+  // Fetch domains for Lectures menu
+  const fetchDomainsForMenu = async () => {
+    try {
+      // setDomainLoading(true);
+      const response = await Network.fetchDomain(instId);
+      const availableDomains = response?.domains || [];
+      // console.log('availableDomains', availableDomains);
+      setDomains(availableDomains);
+      // setCurrentLevel('first');
+      // setSelectedParentDomain(null);
+      // setDomainLoading(false);
+    } catch (error) {
+      console.error('Error fetching domains:', error);
+      // setDomainLoading(false);
+    }
+  };
+
+  const handleMergedLectureChildClick = (domain) => {
+    sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      source: 'header',
+      selectedDomainId: domain?.__parentId,
+      selectedDomainName: domain?.__parentName,
+      selectedExamStageId: domain?.id,
+      selectedExamStageName: domain?.name,
+      isMobile: false,
+      productType: 'lecture'
+    }));
+    router.push('/store');
+  };
+
+  // Domain hierarchy logic
+  const shouldShowSecondLevel = domains?.length === 1;
+  const firstLevelDomains = shouldShowSecondLevel ? domains[0].child || [] : domains;
+  // const secondLevelDomains = selectedParentDomain?.child || [];
+
+  // const booksSecondLevelDomains = booksSelectedParentDomain?.child || [];
+
+  const mergedLectureSecondLevelDomains = firstLevelDomains.flatMap((parent) =>
+    (parent?.child || []).map((child) => ({
+      ...child,
+      __parentId: parent?.id,
+      __parentName: parent?.name,
+    }))
+  );
 
   const handleCourseClick = (examStage) => {
     const isMobile = sessionStorage.getItem('isMobile');
@@ -23,6 +73,10 @@ export const Footer = () => {
     }));
     router.push('/store');
   };
+
+  useEffect(() => {
+    fetchDomainsForMenu();
+  }, []);
 
 
   return (
@@ -41,24 +95,38 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
             <ul className="space-y-1.5">
-              <li
-                onClick={() => handleCourseClick('CSEET')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CSEET
-              </li>
-              <li
-                onClick={() => handleCourseClick('CS Executive')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CS Executive
-              </li>
-              <li
-                onClick={() => handleCourseClick('CS Professional')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CS Professional
-              </li>
+              {mergedLectureSecondLevelDomains.length > 0 ? (
+                mergedLectureSecondLevelDomains.map((domain) => (
+                  <li
+                    key={`${domain?.__parentId || 'parent'}-${domain?.id || domain?.name}`}
+                    onClick={() => handleMergedLectureChildClick(domain)}
+                    className="cursor-pointer hover:text-indigo-400 transition-colors"
+                  >
+                    {domain?.name}
+                  </li>
+                ))
+              ) : (
+                <>
+                  <li
+                    onClick={() => handleCourseClick('CSEET')}
+                    className="cursor-pointer hover:text-indigo-400 transition-colors"
+                  >
+                    CSEET
+                  </li>
+                  <li
+                    onClick={() => handleCourseClick('CS Executive')}
+                    className="cursor-pointer hover:text-indigo-400 transition-colors"
+                  >
+                    CS Executive
+                  </li>
+                  <li
+                    onClick={() => handleCourseClick('CS Professional')}
+                    className="cursor-pointer hover:text-indigo-400 transition-colors"
+                  >
+                    CS Professional
+                  </li>
+                </>
+              )}
             </ul>
           </div>
           <div>
@@ -99,9 +167,9 @@ export const Footer = () => {
           <div>
             <h4 className="text-white font-bold mb-3">Contact</h4>
             <ul className="space-y-1.5">
-              <li>Call: 9318492718 , 7703880232 , 8882090148 , 9220362235</li>
-              <li>info.vgsh@gmail.com</li>
-              <li>D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092</li>
+              <li>Call: {institute?.contact}</li>
+              <li>{institute?.email}</li>
+              <li>{institute?.address}</li>
             </ul>
           </div>
         </div>

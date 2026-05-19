@@ -229,19 +229,8 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 9am to 6pm</p>
-                                <p><a href="tel:9318492718" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-9318492718
-                                </a></p>
-                                <p>
-                                    <a href="tel:7703880232" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                        +91-7703880232
-                                    </a>
-                                </p>
-                                <p> <a href="tel:8882090148" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-8882090148
-                                </a></p>
-                                <p> <a href="tel:9220362235" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-9220362235
+                                <p><a href={`tel:${institute?.contact}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-{institute?.contact}
                                 </a></p>
                             </div>
 
@@ -329,7 +318,7 @@ export default function ContactUsPage() {
                                             name="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
-                                            placeholder=" info.vgsh@gmail.com"
+                                            placeholder={institute?.email || ''}
                                             className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
                                         />
                                         {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>}

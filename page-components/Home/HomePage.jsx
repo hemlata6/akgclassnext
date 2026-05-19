@@ -18,6 +18,7 @@ import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
 import FacultyAndStatsSection from './sections/FacultySection';
 import ContactSupportSection from './sections/ContactSupportSection';
+import VideoHighlight from './sections/VideoHighlight';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -39,11 +40,12 @@ export default function HomePage() {
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
       <PromoBanners />
       {/* <HeroSection onExploreClick={handleScrollToCourses} /> */}
-      <FacultyAndStatsSection />
       {/* <WhyChooseUs /> */}
       {/* <AboutSection /> */}
       <CoursesSection />
       <BookStore />
+      <VideoHighlight />
+      <FacultyAndStatsSection />
       {/* <MarathonGallery /> */}
       <StudentGallery />
       <FreeResources />
