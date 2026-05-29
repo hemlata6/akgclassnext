@@ -8,8 +8,8 @@ import { useTheme } from '../../config/ThemeContext';
 import SignupModal from './SignupModal';
 
 const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
-  const { login, stateList} = useAuth();
-  const { setStudentAuth, studentData, updateStudentData, authToken} = useStudent();
+  const { login, stateList } = useAuth();
+  const { setStudentAuth, studentData, updateStudentData, authToken } = useStudent();
   const { theme } = useTheme();
   const [formData, setFormData] = useState({
     phone: '',
@@ -29,7 +29,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
     zipCode: '',
     address: '',
     stateName: '',
-    cityId: '',
+    // cityId: '',
     cityName: ''
   });
   const [addressErrors, setAddressErrors] = useState({});
@@ -94,7 +94,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
       newErrors.stateName = 'State is required';
     }
 
-    if (!addressForm.cityId) {
+    if (!addressForm.cityName) {
       newErrors.cityName = 'City is required';
     }
 
@@ -115,7 +115,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
       zipCode: '',
       address: '',
       stateName: '',
-      cityId: '',
+      // cityId: '',
       cityName: ''
     });
     setAddressErrors({});
@@ -131,8 +131,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
     setIsSavingAddress(true);
 
     try {
-      const fullAddress = `${addressForm.houseNumber.trim()}, ${addressForm.zipCode.trim()}, ${addressForm.address.trim()}`;
-      
+      const fullAddress = `${addressForm.houseNumber.trim()}, ${addressForm.address.trim()}, ${addressForm.cityName.trim()}, ${addressForm.stateName.trim()}, ${addressForm.zipCode.trim()}`;
+
       const body = {
         firstName: studentData?.firstName || '',
         lastName: studentData?.lastName || studentData?.firstName,
@@ -140,7 +140,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
         email: studentData?.email || '',
         dob: studentData?.dob ? new Date(studentData.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         address: fullAddress,
-        cityId: Number(addressForm.cityId),
+        cityId: null,
         bio: studentData?.bio || studentData?.firstName,
         gender: (studentData?.gender || 'male').toLowerCase(),
         zipCode: addressForm.zipCode.trim(),
@@ -151,7 +151,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
       if (response?.errorCode === 0 || response?.status) {
         updateStudentData({
           address: body.address,
-          cityId: Number(addressForm.cityId),
+          cityId: null,
         });
         setAddressErrors({});
         setShowAddressDialog(false);
@@ -286,14 +286,14 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
           // handleClose();
           // onSignupClick();
 
-           // Check if address is empty
-            // if (studentData?.address || studentData?.address.trim() === '') {
-            //   setShowAddressDialog(true);
-            // }
+          // Check if address is empty
+          // if (studentData?.address || studentData?.address.trim() === '') {
+          //   setShowAddressDialog(true);
+          // }
 
           setOpenSignUpModal(true);
         } else {
-          
+
           setErrors({ submit: verifyResponse.message || 'OTP verification failed. Please try again.' });
         }
       } else {
@@ -550,7 +550,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
         </div>
       </div>
 
-      <SignupModal 
+      <SignupModal
         isOpen={openSignUpModel}
         onClose={() => setOpenSignUpModal(false)}
         handleLoginClose={handleClose}
@@ -611,47 +611,55 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
                 {addressErrors.address && <p className="mt-2 text-xs text-red-600">{addressErrors.address}</p>}
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">State</label>
-                <select
-                  value={addressForm.stateName}
-                  onChange={(e) => {
-                    handleAddressInputChange('stateName', e.target.value);
-                    handleAddressInputChange('cityName', '');
-                    handleAddressInputChange('cityId', '');
-                  }}
-                  required
-                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                >
-                  <option value="">Select your state</option>
-                  {stateList.map((state) => (
-                    <option key={state.name} value={state.name}>{state.name}</option>
-                  ))}
-                </select>
-                {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
-              </div>
-
-              {addressForm.stateName && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* State */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">City</label>
-                  <select
-                    value={addressForm.cityId}
-                    onChange={(e) => {
-                      const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
-                      handleAddressInputChange('cityId', e.target.value);
-                      handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
-                    }}
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    State
+                  </label>
+
+                  <input
+                    type="text"
+                    value={addressForm.stateName}
+                    onChange={(e) =>
+                      handleAddressInputChange('stateName', e.target.value)
+                    }
                     required
-                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                  >
-                    <option value="">Select your city</option>
-                    {(stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
-                      <option key={city.id} value={city.id}>{city.city}</option>
-                    ))}
-                  </select>
-                  {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter your state"
+                  />
+
+                  {addressErrors.stateName && (
+                    <p className="mt-2 text-xs text-red-600">
+                      {addressErrors.stateName}
+                    </p>
+                  )}
                 </div>
-              )}
+
+                {/* City */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    City
+                  </label>
+
+                  <input
+                    type="text"
+                    value={addressForm.cityName}
+                    onChange={(e) =>
+                      handleAddressInputChange('cityName', e.target.value)
+                    }
+                    required
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter your city"
+                  />
+
+                  {addressErrors.cityName && (
+                    <p className="mt-2 text-xs text-red-600">
+                      {addressErrors.cityName}
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {addressErrors.submit && (
                 <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">

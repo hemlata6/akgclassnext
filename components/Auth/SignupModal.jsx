@@ -17,9 +17,11 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     zipCode: '',
     address: '',
     stateName: '',
-    cityId: '',
+    // cityId: '',
     cityName: '',
   });
+
+  console.log('Address Form State:', addressForm);
   const [errors, setErrors] = useState({});
   const [addressErrors, setAddressErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -111,7 +113,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newAddressErrors.stateName = 'State is required';
     }
 
-    if (!addressForm.cityId) {
+    if (!addressForm.cityName.trim()) {
       newAddressErrors.cityName = 'City is required';
     }
 
@@ -128,7 +130,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     }
 
     try {
-      const fullAddress = `${addressForm.houseNumber}, ${addressForm.zipCode}, ${addressForm.address}`;
+      const fullAddress = `${addressForm.houseNumber}, ${addressForm.address}, ${addressForm.cityName}, ${addressForm.stateName}, ${addressForm.zipCode}`;
 
       const registrationBody = {
         contact: tempSignupData?.phone,
@@ -138,7 +140,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         instId: instId,
         password: 123456,
         gender: "male",
-        cityId: addressForm.cityId,
+        cityId: null,
         address: fullAddress,
         userName: `${formData.firstname} ${formData.lastname}`,
       };
@@ -409,43 +411,44 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="grid grid-cols-2 gap-4">
             {/* State */}
             <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">State</label>
-              <select
+              <label className="block text-sm font-semibold text-slate-700">
+                State
+              </label>
+              <input
+                type="text"
                 value={addressForm.stateName}
-                onChange={(e) => {
-                  handleAddressInputChange('stateName', e.target.value);
-                  handleAddressInputChange('cityName', '');
-                  handleAddressInputChange('cityId', '');
-                }}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-              >
-                <option value="">Select state</option>
-                {stateList && stateList.map((state) => (
-                  <option key={state.name} value={state.name}>{state.name}</option>
-                ))}
-              </select>
-              {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
+                onChange={(e) =>
+                  handleAddressInputChange('stateName', e.target.value)
+                }
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter state"
+              />
+              {addressErrors.stateName && (
+                <p className="mt-2 text-xs text-red-600">
+                  {addressErrors.stateName}
+                </p>
+              )}
             </div>
 
             {/* City */}
             <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">City</label>
-              <select
-                value={addressForm.cityId}
-                onChange={(e) => {
-                  const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
-                  handleAddressInputChange('cityId', e.target.value);
-                  handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
-                }}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                disabled={!addressForm.stateName}
-              >
-                <option value="">Select city</option>
-                {(stateList && stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
-                  <option key={city.id} value={city.id}>{city.city}</option>
-                ))}
-              </select>
-              {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
+              <label className="block text-sm font-semibold text-slate-700">
+                City
+              </label>
+              <input
+                type="text"
+                value={addressForm.cityName}
+                onChange={(e) =>
+                  handleAddressInputChange('cityName', e.target.value)
+                }
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter city"
+              />
+              {addressErrors.cityName && (
+                <p className="mt-2 text-xs text-red-600">
+                  {addressErrors.cityName}
+                </p>
+              )}
             </div>
           </div>
 
@@ -467,7 +470,17 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="pt-1">
             <button
               type="submit"
-              disabled={isLoading || !formData.firstname.trim() || !formData.lastname.trim() || !formData.email.trim() || !addressForm.houseNumber.trim() || !addressForm.zipCode.trim() || !addressForm.address.trim() || !addressForm.stateName || !addressForm.cityId}
+              disabled={
+                isLoading ||
+                !formData.firstname.trim() ||
+                !formData.lastname.trim() ||
+                !formData.email.trim() ||
+                !addressForm.houseNumber.trim() ||
+                !addressForm.zipCode.trim() ||
+                !addressForm.address.trim() ||
+                !addressForm.stateName.trim() ||
+                !addressForm.cityName.trim()
+              }
               className={`group relative w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
             >
               {isLoading ? (
