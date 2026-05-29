@@ -21,7 +21,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     cityName: '',
   });
 
-  console.log('Address Form State:', addressForm);
+  // console.log('Address Form State:', addressForm);
   const [errors, setErrors] = useState({});
   const [addressErrors, setAddressErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
