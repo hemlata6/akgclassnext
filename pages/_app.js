@@ -58,14 +58,14 @@ function MyApp({ Component, pageProps }) {
           {/* Announcement Modal */}
           {showAnnouncementModal && announcements.length > 0 && announcements[0]?.image && (
             <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden">
+              <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden">
                 <div className="relative">
                   {/* Close Button */}
                   <button
                     onClick={() => setShowAnnouncementModal(false)}
-                    className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 shadow-lg transition-all hover:scale-110"
+                    className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-1 shadow-lg transition-all hover:scale-110"
                   >
-                    <Icons.X size={24} className="text-slate-900" />
+                    <Icons.X size={10} className="text-slate-900" />
                   </button>
 
                   {/* Image */}

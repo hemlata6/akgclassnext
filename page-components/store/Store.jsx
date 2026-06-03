@@ -1392,7 +1392,7 @@ const Store = () => {
 
                         {/* Left Sidebar - Filters (Desktop Only) */}
                         <div className="hidden lg:block w-full lg:w-72 flex-shrink-0">
-                            <div className="bg-white rounded-2xl shadow-lg p-5 border-2 border-indigo-100 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ borderLeft: `5px solid ${primaryColor}` }}>
+                            <div className="bg-white rounded-2xl shadow-lg p-5 border-2 border-indigo-100 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ borderLeft: `1px solid ${primaryColor}` }}>
                                 {(selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting || searchTerm) && (
                                     <div className="mb-4 pb-4 border-b-2" style={{ borderColor: `${primaryColor}40` }}>
                                         <button
@@ -1428,7 +1428,7 @@ const Store = () => {
                                                 className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
                                                 style={{
                                                     backgroundColor: selectedDomain?.id === domain.id ? `${primaryColor}15` : 'transparent',
-                                                    border: `2px solid ${selectedDomain?.id === domain.id ? primaryColor : 'transparent'}`,
+                                                    border: `1px solid ${selectedDomain?.id === domain.id ? primaryColor : 'transparent'}`,
                                                     color: selectedDomain?.id === domain.id ? primaryColor : '#666'
                                                 }}
                                             >
@@ -1704,198 +1704,323 @@ const Store = () => {
                             >
                                 {filteredCourses?.length > 0 && (
                                     <div className="mb-5">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5">
-                                            {filteredCourses.map((item) => (
-                                                <div
-                                                    onClick={() => handleCardClick(item)}
-                                                    key={item.id}
-                                                    className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
-                                                        ? 'border-amber-200 hover:border-amber-400'
-                                                        : 'border-indigo-100 hover:border-indigo-400'
-                                                        }`}
-                                                >
-                                                    {/* Course Image with Overlay */}
-                                                    <div className="relative w-full overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                        <img
-                                                            src={Endpoints?.mediaBaseUrl + item.logo}
-                                                            alt={item.title}
-                                                            className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
-                                                        />
-                                                    </div>
-
-                                                    {/* Course Content */}
-                                                    <div className="p-2.5 flex-1 flex flex-col">
-                                                        <div className="flex items-start justify-between gap-1.5 mb-1">
-                                                            <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-indigo-700`}>
-                                                                {item.title}
-                                                            </h3>
-                                                        </div>
-
-                                                        {/* Tags */}
-                                                        {/* {item.tags && item.tags.length > 0 && (
-                                                            <div className="flex flex-wrap gap-1 mb-2">
-                                                                {item.tags.slice(0, 2).map((tag) => (
-                                                                    <span
-                                                                        key={tag.id}
-                                                                        className="inline-block px-1.5 py-0.5 bg-emerald-100 text-emerald-700 text-[10px] font-medium rounded-full"
-                                                                    >
-                                                                        {tag.tag}
-                                                                    </span>
-                                                                ))}
-                                                                {item.tags.length > 2 && (
-                                                                    <span className="inline-block px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] font-medium rounded-full">
-                                                                        +{item.tags.length - 2}
-                                                                    </span>
-                                                                )}
+                                        {selectedTag ? (
+                                            <>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5">
+                                                    {filteredCourses.map((item) => (
+                                                        <div
+                                                            onClick={() => handleCardClick(item)}
+                                                            key={item.id}
+                                                            className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
+                                                                ? 'border-amber-200 hover:border-amber-400'
+                                                                : 'border-indigo-100 hover:border-indigo-400'
+                                                                }`}
+                                                        >
+                                                            {/* Course Image with Overlay */}
+                                                            <div className="relative w-full overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                                <img
+                                                                    src={Endpoints?.mediaBaseUrl + item.logo}
+                                                                    alt={item.title}
+                                                                    className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
+                                                                />
                                                             </div>
-                                                        )} */}
 
-                                                        <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
-                                                            {truncateDescription(item?.shortDescription)}
-                                                            {item?.shortDescription?.length > 100 && (
-                                                                <button
-                                                                    onClick={(e) => {
-                                                                        e.stopPropagation();
-                                                                        toggleExpandDescription(item?.shortDescription);
-                                                                    }}
-                                                                    className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
-                                                                >
-                                                                    more
-                                                                </button>
-                                                            )}
-                                                        </p>
+                                                            {/* Course Content */}
+                                                            <div className="p-2.5 flex-1 flex flex-col">
+                                                                <div className="flex items-start justify-between gap-1.5 mb-1">
+                                                                    <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-indigo-700`}>
+                                                                        {item.title}
+                                                                    </h3>
+                                                                </div>
 
-                                                        {/* Pricing Section */}
-                                                        <div className="mb-2 mt-auto">
-                                                            {(() => {
-                                                                const cartItem = cartCourses.find(c => c.id === item.id);
+                                                                <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
+                                                                    {truncateDescription(item?.shortDescription)}
+                                                                    {item?.shortDescription?.length > 100 && (
+                                                                        <button
+                                                                            onClick={(e) => {
+                                                                                e.stopPropagation();
+                                                                                toggleExpandDescription(item?.shortDescription);
+                                                                            }}
+                                                                            className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
+                                                                        >
+                                                                            more
+                                                                        </button>
+                                                                    )}
+                                                                </p>
 
-                                                                const getPriceInfo = () => {
-                                                                    if (item?.coursePricing && item.coursePricing.length > 0) {
-                                                                        let minOriginalPrice = Infinity;
-                                                                        let minFinalPrice = Infinity;
-                                                                        let maxDiscount = 0;
+                                                                {/* Pricing Section */}
+                                                                <div className="mb-2 mt-auto">
+                                                                    {(() => {
+                                                                        const cartItem = cartCourses.find(c => c.id === item.id);
 
-                                                                        item.coursePricing.forEach(pricing => {
-                                                                            const originalPrice = pricing.price;
-                                                                            const discount = pricing.discount || 0;
-                                                                            const finalPrice = discount > 0
-                                                                                ? originalPrice - (originalPrice * (discount / 100))
-                                                                                : originalPrice;
+                                                                        const getPriceInfo = () => {
+                                                                            if (item?.coursePricing && item.coursePricing.length > 0) {
+                                                                                let minOriginalPrice = Infinity;
+                                                                                let minFinalPrice = Infinity;
+                                                                                let maxDiscount = 0;
 
-                                                                            if (finalPrice < minFinalPrice) {
-                                                                                minFinalPrice = finalPrice;
-                                                                                minOriginalPrice = originalPrice;
-                                                                                maxDiscount = discount;
+                                                                                item.coursePricing.forEach(pricing => {
+                                                                                    const originalPrice = pricing.price;
+                                                                                    const discount = pricing.discount || 0;
+                                                                                    const finalPrice = discount > 0
+                                                                                        ? originalPrice - (originalPrice * (discount / 100))
+                                                                                        : originalPrice;
+
+                                                                                    if (finalPrice < minFinalPrice) {
+                                                                                        minFinalPrice = finalPrice;
+                                                                                        minOriginalPrice = originalPrice;
+                                                                                        maxDiscount = discount;
+                                                                                    }
+                                                                                });
+
+                                                                                return {
+                                                                                    originalPrice: minOriginalPrice,
+                                                                                    finalPrice: minFinalPrice,
+                                                                                    discount: maxDiscount
+                                                                                };
                                                                             }
-                                                                        });
-
-                                                                        return {
-                                                                            originalPrice: minOriginalPrice,
-                                                                            finalPrice: minFinalPrice,
-                                                                            discount: maxDiscount
+                                                                            return { originalPrice: 0, finalPrice: 0, discount: 0 };
                                                                         };
-                                                                    }
-                                                                    return { originalPrice: 0, finalPrice: 0, discount: 0 };
-                                                                };
 
-                                                                const priceInfo = getPriceInfo();
+                                                                        const priceInfo = getPriceInfo();
 
-                                                                if (cartItem && cartItem.finalPrice !== undefined && cartItem.finalPrice !== null) {
-                                                                    // Get discount info from cart item's selected pricing
-                                                                    const cartPricing = item?.coursePricing?.find(p => p.id === cartItem.pricingId);
-                                                                    const discount = cartPricing?.discount || 0;
-                                                                    const originalPrice = cartPricing?.price || parseFloat(cartItem.finalPrice) * 1.3;
+                                                                        if (cartItem && cartItem.finalPrice !== undefined && cartItem.finalPrice !== null) {
+                                                                            const cartPricing = item?.coursePricing?.find(p => p.id === cartItem.pricingId);
+                                                                            const discount = cartPricing?.discount || 0;
+                                                                            const originalPrice = cartPricing?.price || parseFloat(cartItem.finalPrice) * 1.3;
 
-                                                                    return (
-                                                                        <div className="space-y-1">
-                                                                            <div className="flex items-center gap-1.5 flex-wrap">
-                                                                                <span className="text-[10px] text-gray-500 italic">Starting</span>
-                                                                                <span className={`text-sm font-bold`} style={{ color: primaryColor }}>
-                                                                                    ₹{parseFloat(cartItem.finalPrice).toFixed(2)}
-                                                                                </span>
-                                                                                {discount > 0 && (
-                                                                                    <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">
-                                                                                        {discount}% OFF
-                                                                                    </span>
-                                                                                )}
-                                                                            </div>
-                                                                            {discount > 0 && (
-                                                                                <span className="text-[9px] text-gray-400 line-through block">
-                                                                                    ₹{originalPrice.toFixed(2)}
-                                                                                </span>
-                                                                            )}
-                                                                        </div>
-                                                                    );
-                                                                } else {
-                                                                    return (
-                                                                        <div className="space-y-1">
-                                                                            <div className="flex items-center gap-1.5 flex-wrap">
-                                                                                <span className="text-[10px] text-gray-500 italic">Starting</span>
-                                                                                <span className={`text-sm font-bold`} style={{ color: priceInfo.finalPrice === 0 ? '#10b981' : primaryColor }}>
-                                                                                    {priceInfo.finalPrice === 0 ? '0' : `₹${priceInfo.finalPrice.toFixed(2)}`}
-                                                                                </span>
-                                                                                {priceInfo.discount > 0 && (
-                                                                                    <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">
-                                                                                        {priceInfo.discount}% OFF
-                                                                                    </span>
-                                                                                )}
-                                                                            </div>
-                                                                            {priceInfo.discount > 0 && (
-                                                                                <span className="text-[9px] text-gray-400 line-through block">
-                                                                                    ₹{priceInfo.originalPrice.toFixed(2)}
-                                                                                </span>
-                                                                            )}
-                                                                        </div>
-                                                                    );
-                                                                }
-                                                            })()}
+                                                                            return (
+                                                                                <div className="space-y-1">
+                                                                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                                                                        <span className="text-[10px] text-gray-500 italic">Starting</span>
+                                                                                        <span className={`text-sm font-bold`} style={{ color: primaryColor }}>
+                                                                                            ₹{parseFloat(cartItem.finalPrice).toFixed(2)}
+                                                                                        </span>
+                                                                                        {discount > 0 && (
+                                                                                            <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">
+                                                                                                {discount}% OFF
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    {discount > 0 && (
+                                                                                        <span className="text-[9px] text-gray-400 line-through block">
+                                                                                            ₹{originalPrice.toFixed(2)}
+                                                                                        </span>
+                                                                                    )}
+                                                                                </div>
+                                                                            );
+                                                                        } else {
+                                                                            return (
+                                                                                <div className="space-y-1">
+                                                                                    <div className="flex items-center gap-1.5 flex-wrap">
+                                                                                        <span className="text-[10px] text-gray-500 italic">Starting</span>
+                                                                                        <span className={`text-sm font-bold`} style={{ color: priceInfo.finalPrice === 0 ? '#10b981' : primaryColor }}>
+                                                                                            {priceInfo.finalPrice === 0 ? '0' : `₹${priceInfo.finalPrice.toFixed(2)}`}
+                                                                                        </span>
+                                                                                        {priceInfo.discount > 0 && (
+                                                                                            <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">
+                                                                                                {priceInfo.discount}% OFF
+                                                                                            </span>
+                                                                                        )}
+                                                                                    </div>
+                                                                                    {priceInfo.discount > 0 && (
+                                                                                        <span className="text-[9px] text-gray-400 line-through block">
+                                                                                            ₹{priceInfo.originalPrice.toFixed(2)}
+                                                                                        </span>
+                                                                                    )}
+                                                                                </div>
+                                                                            );
+                                                                        }
+                                                                    })()}
+                                                                </div>
+
+                                                                {/* Action Buttons */}
+                                                                <div className="flex gap-2">
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleCardClick(item);
+                                                                        }}
+                                                                        className={`flex-1 border-2 font-semibold py-1.5 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 hover:scale-105`}
+                                                                        style={{
+                                                                            borderColor: primaryColor,
+                                                                            color: primaryColor,
+                                                                            backgroundColor: `${primaryColor}10`
+                                                                        }}
+                                                                    >
+                                                                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                        </svg>
+                                                                        Explore
+                                                                    </button>
+                                                                    <button
+                                                                        onClick={(e) => {
+                                                                            e.stopPropagation();
+                                                                            handleAddtoCart(item);
+                                                                        }}
+                                                                        className={`flex-1 font-semibold py-2 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 transform hover:scale-105 border-2 ${cartCourses.some(a => a.id === item?.id)
+                                                                            ? 'bg-white border-red-500 text-red-600 hover:bg-red-50 shadow-sm hover:shadow-red-200/30'
+                                                                            : 'text-white border-transparent shadow-lg hover:shadow-lg'
+                                                                            }`}
+                                                                        style={cartCourses.some(a => a.id === item?.id) ? {} : {
+                                                                            backgroundColor: primaryColor,
+                                                                            boxShadow: `0 10px 15px -3px ${primaryColor}40`
+                                                                        }}
+                                                                    >
+                                                                        <ShoppingCart className="h-4 w-4" />
+                                                                        {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to cart"}
+                                                                    </button>
+                                                                </div>
+                                                            </div>
                                                         </div>
-
-                                                        {/* Action Buttons */}
-                                                        <div className="flex gap-2">
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    handleCardClick(item);
-                                                                }}
-                                                                className={`flex-1 border-2 font-semibold py-1.5 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 hover:scale-105`}
-                                                                style={{
-                                                                    borderColor: primaryColor,
-                                                                    color: primaryColor,
-                                                                    backgroundColor: `${primaryColor}10`
-                                                                }}
-                                                            >
-                                                                <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                                </svg>
-                                                                Explore
-                                                            </button>
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    handleAddtoCart(item);
-                                                                }}
-                                                                className={`flex-1 font-semibold py-2 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 transform hover:scale-105 border-2 ${cartCourses.some(a => a.id === item?.id)
-                                                                    ? 'bg-white border-red-500 text-red-600 hover:bg-red-50 shadow-sm hover:shadow-red-200/30'
-                                                                    : 'text-white border-transparent shadow-lg hover:shadow-lg'
-                                                                    }`}
-                                                                style={cartCourses.some(a => a.id === item?.id) ? {} : {
-                                                                    backgroundColor: primaryColor,
-                                                                    boxShadow: `0 10px 15px -3px ${primaryColor}40`
-                                                                }}
-                                                            >
-                                                                <ShoppingCart className="h-4 w-4" />
-                                                                {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to cart"}
-                                                            </button>
-                                                        </div>
-                                                    </div>
+                                                    ))}
                                                 </div>
-                                            ))}
-                                        </div>
-
-                                        {/* View More Button - Removed */}
+                                            </>
+                                        ) : (
+                                            <>
+                                                {tags.map((tag, index) => {
+                                                    const tagCourses = filteredCourses.filter(course => {
+                                                        if (course.tags && Array.isArray(course.tags)) {
+                                                            return course.tags.some(t => t.id === tag.id);
+                                                        }
+                                                        if (course.tag && Array.isArray(course.tag)) {
+                                                            return course.tag.some(t => t.id === tag.id);
+                                                        }
+                                                        if (course.tagIds && Array.isArray(course.tagIds)) {
+                                                            return course.tagIds.includes(tag.id);
+                                                        }
+                                                        return false;
+                                                    });
+                                                    if (tagCourses.length === 0) return null;
+                                                    return (
+                                                        <div key={tag.id} className="mb-6">
+                                                            <div className="flex justify-center items-center gap-2 mb-3 pb-2" style={{ borderBottom: `1px solid ${primaryColor}` }}>
+                                                                <div className="w-fit h-8 rounded-lg flex items-center justify-start p-2 text-white text-sm font-bold" style={{ backgroundColor: primaryColor }}>
+                                                                    {tag.tag} ({tag?.reference})
+                                                                </div>
+                                                                {/* <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
+                                                                    {tag.tag}
+                                                                </h3> */}
+                                                            </div>
+                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5">
+                                                                {tagCourses.map((item) => (
+                                                                    <div
+                                                                        onClick={() => handleCardClick(item)}
+                                                                        key={item.id}
+                                                                        className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
+                                                                            ? 'border-amber-200 hover:border-amber-400'
+                                                                            : 'border-indigo-100 hover:border-indigo-400'
+                                                                            }`}
+                                                                    >
+                                                                        <div className="relative w-full overflow-hidden bg-gray-50 flex items-center justify-center">
+                                                                            <img
+                                                                                src={Endpoints?.mediaBaseUrl + item.logo}
+                                                                                alt={item.title}
+                                                                                className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
+                                                                            />
+                                                                        </div>
+                                                                        <div className="p-2.5 flex-1 flex flex-col">
+                                                                            <div className="flex items-start justify-between gap-1.5 mb-1">
+                                                                                <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-indigo-700`}>
+                                                                                    {item.title}
+                                                                                </h3>
+                                                                            </div>
+                                                                            <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
+                                                                                {truncateDescription(item?.shortDescription)}
+                                                                                {item?.shortDescription?.length > 100 && (
+                                                                                    <button
+                                                                                        onClick={(e) => {
+                                                                                            e.stopPropagation();
+                                                                                            toggleExpandDescription(item?.shortDescription);
+                                                                                        }}
+                                                                                        className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
+                                                                                    >
+                                                                                        more
+                                                                                    </button>
+                                                                                )}
+                                                                            </p>
+                                                                            <div className="mb-2 mt-auto">
+                                                                                {(() => {
+                                                                                    const cartItem = cartCourses.find(c => c.id === item.id);
+                                                                                    const getPriceInfo = () => {
+                                                                                        if (item?.coursePricing && item.coursePricing.length > 0) {
+                                                                                            let minOriginalPrice = Infinity;
+                                                                                            let minFinalPrice = Infinity;
+                                                                                            let maxDiscount = 0;
+                                                                                            item.coursePricing.forEach(pricing => {
+                                                                                                const originalPrice = pricing.price;
+                                                                                                const discount = pricing.discount || 0;
+                                                                                                const finalPrice = discount > 0 ? originalPrice - (originalPrice * (discount / 100)) : originalPrice;
+                                                                                                if (finalPrice < minFinalPrice) {
+                                                                                                    minFinalPrice = finalPrice;
+                                                                                                    minOriginalPrice = originalPrice;
+                                                                                                    maxDiscount = discount;
+                                                                                                }
+                                                                                            });
+                                                                                            return { originalPrice: minOriginalPrice, finalPrice: minFinalPrice, discount: maxDiscount };
+                                                                                        }
+                                                                                        return { originalPrice: 0, finalPrice: 0, discount: 0 };
+                                                                                    };
+                                                                                    const priceInfo = getPriceInfo();
+                                                                                    if (cartItem && cartItem.finalPrice !== undefined && cartItem.finalPrice !== null) {
+                                                                                        const cartPricing = item?.coursePricing?.find(p => p.id === cartItem.pricingId);
+                                                                                        const discount = cartPricing?.discount || 0;
+                                                                                        const originalPrice = cartPricing?.price || parseFloat(cartItem.finalPrice) * 1.3;
+                                                                                        return (
+                                                                                            <div className="space-y-1">
+                                                                                                <div className="flex items-center gap-1.5 flex-wrap">
+                                                                                                    <span className="text-[10px] text-gray-500 italic">Starting</span>
+                                                                                                    <span className="text-sm font-bold" style={{ color: primaryColor }}>₹{parseFloat(cartItem.finalPrice).toFixed(2)}</span>
+                                                                                                    {discount > 0 && <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">{discount}% OFF</span>}
+                                                                                                </div>
+                                                                                                {discount > 0 && <span className="text-[9px] text-gray-400 line-through block">₹{originalPrice.toFixed(2)}</span>}
+                                                                                            </div>
+                                                                                        );
+                                                                                    } else {
+                                                                                        return (
+                                                                                            <div className="space-y-1">
+                                                                                                <div className="flex items-center gap-1.5 flex-wrap">
+                                                                                                    <span className="text-[10px] text-gray-500 italic">Starting</span>
+                                                                                                    <span className="text-sm font-bold" style={{ color: priceInfo.finalPrice === 0 ? '#10b981' : primaryColor }}>
+                                                                                                        {priceInfo.finalPrice === 0 ? '0' : `₹${priceInfo.finalPrice.toFixed(2)}`}
+                                                                                                    </span>
+                                                                                                    {priceInfo.discount > 0 && <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">{priceInfo.discount}% OFF</span>}
+                                                                                                </div>
+                                                                                                {priceInfo.discount > 0 && <span className="text-[9px] text-gray-400 line-through block">₹{priceInfo.originalPrice.toFixed(2)}</span>}
+                                                                                            </div>
+                                                                                        );
+                                                                                    }
+                                                                                })()}
+                                                                            </div>
+                                                                            <div className="flex gap-2">
+                                                                                <button onClick={(e) => { e.stopPropagation(); handleCardClick(item); }}
+                                                                                    className="flex-1 border-2 font-semibold py-1.5 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 hover:scale-105"
+                                                                                    style={{ borderColor: primaryColor, color: primaryColor, backgroundColor: `${primaryColor}10` }}
+                                                                                >
+                                                                                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                                                                    </svg>
+                                                                                    Explore
+                                                                                </button>
+                                                                                <button onClick={(e) => { e.stopPropagation(); handleAddtoCart(item); }}
+                                                                                    className={`flex-1 font-semibold py-2 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 transform hover:scale-105 border-2 ${cartCourses.some(a => a.id === item?.id) ? 'bg-white border-red-500 text-red-600 hover:bg-red-50 shadow-sm hover:shadow-red-200/30' : 'text-white border-transparent shadow-lg hover:shadow-lg'}`}
+                                                                                    style={cartCourses.some(a => a.id === item?.id) ? {} : { backgroundColor: primaryColor, boxShadow: `0 10px 15px -3px ${primaryColor}40` }}
+                                                                                >
+                                                                                    <ShoppingCart className="h-4 w-4" />
+                                                                                    {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to cart"}
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </>
+                                        )}
                                     </div>
                                 )}
 

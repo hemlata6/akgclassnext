@@ -180,7 +180,7 @@ const FacultyProfile = ({ }) => {
                                     <img
                                         src={facultyImage}
                                         alt={faculty?.name}
-                                        className="w-full h-full object-cover"
+                                        className="w-full h-full object-contain object-center"
                                     />
                                 </div>
                                 {/* Faculty Info Card */}
@@ -244,7 +244,7 @@ const FacultyProfile = ({ }) => {
                 {employeeCourseIds && employeeCourseIds.length > 0 && (
                     <>
                         <CoursesSection employeeCourseId={employeeCourseIds} />
-                        <BookStore employeeCourseId={employeeCourseIds} />
+                        {/* <BookStore employeeCourseId={employeeCourseIds} /> */}
                     </>
                 )}
 
