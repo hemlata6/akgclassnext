@@ -182,7 +182,7 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     const handleShare = async () => {
         const baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
             ? 'http://localhost:3000'
-            : 'https://caclassestest.netlify.app';
+            : 'https://nextgencaacademy.com';
 
         const shareUrl = `${baseUrl}/blog/${cId}/${slug}`;
 

@@ -23,6 +23,8 @@ export const BlogSection = () => {
             const courses = coursesResponse?.courses || [];
             const blogCourses = courses.filter(course => course?.active === true && course?.currentAffair === true);
 
+            // console.log('blogCourses', blogCourses);
+
             if (blogCourses.length > 0) {
                 const firstCourse = blogCourses[0];
                 setCourseId(firstCourse.id);
@@ -36,8 +38,11 @@ export const BlogSection = () => {
                 };
 
                 const response = await Network.fetchAllContentFromCourse(body);
+                console.log('Blogs response', response);
                 if (response?.errorCode === 0 && response?.contentList) {
-                    const blogList = response.contentList.filter(item => item.entityType === 'blog');
+                    const blogList = response.contentList.filter(
+                        item => item.entityType === 'blog' && item.active === true
+                    );
                     setBlogs(blogList.slice(0, 4)); // Ensure max 4 blogs
                 }
             }
@@ -78,7 +83,7 @@ export const BlogSection = () => {
     }
 
     // console.log('blogs', blogs);
-    
+
 
     if (blogs.length === 0) {
         return null; // Don't show section if no blogs

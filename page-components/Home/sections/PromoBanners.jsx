@@ -11,11 +11,11 @@ export const PromoBanners = () => {
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([
-        {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=NextGenCA",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=NextGenCA",
-            alt: "Live Batch"
-        },
+        // {
+        //     mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=NextGenCA",
+        //     desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=NextGenCA",
+        //     alt: "Live Batch"
+        // },
         // {
         //     mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
         //     desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA Jeyasree Krishnamoorthy",
@@ -35,7 +35,11 @@ export const PromoBanners = () => {
         try {
             const response = await Network.getBannersApi(instId);
             if (response && response.banners && response.banners.length > 0) {
-                const activeBanners = response.banners.filter(banner => banner.active);
+                const activeBanners = response.banners.filter(
+                    banner =>
+                        banner.active === true &&
+                        (!banner.group || banner.group.trim() === '')
+                );
 
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({
@@ -44,6 +48,7 @@ export const PromoBanners = () => {
                         desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
                         alt: banner.title || 'Banner'
                     }));
+
                     setSlides(bannerSlides);
                 }
             }
@@ -126,7 +131,7 @@ export const PromoBanners = () => {
 
                         return (
                             <div
-                            onClick={() => handleClickOnImage(slide)}
+                                onClick={() => handleClickOnImage(slide)}
                                 key={index}
                                 className={`
                 flex-shrink-0
