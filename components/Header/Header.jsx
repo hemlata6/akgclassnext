@@ -17,7 +17,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
   const theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
-  const {institute} = useAuth();
+  const { institute } = useAuth();
 
 
   useEffect(() => {
@@ -484,6 +484,18 @@ export const Header = ({ cartCount }) => {
 
               <div
                 className="relative group h-full flex items-center"
+                onMouseEnter={() => setHoveredMenu('About Us')}
+                onMouseLeave={() => setHoveredMenu(null)}
+              >
+                <button onClick={() => router.push('/about-rca')} className="hover:text-slate-900 transition-colors whitespace-nowrap font-semibold text-slate-600 text-sm flex items-center gap-1 py-4">About Us <Icons.ChevronDown className="w-3 h-3" /></button>
+                <div className={`absolute top-full left-0 w-56 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-hidden transition-all duration-300 ${hoveredMenu === 'About Us' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
+                  <button onClick={() => { router.push('/about-rca'); setHoveredMenu(null); }} className="block w-full text-left px-4 py-3 text-sm text-slate-700 hover:bg-slate-50">About RCA</button>
+                  <button onClick={() => { router.push('/the-team'); setHoveredMenu(null); }} className="block w-full text-left px-4 py-3 text-sm text-slate-700 hover:bg-slate-50">The Team</button>
+                </div>
+              </div>
+
+              {/* <div
+                className="relative group h-full flex items-center"
                 onMouseEnter={() => {
                   setHoveredMenu('Lectures');
                   fetchDomainsForMenu();
@@ -508,7 +520,7 @@ export const Header = ({ cartCount }) => {
                     </div>
                   ) : (
                     <>
-                      {/* BACK BUTTON */}
+
                       {currentLevel === 'second' && (
                         <button
                           onClick={handleBackToFirstLevel}
@@ -518,7 +530,7 @@ export const Header = ({ cartCount }) => {
                         </button>
                       )}
 
-                      {/* FIRST LEVEL */}
+
                       {currentLevel === 'first' &&
                         firstLevelDomains.map((domain) => (
                           <button
@@ -530,7 +542,7 @@ export const Header = ({ cartCount }) => {
                           </button>
                         ))}
 
-                      {/* SECOND LEVEL */}
+
                       {currentLevel === 'second' &&
                         secondLevelDomains.map((domain) => (
                           <button
@@ -544,7 +556,7 @@ export const Header = ({ cartCount }) => {
                     </>
                   )}
                 </div>
-              </div>
+              </div> */}
 
 
               {/* <div
@@ -653,6 +665,9 @@ export const Header = ({ cartCount }) => {
 
               <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Free Resources</button>
 
+              <button onClick={() => router.push('/hall-of-fame')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Hall of Fame</button>
+
+
               <button onClick={() => router.push('/blog')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Blog</button>
 
               {/* <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button> */}
@@ -744,8 +759,29 @@ export const Header = ({ cartCount }) => {
               </div>
               <div className="flex flex-col gap-1">
                 <button onClick={() => router.push('/')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Home</button>
+                <div>
+                  <button
+                    onClick={() => {
+                      if (openMobileSubmenu === 'about') {
+                        setOpenMobileSubmenu(null);
+                      } else {
+                        setOpenMobileSubmenu('about');
+                      }
+                    }}
+                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
+                  >
+                    <span>About Us</span>
+                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'about' ? 'rotate-180' : ''}`} />
+                  </button>
+                  {openMobileSubmenu === 'about' && (
+                    <div className="mt-1">
+                      <button onClick={() => { router.push('/about-rca'); setMobileMenuOpen(false); setOpenMobileSubmenu(null); }} className="block w-full text-left font-medium text-slate-600 py-3 px-4 hover:bg-slate-50 rounded-md">About RCA</button>
+                      <button onClick={() => { router.push('/the-team'); setMobileMenuOpen(false); setOpenMobileSubmenu(null); }} className="block w-full text-left font-medium text-slate-600 py-3 px-4 hover:bg-slate-50 rounded-md">The Team</button>
+                    </div>
+                  )}
+                </div>
                 {/* <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button> */}
-                <div className="">
+                {/* <div className="">
                   <button
                     onClick={() => {
                       if (openMobileSubmenu === 'courses') {
@@ -832,7 +868,7 @@ export const Header = ({ cartCount }) => {
                       )}
                     </div>
                   )}
-                </div>
+                </div> */}
 
                 {/* <div className="">
                   <button
@@ -974,9 +1010,13 @@ export const Header = ({ cartCount }) => {
 
                 <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
 
-                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+                <button onClick={() => router.push('/hall-of-fame')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Hall of Fame</button>
 
-                 <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
+
+
+                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+
+                <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 

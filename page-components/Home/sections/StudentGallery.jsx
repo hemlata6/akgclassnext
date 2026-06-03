@@ -88,81 +88,81 @@ export const StudentGallery = () => {
     };
 
     return (
-       <>
-         <section className="py-12 bg-white border-t border-slate-200">
-            <div className={LAYOUT_PADDING}>
-                <div className="text-center mb-10">
-                    <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Hall of Fame</span>
-                    <h2 className="text-2xl md:text-2xl font-bold text-slate-900 mt-1">Student Wall of Love</h2>
-                </div>
-
-                {loading ? (
-                    <div className="flex justify-center py-8">
-                        <p className="text-slate-500">Loading gallery...</p>
+        <>
+            <section className="py-12 bg-white border-t border-slate-200">
+                <div className={LAYOUT_PADDING}>
+                    <div className="text-center mb-10">
+                        <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Hall of Fame</span>
+                        <h2 className="text-2xl md:text-2xl font-bold text-slate-900 mt-1">Student Wall of Love</h2>
                     </div>
-                ) : (
-                    <div>
-                        {/* Carousel Container */}
-                        <div className="overflow-hidden">
-                            <div
-                                className="flex gap-4 transition-transform duration-500 ease-in-out"
-                                style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
-                                }}
-                            >
-                                {getEffectiveGallery().map((item, idx) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex-shrink-0"
-                                        style={{
-                                            width: `calc((100% - ${(itemsPerView - 1) * 1}rem) / ${itemsPerView})`
-                                        }}
-                                    >
-                                        <div className="gallery-card bg-white shadow-md border border-slate-200 rounded-2xl p-2 hover:shadow-lg transition-shadow">
-                                            <div className={`bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center ${gallery.length === 0 ? 'aspect-[3/4]' : ''}`} style={{ minHeight: '200px' }}>
-                                                <img
-                                                    src={item.img}
-                                                    className="gallery-image w-full h-full object-contain hover:opacity-95 transition-all duration-500"
-                                                    alt={item.title || `Student feedback ${idx + 1}`}
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        e.target.parentElement.innerHTML = '<div class="flex items-center justify-center text-slate-400 p-8">No Image</div>';
-                                                    }}
-                                                />
-                                            </div>
-                                            {item.title && <p className="font-bold text-xs text-slate-900 mt-2 text-center">{item.title}</p>}
-                                            {item.type && <span className="text-[9px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full mt-1 uppercase font-bold block text-center">{item.type}</span>}
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
+
+                    {loading ? (
+                        <div className="flex justify-center py-8">
+                            <p className="text-slate-500">Loading gallery...</p>
                         </div>
-
-                        {/* Navigation Buttons */}
-                        {getEffectiveGallery().length > itemsPerView && (
-                            <div className="flex justify-center items-center gap-4 mt-6">
-                                <button
-                                    onClick={handlePrev}
-                                    disabled={!canGoPrev}
-                                    className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                        }`}
+                    ) : (
+                        <div>
+                            {/* Carousel Container */}
+                            <div className="overflow-hidden">
+                                <div
+                                    className="flex gap-4 transition-transform duration-500 ease-in-out"
+                                    style={{
+                                        transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
+                                    }}
                                 >
-                                    <Icons.ChevronLeft />
-                                </button>
-                                <button
-                                    onClick={handleNext}
-                                    disabled={!canGoNext}
-                                    className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <Icons.ChevronRight />
-                                </button>
+                                    {getEffectiveGallery().map((item, idx) => (
+                                        <div
+                                            key={item.id}
+                                            className="flex-shrink-0"
+                                            style={{
+                                                width: `calc((100% - ${(itemsPerView - 1) * 1}rem) / ${itemsPerView})`
+                                            }}
+                                        >
+                                            <div className="gallery-card bg-white shadow-md border border-slate-200 rounded-2xl p-2 hover:shadow-lg transition-shadow">
+                                                <div className={`bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center ${gallery.length === 0 ? 'aspect-[3/4]' : ''}`} style={{ minHeight: '200px' }}>
+                                                    <img
+                                                        src={item.img}
+                                                        className="gallery-image w-full h-full object-contain hover:opacity-95 transition-all duration-500"
+                                                        alt={item.title || `Student feedback ${idx + 1}`}
+                                                        onError={(e) => {
+                                                            e.target.style.display = 'none';
+                                                            e.target.parentElement.innerHTML = '<div class="flex items-center justify-center text-slate-400 p-8">No Image</div>';
+                                                        }}
+                                                    />
+                                                </div>
+                                                {item.title && <p className="font-bold text-xs text-slate-900 mt-2 text-center">{item.title}</p>}
+                                                {item.type && <span className="text-[9px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full mt-1 uppercase font-bold block text-center">{item.type}</span>}
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                        )}
-                    </div>
-                )}
-            </div>
-            <style jsx>{`
+
+                            {/* Navigation Buttons */}
+                            {getEffectiveGallery().length > itemsPerView && (
+                                <div className="flex justify-center items-center gap-4 mt-6">
+                                    <button
+                                        onClick={handlePrev}
+                                        disabled={!canGoPrev}
+                                        className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
+                                            }`}
+                                    >
+                                        <Icons.ChevronLeft />
+                                    </button>
+                                    <button
+                                        onClick={handleNext}
+                                        disabled={!canGoNext}
+                                        className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
+                                            }`}
+                                    >
+                                        <Icons.ChevronRight />
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+                <style jsx>{`
                 .gallery-card {
                     animation: galleryFloat 4.5s ease-in-out infinite;
                     will-change: transform;
@@ -198,7 +198,7 @@ export const StudentGallery = () => {
                     }
                 }
             `}</style>
-        </section>
-       </>
+            </section>
+        </>
     );
 };

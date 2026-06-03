@@ -8,38 +8,7 @@ export const PromoBanners = () => {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
-    const [slides, setSlides] = useState([
-        {
-            mobileSrc: "https://placehold.co/800x1200/312e81/FFF?text=CA VIVEK GABA",
-            desktopSrc: "https://placehold.co/1200x500/312e81/FFF?text=CA VIVEK GABA",
-            alt: "Live Batch",
-            bg: "bg-indigo-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA ARUN SETIA",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA ARUN SETIA",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CS ANKUSH BANSAL",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CS ANKUSH BANSAL",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CA CS HARSH GUPTA",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CA CS HARSH GUPTA",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        },
-        {
-            mobileSrc: "https://placehold.co/800x1200/1e293b/FFF?text=CS GD SALUJA",
-            desktopSrc: "https://placehold.co/1200x500/1e293b/FFF?text=CS GD SALUJA",
-            alt: "Combo Offer",
-            bg: "bg-slate-900"
-        }
-    ]);
+    const [slides, setSlides] = useState([]);
 
     const totalSlides = slides.length;
 
