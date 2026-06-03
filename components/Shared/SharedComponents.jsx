@@ -30,7 +30,9 @@ export const Footer = () => {
       <div className={LAYOUT_PADDING}>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
           <div className="col-span-2 md:col-span-1">
-            <div className="text-white font-bold text-lg mb-2 flex items-center gap-2">
+            <div
+              onClick={() => window.location.href = "/"}
+              className="text-white font-bold text-lg mb-2 flex items-center gap-2 cursor-pointer">
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
