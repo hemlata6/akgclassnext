@@ -4,10 +4,12 @@ import Layout from '../../../components/Layout';
 import { BlogDetailPage } from '../../../page-components/Blog/BlogDetailPage';
 import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
+import { useAuth } from '@/config/AuthContext';
 
 export default function BlogDetail({ blogData, error }) {
     const router = useRouter();
     const { cId, slug } = router.query;
+     const { institute } = useAuth();
 
     // Prepare SEO data
     const truncateToWords = (text, wordLimit = 50) => {
@@ -52,7 +54,7 @@ export default function BlogDetail({ blogData, error }) {
     return (
         <>
             <Head>
-                <title>{blogTitle} | VG STUDY HUB Blog</title>
+                <title>{`${blogTitle} | ${institute?.institute || "Rishabh Jain"} Blog`}</title>
                 <meta name="description" content={blogDescription} />
 
                 {/* Open Graph / Facebook */}

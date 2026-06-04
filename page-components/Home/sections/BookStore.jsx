@@ -212,15 +212,6 @@ export const BookStore = ({ employeeCourseId }) => {
                     </div>
                     <div className="flex justify-start md:justify-end">
                         <div className="flex items-center gap-4 w-full md:w-auto">
-                            {/* Desktop: Explore Store button with filters */}
-                            {!hasEmployeeCourseSelection && (
-                                <button
-                                    onClick={() => handleExploreMoreClick('books')}
-                                    className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
-                                >
-                                    Explore Store <Icons.ChevronRight size={16} />
-                                </button>
-                            )}
                             {/* Domain Filter */}
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button
@@ -239,6 +230,15 @@ export const BookStore = ({ employeeCourseId }) => {
                                     </button>
                                 ))}
                             </div>
+                            {/* Desktop: Explore Store button with filters */}
+                            {!hasEmployeeCourseSelection && (
+                                <button
+                                    onClick={() => handleExploreMoreClick('books')}
+                                    className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                >
+                                    Explore Store <Icons.ChevronRight size={16} />
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -288,100 +288,120 @@ export const BookStore = ({ employeeCourseId }) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="group flex-shrink-0"
+                                            className="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0"
                                             style={{
-                                                width: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
+                                                width: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`,
+                                                minWidth: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`
                                             }}
                                         >
+                                            {/* Image Area */}
                                             <div
-                                                onClick={() => router.push(`/book/${book.id}`)}
-                                                className="relative bg-slate-50 rounded-lg shadow-md mb-2 overflow-hidden border-l-4 border-emerald-900 transition-transform duration-300 group-hover:-translate-y-1 cursor-pointer"
-                                                style={{
-                                                    aspectRatio: '16/9'
-                                                }}
+                                                onClick={() => router.push(`/course/${course.id}`)}
+                                                className="relative overflow-hidden cursor-pointer"
+                                                style={{ aspectRatio: '1/1' }}
                                             >
-                                                {book.logo ? (
+                                                {course.logo && (
                                                     <img
-                                                        src={`${Endpoints?.mediaBaseUrl}${book.logo}`}
-                                                        alt={book.title}
-                                                        className="w-full h-full object-cover"
-                                                        onError={(e) => {
-                                                            e.target.style.display = 'none';
-                                                            e.target.nextElementSibling.style.display = 'flex';
-                                                        }}
+                                                        src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
+                                                        alt={course.title}
+                                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                                     />
-                                                ) : null}
-                                                <div className="w-full h-full flex flex-col items-center justify-center bg-white p-2 text-center border border-slate-100" style={{ display: book.logo ? 'none' : 'flex' }}>
-                                                    <div className="h-8 w-8 md:h-10 md:w-10 bg-emerald-50 rounded-full flex items-center justify-center text-sm md:text-lg mb-1 md:mb-2">
-                                                        📚
-                                                    </div>
-                                                    <span className="text-[10px] md:text-xs font-bold text-slate-800 leading-tight px-1 line-clamp-3">
-                                                        {book.title}
+                                                )}
+                                                {/* Dark gradient overlay at bottom */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                                                
+                                                {/* Badge - top left */}
+                                                <div className="absolute top-3 left-3 z-10">
+                                                    <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                                                        {course.badge || "New"}
                                                     </span>
                                                 </div>
-                                            </div>
-                                            <div className="flex items-center justify-between px-1">
-                                                <div className="flex items-center gap-1 flex-wrap">
-                                                    {hasDiscount ? (
-                                                        <>
-                                                            <span className="text-[10px] text-slate-400 line-through">
-                                                                ₹{originalPrice.toLocaleString('en-IN')}
-                                                            </span>
-                                                            <span className="text-[8px] font-bold text-green-600 bg-green-50 px-1 py-0.5 rounded">
-                                                                {pricing.discount}% OFF
-                                                            </span>
-                                                            <span className="font-bold text-slate-900 text-sm">
-                                                                {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
-                                                            </span>
-                                                        </>
-                                                    ) : (
-                                                        <span className="font-bold text-slate-900 text-sm">
-                                                            {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
+
+                                                {/* Domain label - bottom left over gradient */}
+                                                <div className="absolute bottom-3 left-3 z-10">
+                                                    {course.domain && Array.isArray(course.domain) && course.domain.length > 0 && (
+                                                        <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-sm border border-white/30 uppercase tracking-wider">
+                                                            {course.domain[0].name}
                                                         </span>
                                                     )}
                                                 </div>
-                                                <div className='flex items-center gap-2'>
-                                                    <button
-                                                        onClick={(e) => {
-                                                            e.stopPropagation();
+                                            </div>
 
-                                                            const isInCart = cartCourses.some(item => item.id === book.id);
-
-                                                            if (isInCart) {
-                                                                // Remove from cart
-                                                                const updatedCart = cartCourses.filter(item => item.id !== book.id);
-                                                                setCartCourses(updatedCart);
-                                                                localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                                                                window.dispatchEvent(new Event('cartUpdated'));
-                                                            } else {
-                                                                // Add to cart via modal
-                                                                setSelectedBook(book);
-                                                                setShowConfigModal(true);
-                                                            }
-                                                        }}
-                                                        className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                                                        style={{
-                                                            backgroundColor: cartCourses.some(item => item.id === book.id) ? '#dc2626' : '#2196F3',
-                                                            transform: cartCourses.some(item => item.id === book.id) ? 'scale(1.1)' : 'scale(1)',
-                                                            boxShadow: cartCourses.some(item => item.id === book.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                        }}
-                                                    >
-                                                        {cartCourses.some(item => item.id === book.id) ? <Icons.X /> : <Icons.Cart />}
-                                                    </button>
-                                                    {cartCourses.some(item => item.id === book.id) && (
+                                            {/* Content Area */}
+                                            <div className="p-4 flex-1 flex flex-col">
+                                                <h3
+                                                    onClick={() => router.push(`/course/${course.id}`)}
+                                                    className="text-sm font-bold text-slate-900 leading-snug mb-3 cursor-pointer hover:text-indigo-700 transition-colors line-clamp-2"
+                                                >
+                                                    {course.title}
+                                                </h3>
+                                                
+                                                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[9px] text-slate-500 font-medium uppercase tracking-wider">Starting Price</span>
+                                                        <div className="flex items-center gap-2 mt-0.5">
+                                                            {hasDiscount ? (
+                                                                <>
+                                                                    <span className="text-xs text-slate-400 line-through font-medium">
+                                                                        ₹{originalPrice.toLocaleString('en-IN')}
+                                                                    </span>
+                                                                    <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
+                                                                        {pricing.discount}% OFF
+                                                                    </span>
+                                                                </>
+                                                            ) : null}
+                                                            <span className="text-lg font-extrabold text-slate-900">
+                                                                {hasDiscount
+                                                                    ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`)
+                                                                    : (originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`)
+                                                                }
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <div className='flex items-center gap-2'>
                                                         <button
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
-                                                                router.push('/cart');
+
+                                                                const isInCart = cartCourses.some(item => item.id === course.id);
+
+                                                                if (isInCart) {
+                                                                    const updatedCart = cartCourses.filter(item => item.id !== course.id);
+                                                                    setCartCourses(updatedCart);
+                                                                    localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+                                                                    window.dispatchEvent(new Event('cartUpdated'));
+                                                                } else {
+                                                                    if (!course.coursePricing || course.coursePricing.length === 0) {
+                                                                        return;
+                                                                    }
+                                                                    setSelectedCourse(course);
+                                                                    setShowConfigModal(true);
+                                                                }
                                                             }}
-                                                            className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
+                                                            className="text-white h-9 w-9 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
                                                             style={{
-                                                                backgroundColor: '#2196F3',
+                                                                backgroundColor: cartCourses.some(item => item.id === course.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
+                                                                transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
+                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                                                             }}
                                                         >
-                                                            View Cart
+                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.X /> : <Icons.Cart />}
                                                         </button>
-                                                    )}
+                                                        {cartCourses.some(item => item.id === course.id) && (
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    router.push('/cart');
+                                                                }}
+                                                                className="h-9 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
+                                                                style={{
+                                                                    backgroundColor: theme?.primary || '#2196F3',
+                                                                }}
+                                                            >
+                                                                View Cart
+                                                            </button>
+                                                        )}
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

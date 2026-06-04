@@ -250,11 +250,11 @@ export const CoursesSection = ({ employeeCourseId }) => {
     return (
         <section id="fr-courses" className="py-12 bg-slate-50 relative overflow-hidden">
             <div className={LAYOUT_PADDING}>
-                <div className="mb-8">
+                <div className="mb-8 md:flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div className="flex items-center justify-between mb-4 gap-2">
-                        <div>
-                            <span className={`${theme.textClass} font-bold tracking-widest text-xs uppercase`}>Our Flagship</span>
-                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured Courses</h2>
+                        <div className="flex flex-col gap-1">
+                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Trending Courses</h2>
+                            <span className={`${theme.textClass} font-medium tracking-widest text-[12px] text-[#8091A8] hidden md:block`}>Learn from India's top expert faculty. Meticulously structured video modules for CA curriculum framework</span>
                         </div>
                         {/* Mobile: Explore Store button next to title */}
                         {
@@ -270,17 +270,6 @@ export const CoursesSection = ({ employeeCourseId }) => {
                     </div>
                     <div className="flex justify-start md:justify-end">
                         <div className="flex items-center gap-4 w-full md:w-auto">
-                            {/* Desktop: Explore Store button with filters */}
-                            {
-                                !hasEmployeeCourseSelection && (
-                                    <button
-                                        onClick={() => handleExploreMoreClick('lecture')}
-                                        className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
-                                    >
-                                        Explore Store <Icons.ChevronRight size={16} />
-                                    </button>
-                                )
-                            }
                             {/* Domain Filter */}
                             <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
                                 <button
@@ -299,6 +288,17 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                     </button>
                                 ))}
                             </div>
+                            {/* Desktop: Explore Store button with filters */}
+                            {
+                                !hasEmployeeCourseSelection && (
+                                    <button
+                                        onClick={() => handleExploreMoreClick('lecture')}
+                                        className={`hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
+                                    >
+                                        Explore Store <Icons.ChevronRight size={16} />
+                                    </button>
+                                )
+                            }
                         </div>
                     </div>
                 </div>
@@ -326,9 +326,9 @@ export const CoursesSection = ({ employeeCourseId }) => {
                         {/* Carousel Container */}
                         <div className="overflow-hidden">
                             <div
-                                className="flex gap-6 transition-transform duration-500 ease-in-out"
+                                className="flex gap-3 transition-transform duration-500 ease-in-out"
                                 style={{
-                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${1.5 / itemsPerView}rem)))`
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${0.75 / itemsPerView}rem)))`
                                 }}
                             >
                                 {filtered.map((course, i) => {
@@ -347,59 +347,74 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="group bg-white rounded-2xl p-3 shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col"
+                                            className="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0"
                                             style={{
-                                                minWidth: `calc((100% - ${(itemsPerView - 1) * 1.5}rem) / ${itemsPerView})`
+                                                width: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`,
+                                                minWidth: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`
                                             }}
                                         >
+                                            {/* Image Area */}
                                             <div
                                                 onClick={() => router.push(`/course/${course.id}`)}
-                                                className={`rounded-xl ${theme.primaryClass} relative overflow-hidden flex items-end p-3 cursor-pointer`}
-                                                style={{ aspectRatio: '16/9' }}
+                                                className="relative overflow-hidden cursor-pointer"
+                                                style={{ aspectRatio: '1/1' }}
                                             >
                                                 {course.logo && (
                                                     <img
                                                         src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
                                                         alt={course.title}
-                                                        className="absolute inset-0 w-full h-full object-cover"
+                                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                                     />
                                                 )}
-                                                <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-white/40 via-transparent to-transparent"></div>
-                                                <div className="relative z-10 w-full">
-                                                    <span className="bg-white/20 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md border border-white/20 inline-block mb-1">
+                                                {/* Dark gradient overlay at bottom */}
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                                                
+                                                {/* Badge - top left */}
+                                                <div className="absolute top-3 left-3 z-10">
+                                                    <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
                                                         {course.badge || "New"}
                                                     </span>
-                                                    <div className="flex items-center gap-1.5 text-white/90 text-xs font-bold">
-                                                        <Icons.Clock /> {course.hours}
-                                                    </div>
+                                                </div>
+
+                                                {/* Domain label - bottom left over gradient */}
+                                                <div className="absolute bottom-3 left-3 z-10">
+                                                    {course.domain && Array.isArray(course.domain) && course.domain.length > 0 && (
+                                                        <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-sm border border-white/30 uppercase tracking-wider">
+                                                            {course.domain[0].name}
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
-                                            <div className="p-2 pt-3 flex-1 flex flex-col">
-                                                <h3 onClick={() => router.push(`/course/${course.id}`)} className={`text-sm font-bold text-slate-900 leading-snug mb-1 cursor-pointer hover:${theme.textClass}`}>
+
+                                            {/* Content Area */}
+                                            <div className="p-4 flex-1 flex flex-col">
+                                                <h3
+                                                    onClick={() => router.push(`/course/${course.id}`)}
+                                                    className="text-sm font-bold text-slate-900 leading-snug mb-3 cursor-pointer hover:text-indigo-700 transition-colors line-clamp-2"
+                                                >
                                                     {course.title}
                                                 </h3>
-                                                {/* <p className="text-[10px] text-slate-500 font-medium mb-3">GD / PD / App</p> */}
-                                                <div className="flex items-center justify-between border-t border-slate-50 pt-3">
-                                                    <div className="flex flex-col gap-1">
-                                                        <span className="text-[9px] text-slate-500 font-medium">Starting Price</span>
-                                                        <div className="flex items-center gap-2 flex-wrap">
+                                                
+                                                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3">
+                                                    <div className="flex flex-col">
+                                                        <span className="text-[9px] text-slate-500 font-medium uppercase tracking-wider">Starting Price</span>
+                                                        <div className="flex items-center gap-2 mt-0.5">
                                                             {hasDiscount ? (
                                                                 <>
-                                                                    <span className="text-[11px] text-slate-400 line-through">
+                                                                    <span className="text-xs text-slate-400 line-through font-medium">
                                                                         ₹{originalPrice.toLocaleString('en-IN')}
                                                                     </span>
-                                                                    <span className="text-[9px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
+                                                                    <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
                                                                         {pricing.discount}% OFF
                                                                     </span>
-                                                                    <span className="text-lg font-bold text-slate-900">
-                                                                        {discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`}
-                                                                    </span>
                                                                 </>
-                                                            ) : (
-                                                                <span className="text-lg font-bold text-slate-900">
-                                                                    {originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`}
-                                                                </span>
-                                                            )}
+                                                            ) : null}
+                                                            <span className="text-lg font-extrabold text-slate-900">
+                                                                {hasDiscount
+                                                                    ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`)
+                                                                    : (originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`)
+                                                                }
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     <div className='flex items-center gap-2'>
@@ -410,13 +425,11 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                 const isInCart = cartCourses.some(item => item.id === course.id);
 
                                                                 if (isInCart) {
-                                                                    // Remove from cart
                                                                     const updatedCart = cartCourses.filter(item => item.id !== course.id);
                                                                     setCartCourses(updatedCart);
                                                                     localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
                                                                     window.dispatchEvent(new Event('cartUpdated'));
                                                                 } else {
-                                                                    // Add to cart via modal
                                                                     if (!course.coursePricing || course.coursePricing.length === 0) {
                                                                         return;
                                                                     }
@@ -424,7 +437,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                     setShowConfigModal(true);
                                                                 }
                                                             }}
-                                                            className="text-white h-8 w-8 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
+                                                            className="text-white h-9 w-9 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
                                                             style={{
                                                                 backgroundColor: cartCourses.some(item => item.id === course.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
                                                                 transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
@@ -439,7 +452,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                                     e.stopPropagation();
                                                                     router.push('/cart');
                                                                 }}
-                                                                className="h-8 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
+                                                                className="h-9 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
                                                                 style={{
                                                                     backgroundColor: theme?.primary || '#2196F3',
                                                                 }}

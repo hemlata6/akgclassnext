@@ -1,6 +1,7 @@
 import React from 'react';
 import { FileText, PlayCircle, CheckCircle, Download } from 'lucide-react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
+import { useAuth } from '@/config/AuthContext';
 
 const FREE_RESOURCES = [
     { title: 'Important Notes & MCQs', type: 'PDF' },
@@ -10,6 +11,8 @@ const FREE_RESOURCES = [
 ];
 
 export const FreeResources = () => {
+
+    const { institute } = useAuth();
 
     const handleNavigate = () => {
         window.location.href = '/free-resources';
@@ -24,9 +27,9 @@ export const FreeResources = () => {
                         <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Free Resources</h2>
                         <div className="space-y-3">
                             {FREE_RESOURCES.map((res, i) => (
-                                <div 
-                                onClick={handleNavigate}
-                                 key={i} className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between hover:border-slate-400 transition-all cursor-pointer group shadow-sm hover:shadow-md">
+                                <div
+                                    onClick={handleNavigate}
+                                    key={i} className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between hover:border-slate-400 transition-all cursor-pointer group shadow-sm hover:shadow-md">
                                     <div className="flex items-center gap-4">
                                         <div className="h-12 w-12 bg-emerald-50 rounded-lg flex items-center justify-center shrink-0 text-emerald-700">
                                             {res.type === 'PDF' && <FileText />}
@@ -50,7 +53,7 @@ export const FreeResources = () => {
                     <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 md:p-8 text-center md:text-left relative overflow-hidden text-white shadow-2xl shadow-slate-900/20 sticky top-24">
                         <div className="relative z-10">
                             <h2 className="text-2xl font-bold mb-2">Study on the Go!</h2>
-                            <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the VG STUDY HUB App for offline viewing, live classes, and unlimited access to study materials.</p>
+                            <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the {institute?.institue ? institute?.institue : "Rishabh Jain"} App for offline viewing, live classes, and unlimited access to study materials.</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                 <a
                                     href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"

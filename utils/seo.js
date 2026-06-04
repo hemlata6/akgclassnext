@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'VG STUDY HUB',
+    title = 'Rishabh Jain - Expert coaching for CA Final - Financial Reporting & Ind AS',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
     image = 'https://vgstudyhub.netlify.app/logo.png',
     url = 'https://vgstudyhub.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'VG STUDY HUB',
-    keywords = 'VG STUDY HUB, CA Final, Financial Reporting, Ind AS',
+    author = 'Rishabh Jain',
+    keywords = 'Rishabh Jain, CA Final, Financial Reporting, Ind AS',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'VG STUDY HUB',
+      site_name: 'Rishabh Jain',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -108,7 +108,7 @@ export const generateBlogStructuredData = (blog, url) => {
     image = 'https://vgstudyhub.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'VG STUDY HUB',
+    author = 'Rishabh Jain',
   } = blog;
 
   return {
@@ -130,7 +130,7 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'VG STUDY HUB',
+      name: 'Rishabh Jain',
       url: 'https://vgstudyhub.netlify.app',
       logo: {
         '@type': 'ImageObject',
@@ -152,17 +152,17 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'VG STUDY HUB',
+    name: 'Rishabh Jain',
     url: 'https://vgstudyhub.netlify.app',
     logo: 'https://vgstudyhub.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA VIVEK GABA',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by Rishabh Jain',
     sameAs: [
       // Add your social media URLs
-      'https://www.facebook.com/caclass',
-      'https://www.twitter.com/caclass',
-      'https://www.linkedin.com/company/caclass',
-      'https://www.youtube.com/caclass',
-      'https://www.instagram.com/caclass',
+      'https://www.facebook.com/rishabhjain',
+      'https://www.twitter.com/rishabhjain',
+      'https://www.linkedin.com/in/rishabhjain',
+      'https://www.youtube.com/rishabhjain',
+      'https://www.instagram.com/rishabhjain',
     ],
     contactPoint: {
       '@type': 'ContactPoint',
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: VG STUDY HUB)
+ * @param {string} siteName - Site name (default: Rishabh Jain)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'VG STUDY HUB') => {
+export const generatePageTitle = (pageTitle, siteName = 'Rishabh Jain') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

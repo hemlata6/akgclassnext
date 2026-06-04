@@ -53,7 +53,11 @@ export const PromoBanners = () => {
             const response = await Network.getBannersApi(instId);
             // console.log('API Response for Banners:', response);
             if (response && response.banners && response.banners.length > 0) {
-                const activeBanners = response.banners.filter(banner => banner.active);
+                const activeBanners = response.banners.filter(
+                    banner =>
+                        banner.active &&
+                        banner.group?.toLowerCase() === "top banner"
+                );
 
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({

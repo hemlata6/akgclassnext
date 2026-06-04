@@ -98,6 +98,15 @@
   --tw-gradient-stops: var(--theme-primary), rgba(var(--tw-rgb-indigo-50) / 0.3) var(--tw-gradient-to-pos) !important;
 }
 
+/* Hide scrollbar for horizontal scrolling menus */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .border-indigo-100 {
   border-color: rgba(var(--theme-primary) / 0.1) !important;
 }

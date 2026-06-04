@@ -1,6 +1,6 @@
-# VG STUDY HUB - Next.js Application
+# Rishabh Jain - Next.js Application
 
-This is a Next.js conversion of the original React app for VG STUDY HUB - VG STUDY HUB | VG STUDY HUB - CA VIVEK GABA.
+This is a Next.js conversion of the original React app for Rishabh Jain - Rishabh Jain | Rishabh Jain - CA Rishabh Jain.
 
 ## Getting Started
 

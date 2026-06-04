@@ -3,9 +3,11 @@ import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import BookDetailWrapper from '../../page-components/Course/BookDetailWrapper';
+import { useAuth } from '@/config/AuthContext';
 
 export default function BookDetail() {
   const router = useRouter();
+   const { institute } = useAuth();
   const { bookId } = router.query;
   const [routeData, setRouteData] = useState(null);
   const [tokenFromUrl, setTokenFromUrl] = useState(null);
@@ -39,7 +41,7 @@ export default function BookDetail() {
   return (
     <>
       <Head>
-        <title>Book Details - VG STUDY HUB</title>
+        <title>{`Book Details - ${institute?.institute || "Rishabh Jain"}`}</title>
         <meta name="description" content="View book details and purchase" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

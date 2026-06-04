@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Header, StickyMobileFooter } from '../components/Header/Header';
+import AnnouncementsHeader from './Header/AnnouncementsHeader';
 
 export default function Layout({ children }) {
   const [cartCount, setCartCount] = useState(0);
@@ -58,6 +59,7 @@ export default function Layout({ children }) {
   return (
     <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
       {!shouldHideControls && !isStorePage && <Header cartCount={cartCount} />}
+      {!shouldHideControls && !isStorePage && <AnnouncementsHeader cartCount={cartCount} />}
       {children}
       {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}
     </div>

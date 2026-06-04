@@ -4,10 +4,12 @@ import { Icons } from '../constants/Icons';
 import { Header } from '../components/Header/Header';
 import { Footer } from '../components/Shared/SharedComponents';
 import { StickyMobileFooter } from '../components/Header/Header';
+import { useAuth } from '@/config/AuthContext';
 
 const DownloadAppPage = () => {
     const { theme, primaryClass } = useTheme();
     const [hoveredCard, setHoveredCard] = useState(null);
+    const { institute } = useAuth();
 
     const downloadLinks = [
         {
@@ -82,7 +84,7 @@ const DownloadAppPage = () => {
                         </div>
 
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
-                            Get VG Study Hub
+                            Get {institute?.institue ? institute?.institue : "Rishabh Jain"}
                         </h1>
 
                         <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8">
@@ -149,7 +151,7 @@ const DownloadAppPage = () => {
                         ))}
                     </div>
 
-                
+
 
                     {/* Footer CTA */}
                     <div className="text-center mt-16 space-y-3">

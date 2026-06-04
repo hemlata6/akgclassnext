@@ -12,7 +12,7 @@ export const AppDownload = () => (
           </p>
           <div className="flex flex-wrap justify-center md:justify-start gap-3">
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.VG STUDY HUB"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.ekatvamacademy&pcampaignid=web_share"
               target="_blank"
               rel="noopener noreferrer"
               className="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-200 transition"

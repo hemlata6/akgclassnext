@@ -18,6 +18,7 @@ import { PromoPopup } from './sections/PromoPopup';
 import { PromoBanners } from './sections/PromoBanners';
 import FacultyAndStatsSection from './sections/FacultySection';
 import ContactSupportSection from './sections/ContactSupportSection';
+import { SecondBannerSection } from './sections/secondBannerSection';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -43,6 +44,7 @@ export default function HomePage() {
       {/* <WhyChooseUs /> */}
       {/* <AboutSection /> */}
       <CoursesSection />
+      <SecondBannerSection />
       <BookStore />
       {/* <MarathonGallery /> */}
       <StudentGallery />

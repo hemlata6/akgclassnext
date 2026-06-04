@@ -27,7 +27,7 @@ export const BLOG_DATA = [
     id: 2, 
     title: "How to Score Exemption in FR?", 
     date: "Jan 05, 2026", 
-    author: "Team VG STUDY HUB", 
+    author: "Team Rishabh Jain", 
     category: "Strategy", 
     img: "https://placehold.co/600x400/f1f5f9/1e293b?text=Strategy", 
     desc: "Tips from AIR 1 on how to present your answers, manage time, and prioritize standards for CA Final." 
