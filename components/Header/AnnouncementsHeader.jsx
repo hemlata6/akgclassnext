@@ -25,14 +25,6 @@ function AnnouncementsHeader() {
     }
   };
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setAnnouncementIndex((prev) => (prev + 1) % Math.max(announcementTitles.length, 1));
-    }, 5000);
-
-    return () => clearInterval(timer);
-  }, [announcements.length]);
-
   const announcementTitles = announcements.length > 0
     ? announcements.map((item) => item?.title).filter(Boolean)
     : [
@@ -40,6 +32,14 @@ function AnnouncementsHeader() {
       'New CA Inter Batches Starting Soon!',
       'Get 10% Off on All Video Lectures'
     ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setAnnouncementIndex((prev) => (prev + 1) % Math.max(announcementTitles.length, 1));
+    }, 5000);
+
+    return () => clearInterval(timer);
+  }, [announcementTitles.length]);
 
 
   return (

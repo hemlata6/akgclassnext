@@ -407,13 +407,13 @@ export const Header = ({ cartCount }) => {
             {/* Center Menu */}
             <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-[9px] md:text-[11px] overflow-x-auto no-scrollbar flex-1 justify-center">
 
-              <a href="/blog" className="hover:text-green-400 transition whitespace-nowrap">
+              <Link href="/blog" className="hover:text-green-400 transition whitespace-nowrap">
                 Blog
-              </a>
+              </Link>
 
-              <a href="/free-resources" className="hover:text-green-400 transition whitespace-nowrap">
+              <Link href="/free-resources" className="hover:text-green-400 transition whitespace-nowrap">
                 Free Resources
-              </a>
+              </Link>
 
               <a href="#" className="hover:text-green-400 transition whitespace-nowrap">
                 Gallery
