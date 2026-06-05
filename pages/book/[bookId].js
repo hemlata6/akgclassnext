@@ -5,6 +5,10 @@ import Layout from '../../components/Layout';
 import BookDetailWrapper from '../../page-components/Course/BookDetailWrapper';
 import { useAuth } from '@/config/AuthContext';
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 export default function BookDetail() {
   const router = useRouter();
    const { institute } = useAuth();

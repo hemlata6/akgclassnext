@@ -480,7 +480,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
         <>
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header Section */}
-                <div className="text-center mb-12">
+                <div className="text-center mb-2">
                     <h2 className="text-3xl font-bold text-gray-900 mb-4">
                         🎁 Free Educational Resources
                     </h2>
@@ -538,7 +538,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                     className="group bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl border border-white/40 rounded-3xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-black/10 flex flex-col relative"
                                 >
                                     {/* Image Section */}
-                                    <div className="relative h-48 bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                                    <div className="relative h-full bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
                                         {item?.logo || item?.thumb ? (
                                             <img
                                                 src={Endpoints.mediaBaseUrl + (item?.logo || item?.thumb)}
@@ -597,14 +597,14 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                     {/* Content Section */}
                                     <div className="p-6 flex-grow flex flex-col justify-between">
                                         {/* Title */}
-                                        <h3 className="text-gray-800 font-bold text-base mb-4 line-clamp-2 leading-tight">
+                                        {/* <h3 className="text-gray-800 font-bold text-base mb-4 line-clamp-2 leading-tight">
                                             {item?.title || 'Resource Title'}
-                                        </h3>
+                                        </h3> */}
 
                                         {/* Footer */}
                                         <div className="mt-auto">
                                             {/* Date */}
-                                            <div className="flex items-center mb-4">
+                                            {/* <div className="flex items-center mb-4">
                                                 <Clock className="w-4 h-4 text-gray-500 mr-2" />
                                                 <span className="text-gray-500 text-xs">
                                                     {item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', {
@@ -613,7 +613,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                                         year: 'numeric'
                                                     }) : "Recently Added"}
                                                 </span>
-                                            </div>
+                                            </div> */}
 
                                             {/* Action Button */}
                                             <button onClick={() => handleCardClick(item)} className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`}>

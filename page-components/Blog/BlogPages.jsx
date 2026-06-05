@@ -344,9 +344,9 @@ export const BlogListPage = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">
               Insights & Updates
             </h1>
-            <p className="text-slate-500">
+            {/* <p className="text-slate-500">
               Stay updated with the latest in Financial Reporting, Exam Strategies, and Ind AS Amendments.
-            </p>
+            </p> */}
           </div>
         </div>
       </div>

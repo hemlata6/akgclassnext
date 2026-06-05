@@ -176,7 +176,7 @@ export const Header = ({ cartCount }) => {
   }, [user]);
 
   useEffect(() => {
-
+    fetchDomainsForMenu();
     fetchEmployeeList();
   }, []);
 
@@ -388,7 +388,7 @@ export const Header = ({ cartCount }) => {
 
               <a
                 href={`mailto:${institute?.email}`}
-                className="flex items-center gap-1 md:gap-2 text-[11px] font-medium hover:text-green-400 transition"
+                className="flex items-center gap-1 md:gap-2 text-sm font-medium hover:text-green-400 transition"
               >
                 <span className="text-xs md:text-base">✉️</span>
                 <span className="hidden md:inline">{institute?.email || "info.rishabhjain@gmail.com"}</span>
@@ -396,7 +396,7 @@ export const Header = ({ cartCount }) => {
 
               <a
                 href={`tel:${institute?.instituteAppSettingsModals?.contact}`}
-                className="flex items-center gap-1 md:gap-2 text-[11px] font-medium hover:text-green-400 transition"
+                className="flex items-center gap-1 md:gap-2 text-sm font-medium hover:text-green-400 transition"
               >
                 <span className="text-xs md:text-base">📞</span>
                 <span className="hidden sm:inline">{institute?.instituteAppSettingsModals?.contact}</span>
@@ -405,7 +405,7 @@ export const Header = ({ cartCount }) => {
             </div>
 
             {/* Center Menu */}
-            <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-[9px] md:text-[11px] overflow-x-auto no-scrollbar flex-1 justify-center">
+            <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-sm overflow-x-auto no-scrollbar flex-1 justify-center">
 
               <Link href="/blog" className="hover:text-green-400 transition whitespace-nowrap">
                 Blog
@@ -415,18 +415,18 @@ export const Header = ({ cartCount }) => {
                 Free Resources
               </Link>
 
-              <a href="#" className="hover:text-green-400 transition whitespace-nowrap">
+              {/* <a href="#" className="hover:text-green-400 transition whitespace-nowrap">
                 Gallery
-              </a>
+              </a> */}
 
               <a
                 href="#"
                 className="text-[#f8b400] hover:text-[#ffd15a] transition whitespace-nowrap"
               >
-                Franchise
+                Become Franchise Partner
               </a>
 
-              <a href="#" className="hover:text-green-400 transition whitespace-nowrap">
+              <a href="/store" className="hover:text-green-400 transition whitespace-nowrap">
                 Books
               </a>
 
@@ -435,11 +435,11 @@ export const Header = ({ cartCount }) => {
             {/* Right Buttons */}
             <div className="flex items-center gap-1.5 md:gap-3 flex-shrink-0">
 
-              <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#132b5b] border border-[#27457e] text-white font-semibold text-[10px] md:text-[11px] hover:bg-[#1a376f] transition">
+              <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#132b5b] border border-[#27457e] text-white font-semibold text-sm hover:bg-[#1a376f] transition">
                 TRACK ORDER
               </button>
 
-              <button onClick={() => setShowAppDownloadModal(true)} className="flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#00b66d] text-white font-semibold text-[10px] md:text-[11px] hover:bg-[#00a764] transition whitespace-nowrap">
+              <button onClick={() => setShowAppDownloadModal(true)} className="flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#00b66d] text-white font-semibold text-sm hover:bg-[#00a764] transition whitespace-nowrap">
                 <span className="text-xs md:text-base">📱</span>
                 <span className="hidden xs:inline">DOWNLOAD APP</span>
               </button>
@@ -457,7 +457,7 @@ export const Header = ({ cartCount }) => {
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
                   {/* <img src="/logo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" /> */}
-                  <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-xs font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
+                  <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                     {/* <Icons.User /> */}
                     RJCE
                   </button>
@@ -523,93 +523,47 @@ export const Header = ({ cartCount }) => {
             <div className="flex items-center gap-10 h-full hidden xl:flex">
               {/* <button onClick={() => router.push('/')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors relative group">Home</button> */}
 
-              {/* CA Menu */}
-              <div
-                className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('CA');
-                  fetchDomainsForMenu();
-                }}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
-                  CA <Icons.ChevronDown />
-                </button>
+              {/* Dynamic Domain Menus */}
+              {domains.map(domain => (
                 <div
-                  className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg 
-    transition-all duration-200 transform origin-top
-    ${hoveredMenu === 'CA'
-                      ? 'opacity-100 visible translate-y-0'
-                      : 'opacity-0 invisible translate-y-2'
-                    } p-2`}
+                  key={domain.id}
+                  className="relative group h-full flex items-center"
+                  onMouseEnter={() => setHoveredMenu(domain.name)}
+                  onMouseLeave={() => setHoveredMenu(null)}
                 >
-                  {domainLoading ? (
-                    <div className="px-4 py-3 text-sm text-slate-400">Loading...</div>
-                  ) : (
-                    <>
-                      {domains
-                        .filter(d => d.name.toLowerCase().includes('ca') && !d.name.toLowerCase().includes('cma'))
-                        .flatMap(d => d.child || [])
-                        .map(child => (
-                          <button
-                            key={child.id}
-                            onClick={() => {
-                              const parentDomain = domains.find(d => d.name.toLowerCase().includes('ca') && !d.name.toLowerCase().includes('cma'));
-                              handleDomainChildClick(child, parentDomain);
-                            }}
-                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                          >
-                            {child.name}
-                          </button>
-                        ))}
-                    </>
-                  )}
-                </div>
-              </div>
-
-              {/* CMA Menu */}
-              <div
-                className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('CMA');
-                  fetchDomainsForMenu();
-                }}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
-                  CMA <Icons.ChevronDown />
-                </button>
-                <div
-                  className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg 
+                  <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
+                    {domain.name} <Icons.ChevronDown />
+                  </button>
+                  <div
+                    className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg 
     transition-all duration-200 transform origin-top
-    ${hoveredMenu === 'CMA'
-                      ? 'opacity-100 visible translate-y-0'
-                      : 'opacity-0 invisible translate-y-2'
-                    } p-2`}
-                >
-                  {domainLoading ? (
-                    <div className="px-4 py-3 text-sm text-slate-400">Loading...</div>
-                  ) : (
-                    <>
-                      {domains
-                        .filter(d => d.name.toLowerCase().includes('cma'))
-                        .flatMap(d => d.child || [])
-                        .map(child => (
-                          <button
-                            key={child.id}
-                            onClick={() => {
-                              const parentDomain = domains.find(d => d.name.toLowerCase().includes('cma'));
-                              handleDomainChildClick(child, parentDomain);
-                            }}
-                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                          >
-                            {child.name}
-                          </button>
-                        ))}
-                    </>
-                  )}
+    ${hoveredMenu === domain.name
+                        ? 'opacity-100 visible translate-y-0'
+                        : 'opacity-0 invisible translate-y-2'
+                      } p-2`}
+                  >
+                    {domainLoading ? (
+                      <div className="px-4 py-3 text-sm text-slate-400">Loading...</div>
+                    ) : (
+                      <>
+                        {(domain.child || []).length > 0 ? (
+                          domain.child.map(child => (
+                            <button
+                              key={child.id}
+                              onClick={() => handleDomainChildClick(child, domain)}
+                              className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                            >
+                              {child.name}
+                            </button>
+                          ))
+                        ) : (
+                          <div className="px-4 py-3 text-sm text-slate-400 text-center">No items</div>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
+              ))}
               {/* <div
                 className="relative group h-full flex items-center"
                 onMouseEnter={() => {
@@ -717,7 +671,7 @@ export const Header = ({ cartCount }) => {
               </div>
 
 
-              <button onClick={() => router.push('/blog')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Pune</button>
+              <button onClick={() => router.push('/store?batchTag=F2F+Pune')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Pune</button>
 
               <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#2EB1ED] hover:text-slate-900 text-sm transition-colors">Student Feedback</button>
 
@@ -762,15 +716,15 @@ export const Header = ({ cartCount }) => {
                   </button>
                   <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                     <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                      {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
+                      <p className="text-[11px] font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
+                      {studentData?.email && <p className="text-[11px] text-slate-500">{studentData.email}</p>}
                     </div>
                     <button
                       onClick={async () => {
                         await logout();
                         router.push('/');
                       }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-semibold"
+                      className="w-full text-left px-4 py-2 text-[11px] text-red-600 hover:bg-red-50 transition font-semibold"
                     >
                       Logout
                     </button>
@@ -787,7 +741,7 @@ export const Header = ({ cartCount }) => {
                 onClick={() => router.push('/cart')}
                 className="relative text-slate-600 hover:text-indigo-700 transition-colors">
                 <Icons.Cart />
-                {cartCount > 0 && <span className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-indigo-600 text-white text-[9px] font-bold rounded-full flex items-center justify-center border-2 border-white">{cartCount}</span>}
+                {cartCount > 0 && <span className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-indigo-600 text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">{cartCount}</span>}
               </button>
 
               <button className="xl:hidden text-slate-700 p-1" onClick={() => setMobileMenuOpen(true)}>
@@ -821,40 +775,37 @@ export const Header = ({ cartCount }) => {
               <div className="flex flex-col gap-1">
                 <button onClick={() => router.push('/')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Home</button>
                 {/* <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button> */}
-                {/* CA Mobile Submenu */}
-                <div className="">
-                  <button
-                    onClick={() => {
-                      if (openMobileSubmenu === 'ca') {
-                        setOpenMobileSubmenu(null);
-                      } else {
-                        setOpenMobileSubmenu('ca');
-                        fetchDomainsForMenu();
-                      }
-                    }}
-                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
-                  >
-                    <span>CA</span>
-                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'ca' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {openMobileSubmenu === 'ca' && (
-                    <div className="space-y-1 mt-1 pl-2">
-                      {domainLoading ? (
-                        <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
-                          <span>Loading...</span>
-                        </div>
-                      ) : (
-                        <>
-                          {domains
-                            .filter(d => d.name.toLowerCase().includes('ca') && !d.name.toLowerCase().includes('cma'))
-                            .flatMap(d => d.child || [])
-                            .map(child => (
+                {/* Dynamic Domain Mobile Submenus */}
+                {domains.map(domain => (
+                  <div key={domain.id} className="">
+                    <button
+                      onClick={() => {
+                        const key = `domain-${domain.id}`;
+                        if (openMobileSubmenu === key) {
+                          setOpenMobileSubmenu(null);
+                        } else {
+                          setOpenMobileSubmenu(key);
+                        }
+                      }}
+                      className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
+                    >
+                      <span>{domain.name}</span>
+                      <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === `domain-${domain.id}` ? 'rotate-180' : ''}`} />
+                    </button>
+                    {openMobileSubmenu === `domain-${domain.id}` && (
+                      <div className="space-y-1 mt-1 pl-2">
+                        {domainLoading ? (
+                          <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
+                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
+                            <span>Loading...</span>
+                          </div>
+                        ) : (
+                          <>
+                            {(domain.child || []).map(child => (
                               <button
                                 key={child.id}
                                 onClick={() => {
-                                  const parentDomain = domains.find(d => d.name.toLowerCase().includes('ca') && !d.name.toLowerCase().includes('cma'));
-                                  handleDomainChildClick(child, parentDomain);
+                                  handleDomainChildClick(child, domain);
                                   setMobileMenuOpen(false);
                                   setOpenMobileSubmenu(null);
                                 }}
@@ -864,60 +815,12 @@ export const Header = ({ cartCount }) => {
                                 <span className="truncate">{child.name}</span>
                               </button>
                             ))}
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {/* CMA Mobile Submenu */}
-                <div className="">
-                  <button
-                    onClick={() => {
-                      if (openMobileSubmenu === 'cma') {
-                        setOpenMobileSubmenu(null);
-                      } else {
-                        setOpenMobileSubmenu('cma');
-                        fetchDomainsForMenu();
-                      }
-                    }}
-                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
-                  >
-                    <span>CMA</span>
-                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'cma' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {openMobileSubmenu === 'cma' && (
-                    <div className="space-y-1 mt-1 pl-2">
-                      {domainLoading ? (
-                        <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
-                          <span>Loading...</span>
-                        </div>
-                      ) : (
-                        <>
-                          {domains
-                            .filter(d => d.name.toLowerCase().includes('cma'))
-                            .flatMap(d => d.child || [])
-                            .map(child => (
-                              <button
-                                key={child.id}
-                                onClick={() => {
-                                  const parentDomain = domains.find(d => d.name.toLowerCase().includes('cma'));
-                                  handleDomainChildClick(child, parentDomain);
-                                  setMobileMenuOpen(false);
-                                  setOpenMobileSubmenu(null);
-                                }}
-                                className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
-                                <span className="truncate">{child.name}</span>
-                              </button>
-                            ))}
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
+                          </>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))}
 
                 <div className="">
                   <button

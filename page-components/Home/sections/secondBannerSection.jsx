@@ -22,7 +22,7 @@ export const SecondBannerSection = () => {
                 const activeBanners = response.banners.filter(
                     banner =>
                         banner.active &&
-                        banner.group?.toLowerCase() === "top banner"
+                        banner.group?.toLowerCase() === "mid banner"
                 );
 
                 if (activeBanners.length > 0) {

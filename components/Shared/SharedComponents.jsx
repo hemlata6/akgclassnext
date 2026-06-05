@@ -109,7 +109,7 @@ export const Footer = () => {
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
           © 2026 {institute?.institue ? institute?.institue : "Rishabh Jain"} Education. All rights reserved.
-          <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div>
+          {/* <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div> */}
         </div>
       </div>
     </footer>
@@ -153,7 +153,7 @@ export const Loader = () => (
     }}>
       <img
         src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/caclass-logo-circle-white.webp"
-        alt={institute?.institue ? `${institute?.institue} Logo` : "Rishabh Jain Logo"}
+        alt="Rishabh Jain Logo"
         style={{
           height: '96px',
           width: 'auto',

@@ -60,6 +60,7 @@ const Store = () => {
     const [courseExpandedDescriptions, setCourseExpandedDescriptions] = useState(null);
     const [purchaseSuccess, setPurchaseSuccess] = useState(null);
     const [navigationStateChanged, setNavigationStateChanged] = useState(0); // Trigger navigation handler when header navigation happens
+    const [pendingBatchTag, setPendingBatchTag] = useState(null); // Pending batch tag from URL query param
     const paperCount = selectedPapers.length;
     const productCount = selectedProductType ? 1 : 0;
     const batchCount = selectedTag ? 1 : 0;
@@ -104,9 +105,11 @@ const Store = () => {
             const params = new URLSearchParams(window.location.search);
             const isMobileParam = params.get('isMobile');
             const tokenParam = params.get('token');
+            const batchTagParam = params.get('batchTag');
 
             if (isMobileParam) setRouteData(isMobileParam);
             if (tokenParam) setTokenFromUrl(tokenParam);
+            if (batchTagParam) setPendingBatchTag(batchTagParam);
         }
     }, [router.asPath]);
 
@@ -593,6 +596,27 @@ const Store = () => {
             setSelectedFaculties(faculties);
         }
     }, [faculties, filtersInitialized, router.query, shouldHideGlobalControls]);
+
+    // Select batch tag from URL query param (e.g. ?batchTag=F2F from F2F Pune header button)
+    useEffect(() => {
+        if (shouldHideGlobalControls || !pendingBatchTag) {
+            return;
+        }
+        if (pendingBatchTag && tags.length > 0) {
+            const matchingTag = tags.find(t =>
+                t.tag?.toLowerCase() === pendingBatchTag.toLowerCase() ||
+                String(t.id) === String(pendingBatchTag)
+            );
+            if (matchingTag) {
+                setSelectedTag(matchingTag);
+            }
+            setPendingBatchTag(null); // Clear pending state regardless of match
+            // Clean URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('batchTag');
+            window.history.replaceState({}, '', url.toString());
+        }
+    }, [tags, pendingBatchTag, shouldHideGlobalControls]);
 
     // Select 'lecture' product type by default
     // useEffect(() => {
@@ -1391,162 +1415,308 @@ const Store = () => {
                     <div className="flex flex-col lg:flex-row gap-3">
 
                         {/* Left Sidebar - Filters (Desktop Only) */}
+                        {/* Left Sidebar - Filters (Desktop Only) */}
                         <div className="hidden lg:block w-full lg:w-72 flex-shrink-0">
-                            <div className="bg-white rounded-2xl shadow-lg p-5 border-2 border-indigo-100 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto" style={{ borderLeft: `1px solid ${primaryColor}` }}>
-                                {(selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting || searchTerm) && (
-                                    <div className="mb-4 pb-4 border-b-2" style={{ borderColor: `${primaryColor}40` }}>
-                                        <button
-                                            onClick={clearAllFilters}
-                                            className="w-full text-white border-2 px-3 py-2.5 rounded-lg text-xs font-bold hover:shadow-md transition-all flex items-center justify-center gap-2"
-                                            style={{ backgroundColor: primaryColor, borderColor: primaryColor }}
-                                        >
-                                            <X className="h-4 w-4" />
-                                            Reset Filters
-                                        </button>
-                                    </div>
-                                )}
-
-                                {/* Exam Type Filter - Radio */}
-                                <div className="mb-5">
-                                    <h3 className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 flex items-center gap-2 pb-2" style={{ borderBottom: `2px solid ${primaryColor}` }}>
-                                        <Filter className="h-4 w-4" style={{ color: primaryColor }} />
-                                        Exam Type
-                                    </h3>
-                                    <div className="space-y-2">
-                                        {domains.filter(d => d.parentId === 0).map(domain => (
-                                            <div
-                                                key={domain.id}
-                                                onClick={(e) => {
-                                                    e.preventDefault();
-                                                    e.stopPropagation();
-                                                    if (selectedDomain?.id !== domain.id) {
-                                                        setSelectedDomain(domain);
-                                                        // Reset exam stage when changing domain
-                                                        setSelectedExamStage(null);
-                                                    }
-                                                }}
-                                                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
+                            <div
+                                className="bg-white rounded-3xl p-4 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto"
+                                style={{
+                                    boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
+                                    border: "1px solid #eef2f7"
+                                }}
+                            >
+                                {(selectedPapers.length > 0 ||
+                                    selectedTag ||
+                                    selectedProductType ||
+                                    priceSorting ||
+                                    searchTerm) && (
+                                        <div className="mb-4">
+                                            <button
+                                                onClick={clearAllFilters}
+                                                className="w-full text-white px-3 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
                                                 style={{
-                                                    backgroundColor: selectedDomain?.id === domain.id ? `${primaryColor}15` : 'transparent',
-                                                    border: `1px solid ${selectedDomain?.id === domain.id ? primaryColor : 'transparent'}`,
-                                                    color: selectedDomain?.id === domain.id ? primaryColor : '#666'
+                                                    background: primaryColor,
+                                                    boxShadow: `0 8px 20px ${primaryColor}30`
                                                 }}
                                             >
-                                                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0`} style={{
-                                                    borderColor: selectedDomain?.id === domain.id ? primaryColor : '#d1d5db',
-                                                    backgroundColor: selectedDomain?.id === domain.id ? primaryColor : 'transparent'
-                                                }}>
-                                                    {selectedDomain?.id === domain.id && (
-                                                        <div className="w-2 h-2 bg-white rounded-full"></div>
-                                                    )}
-                                                </div>
-                                                <span>{domain.name}</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
+                                                <X className="h-4 w-4" />
+                                                Reset Filters
+                                            </button>
+                                        </div>
+                                    )}
 
-                                {/* Exam Stage Filter - Radio */}
-                                {getExamStages().length > 0 && (
-                                    <div className="mb-5">
-                                        <h3 className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 flex items-center gap-2 pb-2" style={{ borderBottom: `2px solid ${primaryColor}` }}>Exam Stage</h3>
-                                        <div className="space-y-2 max-h-56 overflow-y-auto pr-2">
-                                            {getExamStages().map(stage => (
+                                {/* EXAM TYPE */}
+                                <div className="mb-4">
+                                    <h3
+                                        className="text-[11px] font-semibold uppercase tracking-[2px] mb-3 pb-2 text-gray-500"
+                                        style={{
+                                            borderBottom: "1px solid #eef2f7"
+                                        }}
+                                    >
+                                        Exam Type
+                                    </h3>
+
+                                    <div className="space-y-1.5">
+                                        {domains
+                                            .filter(d => d.parentId === 0)
+                                            .map(domain => (
                                                 <div
-                                                    key={stage.id}
+                                                    key={domain.id}
                                                     onClick={(e) => {
                                                         e.preventDefault();
                                                         e.stopPropagation();
-                                                        setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage);
+
+                                                        if (selectedDomain?.id !== domain.id) {
+                                                            setSelectedDomain(domain);
+                                                            setSelectedExamStage(null);
+                                                        }
                                                     }}
-                                                    className="w-full text-left px-3 py-0.5 rounded-lg text-sm font-medium transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group"
+                                                    className="w-full px-3 py-2 rounded-xl cursor-pointer flex items-center gap-3 transition-all duration-200"
                                                     style={{
-                                                        backgroundColor: selectedExamStage?.id === stage.id ? `${primaryColor}15` : 'transparent',
-                                                        border: `2px solid ${selectedExamStage?.id === stage.id ? primaryColor : 'transparent'}`,
-                                                        color: selectedExamStage?.id === stage.id ? primaryColor : '#666'
+                                                        backgroundColor:
+                                                            selectedDomain?.id === domain.id
+                                                                ? `${primaryColor}12`
+                                                                : "#fff",
+
+                                                        border:
+                                                            selectedDomain?.id === domain.id
+                                                                ? `1px solid ${primaryColor}40`
+                                                                : "1px solid transparent",
+
+                                                        color:
+                                                            selectedDomain?.id === domain.id
+                                                                ? primaryColor
+                                                                : "#475569"
                                                     }}
                                                 >
-                                                    <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0`} style={{
-                                                        borderColor: selectedExamStage?.id === stage.id ? primaryColor : '#d1d5db',
-                                                        backgroundColor: selectedExamStage?.id === stage.id ? primaryColor : 'transparent'
-                                                    }}>
-                                                        {selectedExamStage?.id === stage.id && (
-                                                            <div className="w-2 h-2 bg-white rounded-full"></div>
+                                                    <div
+                                                        className="w-4 h-4 rounded-full border flex items-center justify-center"
+                                                        style={{
+                                                            borderColor:
+                                                                selectedDomain?.id === domain.id
+                                                                    ? primaryColor
+                                                                    : "#d1d5db",
+
+                                                            backgroundColor:
+                                                                selectedDomain?.id === domain.id
+                                                                    ? primaryColor
+                                                                    : "white"
+                                                        }}
+                                                    >
+                                                        {selectedDomain?.id === domain.id && (
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-white" />
                                                         )}
                                                     </div>
-                                                    <span>{stage.name}</span>
+
+                                                    <span className="text-sm font-medium">
+                                                        {domain.name}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                    </div>
+                                </div>
+
+                                {/* EXAM STAGE */}
+                                {getExamStages().length > 0 && (
+                                    <div className="mb-4">
+                                        <h3
+                                            className="text-[11px] font-semibold uppercase tracking-[2px] mb-3 pb-2 text-gray-500"
+                                            style={{
+                                                borderBottom: "1px solid #eef2f7"
+                                            }}
+                                        >
+                                            Exam Stage
+                                        </h3>
+
+                                        <div className="space-y-1.5 max-h-56 overflow-y-auto">
+                                            {getExamStages().map(stage => (
+                                                <div
+                                                    key={stage.id}
+                                                    onClick={() =>
+                                                        setSelectedExamStage(
+                                                            selectedExamStage?.id === stage.id
+                                                                ? null
+                                                                : stage
+                                                        )
+                                                    }
+                                                    className="w-full px-3 py-2 rounded-xl cursor-pointer flex items-center gap-3 transition-all duration-200"
+                                                    style={{
+                                                        backgroundColor:
+                                                            selectedExamStage?.id === stage.id
+                                                                ? `${primaryColor}12`
+                                                                : "#fff",
+
+                                                        border:
+                                                            selectedExamStage?.id === stage.id
+                                                                ? `1px solid ${primaryColor}40`
+                                                                : "1px solid transparent",
+
+                                                        color:
+                                                            selectedExamStage?.id === stage.id
+                                                                ? primaryColor
+                                                                : "#475569"
+                                                    }}
+                                                >
+                                                    <div
+                                                        className="w-4 h-4 rounded-full border flex items-center justify-center"
+                                                        style={{
+                                                            borderColor:
+                                                                selectedExamStage?.id === stage.id
+                                                                    ? primaryColor
+                                                                    : "#d1d5db",
+
+                                                            backgroundColor:
+                                                                selectedExamStage?.id === stage.id
+                                                                    ? primaryColor
+                                                                    : "white"
+                                                        }}
+                                                    >
+                                                        {selectedExamStage?.id === stage.id && (
+                                                            <div className="w-1.5 h-1.5 rounded-full bg-white" />
+                                                        )}
+                                                    </div>
+
+                                                    <span className="text-sm font-medium">
+                                                        {stage.name}
+                                                    </span>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
                                 )}
 
-                                {/* Faculty Filter - Checkbox */}
+                                {/* FACULTY */}
                                 {faculties.length > 0 && (
-                                    <div className="mb-5">
-                                        <h3 className="text-xs font-bold text-gray-800 uppercase tracking-widest mb-3 flex items-center gap-2 pb-2" style={{ borderBottom: `2px solid ${primaryColor}` }}>Faculty</h3>
-                                        <div className="space-y-2 overflow-y-auto pr-2">
-                                            {/* Select All / Deselect All */}
+                                    <div>
+                                        <h3
+                                            className="text-[11px] font-semibold uppercase tracking-[2px] mb-3 pb-2 text-gray-500"
+                                            style={{
+                                                borderBottom: "1px solid #eef2f7"
+                                            }}
+                                        >
+                                            Faculty
+                                        </h3>
+
+                                        <div className="space-y-1.5">
+                                            {/* SELECT ALL */}
                                             <div
                                                 onClick={() => {
-                                                    if (selectedFaculties.length === faculties.length) {
+                                                    if (
+                                                        selectedFaculties.length ===
+                                                        faculties.length
+                                                    ) {
                                                         setSelectedFaculties([]);
                                                     } else {
                                                         setSelectedFaculties([...faculties]);
                                                     }
                                                 }}
-                                                className="w-full text-left px-3 py-2.5 rounded-lg text-sm font-bold transition-all cursor-pointer flex items-center gap-3 hover:shadow-sm group mb-2 pb-3"
+                                                className="px-3 py-2 rounded-xl flex items-center gap-3 cursor-pointer"
                                                 style={{
-                                                    backgroundColor: selectedFaculties.length > 0 ? `${primaryColor}15` : 'transparent',
-                                                    borderBottom: `1px solid ${selectedFaculties.length > 0 ? primaryColor : '#e5e7eb'}`
+                                                    backgroundColor:
+                                                        selectedFaculties.length > 0
+                                                            ? `${primaryColor}12`
+                                                            : "#f8fafc",
+
+                                                    border:
+                                                        selectedFaculties.length > 0
+                                                            ? `1px solid ${primaryColor}30`
+                                                            : "1px solid #e2e8f0"
                                                 }}
                                             >
-                                                <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all flex-shrink-0`} style={{
-                                                    borderColor: selectedFaculties.length > 0 ? primaryColor : '#d1d5db',
-                                                    backgroundColor: selectedFaculties.length > 0 ? primaryColor : 'transparent'
-                                                }}>
-                                                    {selectedFaculties.length === faculties.length ? (
-                                                        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                <div
+                                                    className="w-4 h-4 rounded border flex items-center justify-center"
+                                                    style={{
+                                                        borderColor:
+                                                            selectedFaculties.length > 0
+                                                                ? primaryColor
+                                                                : "#d1d5db",
+
+                                                        backgroundColor:
+                                                            selectedFaculties.length > 0
+                                                                ? primaryColor
+                                                                : "white"
+                                                    }}
+                                                >
+                                                    {selectedFaculties.length > 0 && (
+                                                        <svg
+                                                            className="w-2.5 h-2.5 text-white"
+                                                            fill="none"
+                                                            stroke="currentColor"
+                                                            viewBox="0 0 24 24"
+                                                        >
+                                                            <path
+                                                                strokeLinecap="round"
+                                                                strokeLinejoin="round"
+                                                                strokeWidth={3}
+                                                                d="M5 13l4 4L19 7"
+                                                            />
                                                         </svg>
-                                                    ) : selectedFaculties.length > 0 ? (
-                                                        <div className="w-2.5 h-1 bg-white rounded"></div>
-                                                    ) : null}
+                                                    )}
                                                 </div>
-                                                <span style={{ color: selectedFaculties.length > 0 ? primaryColor : '#333' }}>
-                                                    {selectedFaculties.length === faculties.length ? 'Deselect All' : 'Select All'}
+
+                                                <span className="text-sm font-semibold">
+                                                    {selectedFaculties.length === faculties.length
+                                                        ? "Deselect All"
+                                                        : "Select All"}
                                                 </span>
                                             </div>
 
+                                            {/* FACULTY LIST */}
                                             {faculties.map(faculty => {
-                                                const isSelected = selectedFaculties.some(f => f.id === faculty.id);
+                                                const isSelected =
+                                                    selectedFaculties.some(
+                                                        f => f.id === faculty.id
+                                                    );
+
                                                 return (
                                                     <div
                                                         key={faculty.id}
                                                         onClick={() => toggleFaculty(faculty)}
-                                                        className="w-full text-left px-2 py-1.5 rounded-md text-xs transition-all cursor-pointer flex items-center gap-2 hover:bg-gray-50 group"
+                                                        className="px-3 py-2 rounded-xl cursor-pointer flex items-center gap-3 transition-all"
+                                                        style={{
+                                                            backgroundColor: isSelected
+                                                                ? `${primaryColor}10`
+                                                                : "transparent"
+                                                        }}
                                                     >
-                                                        <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${isSelected
-                                                            ? 'border-indigo-600 bg-indigo-600 shadow-sm'
-                                                            : 'border-gray-300 group-hover:border-indigo-400'
-                                                            }`}>
+                                                        <div
+                                                            className={`w-4 h-4 rounded border flex items-center justify-center ${isSelected
+                                                                ? "bg-indigo-600 border-indigo-600"
+                                                                : "border-gray-300"
+                                                                }`}
+                                                        >
                                                             {isSelected && (
-                                                                <svg className="w-2.5 h-2.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                                                                <svg
+                                                                    className="w-2.5 h-2.5 text-white"
+                                                                    fill="none"
+                                                                    stroke="currentColor"
+                                                                    viewBox="0 0 24 24"
+                                                                >
+                                                                    <path
+                                                                        strokeLinecap="round"
+                                                                        strokeLinejoin="round"
+                                                                        strokeWidth={3}
+                                                                        d="M5 13l4 4L19 7"
+                                                                    />
                                                                 </svg>
                                                             )}
                                                         </div>
+
                                                         {faculty.profile && (
                                                             <img
                                                                 src={`${Endpoints.mediaBaseUrl}${faculty.profile}`}
                                                                 alt={`${faculty.firstName} ${faculty.lastName}`}
-                                                                className="w-5 h-5 rounded-full object-cover"
+                                                                className="w-8 h-8 rounded-full object-cover border border-gray-200"
                                                             />
                                                         )}
-                                                        <span className={`truncate flex-1 font-medium transition-colors ${isSelected
-                                                            ? 'text-gray-900'
-                                                            : 'text-gray-600 group-hover:text-gray-900'
-                                                            }`}>{faculty.firstName} {faculty.lastName}</span>
+
+                                                        <span
+                                                            className={`text-sm truncate ${isSelected
+                                                                ? "font-semibold text-gray-900"
+                                                                : "text-gray-600"
+                                                                }`}
+                                                        >
+                                                            {faculty.firstName} {faculty.lastName}
+                                                        </span>
                                                     </div>
                                                 );
                                             })}
@@ -1908,10 +2078,11 @@ const Store = () => {
                                                                     <div
                                                                         onClick={() => handleCardClick(item)}
                                                                         key={item.id}
-                                                                        className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
+                                                                        className={`w-[80%] group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
                                                                             ? 'border-amber-200 hover:border-amber-400'
-                                                                            : 'border-indigo-100 hover:border-indigo-400'
+                                                                            : 'hover:border-indigo-400'
                                                                             }`}
+                                                                        // style={{ width: '80% !important' }}
                                                                     >
                                                                         <div className="relative w-full overflow-hidden bg-gray-50 flex items-center justify-center">
                                                                             <img
@@ -1926,7 +2097,7 @@ const Store = () => {
                                                                                     {item.title}
                                                                                 </h3>
                                                                             </div>
-                                                                            <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
+                                                                            {/* <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
                                                                                 {truncateDescription(item?.shortDescription)}
                                                                                 {item?.shortDescription?.length > 100 && (
                                                                                     <button
@@ -1939,7 +2110,7 @@ const Store = () => {
                                                                                         more
                                                                                     </button>
                                                                                 )}
-                                                                            </p>
+                                                                            </p> */}
                                                                             <div className="mb-2 mt-auto">
                                                                                 {(() => {
                                                                                     const cartItem = cartCourses.find(c => c.id === item.id);
@@ -1986,8 +2157,8 @@ const Store = () => {
                                                                                                         {priceInfo.finalPrice === 0 ? '0' : `₹${priceInfo.finalPrice.toFixed(2)}`}
                                                                                                     </span>
                                                                                                     {priceInfo.discount > 0 && <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">{priceInfo.discount}% OFF</span>}
+                                                                                                    {priceInfo.discount > 0 && <span className="text-[9px] text-gray-400 line-through block">₹{priceInfo.originalPrice.toFixed(2)}</span>}
                                                                                                 </div>
-                                                                                                {priceInfo.discount > 0 && <span className="text-[9px] text-gray-400 line-through block">₹{priceInfo.originalPrice.toFixed(2)}</span>}
                                                                                             </div>
                                                                                         );
                                                                                     }

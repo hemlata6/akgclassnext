@@ -1,4 +1,5 @@
 import { useAuth } from '@/config/AuthContext';
+import instId from '@/config/instituteId';
 import { Network } from 'lucide-react';
 import React, { useEffect, useState } from 'react'
 
@@ -28,7 +29,6 @@ function AnnouncementsHeader() {
   const announcementTitles = announcements.length > 0
     ? announcements.map((item) => item?.title).filter(Boolean)
     : [
-      'Think Selection - JOIN FAST EDUCATION',
       'New CA Inter Batches Starting Soon!',
       'Get 10% Off on All Video Lectures'
     ];

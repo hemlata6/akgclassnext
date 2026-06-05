@@ -91,14 +91,14 @@ export const CoursesSection = ({ employeeCourseId }) => {
             const domainList = Array.isArray(response?.domains) ? response.domains : (Array.isArray(response) ? response : []);
 
             // Get only first-level children (children of parent domains where parentId === 0)
-            const firstLevelChildren = [];
-            domainList.forEach(domain => {
-                if (domain.parentId === 0 && domain.child && Array.isArray(domain.child)) {
-                    firstLevelChildren.push(...domain.child);
-                }
-            });
+            // const firstLevelChildren = [];
+            // domainList.forEach(domain => {
+            //     if (domain.parentId === 0 && domain.child && Array.isArray(domain.child)) {
+            //         firstLevelChildren.push(...domain.child);
+            //     }
+            // });
 
-            setDomains(firstLevelChildren);
+            setDomains(domainList);
         } catch (err) {
             console.error('Error fetching domains:', err);
             setDomains([]);
@@ -367,23 +367,23 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                                     />
                                                 )}
                                                 {/* Dark gradient overlay at bottom */}
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                                                <div className="absolute inset-0 from-black/70 via-black/20 to-transparent"></div>
                                                 
                                                 {/* Badge - top left */}
-                                                <div className="absolute top-3 left-3 z-10">
+                                                {/* <div className="absolute top-3 left-3 z-10">
                                                     <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
                                                         {course.badge || "New"}
                                                     </span>
-                                                </div>
+                                                </div> */}
 
                                                 {/* Domain label - bottom left over gradient */}
-                                                <div className="absolute bottom-3 left-3 z-10">
+                                                {/* <div className="absolute bottom-3 left-3 z-10">
                                                     {course.domain && Array.isArray(course.domain) && course.domain.length > 0 && (
                                                         <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-sm border border-white/30 uppercase tracking-wider">
                                                             {course.domain[0].name}
                                                         </span>
                                                     )}
-                                                </div>
+                                                </div> */}
                                             </div>
 
                                             {/* Content Area */}

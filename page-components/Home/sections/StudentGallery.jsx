@@ -91,7 +91,7 @@ export const StudentGallery = () => {
         <section className="py-12 bg-white border-t border-slate-200">
             <div className={LAYOUT_PADDING}>
                 <div className="text-center mb-10">
-                    <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Hall of Fame</span>
+                    <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Face 2 Face Glimpse</span>
                     <h2 className="text-2xl md:text-2xl font-bold text-slate-900 mt-1">Student Wall of Love</h2>
                 </div>
 

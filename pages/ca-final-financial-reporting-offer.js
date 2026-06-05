@@ -20,12 +20,12 @@ export default function CAFinalFROfferPage() {
                 <link rel="canonical" href="https://caclasses.in/ca-final-financial-reporting-offer" />
             </Head>
 
-            <FRCoursePage />
+            <FRCoursePage institute={institute} />
         </>
     );
 }
 
-function FRCoursePage() {
+function FRCoursePage({ institute }) {
     return (
         <div className="w-full h-full bg-[#020617] pt-0">
             <div className="min-h-screen bg-[#020617] font-sans text-gray-300 selection:bg-green-500 selection:text-white pb-20 md:pb-0">
@@ -461,7 +461,7 @@ function FRCoursePage() {
 
                         {/* Bottom Legal Section */}
                         <div className="border-t border-gray-900 mt-10 pt-6 flex flex-col md:flex-row justify-between items-center gap-4 text-[10px] text-gray-600 tracking-widest uppercase">
-                            <p>© 2026 {institute?.institue ? institute?.institue : "Rishabh Jain"}. All rights reserved.</p>
+                            {/* <p>© 2026 {institute?.institue ? institute?.institue : "Rishabh Jain"}. All rights reserved.</p> */}
                             <div className="flex gap-6">
                                 <a href="https://caclasses.in/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a>
                                 <a href="https://caclasses.in/terms-of-use" className="hover:text-white transition-colors">Terms of Service</a>

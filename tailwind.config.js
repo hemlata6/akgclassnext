@@ -21,6 +21,9 @@ module.exports = {
         brandGreenHover: "#0f3824",
         brandGreenDark: "#0a2818",
       },
+      fontFamily: {
+        sans: ['var(--font-family-base)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
+      },
       animation: {
         marquee: 'marquee 20s linear infinite',
         bounce: 'bounce 1s infinite',

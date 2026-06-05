@@ -9,6 +9,7 @@
   --theme-primary-hover-class: hover:bg-[#1976D2];
   --theme-text-class: text-[#2196F3];
   --theme-border-class: border-[#2196F3];
+  --font-family-base: 'Inter', sans-serif;
 }
 
 /* Theme-aware dynamic classes */
@@ -219,9 +220,7 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   padding: 0 !important;

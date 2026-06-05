@@ -4,6 +4,10 @@ import { useEffect, useState } from 'react';
 import Layout from '../../components/Layout';
 import CourseDetailWrapper from '../../page-components/Course/CourseDetailWrapper';
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 export default function CourseDetail() {
   const router = useRouter();
   const { courseId } = router.query;
