@@ -426,9 +426,9 @@ export const Header = ({ cartCount }) => {
                 Become Franchise Partner
               </a>
 
-              <a href="/store" className="hover:text-green-400 transition whitespace-nowrap">
+              <Link href="/store" className="hover:text-green-400 transition whitespace-nowrap">
                 Books
-              </a>
+              </Link>
 
             </div>
 
