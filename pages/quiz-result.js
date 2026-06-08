@@ -9,7 +9,7 @@ export default function QuizResult() {
   return (
     <>
       <Head>
-        <title>{`Quiz Result - ${institute?.institue || "Rishabh Jain"}`}</title>
+        <title>{`Quiz Result - ${institute?.institue || "CA Shirish Vyas"}`}</title>
         <meta name="description" content="View your quiz results" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

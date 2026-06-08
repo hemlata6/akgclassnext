@@ -5,14 +5,14 @@ import HomePage from '../page-components/Home/HomePage';
 export default function Home() {
   const siteUrl = 'https://vgstudyhub.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/VG STUDY HUB-logo-circle-white.webp';
-  const title = 'Rishabh Jain | Rishabh Jain - CA VIVEK GABA';
+  const title = 'CA Shirish Vyas | CA Shirish Vyas - CA VIVEK GABA';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';
-  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, Rishabh Jain, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
+  const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, CA Shirish Vyas, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "EducationalOrganization",
-    "name": "Rishabh Jain",
+    "name": "CA Shirish Vyas",
     "description": description,
     "url": siteUrl,
     "logo": ogImage,
@@ -47,7 +47,7 @@ export default function Home() {
         <meta property="og:image" content={ogImage} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:type" content="website" />
-        <meta property="og:site_name" content="Rishabh Jain" />
+        <meta property="og:site_name" content="CA Shirish Vyas" />
         <meta property="og:locale" content="en_US" />
 
         {/* Twitter Card */}
@@ -60,7 +60,7 @@ export default function Home() {
         {/* Additional SEO */}
         <meta name="robots" content="index, follow, max-image-preview:large" />
         <meta name="googlebot" content="index, follow" />
-        <meta name="author" content="Rishabh Jain" />
+        <meta name="author" content="CA Shirish Vyas" />
 
         {/* JSON-LD Structured Data */}
         <script

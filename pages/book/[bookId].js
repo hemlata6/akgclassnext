@@ -45,7 +45,7 @@ export default function BookDetail() {
   return (
     <>
       <Head>
-        <title>{`Book Details - ${institute?.institute || "Rishabh Jain"}`}</title>
+        <title>{`Book Details - ${institute?.institute || "CA Shirish Vyas"}`}</title>
         <meta name="description" content="View book details and purchase" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

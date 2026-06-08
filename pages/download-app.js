@@ -84,7 +84,7 @@ const DownloadAppPage = () => {
                         </div>
 
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
-                            Get {institute?.institue ? institute?.institue : "Rishabh Jain"}
+                            Get {institute?.institue ? institute?.institue : "CA Shirish Vyas"}
                         </h1>
 
                         <p className="text-lg md:text-xl text-slate-600 max-w-3xl mx-auto mb-8">

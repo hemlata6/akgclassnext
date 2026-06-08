@@ -1,6 +1,6 @@
-# Rishabh Jain - Next.js Application
+# CA Shirish Vyas - Next.js Application
 
-This is a Next.js conversion of the original React app for Rishabh Jain - Rishabh Jain | Rishabh Jain - CA Rishabh Jain.
+This is a Next.js conversion of the original React app for CA Shirish Vyas - CA Shirish Vyas | CA Shirish Vyas - CA CA Shirish Vyas.
 
 ## Getting Started
 

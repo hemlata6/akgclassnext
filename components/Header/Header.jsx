@@ -459,10 +459,10 @@ export const Header = ({ cartCount }) => {
                   {/* <img src="/logo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" /> */}
                   <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                     {/* <Icons.User /> */}
-                    RJCE
+                    CASV
                   </button>
                   <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
-                    RISHABH JAIN
+                    CA Shirish Vyas
                     <span className='text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
                   </div>
                 </Link>
@@ -474,10 +474,10 @@ export const Header = ({ cartCount }) => {
             {/* Mobile Logo - Left side */}
             <Link href="/" className="flex items-center gap-2 cursor-pointer xl:hidden">
               <button className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg">
-                RJCE
+                CASV
               </button>
               <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
-                RISHABH JAIN
+                CA Shirish Vyas
                 <span className='text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
               </div>
             </Link>

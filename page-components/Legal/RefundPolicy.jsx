@@ -31,7 +31,7 @@ const RefundPolicy = () => {
             
             <section className="mb-8">
               <p className="text-slate-700 leading-relaxed mb-4">
-                Thank you for shopping at www.{institute?.instituteName || "Rishabh Jain"}.com
+                Thank you for shopping at www.{institute?.instituteName || "CA Shirish Vyas"}.com
               </p>
             </section>
 

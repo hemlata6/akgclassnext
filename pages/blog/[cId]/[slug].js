@@ -54,7 +54,7 @@ export default function BlogDetail({ blogData, error }) {
     return (
         <>
             <Head>
-                <title>{`${blogTitle} | ${institute?.institute || "Rishabh Jain"} Blog`}</title>
+                <title>{`${blogTitle} | ${institute?.institute || "CA Shirish Vyas"} Blog`}</title>
                 <meta name="description" content={blogDescription} />
 
                 {/* Open Graph / Facebook */}

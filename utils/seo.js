@@ -35,15 +35,15 @@ export const slugify = (str) => {
  */
 export const generateMetaTags = (options) => {
   const {
-    title = 'Rishabh Jain - Expert coaching for CA Final - Financial Reporting & Ind AS',
+    title = 'CA Shirish Vyas - Expert coaching for CA Final - Financial Reporting & Ind AS',
     description = 'Expert coaching for CA Final - Financial Reporting & Ind AS',
     image = 'https://vgstudyhub.netlify.app/logo.png',
     url = 'https://vgstudyhub.netlify.app',
     type = 'website',
     publishedTime = null,
     modifiedTime = null,
-    author = 'Rishabh Jain',
-    keywords = 'Rishabh Jain, CA Final, Financial Reporting, Ind AS',
+    author = 'CA Shirish Vyas',
+    keywords = 'CA Shirish Vyas, CA Final, Financial Reporting, Ind AS',
   } = options;
 
   return {
@@ -63,7 +63,7 @@ export const generateMetaTags = (options) => {
           alt: title,
         },
       ],
-      site_name: 'Rishabh Jain',
+      site_name: 'CA Shirish Vyas',
       locale: 'en_US',
       ...(publishedTime && { article: { published_time: publishedTime } }),
       ...(modifiedTime && { article: { modified_time: modifiedTime } }),
@@ -108,7 +108,7 @@ export const generateBlogStructuredData = (blog, url) => {
     image = 'https://vgstudyhub.netlify.app/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
-    author = 'Rishabh Jain',
+    author = 'CA Shirish Vyas',
   } = blog;
 
   return {
@@ -130,7 +130,7 @@ export const generateBlogStructuredData = (blog, url) => {
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Rishabh Jain',
+      name: 'CA Shirish Vyas',
       url: 'https://vgstudyhub.netlify.app',
       logo: {
         '@type': 'ImageObject',
@@ -152,10 +152,10 @@ export const generateOrganizationStructuredData = () => {
   return {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
-    name: 'Rishabh Jain',
+    name: 'CA Shirish Vyas',
     url: 'https://vgstudyhub.netlify.app',
     logo: 'https://vgstudyhub.netlify.app/logo.png',
-    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by Rishabh Jain',
+    description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by CA Shirish Vyas',
     sameAs: [
       // Add your social media URLs
       'https://www.facebook.com/rishabhjain',
@@ -271,10 +271,10 @@ export const sanitizeMetaDescription = (description, maxLength = 160) => {
 /**
  * Generate unique page title
  * @param {string} pageTitle - Page specific title
- * @param {string} siteName - Site name (default: Rishabh Jain)
+ * @param {string} siteName - Site name (default: CA Shirish Vyas)
  * @returns {string} Complete page title
  */
-export const generatePageTitle = (pageTitle, siteName = 'Rishabh Jain') => {
+export const generatePageTitle = (pageTitle, siteName = 'CA Shirish Vyas') => {
   if (!pageTitle) return siteName;
   return `${pageTitle} | ${siteName}`;
 };

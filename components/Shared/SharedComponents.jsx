@@ -36,9 +36,9 @@ export const Footer = () => {
               {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
                 <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
               </div> */}
-              {institute?.institue ? institute?.institue : "Rishabh Jain"}
+              {institute?.institue ? institute?.institue : "CA Shirish Vyas"}
             </div>
-            <p>Best Rishabh Jain for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
+            <p>Best CA Shirish Vyas for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
           <div>
             <h4 className="text-white font-bold mb-3">Courses</h4>
@@ -108,7 +108,7 @@ export const Footer = () => {
           </div>
         </div>
         <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 {institute?.institue ? institute?.institue : "Rishabh Jain"} Education. All rights reserved.
+          © 2026 {institute?.institue ? institute?.institue : "CA Shirish Vyas"} Education. All rights reserved.
           {/* <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div> */}
         </div>
       </div>
@@ -153,7 +153,7 @@ export const Loader = () => (
     }}>
       <img
         src="https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/caclass-logo-circle-white.webp"
-        alt="Rishabh Jain Logo"
+        alt="CA Shirish Vyas Logo"
         style={{
           height: '96px',
           width: 'auto',

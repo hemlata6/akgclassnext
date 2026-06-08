@@ -8,7 +8,7 @@ export default function Refund() {
   return (
     <>
       <Head>
-        <title>{`Refund Policy - ${institute?.institue || "Rishabh Jain"}`}</title>
+        <title>{`Refund Policy - ${institute?.institue || "CA Shirish Vyas"}`}</title>
         <meta name="description" content="Read our refund policy" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>
