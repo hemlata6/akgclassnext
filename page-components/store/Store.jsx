@@ -1876,12 +1876,12 @@ const Store = () => {
                                     <div className="mb-5">
                                         {selectedTag ? (
                                             <>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5 place-items-center sm:place-items-start">
                                                     {filteredCourses.map((item) => (
                                                         <div
                                                             onClick={() => handleCardClick(item)}
                                                             key={item.id}
-                                                            className={`group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
+                                                            className={`w-[80%] group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
                                                                 ? 'border-amber-200 hover:border-amber-400'
                                                                 : 'border-indigo-100 hover:border-indigo-400'
                                                                 }`}
@@ -2073,7 +2073,7 @@ const Store = () => {
                                                                     {tag.tag}
                                                                 </h3> */}
                                                             </div>
-                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5">
+                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5 place-items-center sm:place-items-start">
                                                                 {tagCourses.map((item) => (
                                                                     <div
                                                                         onClick={() => handleCardClick(item)}
