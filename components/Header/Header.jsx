@@ -384,7 +384,7 @@ export const Header = ({ cartCount }) => {
           <div className="bg-[#071d49] text-white min-h-[44px] md:h-[52px] flex items-center justify-between px-3 md:px-6 lg:px-12 gap-2">
 
             {/* Left Side */}
-            <div className="flex items-center gap-2 md:gap-8 flex-shrink-0">
+            <div className="hidden md:flex items-center gap-2 md:gap-8 flex-shrink-0">
 
               <a
                 href={`mailto:${institute?.email}`}
@@ -405,7 +405,7 @@ export const Header = ({ cartCount }) => {
             </div>
 
             {/* Center Menu */}
-            <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-sm overflow-x-auto no-scrollbar flex-1 justify-center">
+            <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-xs md:text-sm overflow-x-auto no-scrollbar flex-1 justify-center">
 
               <Link href="/blog" className="hover:text-green-400 transition whitespace-nowrap">
                 Blog
@@ -439,7 +439,7 @@ export const Header = ({ cartCount }) => {
                 TRACK ORDER
               </button>
 
-              <button onClick={() => setShowAppDownloadModal(true)} className="flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#00b66d] text-white font-semibold text-sm hover:bg-[#00a764] transition whitespace-nowrap">
+              <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#00b66d] text-white font-semibold text-sm hover:bg-[#00a764] transition whitespace-nowrap">
                 <span className="text-xs md:text-base">📱</span>
                 <span className="hidden xs:inline">DOWNLOAD APP</span>
               </button>
