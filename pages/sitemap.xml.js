@@ -1,4 +1,3 @@
-import { GetServerSideProps } from 'next';
 import Network from '../config/Network';
 import instId from '../config/instituteId';
 

@@ -21,8 +21,8 @@ const nextConfig = {
   swcMinify: true,
   // Compression
   compress: true,
-  // Enable standalone output for Docker/Nginx deployment
-  output: 'standalone',
+  // Enable standalone output for Docker/Nginx deployment (disabled for Netlify)
+  // output: 'standalone',
   // Optimize production builds
   poweredByHeader: false,
   // Security headers
