@@ -3,216 +3,80 @@
 @tailwind utilities;
 
 :root {
-  --theme-primary: #2196F3;
-  --theme-primary-hover: #1976D2;
-  --theme-primary-class: bg-[#2196F3];
-  --theme-primary-hover-class: hover:bg-[#1976D2];
-  --theme-text-class: text-[#2196F3];
-  --theme-border-class: border-[#2196F3];
+  /* =========================================================================
+     PRIME VISION OFFICIAL BRAND MATRIX COLORS (EXTRACTED FROM LOGO)
+     ========================================================================= */
+  --theme-primary: #313381;        /* Deep Midnight Indigo (Logo Text/Base Anchor) */
+  --theme-primary-hover: #1e205c;  /* Darker Navy tone for interactive hover states */
+  --theme-accent: #00a896;         /* Vibrant Cyan/Teal (Logo Gradient Apex) */
+  --theme-accent-light: #e6f6f4;   /* Low-saturation soft tint for cards/backgrounds */
+  
+  --theme-primary-class: bg-[#313381];
+  --theme-primary-hover-class: hover:bg-[#1e205c];
+  --theme-text-class: text-[#313381];
+  --theme-border-class: border-[#313381];
   --font-family-base: 'Inter', sans-serif;
 }
 
-/* Theme-aware dynamic classes */
+/* =========================================================================
+   THEME-AWARE CORE CLASS MAPPINGS
+   ========================================================================= */
 .theme-bg {
   background-color: var(--theme-primary);
 }
-
 .theme-bg:hover {
   background-color: var(--theme-primary-hover);
 }
-
 .theme-text {
   color: var(--theme-primary);
 }
-
 .theme-border {
   border-color: var(--theme-primary);
 }
 
-/* Override indigo classes with CSS variables */
-.bg-indigo-700 {
+/* =========================================================================
+   LEGACY OVERRIDES (RE-MAPS ALL OLD COLOR UTILITIES AUTOMATICALLY)
+   ========================================================================= */
+/* Re-maps Indigo classes to Brand Midnight Indigo */
+.bg-indigo-700, .bg-indigo-600, .bg-indigo-500, .bg-indigo-400 {
   background-color: var(--theme-primary) !important;
 }
-
-.hover\:bg-indigo-600:hover,
-.hover\:bg-indigo-700:hover,
-.hover\:bg-indigo-800:hover {
+.hover\:bg-indigo-600:hover, .hover\:bg-indigo-700:hover, .hover\:bg-indigo-800:hover {
   background-color: var(--theme-primary-hover) !important;
 }
-
-.text-indigo-700 {
+.text-indigo-600, .text-indigo-700, .text-indigo-800 {
   color: var(--theme-primary) !important;
 }
-
-.text-indigo-800 {
+.hover\:text-indigo-600:hover, .hover\:text-indigo-700:hover {
   color: var(--theme-primary) !important;
 }
-
-.text-indigo-600 {
-  color: var(--theme-primary) !important;
+.border-indigo-700, .border-indigo-100 {
+  border-color: rgba(49, 51, 129, 0.15) !important;
 }
 
-.border-indigo-700 {
-  border-color: var(--theme-primary) !important;
+/* Re-maps Emerald & Blue utility instances to Brand Accent Teal */
+.bg-emerald-900, .bg-emerald-800, .bg-emerald-700, .bg-emerald-600, .bg-emerald-500,
+.bg-blue-500, .bg-blue-600 {
+  background-color: var(--theme-accent) !important;
+}
+.hover\:bg-emerald-600:hover, .hover\:bg-blue-600:hover {
+  background-color: #008f80 !important; /* Slightly darker shade of brand teal */
+}
+.text-emerald-600, .text-emerald-700, .text-blue-500, .text-blue-600 {
+  color: var(--theme-accent) !important;
+}
+.border-emerald-900, .border-blue-500 {
+  border-color: var(--theme-accent) !important;
 }
 
-.hover\:text-indigo-700:hover,
-.hover\:text-indigo-600:hover {
-  color: var(--theme-primary) !important;
+/* Elegant low-saturation brand teal backgrounds for active filters/cards */
+.bg-indigo-50, .bg-emerald-50, .bg-blue-50 {
+  background-color: var(--theme-accent-light) !important;
 }
 
-.bg-indigo-500 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-indigo-600 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-indigo-400 {
-  background-color: var(--theme-primary) !important;
-}
-
-.border-t-2.border-indigo-700 {
-  border-color: var(--theme-primary) !important;
-}
-
-/* Also cover violet classes for backward compatibility */
-.bg-violet-500 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-violet-600 {
-  background-color: var(--theme-primary) !important;
-}
-
-.text-violet-500 {
-  color: var(--theme-primary) !important;
-}
-
-/* Light indigo/violet background tints */
-.bg-indigo-50 {
-  background-color: rgba(var(--tw-rgb-indigo-50) / 0.3) !important;
-}
-
-.via-indigo-50 {
-  --tw-gradient-stops: var(--theme-primary), rgba(var(--tw-rgb-indigo-50) / 0.3) var(--tw-gradient-to-pos) !important;
-}
-
-/* Hide scrollbar for horizontal scrolling menus */
-.no-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-.no-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.border-indigo-100 {
-  border-color: rgba(var(--theme-primary) / 0.1) !important;
-}
-
-/* Blue color overrides for production builds */
-.bg-blue-500 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-blue-600 {
-  background-color: var(--theme-primary-hover) !important;
-}
-
-.hover\:bg-blue-600:hover {
-  background-color: var(--theme-primary-hover) !important;
-}
-
-.text-blue-500 {
-  color: var(--theme-primary) !important;
-}
-
-.text-blue-600 {
-  color: var(--theme-primary) !important;
-}
-
-.border-blue-500 {
-  border-color: var(--theme-primary) !important;
-}
-
-.hover\:text-blue-500:hover {
-  color: var(--theme-primary) !important;
-}
-
-.from-blue-500 {
-  --tw-gradient-from: var(--theme-primary) !important;
-}
-
-.to-blue-600 {
-  --tw-gradient-to: var(--theme-primary-hover) !important;
-}
-
-/* Emerald color overrides for dark green theme */
-.bg-emerald-900 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-emerald-800 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-emerald-700 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-emerald-600 {
-  background-color: var(--theme-primary) !important;
-}
-
-.bg-emerald-500 {
-  background-color: var(--theme-primary) !important;
-}
-
-.hover\:bg-emerald-900:hover,
-.hover\:bg-emerald-800:hover,
-.hover\:bg-emerald-700:hover,
-.hover\:bg-emerald-600:hover {
-  background-color: var(--theme-primary-hover) !important;
-}
-
-.text-emerald-900 {
-  color: var(--theme-primary) !important;
-}
-
-.text-emerald-800 {
-  color: var(--theme-primary) !important;
-}
-
-.text-emerald-700 {
-  color: var(--theme-primary) !important;
-}
-
-.text-emerald-600 {
-  color: var(--theme-primary) !important;
-}
-
-.border-emerald-900 {
-  border-color: var(--theme-primary) !important;
-}
-
-.border-emerald-100 {
-  border-color: rgba(var(--theme-primary) / 0.1) !important;
-}
-
-.from-emerald-900 {
-  --tw-gradient-from: var(--theme-primary) !important;
-}
-
-.from-emerald-800 {
-  --tw-gradient-from: var(--theme-primary) !important;
-}
-
-.to-emerald-800 {
-  --tw-gradient-to: var(--theme-primary-hover) !important;
-}
-
+/* =========================================================================
+   GLOBAL RESET MATRICES
+   ========================================================================= */
 * {
   margin: 0;
   padding: 0;
@@ -223,21 +87,14 @@ body {
   font-family: var(--font-family-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #f8fafc; /* Crisp, clean off-white background */
+  color: #0f172a;            /* Dark slate gray text for maximum legibility */
   padding: 0 !important;
   margin: 0 !important;
 }
 
 html {
   scroll-behavior: smooth;
-}
-
-.hide-scrollbar {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
 }
 
 .line-clamp-2 {
@@ -247,136 +104,11 @@ html {
   overflow: hidden;
 }
 
-@keyframes marquee {
-  0% {
-    transform: translateX(100%);
-  }
-
-  100% {
-    transform: translateX(-100%);
-  }
+/* Keep scrollbar hiding extensions pristine */
+.no-scrollbar::-webkit-scrollbar, .hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
-
-.animate-marquee {
-  animation: marquee 25s linear infinite;
-}
-
-/* Letter Drop Animation */
-@keyframes letterDrop {
-  0% {
-    opacity: 0;
-    transform: translate(0, -100px) rotate(360deg) scale(0);
-  }
-
-  30% {
-    transform: translate(0, -50px) rotate(180deg) scale(1);
-  }
-
-  60% {
-    transform: translate(0, 20px) scale(0.8) rotate(0deg);
-  }
-
-  100% {
-    transform: translate(0) scale(1) rotate(0deg);
-    opacity: 1;
-  }
-}
-
-.animate-letter-drop {
-  animation: letterDrop 0.3s forwards;
-}
-
-/* Alternative animations you can use */
-@keyframes revolveScale {
-  0% {
-    opacity: 0;
-    transform: translate(-150px, -50px) rotate(-180deg) scale(3);
-  }
-
-  60% {
-    transform: translate(20px, 20px) rotate(30deg) scale(0.3);
-  }
-
-  100% {
-    transform: translate(0) rotate(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes ballDrop {
-  0% {
-    opacity: 0;
-    transform: translate(200px, -100px) scale(2);
-  }
-
-  60% {
-    transform: translate(0, 20px) rotate(-180deg) scale(0.5);
-  }
-
-  100% {
-    transform: translate(0) rotate(0deg) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes sideSlide {
-  0% {
-    opacity: 0;
-    transform: translate(-300px, 0) scale(0);
-  }
-
-  60% {
-    transform: translate(20px, 0) scale(1);
-  }
-
-  80% {
-    transform: translate(20px, 0) scale(1);
-  }
-
-  99% {
-    transform: translate(0) scale(1.2);
-  }
-
-  100% {
-    transform: translate(0) scale(1);
-    opacity: 1;
-  }
-}
-
-@keyframes twister {
-  0% {
-    opacity: 0;
-    transform: rotate(-180deg) translate(150px, 0);
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  100% {
-    transform: rotate(0deg) translate(0);
-    opacity: 1;
-  }
-}
-
-@keyframes leftRight {
-  0% {
-    opacity: 0;
-    transform: translate(-150px, 0) scale(0.3);
-  }
-
-  40% {
-    transform: translate(50px, 0) scale(0.7);
-    opacity: 1;
-  }
-
-  80% {
-    transform: translate(0) scale(2);
-    opacity: 0;
-  }
-
-  100% {
-    transform: translate(0) scale(1);
-    opacity: 1;
-  }
+.no-scrollbar, .hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

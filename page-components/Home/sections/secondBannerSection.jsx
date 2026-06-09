@@ -104,7 +104,7 @@ export const SecondBannerSection = () => {
     return (
         <section className="py-6 md:py-8">
             <div className={LAYOUT_PADDING}>
-                <div className="bg-[#071d49] rounded-2xl px-6 md:px-10 py-5 md:py-7 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+                <div className="bg-[#191a45] rounded-2xl px-6 md:px-10 py-5 md:py-7 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
                     {/* Left: Text */}
                     <div className="text-center md:text-left">
                         <h2 className="text-white text-lg md:text-2xl font-bold leading-tight">

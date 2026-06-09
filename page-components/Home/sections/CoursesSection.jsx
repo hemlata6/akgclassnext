@@ -347,8 +347,11 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                     return (
                                         <div
                                             key={i}
-                                            className="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0"
-                                            style={{
+                                            className={`group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0 ${itemsPerView === 1 ? 'mx-auto' : ''}`}
+                                            style={itemsPerView === 1 ? {
+                                                width: '80%',
+                                                minWidth: '80%'
+                                            } : {
                                                 width: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`,
                                                 minWidth: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`
                                             }}

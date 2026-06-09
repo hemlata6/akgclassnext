@@ -12,6 +12,7 @@ import SignupModal from '../Auth/SignupModal';
 import AppDownloadModal from '../Modals/AppDownloadModal';
 import Endpoints from '@/config/endpoints';
 import { Typography } from '@mui/material';
+import AnnouncementsHeader from './AnnouncementsHeader';
 
 export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
@@ -261,33 +262,44 @@ export const Header = ({ cartCount }) => {
 
   // Handle first level domain click for Books
   const handleBooksFirstLevelDomainClick = (domain) => {
-    if (domain.child && domain.child?.length > 0 && !booksShowSecondLevel) {
+    // If domain has children → open submenu
+    if (domain.child && domain.child.length > 0 && !booksShowSecondLevel) {
       setBooksSelectedParentDomain(domain);
       setBooksSelectedFirstLevelDomain(domain);
       setBooksCurrentLevel('second');
-    } else if (domain.child && domain.child.length > 0) {
-      sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      return;
+    }
+
+    // If domain has NO children OR only one level exists → redirect directly
+    sessionStorage.setItem(
+      'storeNavigationState',
+      JSON.stringify({
         source: 'header',
         selectedDomainId: domain.id,
         selectedDomainName: domain.name,
         isMobile: false,
-        productType: 'books'
-      }));
-      router.push('/store');
-    }
+        productType: 'lecture',
+      })
+    );
+
+    router.push('/store');
   };
 
   // Handle second level domain click for Books
   const handleBooksSecondLevelDomainClick = (domain) => {
-    sessionStorage.setItem('storeNavigationState', JSON.stringify({
-      source: 'header',
-      selectedDomainId: booksSelectedParentDomain?.id,
-      selectedDomainName: booksSelectedParentDomain?.name,
-      selectedExamStageId: domain.id,
-      selectedExamStageName: domain.name,
-      isMobile: false,
-      productType: 'books'
-    }));
+    sessionStorage.setItem(
+      'storeNavigationState',
+      JSON.stringify({
+        source: 'header',
+        selectedDomainId: booksSelectedParentDomain?.id,
+        selectedDomainName: booksSelectedParentDomain?.name,
+        selectedExamStageId: domain.id,
+        selectedExamStageName: domain.name,
+        isMobile: false,
+        productType: 'lecture',
+      })
+    );
+
     router.push('/store');
   };
 
@@ -381,7 +393,7 @@ export const Header = ({ cartCount }) => {
 
           {/* --- A. TOP ANNOUNCEMENT STRIP --- */}
           {/* <div className="bg-slate-900 text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-slate-800"> */}
-          <div className="bg-[#071d49] text-white min-h-[44px] md:h-[52px] flex items-center justify-between px-3 md:px-6 lg:px-12 gap-2">
+          <div className="bg-[#191a45] text-white min-h-[44px] md:h-[52px] flex items-center justify-center md:justify-between px-3 md:px-6 lg:px-12 gap-2">
 
             {/* Left Side */}
             <div className="hidden md:flex items-center gap-2 md:gap-8 flex-shrink-0">
@@ -391,21 +403,21 @@ export const Header = ({ cartCount }) => {
                 className="flex items-center gap-1 md:gap-2 text-sm font-medium hover:text-green-400 transition"
               >
                 <span className="text-xs md:text-base">✉️</span>
-                <span className="hidden md:inline">{institute?.email || "info.rishabhjain@gmail.com"}</span>
+                <span className="hidden md:inline">{institute?.email || "cashirishvyasonline@gmail.com"}</span>
               </a>
 
               <a
-                href={`tel:${institute?.instituteAppSettingsModals?.contact}`}
+                href={`tel:${institute?.instituteAppSettingsModals?.contact || '+918591089800'}`}
                 className="flex items-center gap-1 md:gap-2 text-sm font-medium hover:text-green-400 transition"
               >
                 <span className="text-xs md:text-base">📞</span>
-                <span className="hidden sm:inline">{institute?.instituteAppSettingsModals?.contact}</span>
+                <span className="hidden sm:inline">{institute?.instituteAppSettingsModals?.contact || '+91 85910 89800'}</span>
               </a>
 
             </div>
 
             {/* Center Menu */}
-            <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-xs md:text-sm overflow-x-auto no-scrollbar flex-1 justify-center">
+            {/* <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-xs md:text-sm overflow-x-auto no-scrollbar flex-1 justify-center">
 
               <Link href="/blog" className="hover:text-green-400 transition whitespace-nowrap">
                 Blog
@@ -415,10 +427,6 @@ export const Header = ({ cartCount }) => {
                 Free Resources
               </Link>
 
-              {/* <a href="#" className="hover:text-green-400 transition whitespace-nowrap">
-                Gallery
-              </a> */}
-
               <a
                 href="#"
                 className="text-[#f8b400] hover:text-[#ffd15a] transition whitespace-nowrap"
@@ -426,18 +434,16 @@ export const Header = ({ cartCount }) => {
                 Become Franchise Partner
               </a>
 
-              <Link href="/store" className="hover:text-green-400 transition whitespace-nowrap">
-                Books
-              </Link>
+            </div> */}
 
-            </div>
+            <AnnouncementsHeader />
 
             {/* Right Buttons */}
             <div className="flex items-center gap-1.5 md:gap-3 flex-shrink-0">
 
-              <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#132b5b] border border-[#27457e] text-white font-semibold text-sm hover:bg-[#1a376f] transition">
+              {/* <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#132b5b] border border-[#27457e] text-white font-semibold text-sm hover:bg-[#1a376f] transition">
                 TRACK ORDER
-              </button>
+              </button> */}
 
               <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#00b66d] text-white font-semibold text-sm hover:bg-[#00a764] transition whitespace-nowrap">
                 <span className="text-xs md:text-base">📱</span>
@@ -456,30 +462,30 @@ export const Header = ({ cartCount }) => {
 
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  {/* <img src="/logo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" /> */}
-                  <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
-                    {/* <Icons.User /> */}
+                  <img src="/logo.png" alt="Next Gen CA" className="h-[2.5rem] object-contain" />
+                  {/* <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                     CASV
                   </button>
                   <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
                     CA Shirish Vyas
                     <span className='text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
-                  </div>
+                  </div> */}
                 </Link>
               </div>
 
             </nav>
-            
+
 
             {/* Mobile Logo - Left side */}
             <Link href="/" className="flex items-center gap-2 cursor-pointer xl:hidden">
-              <button className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg">
+              {/* <button className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg">
                 CASV
               </button>
               <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
                 CA Shirish Vyas
                 <span className='text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
-              </div>
+              </div> */}
+              <img src="/logo.png" alt="Next Gen CA" className="h-[2rem] object-contain" />
             </Link>
 
             <div className="relative hidden">
@@ -522,49 +528,7 @@ export const Header = ({ cartCount }) => {
 
             <div className="flex items-center gap-10 h-full hidden xl:flex">
               {/* <button onClick={() => router.push('/')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors relative group">Home</button> */}
-
-              {/* Dynamic Domain Menus */}
-              {domains.map(domain => (
-                <div
-                  key={domain.id}
-                  className="relative group h-full flex items-center"
-                  onMouseEnter={() => setHoveredMenu(domain.name)}
-                  onMouseLeave={() => setHoveredMenu(null)}
-                >
-                  <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
-                    {domain.name} <Icons.ChevronDown />
-                  </button>
-                  <div
-                    className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg 
-    transition-all duration-200 transform origin-top
-    ${hoveredMenu === domain.name
-                        ? 'opacity-100 visible translate-y-0'
-                        : 'opacity-0 invisible translate-y-2'
-                      } p-2`}
-                  >
-                    {domainLoading ? (
-                      <div className="px-4 py-3 text-sm text-slate-400">Loading...</div>
-                    ) : (
-                      <>
-                        {(domain.child || []).length > 0 ? (
-                          domain.child.map(child => (
-                            <button
-                              key={child.id}
-                              onClick={() => handleDomainChildClick(child, domain)}
-                              className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                            >
-                              {child.name}
-                            </button>
-                          ))
-                        ) : (
-                          <div className="px-4 py-3 text-sm text-slate-400 text-center">No items</div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {/* <div
+              <div
                 className="relative group h-full flex items-center"
                 onMouseEnter={() => {
                   setHoveredMenu('Books');
@@ -573,7 +537,7 @@ export const Header = ({ cartCount }) => {
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
-                  Books <Icons.ChevronDown />
+                  Video Lectures <Icons.ChevronDown />
                 </button>
 
                 <div
@@ -590,7 +554,7 @@ export const Header = ({ cartCount }) => {
                     </div>
                   ) : (
                     <>
-                      BACK
+                      {/* BACK */}
                       {booksCurrentLevel === 'second' && (
                         <button
                           onClick={handleBooksBackToFirstLevel}
@@ -600,19 +564,36 @@ export const Header = ({ cartCount }) => {
                         </button>
                       )}
 
-                      FIRST LEVEL
+                      {/* FIRST LEVEL */}
                       {booksCurrentLevel === 'first' &&
                         booksFirstLevelDomains.map((domain) => (
                           <button
                             key={domain.id}
-                            onClick={() => handleBooksFirstLevelDomainClick(domain)}
+                            onClick={() => {
+                              if (domain.child && domain.child.length > 0 && !booksShowSecondLevel) {
+                                handleBooksFirstLevelDomainClick(domain);
+                              } else {
+                                sessionStorage.setItem(
+                                  'storeNavigationState',
+                                  JSON.stringify({
+                                    source: 'header',
+                                    selectedDomainId: domain.id,
+                                    selectedDomainName: domain.name,
+                                    isMobile: false,
+                                    productType: 'lecture',
+                                  })
+                                );
+
+                                router.push('/store');
+                              }
+                            }}
                             className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
                           >
                             {domain.name}
                           </button>
                         ))}
 
-                      SECOND LEVEL
+                      {/* SECOND LEVEL */}
                       {booksCurrentLevel === 'second' &&
                         booksSecondLevelDomains.map((domain) => (
                           <button
@@ -626,10 +607,7 @@ export const Header = ({ cartCount }) => {
                     </>
                   )}
                 </div>
-              </div> */}
-
-              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button>
-
+              </div>
               {/* Faculty Menu */}
               <div
                 className="relative group h-full flex items-center"
@@ -670,10 +648,42 @@ export const Header = ({ cartCount }) => {
                 </div>
               </div>
 
+              <button onClick={() => router.push('/store')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">Books</button>
 
-              <button onClick={() => router.push('/store?batchTag=F2F+Pune')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Pune</button>
+              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button>
 
-              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#2EB1ED] hover:text-slate-900 text-sm transition-colors">Student Feedback</button>
+
+              <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Mumbai</button>
+
+              <button
+                onClick={() => router.push('/store?batchTag=Combo')}
+                className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${router.query.batchTag === "Combo"
+                  ? `
+        bg-gradient-to-r
+        from-orange-500
+        via-pink-500
+        to-red-500
+        text-white
+        shadow-[0_8px_30px_rgba(249,115,22,0.5)]
+        scale-105
+        ring-2
+        ring-orange-300
+      `
+                  : `
+        bg-white
+        text-[#1A2B4A]
+        border border-gray-200
+        hover:bg-gray-50
+        hover:scale-105
+      `
+                  }`}
+              >
+                🔥 Combo
+              </button>
+
+              {/* <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">About Us</button>
+              <button onClick={() => router.push('/contact-us')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Contact Us</button> */}
+              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#2EB1ED] hover:text-slate-900 text-sm transition-colors">Free Resources</button>
 
 
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
@@ -731,7 +741,7 @@ export const Header = ({ cartCount }) => {
                   </div>
                 </div>
               ) : (
-                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
+                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#191a45] hover:bg-slate-800 text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                   <Icons.User />
                   Account
                 </button>
@@ -776,52 +786,6 @@ export const Header = ({ cartCount }) => {
                 <button onClick={() => router.push('/')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Home</button>
                 {/* <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button> */}
                 {/* Dynamic Domain Mobile Submenus */}
-                {domains.map(domain => (
-                  <div key={domain.id} className="">
-                    <button
-                      onClick={() => {
-                        const key = `domain-${domain.id}`;
-                        if (openMobileSubmenu === key) {
-                          setOpenMobileSubmenu(null);
-                        } else {
-                          setOpenMobileSubmenu(key);
-                        }
-                      }}
-                      className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
-                    >
-                      <span>{domain.name}</span>
-                      <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === `domain-${domain.id}` ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openMobileSubmenu === `domain-${domain.id}` && (
-                      <div className="space-y-1 mt-1 pl-2">
-                        {domainLoading ? (
-                          <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
-                            <span>Loading...</span>
-                          </div>
-                        ) : (
-                          <>
-                            {(domain.child || []).map(child => (
-                              <button
-                                key={child.id}
-                                onClick={() => {
-                                  handleDomainChildClick(child, domain);
-                                  setMobileMenuOpen(false);
-                                  setOpenMobileSubmenu(null);
-                                }}
-                                className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
-                                <span className="truncate">{child.name}</span>
-                              </button>
-                            ))}
-                          </>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                ))}
-
                 <div className="">
                   <button
                     onClick={() => {
@@ -836,7 +800,7 @@ export const Header = ({ cartCount }) => {
                     }}
                     className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
                   >
-                    <span>Books</span>
+                    <span>Video Lectures</span>
                     <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'books' ? 'rotate-180' : ''}`} />
                   </button>
                   {openMobileSubmenu === 'books' && (
@@ -964,7 +928,13 @@ export const Header = ({ cartCount }) => {
 
                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
 
+                <button onClick={() => router.push('/store')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Books</button>
+
+                <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="text-left font-medium text-[#1A2B4A] py-3 hover:bg-slate-50 px-2 rounded-md">F2F Mumbai</button>
+
                 <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
+
+                <button onClick={() => router.push('/store?batchTag=Combo')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">🔥 Combo</button>
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 

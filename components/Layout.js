@@ -59,7 +59,7 @@ export default function Layout({ children }) {
   return (
     <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
       {!shouldHideControls && !isStorePage && <Header cartCount={cartCount} />}
-      {!shouldHideControls && !isStorePage && <AnnouncementsHeader cartCount={cartCount} />}
+      {/* {!shouldHideControls && !isStorePage && <AnnouncementsHeader cartCount={cartCount} />} */}
       {children}
       {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}
     </div>

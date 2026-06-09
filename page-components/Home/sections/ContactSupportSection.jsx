@@ -6,10 +6,10 @@ const ContactSupportSection = () => {
     const { institute } = useAuth();
     
     const phoneNumbers = [
-        "9318492718",
-        "7703880232",
-        "8882090148",
-        "9220362206"
+         "+919930433999",
+        "+919930422999",
+        "+918591089800",
+        "+918591515899"
     ];
 
     const handleCall = (phone) => {
@@ -41,7 +41,7 @@ const ContactSupportSection = () => {
                         <span className="font-bold text-sm md:text-base">
                             Call for Lecture / Books / Test Series Enquiry:
                         </span>
-                        {/* {phoneNumbers.map((phone, index) => (
+                        {phoneNumbers.map((phone, index) => (
                             <React.Fragment key={index}>
                                 <button
                                     onClick={() => handleCall(phone)}
@@ -53,8 +53,8 @@ const ContactSupportSection = () => {
                                     <span className="text-white">|</span>
                                 )}
                             </React.Fragment>
-                        ))} */}
-                        {institute?.instituteAppSettingsModals?.contact}
+                        ))}
+                        {/* {institute?.instituteAppSettingsModals?.contact} */}
                     </div>
                 </div>
             </section>

@@ -5,25 +5,30 @@ import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
     { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
-    { q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
+    {
+        q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
 Even average students can build strong clarity and confidently write exams.` },
-    { q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
+    {
+        q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
 
 Concept notes (easy language)
 Exam-oriented question bank
 Past exam questions coverage
 Mock tests & revision support
 You don’t need to purchase anything separately.` },
-    { q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
+    {
+        q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
 
 Structured study plan
 Proper syllabus coverage
 Exam-focused teaching
 Time-saving preparation strategy
 Students save months of confusion and study in the right direction from Day 1.` },
-    { q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
+    {
+        q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
 You’ll get a clear roadmap so you can maximize marks in minimum time.` },
-    { q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
+    {
+        q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
 
 Clear explanations
 Smart exam strategy
@@ -34,7 +39,7 @@ If you’re serious about clearing CS Executive or CS Professional, this course 
 
 export const StudentSupportSection = () => {
     const [open, setOpen] = useState(null);
-    const {institute } = useAuth();
+    const { institute } = useAuth();
 
     return (
         <section className="py-6 bg-white border-t border-slate-200">
@@ -64,7 +69,7 @@ export const StudentSupportSection = () => {
                         </div>
                     </div>
                     <div className="lg:col-span-5 sticky top-24">
-                        <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden">
+                        <div className="bg-[#191a45] rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                             <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-500/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl"></div>
                             <div className="relative z-10">
@@ -75,20 +80,20 @@ export const StudentSupportSection = () => {
                                 <div className="mb-4 space-y-2 text-sm">
                                     <div className="flex items-center gap-2">
                                         <MapPin className="w-4 h-4 text-emerald-400" />
-                                        <span className="text-slate-300">{institute?.address}</span>
+                                        <span className="text-slate-300">{institute?.address || 'B Wing, 1st Floor, Bhakti Apt, Opp. Jain Temple, Jambhali Galli, Near Moksh Plaza, Borivali West, Mumbai – 400092.'}</span>
                                     </div>
                                     <div className="flex items-center gap-2">
                                         <Mail className="w-4 h-4 text-emerald-400" />
-                                        <a href={`mailto:${institute?.email}`} className="text-slate-300 hover:text-white">{institute?.email}</a>
+                                        <a href={`mailto:${institute?.email || 'cashirishvyasonline@gmail.com'}`} className="text-slate-300 hover:text-white">{institute?.email || 'cashirishvyasonline@gmail.com'}</a>
                                     </div>
                                 </div>
 
                                 <div className="space-y-3">
                                     <a
-                                        href="tel:+917703880232"
+                                        href="tel:+918591089800"
                                         className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-md"
                                     >
-                                        <Phone /> Call: +{institute?.instituteAppSettingsModals?.contact}
+                                        <Phone /> Call: +{institute?.instituteAppSettingsModals?.contact || '+91 85910 89800'}
                                     </a>
                                     <a
                                         href={`https://wa.me/{institute?.instituteAppSettingsModals.contact}`}

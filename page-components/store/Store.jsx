@@ -597,7 +597,9 @@ const Store = () => {
         }
     }, [faculties, filtersInitialized, router.query, shouldHideGlobalControls]);
 
-    // Select batch tag from URL query param (e.g. ?batchTag=F2F from F2F Pune header button)
+    
+
+    // Select batch tag from URL query param (e.g. ?batchTag=F2F from F2F Mumbai header button)
     useEffect(() => {
         if (shouldHideGlobalControls || !pendingBatchTag) {
             return;
