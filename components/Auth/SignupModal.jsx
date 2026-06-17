@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../config/AuthContext';
-import { User, Mail, UserPlus, Sparkles, X } from 'lucide-react';
+import { User, Mail, UserPlus, Sparkles, X, MapPin } from 'lucide-react';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { useTheme } from '../../config/ThemeContext';
 import { useStudent } from '@/config/StudentContext';
 
-const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
+const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose, onAddressSaved }) => {
   const [formData, setFormData] = useState({
     firstname: '',
     lastname: '',
@@ -28,7 +28,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [tempSignupData, setTempSignupData] = useState(null);
   const { login, auth, stateList } = useAuth();
   const { theme } = useTheme();
-  const { setStudentAuth } = useStudent();
+  const { setStudentAuth, authToken, updateStudentData, studentData } = useStudent();
 
   // Check for temporary signup data on component mount
   useEffect(() => {
@@ -36,6 +36,16 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     if (tempData) {
       const parsedData = JSON.parse(tempData);
       setTempSignupData(parsedData);
+
+      // If this is an existing user, pre-fill their name and email
+      if (parsedData.isExistingUser && parsedData.existingStudent) {
+        const existing = parsedData.existingStudent;
+        setFormData({
+          firstname: existing.firstName || existing.first_name || '',
+          lastname: existing.lastName || existing.last_name || '',
+          email: existing.email || '',
+        });
+      }
     }
   }, [isOpen]);
 
@@ -132,58 +142,102 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     try {
       const fullAddress = `${addressForm.houseNumber}, ${addressForm.address}, ${addressForm.cityName}, ${addressForm.stateName}, ${addressForm.zipCode}`;
 
-      const registrationBody = {
-        contact: tempSignupData?.phone,
-        firstName: formData.firstname,
-        lastName: formData.lastname,
-        email: formData.email,
-        instId: instId,
-        password: 123456,
-        gender: "male",
-        cityId: null,
-        address: fullAddress,
-        userName: `${formData.firstname} ${formData.lastname}`,
-      };
+      // Handle existing user: just update their profile with the address
+      if (tempSignupData?.isExistingUser) {
+        const token = authToken || localStorage.getItem('authToken');
+        const existingStudent = tempSignupData.existingStudent || studentData;
 
-      const registrationResponse = await Network.studentRegister(registrationBody);
+        if (!token) {
+          setErrors({ submit: 'Session expired. Please login again.' });
+          setIsLoading(false);
+          return;
+        }
 
-      if (registrationResponse.status === true) {
-        // Registration successful - now call student login API
-        const loginBody = {
-          contact: tempSignupData?.phone,
-          otp: tempSignupData?.otp,
-          instId: instId,
-          deviceId: "1",
-          deviceOS: "windows",
+        const body = {
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          userName: existingStudent?.userName || existingStudent?.contact || tempSignupData?.phone,
+          email: formData.email,
+          dob: existingStudent?.dob ? new Date(existingStudent.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
+          address: fullAddress,
+          cityId: null,
+          bio: existingStudent?.bio || formData.firstname,
+          gender: (existingStudent?.gender || 'male').toLowerCase(),
+          zipCode: addressForm.zipCode.trim(),
         };
 
-        const loginResponse = await Network.verifyLoginOtp(loginBody);
+        const response = await Network.editStudentProfile(token, body);
 
-        if (loginResponse.status === true) {
-          // Set student data in context
-          const success = setStudentAuth(loginResponse);
-
-          if (success) {
-            // Login the user automatically
-            login(tempSignupData?.phone, tempSignupData?.otp);
-            // Clear temporary signup data
-            localStorage.removeItem('tempSignup');
-            // Close the signup form on successful signup/login
-            handleClose();
-            handleLoginClose();
-          } else {
-            setErrors({ submit: 'Registration successful but failed to set user data.' });
+        if (response?.errorCode === 0 || response?.status) {
+          // Update student data in context
+          updateStudentData({ address: fullAddress, zipCode: addressForm.zipCode.trim() });
+          // Clear temporary signup data
+          localStorage.removeItem('tempSignup');
+          // Close the signup form
+          handleClose();
+          handleLoginClose();
+          // Navigate after address is saved
+          if (onAddressSaved) {
+            onAddressSaved();
           }
         } else {
-          setErrors({ submit: loginResponse.message || 'Registration successful but login failed.' });
+          setErrors({ submit: response?.message || response?.errorDescription || 'Failed to save address. Please try again.' });
         }
       } else {
-        setErrors({ submit: registrationResponse.message || 'Registration failed. Please try again.' });
+        // New user: proceed with registration
+        const registrationBody = {
+          contact: tempSignupData?.phone,
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          email: formData.email,
+          instId: instId,
+          password: 123456,
+          gender: "male",
+          cityId: null,
+          address: fullAddress,
+          userName: `${formData.firstname} ${formData.lastname}`,
+        };
+
+        const registrationResponse = await Network.studentRegister(registrationBody);
+
+        if (registrationResponse.status === true) {
+          // Registration successful - now call student login API
+          const loginBody = {
+            contact: tempSignupData?.phone,
+            otp: tempSignupData?.otp,
+            instId: instId,
+            deviceId: "1",
+            deviceOS: "windows",
+          };
+
+          const loginResponse = await Network.verifyLoginOtp(loginBody);
+
+          if (loginResponse.status === true) {
+            // Set student data in context
+            const success = setStudentAuth(loginResponse);
+
+            if (success) {
+              // Login the user automatically
+              login(tempSignupData?.phone, tempSignupData?.otp);
+              // Clear temporary signup data
+              localStorage.removeItem('tempSignup');
+              // Close the signup form on successful signup/login
+              handleClose();
+              handleLoginClose();
+            } else {
+              setErrors({ submit: 'Registration successful but failed to set user data.' });
+            }
+          } else {
+            setErrors({ submit: loginResponse.message || 'Registration successful but login failed.' });
+          }
+        } else {
+          setErrors({ submit: registrationResponse.message || 'Registration failed. Please try again.' });
+        }
       }
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('Error:', error);
       setErrors({
-        submit: error.response?.data?.message || error.message || 'Registration failed. Please try again.'
+        submit: error.response?.data?.message || error.message || 'Something went wrong. Please try again.'
       });
     } finally {
       setIsLoading(false);
@@ -206,6 +260,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     });
     setErrors({});
     setAddressErrors({});
+    setTempSignupData(null);
+    localStorage.removeItem('tempSignup');
+    sessionStorage.removeItem('addressPromptShown');
     onClose();
   };
 
@@ -225,16 +282,22 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="relative mx-auto h-14 w-14 mb-2">
             <div className="absolute inset-0 rounded-2xl" style={{ backgroundColor: theme?.primary || '#2196F3', opacity: 0.3 }}></div>
             <div className="relative h-full w-full rounded-2xl flex items-center justify-center transform rotate-3" style={{ backgroundColor: theme?.primary || '#2196F3' }}>
-              <UserPlus className="h-7 w-7 text-white" />
+              {tempSignupData?.isExistingUser ? (
+                <MapPin className="h-7 w-7 text-white" />
+              ) : (
+                <UserPlus className="h-7 w-7 text-white" />
+              )}
             </div>
           </div>
 
           <div className="space-y-1">
             <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-              Create Account
+              {tempSignupData?.isExistingUser ? 'Complete Your Profile' : 'Create Account'}
             </h2>
             <p className="text-gray-600 text-xs">
-              Join our community and start your learning journey
+              {tempSignupData?.isExistingUser
+                ? 'Please provide your delivery address to proceed'
+                : 'Join our community and start your learning journey'}
             </p>
           </div>
 
@@ -245,20 +308,6 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
               </p>
             </div>
           )}
-
-          {/* <p className="mt-2 text-center text-xs text-gray-500">
-            Already have an account?{' '}
-            <button
-              onClick={() => {
-                handleClose();
-                onLoginClick();
-              }}
-              className="font-semibold hover:opacity-80 transition-all duration-200"
-              style={{ color: theme?.primary || '#2196F3' }}
-            >
-              Sign in here
-            </button>
-          </p> */}
         </div>
 
         {/* Form */}
@@ -486,12 +535,16 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Creating Account...
+                  {tempSignupData?.isExistingUser ? 'Saving Address...' : 'Creating Account...'}
                 </>
               ) : (
                 <>
-                  <Sparkles className="h-5 w-5 opacity-80" />
-                  Create Account
+                  {tempSignupData?.isExistingUser ? (
+                    <MapPin className="h-5 w-5 opacity-80" />
+                  ) : (
+                    <Sparkles className="h-5 w-5 opacity-80" />
+                  )}
+                  {tempSignupData?.isExistingUser ? 'Save Address' : 'Create Account'}
                 </>
               )}
             </button>

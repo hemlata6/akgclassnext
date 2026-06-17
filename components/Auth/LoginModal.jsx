@@ -319,9 +319,16 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
             // console.log("Login successful, loginVerifyResponse data:", loginVerifyResponse?.student);
 
             // Check if student has address
-            if (!loginVerifyResponse?.student?.address || loginVerifyResponse?.student?.address.trim() === '') {
-              // Show address dialog if address is empty
-              setShowAddressDialog(true);
+            if (!loginVerifyResponse?.student?.address || loginVerifyResponse?.student?.address.trim() === '' || loginVerifyResponse?.student?.address.trim().toLowerCase() === 'india') {
+              // Store temporary signup data with existing student info
+              // so the SignupModal can pre-fill and handle address update
+              localStorage.setItem('tempSignup', JSON.stringify({
+                phone: formData.phone,
+                otp: formData.otp,
+                existingStudent: loginVerifyResponse?.student,
+                isExistingUser: true
+              }));
+              setOpenSignUpModal(true);
             } else {
               // Proceed with navigation if address exists
               handleNavigate();
@@ -554,6 +561,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
         isOpen={openSignUpModel}
         onClose={() => setOpenSignUpModal(false)}
         handleLoginClose={handleClose}
+        onAddressSaved={handleNavigate}
       />
 
       {showAddressDialog && (
