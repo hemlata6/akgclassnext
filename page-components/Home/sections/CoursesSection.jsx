@@ -162,7 +162,8 @@ export const CoursesSection = ({ employeeCourseId }) => {
                 ? courses.filter(c =>
                     c.active &&
                     c.paid === true &&
-                    c.type === 'lecture'
+                    c.type === 'lecture' &&
+                    c.coursePricing && c.coursePricing.length > 0
                 )
                 : [];
 
@@ -246,6 +247,8 @@ export const CoursesSection = ({ employeeCourseId }) => {
         }));
         router.push('/store');
     }
+
+    console.log('filtered', filtered)
 
     return (
         <section id="fr-courses" className="py-12 bg-slate-50 relative overflow-hidden">

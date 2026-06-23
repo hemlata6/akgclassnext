@@ -6,13 +6,16 @@ import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
 import CourseConfigModal from './CourseConfigModal';
+import { useTheme } from '@mui/material';
 
 export const BookStore = ({ employeeCourseId }) => {
+
+    const theme = useTheme();
     const router = useRouter();
     const { authToken } = useAuth();
     const [active, setActive] = useState(null);
     const [activeDomain, setActiveDomain] = useState(null);
-    const [coursesData, setCoursesData] = useState([]);
+    const [bookData, setBookData] = useState([]);
     const [tags, setTags] = useState([]);
     const [domains, setDomains] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -106,10 +109,10 @@ export const BookStore = ({ employeeCourseId }) => {
     };
 
     useEffect(() => {
-        fetchCourses();
+        fetchBooks();
     }, [tags]);
 
-    const fetchCourses = async () => {
+    const fetchBooks = async () => {
         try {
             setLoading(true);
             const response = authToken ? await Network.getStudentAuthCourse(authToken) : await Network.getFreeCourseList(instId);
@@ -123,22 +126,32 @@ export const BookStore = ({ employeeCourseId }) => {
                 )
                 : [];
 
-            setCoursesData(bookCourses);
+            setBookData(bookCourses);
             setError(null);
         } catch (err) {
             console.error('Error fetching courses:', err);
             setError('Failed to load books');
-            setCoursesData([]);
+            setBookData([]);
         } finally {
             setLoading(false);
         }
     };
 
-    const filtered = coursesData.filter(c => {
+    const filtered = bookData.filter(c => {
         // Filter by domain if selected
         const domainMatch = activeDomain === null || (c.domain && Array.isArray(c.domain) && c.domain.some(d => d.id === activeDomain));
 
-        return domainMatch;
+        // Exclude books with zero price
+        const pricing = c.coursePricing && Array.isArray(c.coursePricing) && c.coursePricing.length > 0
+            ? c.coursePricing.reduce((lowest, current) => {
+                const currentDiscounted = current.price - (current.price * current.discount / 100);
+                const lowestDiscounted = lowest.price - (lowest.price * lowest.discount / 100);
+                return currentDiscounted < lowestDiscounted ? current : lowest;
+            })
+            : null;
+        const hasNonZeroPrice = pricing && pricing.price > 0;
+
+        return domainMatch && hasNonZeroPrice;
     });
 
     // Reset currentIndex when filtering changes
@@ -255,7 +268,7 @@ export const BookStore = ({ employeeCourseId }) => {
                     </div>
                 )}
 
-                {!loading && coursesData.length === 0 && (
+                {!loading && bookData.length === 0 && (
                     <div className="text-center py-12">
                         <p className="text-slate-500">No books available at the moment.</p>
                     </div>
@@ -296,14 +309,14 @@ export const BookStore = ({ employeeCourseId }) => {
                                         >
                                             {/* Image Area */}
                                             <div
-                                                onClick={() => router.push(`/course/${course.id}`)}
+                                                onClick={() => router.push(`/book/${book.id}`)}
                                                 className="relative overflow-hidden cursor-pointer"
                                                 style={{ aspectRatio: '1/1' }}
                                             >
-                                                {course.logo && (
+                                                {book.logo && (
                                                     <img
-                                                        src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
-                                                        alt={course.title}
+                                                        src={`${Endpoints?.mediaBaseUrl}${book.logo}`}
+                                                        alt={book.title}
                                                         className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                                     />
                                                 )}
@@ -330,10 +343,10 @@ export const BookStore = ({ employeeCourseId }) => {
                                             {/* Content Area */}
                                             <div className="p-4 flex-1 flex flex-col">
                                                 <h3
-                                                    onClick={() => router.push(`/course/${course.id}`)}
+                                                    onClick={() => router.push(`/book/${book.id}`)}
                                                     className="text-sm font-bold text-slate-900 leading-snug mb-3 cursor-pointer hover:text-indigo-700 transition-colors line-clamp-2"
                                                 >
-                                                    {course.title}
+                                                    {book.title}
                                                 </h3>
                                                 
                                                 <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3">
@@ -363,31 +376,31 @@ export const BookStore = ({ employeeCourseId }) => {
                                                             onClick={(e) => {
                                                                 e.stopPropagation();
 
-                                                                const isInCart = cartCourses.some(item => item.id === course.id);
+                                                                const isInCart = cartCourses.some(item => item.id === book.id);
 
                                                                 if (isInCart) {
-                                                                    const updatedCart = cartCourses.filter(item => item.id !== course.id);
+                                                                    const updatedCart = cartCourses.filter(item => item.id !== book.id);
                                                                     setCartCourses(updatedCart);
                                                                     localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
                                                                     window.dispatchEvent(new Event('cartUpdated'));
                                                                 } else {
-                                                                    if (!course.coursePricing || course.coursePricing.length === 0) {
+                                                                    if (!book.coursePricing || book.coursePricing.length === 0) {
                                                                         return;
                                                                     }
-                                                                    setSelectedCourse(course);
+                                                                    setSelectedBook(book);
                                                                     setShowConfigModal(true);
                                                                 }
                                                             }}
                                                             className="text-white h-9 w-9 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
                                                             style={{
-                                                                backgroundColor: cartCourses.some(item => item.id === course.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
-                                                                transform: cartCourses.some(item => item.id === course.id) ? 'scale(1.1)' : 'scale(1)',
-                                                                boxShadow: cartCourses.some(item => item.id === course.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+                                                                backgroundColor: cartCourses.some(item => item.id === book.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
+                                                                transform: cartCourses.some(item => item.id === book.id) ? 'scale(1.1)' : 'scale(1)',
+                                                                boxShadow: cartCourses.some(item => item.id === book.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
                                                             }}
                                                         >
-                                                            {cartCourses.some(item => item.id === course.id) ? <Icons.X /> : <Icons.Cart />}
+                                                            {cartCourses.some(item => item.id === book.id) ? <Icons.X /> : <Icons.Cart />}
                                                         </button>
-                                                        {cartCourses.some(item => item.id === course.id) && (
+                                                        {cartCourses.some(item => item.id === book.id) && (
                                                             <button
                                                                 onClick={(e) => {
                                                                     e.stopPropagation();

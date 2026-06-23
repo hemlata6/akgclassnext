@@ -541,69 +541,72 @@ export const Header = ({ cartCount }) => {
                 </button>
 
                 <div
-                  className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg
+                  className={`absolute top-full left-0 w-72 bg-white border border-slate-100 shadow-xl rounded-lg
     transition-all duration-200 transform origin-top
     ${hoveredMenu === 'Books'
                       ? 'opacity-100 visible translate-y-0'
                       : 'opacity-0 invisible translate-y-2'
-                    } p-2`}
+                    } p-2 max-h-[80vh] overflow-y-auto`}
                 >
                   {booksLoading ? (
                     <div className="px-4 py-3 text-sm text-slate-400">
                       Loading...
                     </div>
+                  ) : booksFirstLevelDomains.length === 0 ? (
+                    <div className="px-4 py-3 text-sm text-slate-400">
+                      No categories available
+                    </div>
                   ) : (
                     <>
-                      {/* BACK */}
-                      {booksCurrentLevel === 'second' && (
-                        <button
-                          onClick={handleBooksBackToFirstLevel}
-                          className="w-full text-left px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-slate-50 rounded-md"
-                        >
-                          ← Back
-                        </button>
-                      )}
-
-                      {/* FIRST LEVEL */}
-                      {booksCurrentLevel === 'first' &&
-                        booksFirstLevelDomains.map((domain) => (
+                      {booksFirstLevelDomains.map((domain) => (
+                        <div key={domain.id}>
                           <button
-                            key={domain.id}
                             onClick={() => {
-                              if (domain.child && domain.child.length > 0 && !booksShowSecondLevel) {
-                                handleBooksFirstLevelDomainClick(domain);
-                              } else {
-                                sessionStorage.setItem(
-                                  'storeNavigationState',
-                                  JSON.stringify({
-                                    source: 'header',
-                                    selectedDomainId: domain.id,
-                                    selectedDomainName: domain.name,
-                                    isMobile: false,
-                                    productType: 'lecture',
-                                  })
-                                );
-
-                                router.push('/store');
-                              }
+                              sessionStorage.setItem(
+                                'storeNavigationState',
+                                JSON.stringify({
+                                  source: 'header',
+                                  selectedDomainId: domain.id,
+                                  selectedDomainName: domain.name,
+                                  isMobile: false,
+                                  productType: 'lecture',
+                                })
+                              );
+                              router.push('/store');
                             }}
-                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                            className="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
                           >
                             {domain.name}
                           </button>
-                        ))}
-
-                      {/* SECOND LEVEL */}
-                      {booksCurrentLevel === 'second' &&
-                        booksSecondLevelDomains.map((domain) => (
-                          <button
-                            key={domain.id}
-                            onClick={() => handleBooksSecondLevelDomainClick(domain)}
-                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                          >
-                            {domain.name}
-                          </button>
-                        ))}
+                          {domain.child && domain.child.length > 0 && (
+                            <div className="ml-3 border-l-2 border-slate-100 pl-2 mb-1">
+                              {domain.child.map((child) => (
+                                <button
+                                  key={child.id}
+                                  onClick={() => {
+                                    sessionStorage.setItem(
+                                      'storeNavigationState',
+                                      JSON.stringify({
+                                        source: 'header',
+                                        selectedDomainId: domain.id,
+                                        selectedDomainName: domain.name,
+                                        selectedExamStageId: child.id,
+                                        selectedExamStageName: child.name,
+                                        isMobile: false,
+                                        productType: 'lecture',
+                                      })
+                                    );
+                                    router.push('/store');
+                                  }}
+                                  className="block w-full text-left px-4 py-2 text-sm text-slate-500 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition"
+                                >
+                                  {child.name}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </>
                   )}
                 </div>
@@ -655,7 +658,7 @@ export const Header = ({ cartCount }) => {
 
               <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Mumbai</button>
 
-              <button
+              {/* <button
                 onClick={() => router.push('/store?batchTag=Combo')}
                 className={`px-5 py-2.5 rounded-full text-sm font-bold transition-all duration-300 ${router.query.batchTag === "Combo"
                   ? `
@@ -679,7 +682,7 @@ export const Header = ({ cartCount }) => {
                   }`}
               >
                 🔥 Combo
-              </button>
+              </button> */}
 
               {/* <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">About Us</button>
               <button onClick={() => router.push('/contact-us')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Contact Us</button> */}
@@ -934,7 +937,7 @@ export const Header = ({ cartCount }) => {
 
                 <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
 
-                <button onClick={() => router.push('/store?batchTag=Combo')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">🔥 Combo</button>
+                {/* <button onClick={() => router.push('/store?batchTag=Combo')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">🔥 Combo</button> */}
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 

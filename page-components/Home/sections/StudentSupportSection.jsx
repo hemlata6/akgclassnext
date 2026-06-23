@@ -4,37 +4,59 @@ import { LAYOUT_PADDING } from '../../../constants/Icons';
 import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
-    { q: 'Are these courses updated for the latest ICSI syllabus and exam pattern?', a: 'Yes. All lectures, notes, question banks and test series are 100% updated as per the latest ICSI syllabus and exam trend for the upcoming attempts. We continuously update content whenever any amendment or change happens so you never study outdated material.' },
     {
-        q: 'Will I get full coverage from basics to exam-level preparation?', a: `Absolutely. Our courses start from conceptual basics → exam oriented approach → past paper practice → revision strategy.
-Even average students can build strong clarity and confidently write exams.` },
+        q: 'Are these courses updated as per the latest ICAI syllabus and exam pattern?',
+        a: 'Yes. All lectures, notes, question banks, and test series are fully updated according to the latest ICAI syllabus, amendments, and exam pattern for upcoming CA Foundation, Intermediate, and Final attempts. We continuously update the content whenever ICAI introduces any changes, ensuring you always study the most relevant material.'
+    },
     {
-        q: 'Do you provide notes, question banks and test series with the course?', a: `Yes. The course is a complete preparation package, including:
+        q: 'Will I get complete coverage from basics to exam-level preparation?',
+        a: `Absolutely. Our courses are designed to take you from conceptual understanding to exam success:
 
-Concept notes (easy language)
+Conceptual clarity from scratch
+Practical and exam-oriented learning
+Past exam question practice
+Revision and answer-writing strategies
+
+Whether you are a beginner or a repeat student, the course helps you build confidence and perform effectively in exams.`
+    },
+    {
+        q: 'Do you provide notes, question banks, and test series with the course?',
+        a: `Yes. Our course is a complete preparation package that includes:
+
+Comprehensive study notes
 Exam-oriented question bank
-Past exam questions coverage
-Mock tests & revision support
-You don’t need to purchase anything separately.` },
-    {
-        q: 'How are your courses different from YouTube or free content?', a: `Free content is scattered and incomplete. Our course gives you:
+Coverage of past ICAI exam questions
+Mock tests and revision support
 
-Structured study plan
-Proper syllabus coverage
-Exam-focused teaching
-Time-saving preparation strategy
-Students save months of confusion and study in the right direction from Day 1.` },
+You won’t need to purchase additional study material separately.`
+    },
     {
-        q: 'Is this course suitable if I am starting late or have less time?', a: `Yes! Many of our students join with limited time and still clear exams because the course is designed to be crisp, practical and exam-focused.
-You’ll get a clear roadmap so you can maximize marks in minimum time.` },
+        q: 'How is this course different from YouTube or free content?',
+        a: `Free content is often scattered, incomplete, and lacks a clear study path. Our courses provide:
+
+Structured learning roadmap
+Complete syllabus coverage
+Exam-focused teaching methodology
+Smart preparation and revision strategy
+
+This helps students avoid confusion, save valuable time, and stay focused on what actually matters for exams.`
+    },
     {
-        q: 'What if I am unsure whether this course will work for me?', a: `That’s exactly why we focus on student results and experience. Thousands of students trust our courses for:
+        q: 'Is this course suitable if I am starting late or have limited preparation time?',
+        a: `Yes. Many students join our courses with limited preparation time and still achieve excellent results because the content is concise, practical, and highly exam-focused.
 
-Clear explanations
-Smart exam strategy
-Consistent results
+You’ll get a clear study plan and priority-based preparation strategy to maximize your score in the available time.`
+    },
+    {
+        q: 'What if I am unsure whether this course is right for me?',
+        a: `That’s exactly why we focus on student outcomes and learning experience. Thousands of CA aspirants trust our courses because of:
 
-If you’re serious about clearing CS Executive or CS Professional, this course gives you the right guidance, structure and confidence to succeed.` }
+Simple and clear explanations
+Proven exam strategies
+Consistent student success
+
+If you're serious about clearing CA Foundation, Intermediate, or Final, this course provides the guidance, structure, and confidence needed to achieve your goal.`
+    }
 ];
 
 export const StudentSupportSection = () => {
@@ -93,7 +115,7 @@ export const StudentSupportSection = () => {
                                         href="tel:+918591089800"
                                         className="w-full bg-white text-slate-900 py-3 rounded-xl font-bold text-sm hover:bg-slate-200 transition-colors flex items-center justify-center gap-2 shadow-md"
                                     >
-                                        <Phone /> Call: +{institute?.instituteAppSettingsModals?.contact || '+91 85910 89800'}
+                                        <Phone /> Call: {institute?.instituteAppSettingsModals?.contact || '+91 85910 89800'}
                                     </a>
                                     <a
                                         href={`https://wa.me/{institute?.instituteAppSettingsModals.contact}`}

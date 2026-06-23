@@ -18,6 +18,7 @@ import { Dialog, DialogContent, IconButton } from '@mui/material';
 const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
   const [carouselIndex, setCarouselIndex] = useState(0);
   const [allEmployee, setAllEmployee] = useState([]);
+  // console.log('courseData',courseData)
   // Format duration from coursePricing
   const formatDuration = (duration) => {
     if (!duration || isNaN(duration)) return "0 hr";
@@ -149,7 +150,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
         </div>
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-7/12">
-            <div className="relative aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl group cursor-pointer border-4 border-white">
+            <div className="relative bg-black rounded-2xl overflow-hidden shadow-2xl group cursor-pointer border-4 border-white">
               {carouselItems[carouselIndex]?.type === 'logo' ? (
                 <img
                   src={carouselItems[carouselIndex]?.src}
@@ -212,7 +213,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
             <p className="text-slate-500 text-sm leading-relaxed">
               {courseData?.shortDescription}
             </p>
-            <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 border-y border-slate-200">
+            {/* <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-6 py-4 border-y border-slate-200">
               <div className="flex items-center gap-2">
                 <div className="p-2 bg-emerald-50 rounded-lg text-emerald-700"><Icons.Clock /></div>
                 <div>
@@ -235,14 +236,14 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
                   <p className="text-sm font-bold text-slate-900">{getHeaderValidity()}</p>
                 </div>
               </div>
-              {/* <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
                 <div className="p-2 bg-purple-50 rounded-lg text-purple-700"><Icons.Book /></div>
                 <div>
                   <p className="text-[10px] text-slate-500 uppercase font-bold">Material</p>
                   <p className="text-sm font-bold text-slate-900">Hard Copy</p>
                 </div>
-              </div> */}
-            </div>
+              </div>
+            </div> */}
             <div className="flex items-center gap-3">
               {/* <img
                 src="https://placehold.co/100x100/164e33/FFF?text=VD"
@@ -290,6 +291,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedMode, setSelectedMode] = useState(null);
   const [selectedVariant, setSelectedVariant] = useState(null);
+  const [selectedWatchTime, setSelectedWatchTime] = useState(null);
   const [selectedValidity, setSelectedValidity] = useState(null);
   const [cartCourses, setCartCourses] = useState([]);
   const [showConfigModal, setShowConfigModal] = useState(false);
@@ -316,7 +318,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const [successBarMessage, setSuccessBarMessage] = useState('');
   const [showCopyAlert, setShowCopyAlert] = useState(false);
 
-  // console.log("CourseData", courseData)
+  console.log("CourseData", courseData)
 
   const LOGOUT_ERROR_CODES = new Set([100, 101, 102, 103, 104, 401]);
 
@@ -427,7 +429,9 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
         (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
         (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
-        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
+        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null) &&
+        // Match watch time if selected
+        (!selectedWatchTime || pricing.watchTime === selectedWatchTime)
       );
 
       return matchesSelection;
@@ -435,16 +439,18 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   };
 
   const formatValidity = (pricing) => {
+    let validityStr = '';
+
     if (pricing.validityType === "expiry" && pricing.expiry) {
       // expiry is in milliseconds timestamp
       const expiryDate = new Date(pricing.expiry);
-      return expiryDate.toLocaleDateString('en-IN', {
+      validityStr = expiryDate.toLocaleDateString('en-IN', {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
       });
     } else if (pricing.validityType === "lifetime") {
-      return "Lifetime";
+      validityStr = "Lifetime";
     } else if (pricing.validityType === "validity" && pricing.duration) {
       // Check if duration is an object or milliseconds
       let yr, mon, days;
@@ -467,14 +473,42 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       if (yr) parts.push(`${yr} Year${yr > 1 ? 's' : ''}`);
       if (mon) parts.push(`${mon} Month${mon > 1 ? 's' : ''}`);
       if (days) parts.push(`${days} Day${days > 1 ? 's' : ''}`);
-      return parts.length > 0 ? parts.join(' ') : 'N/A';
+      validityStr = parts.length > 0 ? parts.join(' ') : 'N/A';
+    } else {
+      validityStr = "N/A";
     }
-    return "N/A";
+
+    return validityStr;
+  };
+
+  const getUniqueWatchTimes = () => {
+    if (!selectedMode) return [];
+
+    const selectedModes = selectedMode.split(" + ");
+    const watchTimeSet = new Set();
+
+    courseData?.coursePricing?.forEach(pricing => {
+      const matchesSelection = (
+        (selectedModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
+        (selectedModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
+        (selectedModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
+        (selectedModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
+        (selectedModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
+      );
+
+      if (matchesSelection && pricing.watchTime) {
+        watchTimeSet.add(pricing.watchTime);
+      }
+    });
+
+    return Array.from(watchTimeSet).sort((a, b) => a - b);
   };
 
   const modes = getUniqueLearningModes();
   const variants = getUniqueVariants();
   const hasVariants = variants.length > 0;
+  const watchTimeOptions = getUniqueWatchTimes();
+  const hasWatchTimeOptions = watchTimeOptions.length > 0;
   const validityOptions = getValidityOptions();
   const uniqueValidityLabels = Array.from(new Set(validityOptions.map((pricing) => formatValidity(pricing))));
   const shouldShowValidityChip = validityOptions.length > 0 && uniqueValidityLabels.length === 1;
@@ -494,15 +528,27 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     }
   }, [variants, selectedVariant]);
 
+  // Reset watch time when mode changes
+  React.useEffect(() => {
+    setSelectedWatchTime(null);
+    setSelectedValidity(null);
+  }, [selectedMode]);
+
+  React.useEffect(() => {
+    if (watchTimeOptions.length > 0 && !selectedWatchTime) {
+      setSelectedWatchTime(watchTimeOptions[0]);
+    }
+  }, [watchTimeOptions]);
+
   React.useEffect(() => {
     if (validityOptions.length > 0 && !selectedValidity) {
       setSelectedValidity(validityOptions[0]);
     }
   }, [validityOptions]);
 
-  // Calculate price based on selected mode, variant and validity
+  // Calculate price based on selected mode, variant, watch time and validity
   const getSelectedPrice = () => {
-    if (!selectedMode || !selectedValidity || (hasVariants && !selectedVariant)) return null;
+    if (!selectedMode || !selectedValidity || (hasVariants && !selectedVariant) || (hasWatchTimeOptions && !selectedWatchTime)) return null;
 
     const selectedModes = selectedMode.split(" + ");
 
@@ -524,10 +570,13 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         pricing.packageName === selectedVariant
       );
 
+      // Match watch time
+      const watchTimeMatch = !hasWatchTimeOptions || pricing.watchTime === selectedWatchTime;
+
       // Match validity
       const validityMatch = formatValidity(pricing) === formatValidity(selectedValidity);
 
-      return modeMatch && variantMatch && validityMatch;
+      return modeMatch && variantMatch && watchTimeMatch && validityMatch;
     });
 
     if (selectedPricing) {
@@ -559,19 +608,19 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const priceInfo = getSelectedPrice();
 
   // Debug logging for price calculation
-  React.useEffect(() => {
-    if (selectedMode && selectedValidity && (!hasVariants || selectedVariant)) {
-      console.log('Price Calculation Debug:', {
-        selectedMode,
-        selectedVariant,
-        selectedValidity: formatValidity(selectedValidity),
-        priceInfo,
-        totalCoursePricing: courseData?.coursePricing?.length
-      });
-    }
-  }, [selectedMode, selectedVariant, selectedValidity, priceInfo, hasVariants, courseData?.coursePricing?.length]);
+  // React.useEffect(() => {
+  //   if (selectedMode && selectedValidity && (!hasVariants || selectedVariant)) {
+  //     console.log('Price Calculation Debug:', {
+  //       selectedMode,
+  //       selectedVariant,
+  //       selectedValidity: formatValidity(selectedValidity),
+  //       priceInfo,
+  //       totalCoursePricing: courseData?.coursePricing?.length
+  //     });
+  //   }
+  // }, [selectedMode, selectedVariant, selectedValidity, priceInfo, hasVariants, courseData?.coursePricing?.length]);
 
-  const isPurchaseSelectionIncomplete = !selectedMode || (hasVariants && !selectedVariant) || !selectedValidity || !priceInfo;
+  const isPurchaseSelectionIncomplete = !selectedMode || (hasVariants && !selectedVariant) || (hasWatchTimeOptions && !selectedWatchTime) || !selectedValidity || !priceInfo;
 
   const handleSuggestedCourseAddToCart = (suggestedCourse) => {
     const isAlreadyInCart = cartCourses.some(item => item.id === suggestedCourse.id);
@@ -619,6 +668,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       discount: priceInfo.discount,
       validityType: priceInfo.validityType,
       watchTime: priceInfo.watchTime,
+      selectedWatchTime: selectedWatchTime,
       type: 'Course'
     };
 
@@ -932,6 +982,12 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       You save ({priceInfo.discount}% OFF)
                     </p>
                   )}
+                  {priceInfo?.watchTime && (
+                    <p className="text-xs font-bold text-indigo-600 mt-2 flex items-center gap-1">
+                      <Icons.Clock size={14} />
+                      Watch Time: {priceInfo.watchTime === "Unlimited" ? "Unlimited" : `${priceInfo.watchTime}x`}
+                    </p>
+                  )}
                   {/* {showErrorBar && errorBarMessage && (
                     <p className="mt-3 rounded-lg bg-red-50 px-3 py-2 text-xs font-medium text-red-700 border border-red-200">
                       {errorBarMessage}
@@ -997,6 +1053,28 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                               }`}
                           >
                             {variant}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  {hasWatchTimeOptions && (
+                    <div>
+                      <label className="block text-xs font-bold text-slate-700 uppercase mb-2">Select Watch Time</label>
+                      <div className="flex flex-wrap gap-2">
+                        {watchTimeOptions.map((wt) => (
+                          <button
+                            key={wt}
+                            onClick={() => {
+                              setSelectedWatchTime(wt);
+                              setSelectedValidity(null);
+                            }}
+                            className={`px-3 py-2 rounded-lg text-xs font-bold transition-all max-w-full break-words text-center leading-tight ${selectedWatchTime === wt
+                              ? `border-2 ${BRAND_GREEN_CLASS} text-white`
+                              : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                              }`}
+                          >
+                            {wt === "Unlimited" ? "Unlimited" : `${wt}x`}
                           </button>
                         ))}
                       </div>
@@ -1070,6 +1148,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                           discount: priceInfo.discount,
                           validityType: priceInfo.validityType,
                           watchTime: priceInfo.watchTime,
+                          selectedWatchTime: selectedWatchTime,
                           type: "Course"
                         };
 
