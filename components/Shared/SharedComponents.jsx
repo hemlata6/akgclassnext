@@ -46,11 +46,11 @@ export const Footer = () => {
     <footer className="bg-[#191a45] text-slate-300 pt-10 pb-24 md:pb-10 border-t border-[#121333]">
       <div className={LAYOUT_PADDING}>
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8 text-xs">
-          
+
           <div className="col-span-2 md:col-span-1">
             <div
               onClick={() => window.location.href = "/"}
-              className="text-white font-bold text-lg mb-2 flex items-center gap-2 cursor-pointer"
+              className="text-white font-bold text-lg mb-2 flex items-center gap-2 cursor-pointer p-1 bg-white"
             >
               <img src="/logo.png" alt="Next Gen CA Logo" className="h-[2.5rem] object-contain" />
             </div>
@@ -94,7 +94,7 @@ export const Footer = () => {
             </ul>
           </div>
 
-           <div>
+          <div>
             <h4 className="text-white font-bold mb-3 tracking-wide">Important Links</h4>
             <ul className="space-y-2">
               <li

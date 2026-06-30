@@ -383,19 +383,19 @@ const BookDetailPage = ({ bookData, onBack }) => {
                 <div className={`flex flex-col lg:grid ${suggestedCourses.length > 0 ? 'lg:grid-cols-12' : 'lg:grid-cols-5'} gap-4 lg:gap-6`}>
                     {/* Left: Book Cover */}
                     <div className={`${suggestedCourses.length > 0 ? 'lg:col-span-3' : 'lg:col-span-2'} animate-in fade-in slide-in-from-bottom-4 slide-in-from-left zoom-in-95 duration-700 ease-out`} style={{ animationTimingFunction: 'cubic-bezier(0.34, 1.56, 0.64, 1)' }}>
-                        <div className="lg:sticky lg:top-24 lg:aspect-video lg:max-h-[400px]">
+                        <div className="lg:sticky lg:top-24 lg:max-h-[400px]">
                             <div className="flex flex-col lg:h-full">
                                 <div className="relative group lg:flex-1">
                                     {/* Book Cover Container */}
                                     <div className="relative bg-white rounded-lg shadow-lg overflow-hidden border border-slate-100 transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl lg:h-full">
                                         <div
-                                            className="bg-gradient-to-br from-emerald-900 to-emerald-700 flex items-center justify-center aspect-video lg:aspect-video lg:h-full"
+                                            className="bg-gradient-to-br from-emerald-900 to-emerald-700 flex items-center justify-center aspect-video lg:h-full lg:aspect-auto"
                                         >
                                             {bookData?.logo ? (
                                                 <img
                                                     src={`${Endpoints?.mediaBaseUrl}${bookData.logo}`}
                                                     alt={bookData.title}
-                                                    className={`w-full h-full transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
+                                                    className={`w-full h-full object-contain transition-opacity duration-500 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                                                     onLoad={() => setImageLoaded(true)}
                                                     onError={(e) => {
                                                         e.target.style.display = 'none';

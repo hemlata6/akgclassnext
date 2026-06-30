@@ -70,10 +70,19 @@ function truncateText(text, wordLimit = 10) {
 
 export const StudentGallery = () => {
     const [currentIndex, setCurrentIndex] = useState(0);
-    const itemsPerView = 1;
+    const [itemsPerView, setItemsPerView] = useState(4);
     const [isTransitioning, setIsTransitioning] = useState(false);
     const [expandedIds, setExpandedIds] = useState(new Set());
     const timerRef = useRef(null);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setItemsPerView(window.innerWidth < 768 ? 1 : 4);
+        };
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     useEffect(() => {
         if (timerRef.current) clearInterval(timerRef.current);
@@ -83,7 +92,7 @@ export const StudentGallery = () => {
         return () => clearInterval(timerRef.current);
     }, [currentIndex]);
 
-    const maxIndex = TESTIMONIALS.length - 1;
+    const maxIndex = TESTIMONIALS.length - itemsPerView;
     const canGoPrev = currentIndex > 0;
     const canGoNext = currentIndex < maxIndex;
 
@@ -120,7 +129,7 @@ export const StudentGallery = () => {
                         <div
                             className="flex transition-transform duration-500 ease-in-out"
                             style={{
-                                transform: `translateX(-${currentIndex * 100}%)`
+                                transform: `translateX(-${(100 / itemsPerView) * currentIndex}%)`
                             }}
                         >
                             {TESTIMONIALS.map((item, idx) => {
@@ -129,7 +138,7 @@ export const StudentGallery = () => {
                                 return (
                                     <div
                                         key={item.id}
-                                        className="flex-shrink-0 w-full"
+                                        className="flex-shrink-0 w-full md:w-1/4 px-2"
                                     >
                                         <div className="bg-white rounded-xl border border-slate-200 p-6 h-full flex flex-col transition-shadow hover:shadow-md">
                                             {/* Stars + Google Icon Row */}
@@ -190,7 +199,7 @@ export const StudentGallery = () => {
                     </div>
 
                     {/* Navigation Arrows */}
-                    {TESTIMONIALS.length > itemsPerView && (
+                    {itemsPerView < TESTIMONIALS.length && (
                         <div className="flex justify-center items-center gap-4 mt-8">
                             <button
                                 onClick={handlePrev}

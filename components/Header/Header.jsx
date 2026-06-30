@@ -651,9 +651,17 @@ export const Header = ({ cartCount }) => {
                 </div>
               </div>
 
-              <button onClick={() => router.push('/store')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">Books</button>
+              <button onClick={() => {
+                sessionStorage.setItem('storeNavigationState', JSON.stringify({ source: 'books', productType: 'books' }));
+                router.push('/store');
+              }} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">Books</button>
 
-              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button>
+              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">
+                <span className="relative">
+                  Test-Series
+                  <span className="absolute -top-5 -right-10 bg-gradient-to-r from-red-500 to-red-600 text-white text-[8px] font-bold px-1 py-0.2 rounded-full whitespace-nowrap shadow-sm">Coming Soon</span>
+                </span>
+              </button>
 
 
               <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Mumbai</button>
@@ -931,11 +939,19 @@ export const Header = ({ cartCount }) => {
 
                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
 
-                <button onClick={() => router.push('/store')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Books</button>
+                <button onClick={() => {
+                  sessionStorage.setItem('storeNavigationState', JSON.stringify({ source: 'books', productType: 'books' }));
+                  router.push('/store');
+                }} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Books</button>
 
                 <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="text-left font-medium text-[#1A2B4A] py-3 hover:bg-slate-50 px-2 rounded-md">F2F Mumbai</button>
 
-                <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
+                <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">
+                  <span className="relative inline-flex items-center">
+                    Test-Series
+                    <span className="ml-2 bg-gradient-to-r from-red-500 to-red-600 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">Coming Soon</span>
+                  </span>
+                </button>
 
                 {/* <button onClick={() => router.push('/store?batchTag=Combo')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">🔥 Combo</button> */}
 
