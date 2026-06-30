@@ -3,7 +3,7 @@ import Layout from '../../components/Layout';
 import { BlogListPage } from '../../page-components/Blog/BlogPages';
 
 export default function Blog() {
-  const siteUrl = 'https://vgstudyhub.netlify.app/blog/';
+  const siteUrl = 'https://ca-shiris-vyas.netlify.app/blog/';
   const ogImage = 'logoVG STUDY HUB.png';
   const title = 'CA Shirish Vyas | CA Shirish Vyas - CA VIVEK GABA';
   const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';

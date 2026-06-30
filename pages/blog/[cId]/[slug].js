@@ -22,7 +22,7 @@ export default function BlogDetail({ blogData, error }) {
 
 
     const getBlogImage = () => {
-        if (!blogData) return 'https://vgstudyhub.netlify.app/logo.png';
+        if (!blogData) return 'https://ca-shiris-vyas.netlify.app/logo.png';
 
         // Helper to fix old CDN URLs
         const fixCdnUrl = (url) => {
@@ -39,7 +39,7 @@ export default function BlogDetail({ blogData, error }) {
         if (blogData.logo) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.logo);
         if (blogData.img) return fixCdnUrl(Endpoints?.mediaBaseUrl + blogData.img);
 
-        return 'https://vgstudyhub.netlify.app/logo.png';
+        return 'https://ca-shiris-vyas.netlify.app/logo.png';
     };
 
     const blogImage = getBlogImage();
@@ -49,7 +49,7 @@ export default function BlogDetail({ blogData, error }) {
         'Read our latest blog post',
         50
     );
-    const blogUrl = `https://vgstudyhub.netlify.app/blog/${cId}/${slug}`;
+    const blogUrl = `https://ca-shiris-vyas.netlify.app/blog/${cId}/${slug}`;
 
     return (
         <>

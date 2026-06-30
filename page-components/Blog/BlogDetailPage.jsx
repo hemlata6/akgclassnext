@@ -183,7 +183,7 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     const handleShare = async () => {
         const baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
             ? 'http://localhost:3000'
-            : 'https://vgstudyhub.netlify.app';
+            : 'https://ca-shiris-vyas.netlify.app';
 
         const shareUrl = `${baseUrl}/blog/${cId}/${slug}`;
 

@@ -344,7 +344,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
     const handleShare = async () => {
         const baseUrl = window.location.hostname === 'localhost'
             ? 'http://localhost:3000'
-            : 'https://vgstudyhub.netlify.app/';
+            : 'https://ca-shiris-vyas.netlify.app/';
 
         const shareUrl = `${baseUrl}/book/${bookData?.id}`;
         const shareData = {
