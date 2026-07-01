@@ -12,8 +12,6 @@ export const PromoBanners = () => {
 
     const totalSlides = slides.length;
 
-    console.log('Total Slides:', slides);
-
     // Fetch banners from API
     useEffect(() => {
         fetchBanners();
