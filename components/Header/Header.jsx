@@ -17,7 +17,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
   const theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
-  const {institute} = useAuth();
+  const { institute } = useAuth();
 
 
   useEffect(() => {
@@ -562,6 +562,15 @@ export const Header = ({ cartCount }) => {
                         ))}
                     </>
                   )}
+                  <a href="https://ultimateca.com/ca-inter.php?sub_auth=Taxation#ca-foundation-new-syllabus" target="_blank" rel="noopener noreferrer">
+                    <button
+                      // key={domain.id}
+                      // onClick={() => handleFirstLevelDomainClick(domain)}
+                      className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                    >
+                      CA Inter
+                    </button>
+                  </a>
                 </div>
               </div>
 
@@ -627,8 +636,17 @@ export const Header = ({ cartCount }) => {
                         ))}
                     </>
                   )}
+                  <a href="https://ultimateca.com/ca-inter.php?sub_auth=Taxation#ca-foundation-new-syllabus" target="_blank" rel="noopener noreferrer">
+                    <button
+                      // key={domain.id}
+                      // onClick={() => handleFirstLevelDomainClick(domain)}
+                      className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                    >
+                      CA Inter
+                    </button>
+                  </a>
                 </div>
-              </div>  
+              </div>
 
               {/* Faculty Menu */}
               <div
@@ -993,9 +1011,9 @@ export const Header = ({ cartCount }) => {
 
                 <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
 
-                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
+                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
 
-                 <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
+                <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 
