@@ -12,6 +12,8 @@ export const PromoBanners = () => {
 
     const totalSlides = slides.length;
 
+    console.log('Total Slides:', slides);
+
     // Fetch banners from API
     useEffect(() => {
         fetchBanners();
@@ -24,8 +26,7 @@ export const PromoBanners = () => {
             if (response && response.banners && response.banners.length > 0) {
                 const activeBanners = response.banners.filter(
                     banner =>
-                        banner.active &&
-                        banner.group?.toLowerCase() === "top banner"
+                        banner.active
                 );
 
                 if (activeBanners.length > 0) {
