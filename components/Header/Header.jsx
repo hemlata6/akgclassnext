@@ -185,6 +185,28 @@ export const Header = ({ cartCount }) => {
     // This will trigger a re-render when studentData updates
   }, [studentData]);
 
+  // Automatically show signup form if user is logged in but has no address
+  useEffect(() => {
+    if (user && studentData) {
+      const hasAddress = studentData?.address && studentData?.address.trim() !== '' && studentData?.address.trim().toLowerCase() !== 'india';
+      if (!hasAddress) {
+        // Check if the signup modal was already shown in this session
+        const addressPromptShown = sessionStorage.getItem('addressPromptShown');
+        if (!addressPromptShown) {
+          // Store temp signup data with existing student info
+          localStorage.setItem('tempSignup', JSON.stringify({
+            phone: studentData?.contact || '',
+            otp: '',
+            existingStudent: studentData,
+            isExistingUser: true
+          }));
+          setShowSignupModal(true);
+          sessionStorage.setItem('addressPromptShown', 'true');
+        }
+      }
+    }
+  }, [user, studentData]);
+
   const fetchCoursesData = async () => {
     try {
       setLoadingCourses(true);
@@ -625,6 +647,15 @@ export const Header = ({ cartCount }) => {
                         ))}
                     </>
                   )}
+                  <a href="https://ultimateca.com/ca-inter.php?sub_auth=Taxation#ca-foundation-new-syllabus" target="_blank" rel="noopener noreferrer">
+                    <button
+                      // key={domain.id}
+                      // onClick={() => handleFirstLevelDomainClick(domain)}
+                      className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                    >
+                      CA Inter
+                    </button>
+                  </a>
                 </div>
               </div> */}
 

@@ -1,114 +1,187 @@
-import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../config/AuthContext';
-import { Calendar, Clock, Star, Play, Download, BookOpen, Folder, FolderOpen, FileText, PlayCircle, X, ChevronDown, Music, Eye } from 'lucide-react';
+import React, { useEffect, useState } from 'react'
+import {
+    PlayCircle,
+    FileText,
+    Clock,
+    Download,
+    X,
+    BookOpen,
+    ChevronDown,
+    Folder,
+    FolderOpen,
+    Lock,
+    Eye,
+    Music
+} from 'lucide-react';
 import Network from '../../config/Network';
-import Endpoints from '../../config/endpoints';
-import instId from '../../config/instituteId';
-import YouTubePlayer from './YouTubePlayer';
+import { useAuth } from '../../config/AuthContext';
 import { useStudent } from '../../config/StudentContext';
+import instId from '../../config/instituteId';
+import Endpoints from '../../config/endpoints';
+import YouTubePlayer from './YouTubePlayer';
 import { useRouter } from 'next/router';
+import { BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS } from '../../constants/Icons';
+import LoginModal from '../../components/Auth/LoginModal';
+import SignupModal from '../../components/Auth/SignupModal';
 import { Footer } from '../../components/Shared/SharedComponents';
 
-const MyPurchases = () => {
+const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => {
+
     const router = useRouter();
-    const { user, authToken, stateList } = useAuth();
-    const { isAuthenticated, studentData, updateStudentData } = useStudent();
-    // const purchases = user?.purchases || [];
-    const [mycourseList, setMyCourseList] = useState([]);
+    const { authToken } = useAuth();
+    const { isAuthenticated } = useStudent();
+    const [coursesList, setCoursesList] = useState([]);
+    const [isVisible, setIsVisible] = useState(false);
+    const [activeCoursesList, setActiveCoursesList] = useState([]);
     const [selectedSceduleList, setSelectedSceduleList] = useState([]);
+    const [number, setNumber] = useState('');
+    const [name, setName] = useState('');
+    const [selectCourse, setSelectCourse] = useState("");
+    const [selectedItem, setSelectedItem] = useState({});
+    const [formModalOpen, setFormModalOpen] = useState(false);
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [courseId, setCourseId] = useState(null);
     const [parentId, setParentId] = useState(null);
-    const [isVisible, setIsVisible] = useState(false);
-    const [currentView, setCurrentView] = useState('courses'); // 'courses' or 'content'
-    const [selectedCourse, setSelectedCourse] = useState(null);
-    const [formModalOpen, setFormModalOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState({});
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
-    const [selectCourse, setSelectCourse] = useState('');
-    const [activeCoursesList, setActiveCoursesList] = useState([]);
-    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [showAppDownloadDialog, setShowAppDownloadDialog] = useState(false);
+    const [showLoginWarning, setShowLoginWarning] = useState(false);
+    const [selectedQuizItem, setSelectedQuizItem] = useState(null);
+    const [showEnrollModal, setShowEnrollModal] = useState(false);
+    const [enrollingCourse, setEnrollingCourse] = useState(null);
+    const [enrolledCourses, setEnrolledCourses] = useState(new Set());
+    const [isEnrolling, setIsEnrolling] = useState(false);
     const [openDialog, setopenDialog] = useState(false);
+    const [showLoginModal, setShowLoginModal] = useState(false);
+    const [showSignupModal, setShowSignupModal] = useState(false);
     const [selectedAudio, setSelectedAudio] = useState(null);
     const [showAudioModal, setShowAudioModal] = useState(false);
-    const [showAddressDialog, setShowAddressDialog] = useState(false);
-    const [addressForm, setAddressForm] = useState({
-        houseNo: '',
-        zipCode: '',
-        address: '',
-        stateName: '',
-        cityName: '',
-        // cityId: ''
-    });
-    const [addressErrors, setAddressErrors] = useState({});
-    const [isSavingAddress, setIsSavingAddress] = useState(false);
-    const [pendingCourse, setPendingCourse] = useState(null);
 
-    const isEmptyValue = (value) => !String(value || '').trim();
+    console.log(';coursesList', coursesList);
 
-    const hasMissingDispatchAddress = Boolean(
-        isAuthenticated &&
-        studentData &&
-        isEmptyValue(studentData?.address)
-    );
 
     const handleCloseVideo = () => {
         setopenDialog(false)
     }
 
-    const fetcMyCourse = async () => {
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
+    useEffect(() => {
+        setIsVisible(true);
+
+        // Call appropriate API based on authentication
+        if (authToken && isAuthenticated) {
+            fetchEnrolledCourses();
+            loadEnrolledCourses(); // Load enrolled courses from accessList
+        } else {
+            getAllCourses();
+        }
+    }, [authToken, isAuthenticated]);
+
+    useEffect(() => {
+        if (coursesList?.length > 0) {
+            setSelectedSceduleList(coursesList);
+            setCourseId(null);
+            setParentId(null);
+        }
+    }, [coursesList]);
+
+    const getAccessCourse = async (contentId, contentType = 'course') => {
         try {
-            let response = await Network.getMyCourses(authToken);
-            if (response && (response.courses || response.data)) {
-                setMyCourseList(response.courses || response.data || response);
-                setActiveCoursesList(response.courses || response.data || response);
-            };
+            const response = await Network.getAccessCourseApi(authToken, contentId?.id || contentId, contentType);
+
+            return response;
         } catch (error) {
-            console.log("Error fetching my courses:", error);
+            console.log(error);
+            return null;
         };
+    }
+
+    // Load enrolled courses from accessList API
+    const loadEnrolledCourses = async () => {
+        try {
+            // Call without contentId to get all user's enrolled courses
+            const response = await Network.getAccessCourseApi(authToken, '', 'course');
+
+            if (response?.accessList && Array.isArray(response.accessList)) {
+                // Extract course IDs from accessList
+                const courseIds = response.accessList
+                    .filter(item => item?.course?.id)
+                    .map(item => item.course.id);
+
+                setEnrolledCourses(new Set(courseIds));
+                console.log('Loaded enrolled courses:', courseIds);
+            }
+        } catch (error) {
+            console.log('Error loading enrolled courses:', error);
+        }
     };
 
-    // Recursive function to traverse folders and find content
-    const traverseFoldersRecursively = async (courseId, folderId = 0, visitedFolders = new Set(), depth = 0) => {
-        const folderKey = `${courseId}_${folderId}`;
-        if (visitedFolders.has(folderKey)) {
-            return [];
-        }
-        visitedFolders.add(folderKey);
-
-        const indent = "  ".repeat(depth);
-
+    const fetchEnrolledCourses = async () => {
         try {
-            const response = await Network.fetchScheduleApi(authToken, courseId, folderId);
-            if (!response?.contentList) {
-                return [];
+            const response = await Network.getStudentAuthCourse(authToken);
+
+            if (response?.courses) {
+                const course = response.courses || [];
+                const ActivefilteredCourses = course.filter(course =>
+                    course?.active === true
+                );
+                setActiveCoursesList(ActivefilteredCourses);
+
+                const filteredCourses = course.filter(course =>
+                    course.paid === false &&
+                    course?.active === true &&
+                    course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
+                );
+                console.log('filteredCourses', filteredCourses);
+
+                setCoursesList(filteredCourses);
             }
-
-            let foundContent = [];
-
-            for (const item of response.contentList) {
-                const itemType = item?.entityType?.toLowerCase();
-
-                if (itemType === "folder" && item?.id) {
-                    const folderContent = await traverseFoldersRecursively(courseId, item.id, visitedFolders, depth + 1);
-                    foundContent = [...foundContent, ...folderContent];
-                } else {
-                    foundContent.push(item);
-                }
-            }
-
-            return foundContent;
         } catch (error) {
-            console.error(`${indent}Error fetching content for course ${courseId}, folder ${folderId}:`, error);
-            return [];
+            console.log(error);
+        };
+
+    }
+
+    const fetchAuthCourseContent = async (courseId, folderId = 0, authToken) => {
+        try {
+
+            let response = await Network.fetchAuthStudentContent(courseId, folderId, authToken);
+
+            if (response?.contentList) {
+                setSelectedSceduleList(response.contentList);
+            } else {
+                setSelectedSceduleList([]);
+            }
+        } catch (error) {
+            setSelectedSceduleList([]);
         }
+    };
+
+    const getAllCourses = async () => {
+        try {
+            const response = await Network.getFreeCourseList(instId);
+            const course = response?.courses || [];
+            const ActivefilteredCourses = course.filter(course =>
+                course?.active === true
+            );
+            setActiveCoursesList(ActivefilteredCourses);
+
+            const filteredCourses = course.filter(course =>
+                course.paid === false &&
+                course?.active === true &&
+                course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
+            );
+
+            setCoursesList(filteredCourses);
+        } catch (error) {
+            console.log(error);
+        };
     };
 
     const getMergedSchedules = async (courseId, folderId = 0) => {
         try {
 
-            let response = await Network.fetchScheduleApi(authToken, courseId, folderId);
+            let response = await Network.fetchFreePublicScheduleApi(courseId, folderId);
 
             if (response?.contentList) {
                 setSelectedSceduleList(response.contentList);
@@ -129,79 +202,138 @@ const MyPurchases = () => {
 
     const handleCardClick = (item) => {
 
-        if (currentView === 'courses') {
-            if (hasMissingDispatchAddress) {
-                setPendingCourse(item);
-                setShowAddressDialog(true);
+        if (!courseId && !item?.entityType) {
+            // Check if this is a restricted free course that requires enrollment
+            if (item?.setting?.restrictFreeContent === true && !enrolledCourses.has(item?.id)) {
+                // Check if user is logged in
+                const authToken = localStorage.getItem('authToken');
+                const studentData = localStorage.getItem('studentData');
+
+                if (!authToken || !studentData) {
+                    setSelectedQuizItem(item);
+                    setShowLoginWarning(true);
+                    return;
+                }
+
+                // Show enrollment modal
+                setEnrollingCourse(item);
+                setShowEnrollModal(true);
                 return;
             }
-            setSelectedCourse(item);
+
             setCourseId(item?.id);
-            setCurrentView('content');
-            getMergedSchedules(item?.id, 0);
-            return;
-        }
+            setParentId(null);
 
-        if (item?.entityType?.toLowerCase() === "folder") {
-            setParentId(item?.id);
-            getMergedSchedules(courseId, item?.id);
-            return;
-        }
-
-        if ((item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") && authToken && item?.quiz?.id) {
-            if (typeof window !== 'undefined') {
-                localStorage.setItem('quizData', JSON.stringify(item));
-            }
-            if (item?.quiz?.attempt === true) {
-                // Navigate to result page for already attempted quiz
-                router.push('/quiz-result');
+            // Use authenticated or public API based on login status
+            if (authToken && isAuthenticated) {
+                fetchAuthCourseContent(item?.id, 0, authToken);
             } else {
-                // Navigate to test page for new quiz
-                router.push('/mcq-test');
-            }
-            return;
-        }
-        if (item?.entityType === "note" && authToken) {
-            if (item?.note?.note) {
-                window.open(Endpoints.mediaBaseUrl + item?.note?.note, "_blank");
-            }
-            return;
-        }
-        if (item?.entityType === "video" && authToken) {
-            if (item?.video?.youtubeUrl) {
-                setSelectedItem(item);
-                // setopenDialog(true)
-            }
-            return;
-        }
-        if (item?.entityType === 'blog') {
-            // Create URL-friendly slug from title
-            const titleSlug = slugify(item.title || '');
-            // Combine courseId, parentId, and slug with hyphens for the route
-            const combinedSlug = `${courseId}-${parentId ? parentId : 0}-${titleSlug}`;
-            router.push(`/blog/${combinedSlug}`);
-            return;
-        }
-
-        if (item?.entityType === "audio" && authToken) {
-            if (item?.audio?.audio) {
-                setSelectedAudio(item);
-                setShowAudioModal(true);
+                getMergedSchedules(item?.id, 0);
             }
             return;
         }
 
-        // Check if content type is supported on web platform
-        const contentType = item?.entityType?.toLowerCase();
-        const webSupportedTypes = ['video', 'audio', 'quiz', 'folder'];
+        if (item?.entityType) {
+            if (item?.entityType?.toLowerCase() === "folder") {
+                setParentId(item?.id);
 
-        if (webSupportedTypes.includes(contentType)) {
-            // Content supported on web - open form modal
+                // Use authenticated or public API based on login status
+                if (authToken && isAuthenticated) {
+                    fetchAuthCourseContent(courseId, item?.id, authToken);
+                } else {
+                    getMergedSchedules(courseId, item?.id);
+                }
+                return;
+            }
+
+            if ((item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") && item?.quiz?.id) {
+                // Check if user is logged in by checking localStorage for auth token
+                const authToken = localStorage.getItem('authToken');
+                const studentData = localStorage.getItem('studentData');
+
+                if (!authToken || !studentData) {
+                    setSelectedQuizItem(item);
+                    setShowLoginWarning(true);
+                    return;
+                }
+
+                // Store quiz data in localStorage for the test page
+                if (typeof window !== 'undefined') {
+                    localStorage.setItem('quizData', JSON.stringify(item));
+                }
+
+                // Check if quiz has already been attempted
+                if (item?.quiz?.attempt === true) {
+                    // Navigate to result page for already attempted quiz
+                    router.push('/quiz-result');
+                } else {
+                    // Navigate to test page for new quiz
+                    router.push('/mcq-test');
+                }
+                return;
+            }
+
+            if (item?.entityType === 'blog') {
+                // Create URL-friendly slug from title
+                const titleSlug = slugify(item.title || '');
+                router.push(`/blog/${item?.id}/${titleSlug}`);
+                return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
+            }
+            if (item?.entityType === "note" && authToken && isAuthenticated) {
+                if (item?.note?.note) {
+                    window.open(Endpoints.mediaBaseUrl + item?.note?.note, "_blank");
+                }
+                return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
+            }
+
+            if (item?.entityType === "video" && authToken && isAuthenticated) {
+                if (item?.video?.youtubeUrl) {
+                    setSelectedQuizItem(item);
+                    setopenDialog(true)
+                }
+                return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
+            }
+
+            if (item?.entityType === "audio" && authToken && isAuthenticated) {
+                if (item?.audio?.audio) {
+                    setSelectedAudio(item);
+                    setShowAudioModal(true);
+                }
+                return;
+            } else {
+                if (!authToken && !isAuthenticated) {
+                    setShowLoginWarning(true)
+                }
+            }
+
+            // For other content types, open the form modal
             setSelectedItem(item);
-            setFormModalOpen(true);
-        } else {
-            // Content not supported on web - show app download dialog
-            setShowAppDownloadDialog(true);
+            // setFormModalOpen(true);
+            return;
+        }
+
+        if (item?.id && !item?.entityType) {
+            setCourseId(item?.id);
+            setParentId(null);
+
+            // Use authenticated or public API based on login status
+            if (authToken && isAuthenticated) {
+                fetchAuthCourseContent(item?.id, 0, authToken);
+            } else {
+                getMergedSchedules(item?.id, 0);
+            }
         }
     };
 
@@ -218,6 +350,91 @@ const MyPurchases = () => {
         setIsDropdownOpen(false);
     };
 
+    const handleLoginWarningConfirm = () => {
+        if (!authToken && !isAuthenticated) {
+            setShowLoginModal(true);
+        }
+        setShowLoginWarning(false);
+        setSelectedQuizItem(null);
+
+    };
+
+    const handleLoginWarningCancel = () => {
+        setShowLoginWarning(false);
+        setSelectedQuizItem(null);
+    };
+
+    const handleEnrollNow = async () => {
+        if (!enrollingCourse) return;
+
+        setIsEnrolling(true);
+        try {
+            // First check if user already has access
+            const accessResponse = await getAccessCourse(enrollingCourse);
+
+            // Check if course already exists in accessList
+            const hasAccess = accessResponse?.accessList?.some(
+                (item) => item?.course?.id === enrollingCourse.id
+            );
+
+            if (hasAccess) {
+                console.log('User already has access to this course');
+                // User already has access, just proceed to open the course
+                setEnrolledCourses(prev => new Set([...prev, enrollingCourse.id]));
+                setShowEnrollModal(false);
+
+                // Open the course
+                setCourseId(enrollingCourse.id);
+                setParentId(null);
+
+                if (authToken && isAuthenticated) {
+                    fetchAuthCourseContent(enrollingCourse.id, 0, authToken);
+                } else {
+                    getMergedSchedules(enrollingCourse.id, 0);
+                }
+                setEnrollingCourse(null);
+            } else {
+                // User doesn't have access, call assignFreeAccess API
+                const body = {
+                    contentId: enrollingCourse.id,
+                    contentPurchaseType: "course"
+                };
+
+                const response = await Network.assignFreeAccess(authToken, body);
+
+                if (response?.errorCode === 0) {
+                    // Add course to enrolled courses
+                    setEnrolledCourses(prev => new Set([...prev, enrollingCourse.id]));
+                    setShowEnrollModal(false);
+
+                    // Now open the course
+                    setCourseId(enrollingCourse.id);
+                    setParentId(null);
+
+                    // Use authenticated API since user is enrolled
+                    if (authToken && isAuthenticated) {
+                        fetchAuthCourseContent(enrollingCourse.id, 0, authToken);
+                    } else {
+                        getMergedSchedules(enrollingCourse.id, 0);
+                    }
+                    setEnrollingCourse(null);
+                } else {
+                    alert(response?.message || 'Failed to enroll. Please try again.');
+                }
+            }
+        } catch (error) {
+            console.error('Enrollment error:', error);
+            alert('An error occurred during enrollment. Please try again.');
+        } finally {
+            setIsEnrolling(false);
+        }
+    };
+
+    const handleCancelEnroll = () => {
+        setShowEnrollModal(false);
+        setEnrollingCourse(null);
+    };
+
     const handleSubmit = async () => {
         try {
             const body = {
@@ -232,6 +449,7 @@ const MyPurchases = () => {
             let response = await Network.createLeadFormAPI(body, instId);
             if (response?.errorCode !== 0) {
             } else if (response?.errorCode === 0) {
+
                 handleClose();
 
                 setTimeout(() => {
@@ -245,441 +463,71 @@ const MyPurchases = () => {
                         window.open(Endpoints.mediaBaseUrl + selectedItem?.pdf?.pdf, "_blank");
                     } else if (selectedItem?.entityType === "document" && selectedItem?.document?.document) {
                         window.open(Endpoints.mediaBaseUrl + selectedItem?.document?.document, "_blank");
+                    } else {
+                        const fallbackUrl = selectedItem?.url || selectedItem?.link || selectedItem?.contentUrl;
+                        if (fallbackUrl) {
+                            window.open(fallbackUrl.startsWith('http') ? fallbackUrl : Endpoints.mediaBaseUrl + fallbackUrl, "_blank");
+                        }
                     }
                 }, 300);
             }
         } catch (error) {
             console.log(error);
         }
-    };
-
-    const goBackToCourses = () => {
-        setCurrentView('courses');
-        setSelectedCourse(null);
-        setCourseId(null);
-        setParentId(null);
-        setSelectedSceduleList([]);
-    };
-
-    useEffect(() => {
-        fetcMyCourse();
-        setIsVisible(true);
-    }, []);
-
-    useEffect(() => {
-        if (!studentData) {
-            return;
-        }
-
-        setAddressForm({
-            houseNo: studentData?.houseNo || '',
-            zipCode: studentData?.zipCode || '',
-            address: studentData?.address || '',
-            // stateName: studentData?.stateName || '',
-            // cityName: studentData?.cityName || '',
-            // cityId: studentData?.cityId || ''
-        });
-    }, [studentData]);
-
-    useEffect(() => {
-        if (hasMissingDispatchAddress) {
-            setShowAddressDialog(true);
-        }
-    }, [hasMissingDispatchAddress]);
-
-    const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    };
-
-    // console.log('selectedSceduleList', selectedSceduleList);
-
-    // console.log('mycourseList', mycourseList);
-
-    const getProgressPercentage = () => {
-        // Mock progress - in a real app, this would come from user progress data
-        return Math.floor(Math.random() * 100);
-    };
-
-    const handleAddressInputChange = (field, value) => {
-        setAddressForm((prev) => ({
-            ...prev,
-            [field]: value
-        }));
-
-        if (addressErrors[field]) {
-            setAddressErrors((prev) => ({
-                ...prev,
-                [field]: ''
-            }));
-        }
-    };
-
-    const validateAddressForm = () => {
-        const nextErrors = {};
-
-        if (isEmptyValue(addressForm.houseNo)) {
-            nextErrors.houseNo = 'House No is required.';
-        }
-
-        if (isEmptyValue(addressForm.zipCode)) {
-            nextErrors.zipCode = 'Zipcode is required.';
-        }
-
-        if (isEmptyValue(addressForm.address)) {
-            nextErrors.address = 'Address is required.';
-        }
-
-        if (isEmptyValue(addressForm.stateName)) {
-            nextErrors.stateName = 'State is required.';
-        }
-
-        if (isEmptyValue(addressForm.cityName)) {
-            nextErrors.cityName = 'City is required.';
-        }
-
-        setAddressErrors(nextErrors);
-        return Object.keys(nextErrors).length === 0;
-    };
-
-    const handleAddressDialogClose = () => {
-        setShowAddressDialog(false);
-        setAddressErrors({});
-        setPendingCourse(null);
-        setAddressForm({
-            houseNo: studentData?.houseNo || '',
-            zipCode: studentData?.zipCode || '',
-            address: studentData?.address || '',
-            stateName: studentData?.stateName || '',
-            cityName: studentData?.cityName || '',
-            cityName: studentData?.cityName || ''
-        });
-    };
-
-    const handleSaveAddress = async () => {
-        if (!validateAddressForm() || !authToken || !studentData) {
-            return;
-        }
-
-        setIsSavingAddress(true);
-
-        try {
-            const fullAddress = `${addressForm.houseNo}, ${addressForm.address}, ${addressForm.cityName}, ${addressForm.stateName}, ${addressForm.zipCode}`;
-
-            const body = {
-                firstName: studentData?.firstName || '',
-                lastName: studentData?.lastName || studentData?.firstName,
-                userName: studentData?.userName || studentData?.contact || '',
-                email: studentData?.email || '',
-                dob: studentData?.dob ? new Date(studentData.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
-                address: fullAddress,
-                cityId: null,
-                bio: studentData?.bio || studentData?.firstName,
-                gender: (studentData?.gender || 'male').toLowerCase(),
-                zipCode: addressForm.zipCode.trim(),
-            };
-
-            const response = await Network.editStudentProfile(authToken, body);
-
-            if (response?.errorCode === 0 || response?.status) {
-                updateStudentData({
-                    houseNo: addressForm.houseNo.trim(),
-                    zipCode: addressForm.zipCode.trim(),
-                    address: body.address,
-                    // stateName: body.stateName,
-                    // cityName: addressForm.cityName,
-                    cityId: null,
-                });
-                setAddressErrors({});
-                setShowAddressDialog(false);
-                if (pendingCourse) {
-                    setSelectedCourse(pendingCourse);
-                    setCourseId(pendingCourse?.id);
-                    setCurrentView('content');
-                    getMergedSchedules(pendingCourse?.id, 0);
-                    setPendingCourse(null);
-                }
-                return;
-            }
-
-            setAddressErrors({
-                submit: response?.message || response?.errorDescription || 'Unable to save delivery address.'
-            });
-        } catch (error) {
-            setAddressErrors({
-                submit: error?.response?.data?.message || 'Unable to save delivery address.'
-            });
-        } finally {
-            setIsSavingAddress(false);
-        }
-    };
-
-    if (mycourseList.length === 0) {
-        return (
-            <div className="min-h-screen bg-white">
-                <div className="max-w-4xl mx-auto px-4 py-20">
-                    <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 text-center">My Purchases</h1>
-                    <div className="bg-gradient-to-br from-emerald-50 to-white rounded-2xl shadow-lg p-12 text-center border border-emerald-100">
-                        <div className="w-24 h-24 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                            <BookOpen className="h-12 w-12 text-emerald-600" />
-                        </div>
-                        <h2 className="text-2xl font-bold text-slate-900 mb-4">No Courses Purchased Yet</h2>
-                        <p className="text-slate-600 mb-8 max-w-md mx-auto">
-                            You haven't purchased any courses yet. Browse our course catalog to find courses that match your interests and start your learning journey!
-                        </p>
-                        <button
-                            onClick={() => router.push('/')}
-                            className="bg-indigo-700 hover:bg-indigo-800 text-white px-8 py-3 rounded-lg font-bold transition-all shadow-md hover:shadow-lg"
-                        >
-                            Explore Courses
-                        </button>
-                    </div>
-                </div>
-                <Footer />
-            </div>
-        );
     }
 
     return (
-        <div className="min-h-screen bg-white overflow-x-hidden">
-            {showAddressDialog && (
-                <div className="fixed inset-0 z-[120] flex items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
-                    <div className="w-full max-w-lg rounded-3xl bg-white shadow-2xl overflow-hidden border border-slate-200">
-                        <div className="bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-5 text-white">
-                            <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-emerald-100 mb-2">Dispatch Address Required</p>
-                            <h3 className="text-2xl font-bold mb-2">Add your delivery address</h3>
-                            <p className="text-sm text-emerald-50 leading-relaxed">
-                                Note: Kindly enter your complete and correct dispatch address, including your house number, street/locality, city, state, and PIN code. Your books will be delivered to this address only. Incorrect or incomplete address details may lead to delivery delays, failed delivery attempts, or cancellation of shipment. Please verify all details carefully before submitting your order.
-                            </p>
-                        </div>
-
-                        <div className="p-6 space-y-4">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">House No.</label>
-                                    <input
-                                        type="text"
-                                        value={addressForm.houseNo}
-                                        onChange={(e) => handleAddressInputChange('houseNo', e.target.value)}
-                                        className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                                        placeholder="e.g. 12A"
-                                    />
-                                    {addressErrors.houseNo && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNo}</p>}
-                                </div>
-
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">Zipcode</label>
-                                    <input
-                                        type="number"
-                                        value={addressForm.zipCode}
-                                        onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
-                                        className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                                        placeholder="e.g. 500001"
-                                    />
-                                    {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
-                                </div>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-slate-700 mb-2">Address</label>
-                                <textarea
-                                    value={addressForm.address}
-                                    onChange={(e) => handleAddressInputChange('address', e.target.value)}
-                                    rows={3}
-                                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 resize-none"
-                                    placeholder="Enter your full delivery address"
-                                />
-                                {addressErrors.address && <p className="mt-2 text-xs text-red-600">{addressErrors.address}</p>}
-                            </div>
-
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                {/* State */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        State
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        value={addressForm.stateName}
-                                        onChange={(e) =>
-                                            handleAddressInputChange('stateName', e.target.value)
-                                        }
-                                        className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                                        placeholder="Enter your state"
-                                    />
-
-                                    {addressErrors.stateName && (
-                                        <p className="mt-2 text-xs text-red-600">
-                                            {addressErrors.stateName}
-                                        </p>
-                                    )}
-                                </div>
-
-                                {/* City */}
-                                <div>
-                                    <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        City
-                                    </label>
-
-                                    <input
-                                        type="text"
-                                        value={addressForm.cityName}
-                                        onChange={(e) =>
-                                            handleAddressInputChange('cityName', e.target.value)
-                                        }
-                                        className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                                        placeholder="Enter your city"
-                                    />
-
-                                    {addressErrors.cityName && (
-                                        <p className="mt-2 text-xs text-red-600">
-                                            {addressErrors.cityName}
-                                        </p>
-                                    )}
-                                </div>
-                            </div>
-
-                            {addressErrors.submit && (
-                                <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-                                    {addressErrors.submit}
-                                </div>
-                            )}
-
-                            <div className="flex flex-col-reverse sm:flex-row gap-3 pt-2">
-                                <button
-                                    type="button"
-                                    onClick={handleAddressDialogClose}
-                                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
-                                    disabled={isSavingAddress}
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    type="button"
-                                    onClick={handleSaveAddress}
-                                    className="w-full rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
-                                    disabled={isSavingAddress}
-                                >
-                                    {isSavingAddress ? 'Saving...' : 'Save Address'}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-4 sm:py-6 lg:py-8">
+        <>
+            <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header Section */}
-                <div className="text-center mb-6 sm:mb-8 lg:mb-12">
-                    <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-slate-900 mb-2 sm:mb-4 px-2">
-                        {currentView === 'courses' ? '📚 My Purchases' : `📖 ${selectedCourse?.title || 'Course Content'}`}
+                <div className="text-center mb-2">
+                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                        🎁 Free Educational Resources
                     </h2>
-                    <p className="text-sm sm:text-base lg:text-lg text-slate-600 max-w-2xl mx-auto px-4">
-                        {currentView === 'courses'
-                            ? 'Access your purchased courses and track your learning progress'
-                            : 'Navigate through your course content and continue learning'
-                        }
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Access premium educational content at no cost. Unlock valuable resources to boost your learning journey.
                     </p>
                 </div>
 
-                {/* Navigation Breadcrumb */}
-                {currentView === 'content' && (
-                    <div className="mb-4 sm:mb-6 flex flex-col sm:flex-row gap-2 sm:gap-3">
+                {/* Breadcrumb Navigation */}
+                <div className="mb-6 flex gap-2">
+                    {/* Back to Courses button - show when we're inside a course */}
+                    {courseId && (
                         <button
-                            onClick={goBackToCourses}
-                            className="bg-indigo-700 hover:bg-indigo-800 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center font-semibold shadow-md"
+                            onClick={() => {
+                                setCourseId(null);
+                                setParentId(null);
+                                setSelectedSceduleList(coursesList);
+                            }}
+                            className={`${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-300`}
                         >
-                            ← Back to My Purchases
+                            ← Back to Courses
                         </button>
-                        {parentId && (
-                            <button
-                                onClick={() => {
-                                    setParentId(null);
+                    )}
+
+                    {/* Back to Course Root button - show when we're inside a folder */}
+                    {parentId && courseId && (
+                        <button
+                            onClick={() => {
+                                setParentId(null);
+                                // Use authenticated or public API based on login status
+                                if (authToken && isAuthenticated) {
+                                    fetchAuthCourseContent(courseId, 0, authToken);
+                                } else {
                                     getMergedSchedules(courseId, 0);
-                                }}
-                                className="bg-slate-600 hover:bg-slate-700 text-white px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm transition-all duration-300 flex items-center justify-center font-semibold shadow-md"
-                            >
-                                ← Back to Course Root
-                            </button>
-                        )}
-                    </div>
-                )}
+                                }
+                            }}
+                            className={`${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white px-4 py-2 rounded-lg text-sm transition-colors duration-300`}
+                        >
+                            ← Back to Course Root
+                        </button>
+                    )}
+                </div>
 
-                {/* Content Grid */}
-                <div className="grid grid-cols-1 xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-                    {/* Show courses or course content based on currentView */}
-                    {currentView === 'courses' ? (
-                        // Show courses
-                        mycourseList.map((course, i) => (
-                            <div
-                                key={course.id || i}
-                                className={`transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
-                                style={{ transitionDelay: `${100 + (i * 100)}ms` }}
-                            >
-                                <div
-                                    onClick={() => handleCardClick(course)}
-                                    className="group bg-white border border-slate-200 rounded-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-indigo-300 flex flex-col relative"
-                                >
-                                    {/* Status Badge */}
-                                    <div className={`absolute top-4 right-4 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10 transform group-hover:scale-110 transition-transform duration-300 ${course.active
-                                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600'
-                                        : 'bg-gradient-to-r from-slate-400 to-slate-500'
-                                        }`}>
-                                        {course.active ? 'ACTIVE' : 'INACTIVE'}
-                                    </div>
-
-                                    {/* Thumbnail */}
-                                    <div className="relative bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden aspect-video">
-                                        {course.logo ? (
-                                            <img
-                                                src={`${Endpoints.mediaBaseUrl}${course.logo}`}
-                                                alt={course.title}
-                                                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-                                            />
-                                        ) : (
-                                            <div className="flex items-center justify-center h-full bg-gradient-to-br from-emerald-50 to-emerald-100">
-                                                <BookOpen className="w-16 h-16 text-emerald-500 opacity-70" />
-                                            </div>
-                                        )}
-
-                                        {/* Course Type Icon */}
-                                        <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm rounded-xl p-2">
-                                            <BookOpen className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
-                                        </div>
-                                    </div>
-
-                                    {/* Content Section */}
-                                    <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col justify-between">
-                                        {/* Title */}
-                                        <h3 className="text-slate-800 font-bold text-sm sm:text-base lg:text-lg mb-2 line-clamp-2 leading-tight">
-                                            {course.title || 'Course Title'}
-                                        </h3>
-
-                                        {/* Short Description */}
-                                        <p className="text-slate-600 text-xs sm:text-sm mb-3 sm:mb-4 line-clamp-2 sm:line-clamp-3 leading-relaxed">
-                                            {course.shortDescription || 'Course description not available'}
-                                        </p>
-
-                                        {/* Continue Learning Button */}
-                                        <div className="mt-auto">
-                                            <button className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/30 flex items-center justify-center gap-2">
-                                                <Play className="w-3 h-3 sm:w-4 sm:h-4" />
-                                                <span className="hidden xs:inline">Continue Learning</span>
-                                                <span className="xs:hidden">Continue</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        ))
-                    ) : (
-                        // Show course content (same as FreeResourcesPage)
-                        selectedSceduleList.map((item, i) => (
+                {/* Resources Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    {selectedSceduleList?.length > 0 && selectedSceduleList?.map((item, i) => {
+                        return (
                             <div
                                 key={i}
                                 className={`transform transition-all duration-500 ${isVisible ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}
@@ -687,127 +535,125 @@ const MyPurchases = () => {
                             >
                                 <div
                                     onClick={() => handleCardClick(item)}
-                                    className="group bg-white border border-slate-200 rounded-2xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:shadow-xl hover:border-indigo-300 flex flex-col relative"
+                                    className="group bg-gradient-to-br from-white/95 to-gray-50/95 backdrop-blur-xl border border-white/40 rounded-3xl overflow-hidden h-full cursor-pointer transition-all duration-300 hover:-translate-y-3 hover:shadow-2xl hover:shadow-black/10 flex flex-col relative"
                                 >
-                                    {/* Content Type Badge */}
-                                    <div className={`absolute top-4 right-4 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-lg z-10 transform group-hover:scale-110 transition-transform duration-300 ${item?.entityType?.toLowerCase() === "folder"
-                                        ? 'bg-gradient-to-r from-amber-500 to-amber-600'
-                                        : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz")
-                                            ? 'bg-gradient-to-r from-purple-500 to-purple-600'
-                                            : 'bg-gradient-to-r from-emerald-500 to-emerald-600'
-                                        }`}>
-                                        {item?.entityType?.toUpperCase() || 'CONTENT'}
-                                    </div>
-
                                     {/* Image Section */}
-                                    <div className="relative aspect-video bg-gradient-to-br from-slate-50 to-slate-100 overflow-hidden">
-                                        {item?.thumb ? (
+                                    <div className="relative h-full bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+                                        {item?.logo || item?.thumb ? (
                                             <img
-                                                src={Endpoints.mediaBaseUrl + item?.thumb}
+                                                src={Endpoints.mediaBaseUrl + (item?.logo || item?.thumb)}
                                                 alt={item?.title}
-                                                className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+                                                className="w-full object-cover transform group-hover:scale-105 transition-transform duration-300"
                                             />
                                         ) : (
-                                            <div className="flex items-center justify-center h-full bg-gradient-to-br from-emerald-50 to-amber-50">
-                                                {item?.entityType?.toLowerCase() === "folder" ?
+                                            <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-yellow-50">
+                                                {!courseId && !item?.entityType ? (
                                                     <div className="flex flex-col items-center">
-                                                        <FolderOpen className="w-16 h-16 text-amber-500 opacity-70" />
-                                                        <span className="text-amber-600 font-semibold text-sm mt-1">FOLDER</span>
-                                                    </div> :
-                                                    item?.entityType === "video" ?
-                                                        <PlayCircle className="w-16 h-16 text-emerald-500 opacity-70" /> : item?.entityType === "audio" ?
-                                                            <Music className="w-16 h-16 text-green-500 opacity-70" /> : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ?
-                                                                <div className="flex flex-col items-center">
-                                                                    <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-full flex items-center justify-center mb-2">
-                                                                        <span className="text-white font-bold text-2xl">?</span>
-                                                                    </div>
-                                                                    <span className="text-purple-600 font-semibold text-sm">QUIZ</span>
-                                                                </div> :
-                                                                <FileText className="w-16 h-16 text-red-500 opacity-70" />
-                                                }
+                                                        <BookOpen className="w-16 h-16 text-blue-500 opacity-70" />
+                                                        <span className="text-blue-600 font-semibold text-sm mt-1">COURSE</span>
+                                                    </div>
+                                                ) : item?.entityType?.toLowerCase() === "folder" ? (
+                                                    <div className="flex flex-col items-center">
+                                                        <FolderOpen className="w-16 h-16 text-yellow-500 opacity-70" />
+                                                        <span className="text-yellow-600 font-semibold text-sm mt-1">FOLDER</span>
+                                                    </div>
+                                                ) : item?.entityType === "video" ? (
+                                                    <PlayCircle className="w-15 h-15 text-blue-500 opacity-70" size={60} />
+                                                ) : item?.entityType === "audio" ? (
+                                                    <Music className="w-15 h-15 text-indigo-500 opacity-70" size={60} />
+                                                ) : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ? (
+                                                    <div className="flex flex-col items-center">
+                                                        <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-600 rounded-full flex items-center justify-center mb-2">
+                                                            <span className="text-white font-bold text-2xl">?</span>
+                                                        </div>
+                                                        <span className="text-purple-600 font-semibold text-sm">QUIZ</span>
+                                                    </div>
+                                                ) : (
+                                                    <FileText className="w-15 h-15 text-red-500 opacity-70" size={60} />
+                                                )}
                                             </div>
                                         )}
 
                                         {/* Content Type Icon */}
                                         <div className="absolute bottom-3 left-3 bg-black/70 backdrop-blur-sm rounded-xl p-2">
-                                            {item?.entityType?.toLowerCase() === "folder" ?
-                                                <Folder className="w-5 h-5 text-amber-300 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" /> :
-                                                item?.entityType === "video" ?
-                                                    <PlayCircle className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" /> : item?.entityType === "audio" ?
-                                                        <Music className="w-5 h-5 text-green-400 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" /> : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ?
-                                                            <div className="w-5 h-5 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300">
-                                                                ?
-                                                            </div> :
-                                                            <FileText className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
-                                            }
+                                            {!courseId && !item?.entityType ? (
+                                                <BookOpen className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
+                                            ) : item?.entityType?.toLowerCase() === "folder" ? (
+                                                <Folder className="w-5 h-5 text-yellow-300 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
+                                            ) : item?.entityType === "video" ? (
+                                                <PlayCircle className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
+                                            ) : item?.entityType === "audio" ? (
+                                                <Music className="w-5 h-5 text-indigo-400 transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
+                                            ) : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ? (
+                                                <div className="w-5 h-5 bg-purple-500 text-white rounded-full flex items-center justify-center text-xs font-bold transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300">
+                                                    ?
+                                                </div>
+                                            ) : (
+                                                <FileText className="w-5 h-5 text-white transform group-hover:scale-125 group-hover:rotate-6 transition-all duration-300" />
+                                            )}
                                         </div>
                                     </div>
 
                                     {/* Content Section */}
-                                    <div className="p-4 sm:p-5 lg:p-6 flex-grow flex flex-col justify-between">
+                                    <div className="p-6 flex-grow flex flex-col justify-between">
                                         {/* Title */}
-                                        <h3 className="text-slate-800 font-bold text-sm sm:text-base mb-3 sm:mb-4 line-clamp-2 leading-tight">
-                                            {item?.title || 'Content Title'}
-                                        </h3>
+                                        {/* <h3 className="text-gray-800 font-bold text-base mb-4 line-clamp-2 leading-tight">
+                                            {item?.title || 'Resource Title'}
+                                        </h3> */}
 
                                         {/* Footer */}
                                         <div className="mt-auto">
                                             {/* Date */}
-                                            <div className="flex items-center mb-3 sm:mb-4">
-                                                <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-slate-500 mr-2" />
-                                                <span className="text-slate-500 text-xs">
+                                            {/* <div className="flex items-center mb-4">
+                                                <Clock className="w-4 h-4 text-gray-500 mr-2" />
+                                                <span className="text-gray-500 text-xs">
                                                     {item.createdAt ? new Date(item.createdAt).toLocaleDateString('en-US', {
                                                         month: 'short',
                                                         day: 'numeric',
                                                         year: 'numeric'
                                                     }) : "Recently Added"}
                                                 </span>
-                                            </div>
+                                            </div> */}
 
                                             {/* Action Button */}
-                                            <button
-                                                onClick={(e) => {
-                                                    if (item?.entityType === "video") {
-                                                        e.stopPropagation();
-                                                        setSelectedItem(item);
-                                                        setFormModalOpen(true);
-                                                    }
-                                                }}
-                                                className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 ${item?.entityType?.toLowerCase() === "folder"
-                                                    ? "bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 hover:shadow-amber-500/30"
-                                                    : item?.entityType === "audio"
-                                                        ? "bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 hover:shadow-green-500/30"
-                                                        : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz")
-                                                            ? "bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 hover:shadow-purple-500/30"
-                                                            : "bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 hover:shadow-emerald-500/30"
-                                                    } text-white`}>
-                                                {item?.entityType?.toLowerCase() === "folder" ? (
+                                            <button onClick={() => handleCardClick(item)} className={`w-full py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-2 ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white`}>
+                                                {!courseId && !item?.entityType ? (
                                                     <>
-                                                        <FolderOpen className="w-3 h-3 sm:w-4 sm:h-4" />
-                                                        <span className="hidden xs:inline">Open Folder</span>
-                                                        <span className="xs:hidden">Open</span>
+                                                        <BookOpen className="w-4 h-4" />
+                                                        {item?.setting?.restrictFreeContent === true && !enrolledCourses.has(item?.id) ? 'Enroll Now' : 'View Course'}
+                                                    </>
+                                                ) : item?.entityType?.toLowerCase() === "folder" ? (
+                                                    <>
+                                                        <FolderOpen className="w-4 h-4" />
+                                                        Open Folder
+                                                    </>
+                                                ) : item?.entityType === "video" ? (
+                                                    <>
+                                                        <PlayCircle className="w-4 h-4" />
+                                                        Watch Video
                                                     </>
                                                 ) : item?.entityType === "audio" ? (
                                                     <>
-                                                        <Music className="w-3 h-3 sm:w-4 sm:h-4" />
-                                                        <span className="hidden xs:inline">Listen Audio</span>
-                                                        <span className="xs:hidden">Audio</span>
+                                                        <Music className="w-4 h-4" />
+                                                        Listen Audio
                                                     </>
                                                 ) : (item?.entityType === "quiz" || item?.entityType === "practiseTest" || item?.entityType === "answerQuiz") ? (
                                                     <>
-                                                        {item?.quiz?.attempt === true ? (
-                                                            <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+                                                        {isAuthenticated ? (
+                                                            item?.quiz?.attempt === true ? (
+                                                                <Eye className="w-4 h-4" />
+                                                            ) : (
+                                                                <div className="w-4 h-4 bg-white text-purple-600 rounded-full flex items-center justify-center text-xs font-bold">?</div>
+                                                            )
                                                         ) : (
-                                                            <div className="w-3 h-3 sm:w-4 sm:h-4 bg-white text-purple-600 rounded-full flex items-center justify-center text-xs font-bold">?</div>
+                                                            <Lock className="w-4 h-4" />
                                                         )}
-                                                        <span className="hidden xs:inline">{item?.quiz?.attempt === true ? "View Result" : "Start Quiz"}</span>
-                                                        <span className="xs:hidden">{item?.quiz?.attempt === true ? "Result" : "Quiz"}</span>
+                                                        {isAuthenticated ? (item?.quiz?.attempt === true ? "View Result" : "Start Quiz") : "Login to Start Quiz"}
                                                     </>
                                                 ) : (
                                                     <>
-                                                        <Download className="w-3 h-3 sm:w-4 sm:h-4" />
-                                                        <span className="hidden xs:inline">Access Now</span>
-                                                        <span className="xs:hidden">Access</span>
+                                                        <Download className="w-4 h-4" />
+                                                        Access Now
                                                     </>
                                                 )}
                                             </button>
@@ -815,204 +661,225 @@ const MyPurchases = () => {
                                     </div>
                                 </div>
                             </div>
-                        ))
-                    )}
+                        );
+                    })}
                 </div>
 
-                {/* No Content Found */}
-                {((currentView === 'courses' && mycourseList.length === 0) ||
-                    (currentView === 'content' && selectedSceduleList.length === 0)) && (
-                        <div className="text-center py-8 sm:py-12 lg:py-16 px-4">
-                            <BookOpen className="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-3 sm:mb-4" />
-                            <h3 className="text-lg sm:text-xl font-semibold text-gray-600 mb-2">
-                                {currentView === 'courses' ? 'No Courses Available' : 'No Content Available'}
-                            </h3>
-                            <p className="text-sm sm:text-base text-gray-500 max-w-md mx-auto">
-                                {currentView === 'courses'
-                                    ? 'Purchase courses to start your learning journey.'
-                                    : 'This course folder is empty or content is being loaded.'
-                                }
-                            </p>
-                        </div>
-                    )}
+                {/* No Resources Found */}
+                {selectedSceduleList?.length === 0 && (
+                    <div className="text-center py-16">
+                        <BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-xl font-semibold text-gray-600 mb-2">No Free Resources Available</h3>
+                        <p className="text-gray-500">Check back later for new free educational content.</p>
+                    </div>
+                )}
 
-                {/* App Download Dialog */}
-                {formModalOpen && (
-                    <div
-                        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm"
-                        onClick={(e) => e.target === e.currentTarget && setFormModalOpen(false)}
-                    >
-                        <div className="bg-gradient-to-br from-white/98 to-gray-50/98 backdrop-blur-xl border border-white/40 rounded-3xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-hidden">
+                {/* Enrollment Modal */}
+                {showEnrollModal && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
                             {/* Header */}
-                            <div className="bg-gradient-to-br from-blue-50 via-white to-purple-50 p-6 text-gray-800 relative overflow-hidden border-b border-gray-100">
-                                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-transparent"></div>
-
-                                <button
-                                    onClick={() => setFormModalOpen(false)}
-                                    className="absolute right-4 top-4 bg-gray-100/80 backdrop-blur-sm hover:bg-gray-200/80 text-gray-600 hover:text-gray-800 p-3 rounded-full transition-all duration-300 hover:scale-110 z-50 cursor-pointer"
-                                    type="button"
-                                >
-                                    <X className="w-5 h-5" />
-                                </button>
-
-                                <div className="relative z-10 text-center">
-                                    <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                                        <Download className="w-8 h-8 text-white" />
+                            <div className={`${BRAND_GREEN_CLASS} p-6 text-white`}>
+                                <div className="text-center">
+                                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <span className="text-3xl">🎓</span>
                                     </div>
-                                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                                        📱 Download Our App
-                                    </h2>
-                                    <p className="text-sm text-gray-600 max-w-xs mx-auto leading-relaxed">
-                                        For accessing this content, please install our mobile application
+                                    <h2 className="text-2xl font-bold mb-2">Enroll in Free Course</h2>
+                                    <p className="text-white/90 text-sm">
+                                        Get instant access to this premium content
                                     </p>
                                 </div>
                             </div>
 
                             {/* Content */}
-                            <div className="p-6 space-y-6">
-                                {/* App Features */}
-                                <div className="space-y-4">
-                                    <div className="flex items-center space-x-3">
-                                        <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <Play className="w-4 h-4 text-blue-600" />
-                                        </div>
-                                        <span className="text-white text-sm">Access all video content</span>
-                                    </div>
-                                    <div className="flex items-center space-x-3">
-                                        <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                            <FileText className="w-4 h-4 text-green-600" />
-                                        </div>
-                                        <span className="text-white text-sm">Read PDFs and documents</span>
-                                    </div>
-                                    <div className="flex items-center space-x-3">
-                                        <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                            <BookOpen className="w-4 h-4 text-purple-600" />
-                                        </div>
-                                        <span className="text-white text-sm">Enhanced learning experience</span>
-                                    </div>
+                            <div className="p-6">
+                                <div className="text-center mb-6">
+                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                        {enrollingCourse?.title}
+                                    </h3>
+                                    <p className="text-gray-600 text-sm">
+                                        This course requires enrollment. Click "Enroll Now" to get free access and start learning immediately.
+                                    </p>
                                 </div>
 
-                                {/* Download Buttons */}
-                                <div className="space-y-3">
-                                    <a
-                                        href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/30 flex items-center justify-center gap-3"
-                                    >
-                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M3.18 23.76c.37.21.8.22 1.19.04l11.16-6.44-2.5-2.5-9.85 8.9zM.5 1.6C.19 1.99 0 2.56 0 3.28v17.44c0 .72.19 1.29.51 1.68l.09.08 9.77-9.77v-.23L.59 1.52l-.09.08zM20.33 10.3l-2.43-1.4-2.78 2.78 2.78 2.78 2.44-1.41c.7-.4.7-1.35-.01-1.75zM4.37.24L15.53 6.68l-2.5 2.5L3.18.28C3.57.1 4 .1 4.37.24z" /></svg>
-                                        Google Play (Android)
-                                    </a>
-                                    <a
-                                        href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-3"
-                                    >
-                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98l-.09.06c-.22.14-2.18 1.27-2.16 3.8.03 3.02 2.65 4.03 2.68 4.04l-.07.28zM13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
-                                        App Store (iOS)
-                                    </a>
-                                    <a
-                                        href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-blue-500/30 flex items-center justify-center gap-3"
-                                    >
-                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.55H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801" /></svg>
-                                        Microsoft Store (Windows)
-                                    </a>
-                                    <a
-                                        href="https://baseclassio.b-cdn.net/VG%20Study%20Hub.zip"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="w-full bg-gradient-to-r from-emerald-600 to-emerald-700 hover:from-emerald-700 hover:to-emerald-800 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-emerald-500/30 flex items-center justify-center gap-3"
-                                    >
-                                        <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="3" y="4" width="18" height="13" rx="2" fill="currentColor" />
-                                            <rect x="9" y="18" width="6" height="1.5" rx="0.75" fill="currentColor" opacity="0.65" />
-                                            <path d="M8 20h8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.65" />
-                                        </svg>
-                                        MacOS (macOS)
-                                    </a>
-
+                                {/* Benefits */}
+                                <div className="bg-indigo-50 rounded-xl p-4 mb-6">
+                                    <h4 className="font-semibold text-gray-800 mb-2 text-sm">What you'll get:</h4>
+                                    <ul className="space-y-2 text-sm text-gray-700">
+                                        <li className="flex items-start">
+                                            <span className="text-indigo-600 mr-2">✓</span>
+                                            <span>Lifetime access to course content</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="text-indigo-600 mr-2">✓</span>
+                                            <span>Track your learning progress</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="text-indigo-600 mr-2">✓</span>
+                                            <span>Access to quizzes and assignments</span>
+                                        </li>
+                                        <li className="flex items-start">
+                                            <span className="text-indigo-600 mr-2">✓</span>
+                                            <span>100% FREE - No hidden charges</span>
+                                        </li>
+                                    </ul>
                                 </div>
 
-                                {/* Note */}
-                                <p className="text-center text-white text-xs">
-                                    📱 Get the best learning experience with our mobile app
+                                {/* Buttons */}
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleCancelEnroll}
+                                        disabled={isEnrolling}
+                                        className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-colors duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleEnrollNow}
+                                        disabled={isEnrolling}
+                                        className={`flex-1 py-3 px-4 ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white font-semibold rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2`}
+                                    >
+                                        {isEnrolling ? (
+                                            <>
+                                                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                <span>Enrolling...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <BookOpen className="w-4 h-4" />
+                                                <span>Enroll Now</span>
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {showLoginWarning && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
+                        <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden">
+                            {/* Header */}
+                            <div className={`${BRAND_GREEN_CLASS} p-6 text-white`}>
+                                <div className="text-center">
+                                    <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                                        <span className="text-3xl">🔐</span>
+                                    </div>
+                                    <h2 className="text-2xl font-bold mb-2">Login Required</h2>
+                                    <p className="text-white/90 text-sm">
+                                        You need to be logged in to start the access
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Content */}
+                            <div className="p-6">
+                                <div className="text-center mb-6">
+                                    {/* <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                    Quiz: {selectedQuizItem?.title}
+                                </h3> */}
+                                    <p className="text-gray-600 text-sm">
+                                        Please login or create an account to access this and track your progress.
+                                    </p>
+                                </div>
+
+                                {/* Buttons */}
+                                <div className="flex gap-3">
+                                    <button
+                                        onClick={handleLoginWarningCancel}
+                                        className="flex-1 py-3 px-4 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl transition-colors duration-300"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleLoginWarningConfirm}
+                                        className={`flex-1 py-3 px-4 ${BRAND_GREEN_CLASS} ${BRAND_GREEN_HOVER_CLASS} text-white font-semibold rounded-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg`}
+                                    >
+                                        Login Now
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                {/* Video Dialog */}
+                {openDialog && (
+                    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
+                        {/* Close Button */}
+                        <button
+                            onClick={handleCloseVideo}
+                            className="absolute top-6 right-6 z-[1300] w-12 h-12 bg-yellow-400 hover:bg-yellow-300 text-black rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 font-bold text-2xl"
+                        >
+                            ✕
+                        </button>
+
+                        {/* Video Container */}
+                        <div className="w-full h-screen max-w-6xl flex items-center justify-center pt-8 px-4">
+                            <div className="w-full aspect-video bg-black rounded-xl shadow-2xl overflow-hidden">
+                                <YouTubePlayer videoUrl={selectedQuizItem?.video?.youtubeUrl} />
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                {/* Audio Modal */}
+                {showAudioModal && (
+                    <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setShowAudioModal(false)}
+                            className="absolute top-6 right-6 z-[1300] w-12 h-12 bg-yellow-400 hover:bg-yellow-300 text-black rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 font-bold text-2xl"
+                        >
+                            ✕
+                        </button>
+
+                        {/* Audio Container */}
+                        <div className="w-full max-w-2xl">
+
+                            {/* Audio Player */}
+                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-2xl">
+                                <div className="flex items-center justify-center mb-6">
+                                    <Music className="w-16 h-16 text-indigo-500 opacity-80" />
+                                </div>
+                                <audio
+                                    controls
+                                    className="w-full"
+                                    style={{
+                                        backgroundColor: '#1f2937',
+                                        borderRadius: '12px',
+                                        outline: 'none'
+                                    }}
+                                >
+                                    <source src={Endpoints.mediaBaseUrl + selectedAudio?.audio?.audio} type="audio/mpeg" />
+                                    Your browser does not support the audio element.
+                                </audio>
+                                <p className="text-gray-400 text-sm text-center mt-4">
+                                    {selectedAudio?.audio?.duration && `Duration: ${selectedAudio.audio.duration}`}
                                 </p>
                             </div>
                         </div>
                     </div>
                 )}
+
+                {/* Login Modal */}
+                <LoginModal
+                    isOpen={showLoginModal}
+                    onClose={() => setShowLoginModal(false)}
+                    onSignupClick={() => setShowSignupModal(true)}
+                />
+                <SignupModal
+                    isOpen={showSignupModal}
+                    onClose={() => setShowSignupModal(false)}
+                    onLoginClick={() => {
+                        setShowSignupModal(false);
+                        setShowLoginModal(true);
+                    }}
+                />
             </div>
-
-            {/* Simple Modal for YouTube Video */}
-            {openDialog && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-sm">
-                    <button
-                        onClick={handleCloseVideo}
-                        className="fixed top-4 right-4 md:top-8 md:right-8 z-[110] bg-yellow-400 hover:bg-yellow-500 text-black rounded-full p-2 md:p-3 transition-all shadow-lg hover:scale-105"
-                    >
-                        <X className="w-5 h-5 md:w-6 md:h-6" />
-                    </button>
-                    <div className="w-full max-w-[95%] md:max-w-5xl aspect-video px-4">
-                        <div className="w-full h-full rounded-lg md:rounded-xl overflow-hidden shadow-2xl">
-                            <YouTubePlayer videoUrl={selectedItem?.video?.youtubeUrl} />
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Audio Modal */}
-            {showAudioModal && (
-                <div className="fixed inset-0 z-50 bg-black/95 backdrop-blur-lg flex items-center justify-center p-4">
-                    {/* Close Button */}
-                    <button
-                        onClick={() => setShowAudioModal(false)}
-                        className="absolute top-6 right-6 z-[1300] w-12 h-12 bg-yellow-400 hover:bg-yellow-300 text-black rounded-full flex items-center justify-center transition-all duration-300 hover:scale-105 font-bold text-2xl"
-                    >
-                        ✕
-                    </button>
-
-                    {/* Audio Container */}
-                    <div className="w-full max-w-2xl">
-                        {/* Title */}
-                        <div className="text-center mb-8 pt-8">
-                            <h2 className="text-3xl font-bold text-white mb-2">{selectedAudio?.title || 'Audio'}</h2>
-                            {selectedAudio?.description && (
-                                <p className="text-gray-300 text-sm max-w-xl mx-auto">{selectedAudio.description}</p>
-                            )}
-                        </div>
-
-                        {/* Audio Player */}
-                        <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-8 shadow-2xl">
-                            <div className="flex items-center justify-center mb-6">
-                                <Music className="w-16 h-16 text-green-500 opacity-80" />
-                            </div>
-                            <audio
-                                controls
-                                className="w-full"
-                                style={{
-                                    backgroundColor: '#1f2937',
-                                    borderRadius: '12px',
-                                    outline: 'none'
-                                }}
-                            >
-                                <source src={Endpoints.mediaBaseUrl + selectedAudio?.audio?.audio} type="audio/mpeg" />
-                                Your browser does not support the audio element.
-                            </audio>
-                            <p className="text-gray-400 text-sm text-center mt-4">
-                                {selectedAudio?.audio?.duration && `Duration: ${selectedAudio.audio.duration}`}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            )}
-
             <Footer />
-        </div>
-    );
-};
+        </>
+    )
+}
 
-export default MyPurchases;
+export default FreeResourcesPage

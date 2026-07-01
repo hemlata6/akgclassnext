@@ -694,4 +694,3 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 };
 
 export default LoginModal;
-

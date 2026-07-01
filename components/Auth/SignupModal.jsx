@@ -513,4 +513,3 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
 };
 
 export default SignupModal;
-
