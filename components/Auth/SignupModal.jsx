@@ -24,7 +24,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [addressErrors, setAddressErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [tempSignupData, setTempSignupData] = useState(null);
-  const { login, auth, stateList } = useAuth();
+  const { login, auth } = useAuth();
   const { theme } = useTheme();
   const { setStudentAuth } = useStudent();
 
@@ -107,11 +107,11 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newAddressErrors.zipCode = 'Zipcode is required';
     }
 
-    if (!addressForm.stateName) {
+    if (!addressForm.stateName.trim()) {
       newAddressErrors.stateName = 'State is required';
     }
 
-    if (!addressForm.cityId) {
+    if (!addressForm.cityName.trim()) {
       newAddressErrors.cityName = 'City is required';
     }
 
@@ -142,10 +142,10 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         instId: instId,
         password: 123456,
         gender: "male",
-        cityId: addressForm.cityId,
+        cityId: null,
         address: fullAddress,
         zipCode: addressForm.zipCode.trim(),
-        userName: `${formData.firstname} ${formData.lastname}`,
+        userName: `${formData.firstname}${formData.lastname}`,
       };
 
       const registrationResponse = await Network.studentRegister(registrationBody);
@@ -413,42 +413,39 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             {/* State */}
             <div className="space-y-1">
               <label className="block text-sm font-semibold text-slate-700">State</label>
-              <select
+              <input
+                type="text"
                 value={addressForm.stateName}
-                onChange={(e) => {
-                  handleAddressInputChange('stateName', e.target.value);
-                  handleAddressInputChange('cityName', '');
-                  handleAddressInputChange('cityId', '');
-                }}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-              >
-                <option value="">Select state</option>
-                {stateList && stateList.map((state) => (
-                  <option key={state.name} value={state.name}>{state.name}</option>
-                ))}
-              </select>
-              {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
+                onChange={(e) =>
+                  handleAddressInputChange('stateName', e.target.value)
+                }
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter state"
+              />
+              {addressErrors.stateName && (
+                <p className="mt-2 text-xs text-red-600">
+                  {addressErrors.stateName}
+                </p>
+              )}
             </div>
 
             {/* City */}
             <div className="space-y-1">
               <label className="block text-sm font-semibold text-slate-700">City</label>
-              <select
-                value={addressForm.cityId}
-                onChange={(e) => {
-                  const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
-                  handleAddressInputChange('cityId', e.target.value);
-                  handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
-                }}
-                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                disabled={!addressForm.stateName}
-              >
-                <option value="">Select city</option>
-                {(stateList && stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
-                  <option key={city.id} value={city.id}>{city.city}</option>
-                ))}
-              </select>
-              {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
+              <input
+                type="text"
+                value={addressForm.cityName}
+                onChange={(e) =>
+                  handleAddressInputChange('cityName', e.target.value)
+                }
+                className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                placeholder="Enter city"
+              />
+              {addressErrors.cityName && (
+                <p className="mt-2 text-xs text-red-600">
+                  {addressErrors.cityName}
+                </p>
+              )}
             </div>
           </div>
 
