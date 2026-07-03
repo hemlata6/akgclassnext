@@ -443,7 +443,7 @@ export const Header = ({ cartCount }) => {
 
               <a
                 href="#"
-                className="text-[#0749A2] hover:text-[#0B3276] transition whitespace-nowrap"
+                className="text-yellow-300 transition whitespace-nowrap"
               >
                 Become Franchise Partner
               </a>
@@ -461,7 +461,7 @@ export const Header = ({ cartCount }) => {
                 TRACK ORDER
               </button>
 
-              <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#0749A2] text-white font-semibold text-sm hover:bg-[#0B3276] transition whitespace-nowrap">
+              <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#0B3276] text-white font-semibold text-sm hover:bg-[#0749A2] transition whitespace-nowrap">
                 <span className="text-xs md:text-base">📱</span>
                 <span className="hidden xs:inline">DOWNLOAD APP</span>
               </button>
