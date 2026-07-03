@@ -24,7 +24,7 @@ export const PromoBanners = () => {
             if (response && response.banners && response.banners.length > 0) {
                 const activeBanners = response.banners.filter(
                     banner =>
-                        banner.active
+                        banner.active && banner.group === 'Top banner'
                 );
 
                 if (activeBanners.length > 0) {
