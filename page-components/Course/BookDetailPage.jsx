@@ -430,7 +430,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                         <div className="flex gap-2">
                                             <button
                                                 onClick={() => router.push(`/cart${getQueryString()}`)}
-                                                className="flex-1 bg-slate-700 hover:bg-slate-800 text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5"
+                                                className="flex-1 bg-[#0B3276] hover:bg-[#0749A2] text-white py-2 rounded-lg font-bold text-xs shadow-md transition-all active:scale-95 flex items-center justify-center gap-1.5"
                                             >
                                                 View Cart
                                             </button>

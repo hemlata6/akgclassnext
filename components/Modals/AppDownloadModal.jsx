@@ -4,7 +4,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
-const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
+const AppDownloadModal = ({ open, onClose, brandColor = '#0749A2' }) => {
   return (
     <Dialog 
       open={open} 

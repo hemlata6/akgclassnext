@@ -43,14 +43,14 @@ export const FreeResources = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="h-8 w-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-slate-900 group-hover:text-white group-hover:border-slate-900 transition-all">
+                                    <div className="h-8 w-8 rounded-full border border-slate-200 flex items-center justify-center text-slate-400 group-hover:bg-[#0749A2] group-hover:text-white group-hover:border-[#0749A2] transition-all">
                                         <Download />
                                     </div>
                                 </div>
                             ))}
                         </div>
                     </div>
-                    <div className="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 md:p-8 text-center md:text-left relative overflow-hidden text-white shadow-2xl shadow-slate-900/20 sticky top-24">
+                    <div className="bg-gradient-to-br from-[#0749A2] to-[#0B3276] rounded-2xl p-6 md:p-8 text-center md:text-left relative overflow-hidden text-white shadow-2xl shadow-[#0749A2]/20 sticky top-24">
                         <div className="relative z-10">
                             <h2 className="text-2xl font-bold mb-2">Study on the Go!</h2>
                             <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the {institute?.institue ? institute?.institue : "Rishabh Jain"} App for offline viewing, live classes, and unlimited access to study materials.</p>

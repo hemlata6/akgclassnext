@@ -6,13 +6,13 @@ const ThemeContext = createContext();
 export const THEMES = {
   darkBlue: {
     name: 'Dark Blue',
-    primary: '#000d4e',
-    primaryHover: '#00135e',
-    primaryClass: 'bg-indigo-700',
-    primaryHoverClass: 'hover:bg-indigo-600',
-    textClass: 'text-indigo-700',
-    borderClass: 'border-indigo-700',
-    bgGradient: 'from-indigo-700 to-indigo-800',
+    primary: '#0749A2',
+    primaryHover: '#0B3276',
+    primaryClass: 'bg-[#0749A2]',
+    primaryHoverClass: 'hover:bg-[#0B3276]',
+    textClass: 'text-[#0749A2]',
+    borderClass: 'border-[#0749A2]',
+    bgGradient: 'from-[#0749A2] to-[#0B3276]',
   },
   darkGreen: {
     name: 'Dark Green',

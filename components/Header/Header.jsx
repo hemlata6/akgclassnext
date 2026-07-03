@@ -402,8 +402,8 @@ export const Header = ({ cartCount }) => {
         <div className="relative bg-white">
 
           {/* --- A. TOP ANNOUNCEMENT STRIP --- */}
-          {/* <div className="bg-slate-900 text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-slate-800"> */}
-          <div className="bg-[#071d49] text-white min-h-[44px] md:h-[52px] flex items-center justify-between px-3 md:px-6 lg:px-12 gap-2">
+          {/* <div className="bg-[#0749A2] text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-[#0B3276]"> */}
+          <div className="bg-[#0749A2] text-white min-h-[44px] md:h-[52px] flex items-center justify-between px-3 md:px-6 lg:px-12 gap-2">
 
             {/* Left Side */}
             <div className="hidden md:flex items-center gap-2 md:gap-8 flex-shrink-0">
@@ -443,7 +443,7 @@ export const Header = ({ cartCount }) => {
 
               <a
                 href="#"
-                className="text-[#f8b400] hover:text-[#ffd15a] transition whitespace-nowrap"
+                className="text-[#0749A2] hover:text-[#0B3276] transition whitespace-nowrap"
               >
                 Become Franchise Partner
               </a>
@@ -457,11 +457,11 @@ export const Header = ({ cartCount }) => {
             {/* Right Buttons */}
             <div className="flex items-center gap-1.5 md:gap-3 flex-shrink-0">
 
-              <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#132b5b] border border-[#27457e] text-white font-semibold text-sm hover:bg-[#1a376f] transition">
+              <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#0B3276] border border-[#0749A2] text-white font-semibold text-sm hover:bg-[#0749A2] transition">
                 TRACK ORDER
               </button>
 
-              <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#00b66d] text-white font-semibold text-sm hover:bg-[#00a764] transition whitespace-nowrap">
+              <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#0749A2] text-white font-semibold text-sm hover:bg-[#0B3276] transition whitespace-nowrap">
                 <span className="text-xs md:text-base">📱</span>
                 <span className="hidden xs:inline">DOWNLOAD APP</span>
               </button>
@@ -479,7 +479,7 @@ export const Header = ({ cartCount }) => {
               <div className="flex flex-col items-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
                   {/* <img src="/logo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" /> */}
-                  <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
+                  <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                     {/* <Icons.User /> */}
                     RJCE
                   </button>
@@ -495,7 +495,7 @@ export const Header = ({ cartCount }) => {
 
             {/* Mobile Logo - Left side */}
             <Link href="/" className="flex items-center gap-2 cursor-pointer xl:hidden">
-              <button className="bg-slate-900 hover:bg-slate-800 text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg">
+              <button className="bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg">
                 RJCE
               </button>
               <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
@@ -659,7 +659,10 @@ export const Header = ({ cartCount }) => {
                 </div>
               </div> */}
 
-              <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Test-Series</button>
+              <button className="font-semibold text-slate-600 text-sm transition-colors relative group/test">
+                Test-Series
+                <span className="ml-1.5 text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold align-middle">Coming Soon</span>
+              </button>
 
               {/* Faculty Menu */}
               <div
@@ -702,9 +705,9 @@ export const Header = ({ cartCount }) => {
               </div>
 
 
-              <button onClick={() => router.push('/store?batchTag=F2F+Pune')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Pune</button>
+              <button onClick={() => router.push('/store?batchTag=F2F+Pune')} className="font-semibold text-[#0B3276] hover:text-[#0749A2] text-sm transition-colors">F2F Pune</button>
 
-              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#2EB1ED] hover:text-slate-900 text-sm transition-colors">Student Feedback</button>
+              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#0749A2] hover:text-[#0B3276] text-sm transition-colors">Student Feedback</button>
 
 
               {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
@@ -734,7 +737,7 @@ export const Header = ({ cartCount }) => {
                   </div>
                 </div>
               ) : (
-                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
+                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                   <Icons.User />
                   Account
                 </button>
@@ -762,7 +765,7 @@ export const Header = ({ cartCount }) => {
                   </div>
                 </div>
               ) : (
-                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-slate-900 hover:bg-slate-800 text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
+                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
                   <Icons.User />
                   Account
                 </button>
@@ -797,7 +800,7 @@ export const Header = ({ cartCount }) => {
         {/* Mobile Menu Drawer */}
         {mobileMenuOpen && (
           <div className="fixed inset-0 z-[100] xl:hidden">
-            <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
+            <div className="absolute inset-0 bg-[#0B3276]/20 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
             <div className="absolute top-0 right-0 bottom-0 w-[280px] bg-white shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300">
               <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
                 <h3 className="font-bold text-lg text-slate-900">Menu</h3>
@@ -995,7 +998,10 @@ export const Header = ({ cartCount }) => {
 
                 <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
 
-                <button onClick={() => window.location.href = 'https://classeskart.in/503/vg-study-hub'} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Test-Series</button>
+                <button className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md relative group/test">
+                  Test-Series
+                  <span className="ml-1.5 text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">Coming Soon</span>
+                </button>
 
                 {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
 
@@ -1007,7 +1013,7 @@ export const Header = ({ cartCount }) => {
                   <a href="#" className="text-slate-400 hover:text-green-500"><Icons.Whatsapp /></a>
                 </div>
 
-                <button onClick={() => setShowAppDownloadModal(true)} className={`bg-slate-900 ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-3.5 rounded-lg font-bold text-sm mt-6 w-full flex items-center justify-center gap-2`}>
+                <button onClick={() => setShowAppDownloadModal(true)} className={`bg-[#0749A2] ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-3.5 rounded-lg font-bold text-sm mt-6 w-full flex items-center justify-center gap-2`}>
                   <Icons.Download /> Download App
                 </button>
               </div>
@@ -1063,7 +1069,7 @@ export const Header = ({ cartCount }) => {
       <AppDownloadModal
         open={showAppDownloadModal}
         onClose={() => setShowAppDownloadModal(false)}
-        brandColor={`var(--theme-primary, #0d5a3e)`}
+        brandColor={`var(--theme-primary, #0749A2)`}
       />
     </>
   );

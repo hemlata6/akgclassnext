@@ -2,7 +2,7 @@ import React from 'react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
 
 export const AppDownload = () => (
-  <section id="app" className="bg-slate-900 py-10 relative overflow-hidden">
+  <section id="app" className="bg-[#0749A2] py-10 relative overflow-hidden">
     <div className={LAYOUT_PADDING}>
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
         <div className="text-center md:text-left">

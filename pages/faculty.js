@@ -291,7 +291,7 @@ const FacultyProfile = () => {
                 {/* CTA Section */}
                 <section id="faculty-cta-section" data-section="faculty-cta" className="py-16">
                     <div className={LAYOUT_PADDING}>
-                        <div className="cta-box bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-12 text-center text-white shadow-2xl max-w-4xl mx-auto">
+                        <div className="cta-box bg-gradient-to-br from-[#0749A2] to-[#0B3276] rounded-2xl p-12 text-center text-white shadow-2xl max-w-4xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold mb-4">Ready to Start Your CA Journey?</h2>
                             <p className="text-lg text-slate-300 mb-8">Join 200,000+ students learning with CA VIVEK GABA</p>
                             <button

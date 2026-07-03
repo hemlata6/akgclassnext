@@ -64,7 +64,7 @@ export const StudentSupportSection = () => {
                         </div>
                     </div>
                     <div className="lg:col-span-5 sticky top-24">
-                        <div className="bg-slate-900 rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden">
+                        <div className="bg-[#0749A2] rounded-2xl p-6 text-white shadow-2xl relative overflow-hidden">
                             <div className="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
                             <div className="absolute bottom-0 left-0 w-24 h-24 bg-pink-500/20 rounded-full translate-y-1/2 -translate-x-1/2 blur-2xl"></div>
                             <div className="relative z-10">

@@ -55,9 +55,9 @@ export const Icons = {
 
 export const LAYOUT_PADDING = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
 // Theme colors - these will be used by components that haven't been converted to useTheme yet
-// Purple theme (indigo-700)
-export const BRAND_GREEN = "rgb(55, 48, 163)"; // indigo-700
-export const BRAND_GREEN_HOVER = "rgb(67, 56, 202)"; // indigo-600
+// Brand theme colors (#0749A2 / #0B3276)
+export const BRAND_GREEN = "#0749A2";
+export const BRAND_GREEN_HOVER = "#0B3276";
 // For className strings - use Tailwind classes
 export const BRAND_GREEN_CLASS = "bg-indigo-700";
 export const BRAND_GREEN_HOVER_CLASS = "hover:bg-indigo-600";

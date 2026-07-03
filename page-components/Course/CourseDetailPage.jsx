@@ -1034,7 +1034,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       {/* View Cart button */}
                       <button
                         onClick={() => router.push('/cart')}
-                        className="flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white"
+                        className="flex-1 py-4 rounded-xl font-bold text-sm shadow-lg transform transition active:scale-95 flex items-center justify-center gap-2 bg-[#0B3276] hover:bg-[#0749A2] text-white"
                       >
                         View Cart
                       </button>

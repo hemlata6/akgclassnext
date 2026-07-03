@@ -159,7 +159,7 @@ const FacultyProfile = ({ }) => {
         <Layout>
             <div id="faculty-profile-container" data-page="faculty-profile" className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
                 {/* Hero Section */}
-                <section id="faculty-hero-section" data-section="faculty-hero" className="bg-white py-16" style={{ backgroundColor: '#ffffff' }}>
+                <section id="faculty-hero-section" data-section="faculty-hero" className="bg-white pt-4 pb-16" style={{ backgroundColor: '#ffffff' }}>
                     <div className={LAYOUT_PADDING}>
                         <div className="flex items-center gap-4 mb-8">
                             <button
@@ -204,9 +204,9 @@ const FacultyProfile = ({ }) => {
                             </div>
 
                             <div className="w-full md:w-2/3 md:overflow-y-auto md:pr-2">
-                                <div className="space-y-6 bg-white rounded-xl shadow-lg p-8 border border-slate-100">
-                                    <div>
-                                        <h2 className="text-2xl font-bold text-slate-900 mb-4">About</h2>
+                                <div className="space-y-6 bg-white rounded-xl shadow-lg pt-0 pb-[2rem] px=[2rem] border border-slate-100">
+                                    {/* <div> */}
+                                        {/* <h2 className="text-2xl font-bold text-slate-900 mb-4">About</h2> */}
                                         {/* {faculty?.description && (
                                             <div className="text-lg text-slate-700 leading-relaxed mb-4">
                                                 {faculty.description}
@@ -218,7 +218,7 @@ const FacultyProfile = ({ }) => {
                                             </div>
                                         )} */}
                                         <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload?.address }} />
-                                    </div>
+                                    {/* </div> */}
 
                                     {/* {faculty?.journey && (
                                         <div>

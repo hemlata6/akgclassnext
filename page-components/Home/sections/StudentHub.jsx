@@ -39,7 +39,7 @@ export const StudentHub = () => {
               <Icons.Download /> Download Now
             </button>
           </div>
-          <div className="bg-slate-900 p-6 rounded-2xl text-white relative overflow-hidden">
+          <div className="bg-[#0749A2] p-6 rounded-2xl text-white relative overflow-hidden">
             <div className="relative z-10">
               <div className="flex justify-between items-center mb-4">
                 <h3 className="text-xl font-bold">Demo Lectures</h3>
@@ -48,7 +48,7 @@ export const StudentHub = () => {
               <div className="space-y-3 mb-4">
                 {[1, 2].map((i) => (
                   <div key={i} className="flex gap-3 items-center group cursor-pointer p-2 rounded-lg hover:bg-white/10 transition-colors" onClick={handleNavigateToResources}>
-                    <div className="h-10 w-16 bg-slate-800 rounded flex items-center justify-center flex-shrink-0 border border-slate-700 group-hover:border-indigo-500">
+                    <div className="h-10 w-16 bg-[#0B3276] rounded flex items-center justify-center flex-shrink-0 border border-[#0749A2] group-hover:border-[#0749A2]">
                       <Icons.Play />
                     </div>
                     <div>

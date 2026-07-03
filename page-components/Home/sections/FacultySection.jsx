@@ -196,8 +196,9 @@ const FacultyAndStatsSection = () => {
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent"></div>
 
                                         {/* Text */}
-                                        <div className="absolute bottom-0 left-0 p-3 text-white w-full">
-                                            <h3 className="text-sm font-bold leading-tight">
+                                        <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-8">
+                                            <div className="w-8 h-0.5 bg-[#0749A2] rounded-full mb-2"></div>
+                                            <h3 className="text-sm font-bold leading-tight text-white">
                                                 {f.firstName} {f.lastName}
                                             </h3>
 
@@ -236,18 +237,19 @@ const FacultyAndStatsSection = () => {
 
                                             <div className="absolute"></div>
 
-                                            <div className="absolute bottom-0 left-0 p-5 text-white w-full">
-                                                <h3 className="text-xl font-bold">
+                                            <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-12">
+                                                <div className="w-10 h-1 bg-[#0749A2] rounded-full mb-2"></div>
+                                                <h3 className="text-xl font-bold text-white">
                                                     {f.firstName} {f.lastName}
                                                 </h3>
-
+{/* 
                                                 <p className="text-xs text-indigo-300 font-bold uppercase mt-1">
                                                     {f.designation}
                                                 </p>
 
                                                 <p className="text-[10px] text-slate-300 mt-2 line-clamp-2">
                                                     {f.userRole}
-                                                </p>
+                                                </p> */}
                                             </div>
                                         </div>
                                     </div>

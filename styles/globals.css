@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --theme-primary: #2196F3;
-  --theme-primary-hover: #1976D2;
-  --theme-primary-class: bg-[#2196F3];
-  --theme-primary-hover-class: hover:bg-[#1976D2];
-  --theme-text-class: text-[#2196F3];
-  --theme-border-class: border-[#2196F3];
+  --theme-primary: #0749A2;
+  --theme-primary-hover: #0B3276;
+  --theme-primary-class: bg-[#0749A2];
+  --theme-primary-hover-class: hover:bg-[#0B3276];
+  --theme-text-class: text-[#0749A2];
+  --theme-border-class: border-[#0749A2];
   --font-family-base: 'Inter', sans-serif;
 }
 

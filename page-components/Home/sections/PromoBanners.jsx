@@ -33,7 +33,7 @@ export const PromoBanners = () => {
                         mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
                         desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
                         alt: banner.title || 'Banner',
-                        bg: 'bg-slate-900'
+                        bg: 'bg-[#0749A2]'
                     }));
                     // console.log('Fetched Banners:', bannerSlides);
                     setSlides(bannerSlides);
@@ -95,7 +95,7 @@ export const PromoBanners = () => {
     };
 
     return (
-        <section className="relative w-full group bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 overflow-hidden">
+        <section className="relative w-full group bg-gradient-to-br from-[#0749A2] via-[#0B3276] to-[#0749A2] overflow-hidden">
 
             <div className="w-full aspect-[3/1] md:aspect-[3/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
 
