@@ -1,6 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Icons, BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CLASS } from '../../../constants/Icons';
 
+const formatMilliseconds = (ms) => {
+  if (!ms) return "N/A";
+  const millisecondsInYear = 365 * 24 * 60 * 60 * 1000;
+  const millisecondsInMonth = 30 * 24 * 60 * 60 * 1000;
+  const millisecondsInDay = 24 * 60 * 60 * 1000;
+  const years = Math.floor(ms / millisecondsInYear);
+  let remainder = ms % millisecondsInYear;
+  const months = Math.floor(remainder / millisecondsInMonth);
+  remainder %= millisecondsInMonth;
+  const days = Math.floor(remainder / millisecondsInDay);
+  let result = [];
+  if (years > 0) result.push(`${years} Year${years > 1 ? 's' : ''}`);
+  if (months > 0) result.push(`${months} Month${months > 1 ? 's' : ''}`);
+  if (days > 0) result.push(`${days} Day${days > 1 ? 's' : ''}`);
+  return result.length > 0 ? result.join(" ") : "N/A";
+};
+
 const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
   const [selectedMode, setSelectedMode] = useState('');
   const [selectedVariation, setSelectedVariation] = useState('');
@@ -204,29 +221,77 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
             </div>
           )}
 
-          {/* Validity Selection */}
-          {validityOptions.length > 1 && (
+          {/* Deduplicate validity labels - show each unique period only once */}
+          {(() => {
+            const uniqueLabels = [...new Set(validityOptions.map(p => formatValidity(p)))];
+            if (uniqueLabels.length > 1) {
+              return (
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-3">Select Validity</label>
+                  <select
+                    className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-emerald-600"
+                    value={selectedValidity ? formatValidity(selectedValidity) : ''}
+                    onChange={(e) => {
+                      const match = validityOptions.find(p => formatValidity(p) === e.target.value);
+                      if (match) setSelectedValidity(match);
+                    }}
+                  >
+                    {uniqueLabels.map((label, idx) => (
+                      <option key={idx} value={label}>{label}</option>
+                    ))}
+                  </select>
+                </div>
+              );
+            } else if (uniqueLabels.length === 1) {
+              return (
+                <div>
+                  <label className="block text-sm font-bold text-slate-700 mb-3">Validity</label>
+                  <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all ${BRAND_GREEN_CLASS} text-white`}>
+                    {uniqueLabels[0]}
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })()}
+
+          {/* Watch Time Selection - standalone section like Mode/Variation */}
+          {validityOptions.length > 0 && [...new Set(validityOptions.map(p => String(p.watchTime)))].length > 0 && (
             <div>
-              <label className="block text-sm font-bold text-slate-700 mb-3">Select Validity</label>
-              <select
-                className="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg text-sm font-semibold outline-none focus:border-emerald-600"
-                value={selectedValidity ? JSON.stringify(selectedValidity) : ''}
-                onChange={(e) => setSelectedValidity(JSON.parse(e.target.value))}
-              >
-                {validityOptions.map((pricing, idx) => (
-                  <option key={idx} value={JSON.stringify(pricing)}>
-                    {formatValidity(pricing)}
-                  </option>
-                ))}
-              </select>
+              <label className="block text-sm font-bold text-slate-700 mb-3">Select Watch Time</label>
+              <div className="flex flex-wrap gap-2">
+                {[...new Set(validityOptions.map(p => String(p.watchTime)))].map((wt) => {
+                  const currentWatchTime = pricingToDisplay?.watchTime !== undefined && pricingToDisplay?.watchTime !== null ? String(pricingToDisplay.watchTime) : '';
+                  const isActive = currentWatchTime === wt || (!currentWatchTime && wt === '');
+                  return (
+                    <button
+                      key={wt || 'unlimited'}
+                      type="button"
+                      onClick={() => {
+                        const match = validityOptions.find(p => String(p.watchTime) === wt);
+                        if (match) setSelectedValidity(match);
+                      }}
+                      className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                        isActive
+                          ? `${BRAND_GREEN_CLASS} text-white`
+                          : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                      }`}
+                    >
+                      {!wt || wt === 'Unlimited' || wt === 'undefined' || wt === 'null' ? 'Unlimited' : `${wt}x`}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
 
-          {validityOptions.length === 1 && (
-            <div>
-              <label className="block text-sm font-bold text-slate-700 mb-3">Validity</label>
-              <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all ${BRAND_GREEN_CLASS} text-white`}>
-                {formatValidity(validityOptions[0])}
+          {/* Course Details - Duration only */}
+          {course?.duration > 0 && (
+            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+              <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Course Details</h4>
+              <div className="bg-white rounded-lg p-3 border border-slate-100 text-center">
+                <span className="text-[9px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Duration</span>
+                <span className="text-xs font-bold text-slate-800">{formatMilliseconds(course.duration)}</span>
               </div>
             </div>
           )}

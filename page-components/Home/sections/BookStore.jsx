@@ -222,13 +222,13 @@ export const BookStore = ({ employeeCourseId }) => {
                                 >
                                     All
                                 </button>
-                                {domains.map(domain => (
+                                {domains.flatMap(d => d.child || []).map(child => (
                                     <button
-                                        key={domain.id}
-                                        onClick={() => setActiveDomain(domain.id)}
-                                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === domain.id ? `${BRAND_GREEN_CLASS} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
+                                        key={child.id}
+                                        onClick={() => setActiveDomain(child.id)}
+                                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === child.id ? `${BRAND_GREEN_CLASS} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
                                     >
-                                        {domain.name}
+                                        {child.name}
                                     </button>
                                 ))}
                             </div>

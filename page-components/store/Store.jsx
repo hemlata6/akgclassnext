@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useAuth } from '../../config/AuthContext';
 import { ShoppingCart, Star, Clock, Users, CheckCircle, Filter, X } from 'lucide-react';
 import Network from '../../config/Network';
@@ -11,6 +11,72 @@ import axios from 'axios';
 import { Footer } from '../../components/Shared/SharedComponents';
 import { useTheme } from '../../config/ThemeContext';
 
+// --- THEMED DROPDOWN COMPONENT ---
+function ThemeDropdown({ label, options, selectedValue, onChange }) {
+    const [isOpen, setIsOpen] = useState(false);
+    const dropdownRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setIsOpen(false);
+            }
+        }
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    return (
+        <div className="relative flex items-center gap-1.5" ref={dropdownRef}>
+            <span className="text-[10px] text-slate-400 font-bold tracking-wider whitespace-nowrap">
+                {label}:
+            </span>
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center gap-1 py-0.5 text-xs font-bold text-slate-700 focus:outline-none select-none transition-colors hover:text-slate-900"
+            >
+                <span>{selectedValue}</span>
+                <svg className={`w-3 h-3 text-slate-400 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7" />
+                </svg>
+            </button>
+
+            {isOpen && (
+                <div className="absolute top-full left-0 mt-2 w-36 bg-white border border-slate-100 rounded-xl shadow-xl z-50 py-1.5 overflow-hidden">
+                    {options.map((option) => (
+                        <div
+                            key={option}
+                            onClick={() => {
+                                onChange(option);
+                                setIsOpen(false);
+                            }}
+                            className="px-3.5 py-1.5 text-xs font-semibold text-slate-600 cursor-pointer transition-colors"
+                            style={{
+                                backgroundColor: selectedValue === option ? 'var(--theme-primary, #0749A2)' : 'transparent',
+                                color: selectedValue === option ? '#ffffff' : undefined,
+                            }}
+                            onMouseEnter={(e) => {
+                                if (selectedValue !== option) {
+                                    e.currentTarget.style.backgroundColor = '#f1f5f9';
+                                    e.currentTarget.style.color = '#0f172a';
+                                }
+                            }}
+                            onMouseLeave={(e) => {
+                                if (selectedValue !== option) {
+                                    e.currentTarget.style.backgroundColor = 'transparent';
+                                    e.currentTarget.style.color = '#475569';
+                                }
+                            }}
+                        >
+                            {option}
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 const Store = () => {
 
     const { theme } = useTheme();
@@ -21,7 +87,7 @@ const Store = () => {
     //     batch: 'single',     // radio
     //     price: 'single',     // radio
     // };
-
+    const { institute } = useAuth();
     const router = useRouter();
     const [isMobile, setIsMobile] = useState(false);
     const [routeData, setRouteData] = useState(null);
@@ -32,6 +98,7 @@ const Store = () => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
+
     // const [finalAmounts, setFinalAmounts] = useState(0);
     // const [finalAmountsss, setFinalAmountsss] = useState(0);
     // const [selectedSceduleList, setSelectedSceduleList] = useState([]);
@@ -58,7 +125,9 @@ const Store = () => {
     const [filtersInitialized, setFiltersInitialized] = useState(false);
     const [isProcessingSubmenu, setIsProcessingSubmenu] = useState(false); // Track if we're processing a sidebar submenu selection
     const [courseExpandedDescriptions, setCourseExpandedDescriptions] = useState(null);
-    const [purchaseSuccess, setPurchaseSuccess] = useState(null);
+    // const [purchaseSuccess, setPurchaseSuccess
+    // 
+    // ] = useState(null);
     const [navigationStateChanged, setNavigationStateChanged] = useState(0); // Trigger navigation handler when header navigation happens
     const [pendingBatchTag, setPendingBatchTag] = useState(null); // Pending batch tag from URL query param
     const paperCount = selectedPapers.length;
@@ -174,6 +243,23 @@ const Store = () => {
             }
         };
     }, [routeData, tokenFromUrl]);
+
+    // CSS Injection for subtle vibration animation
+    useEffect(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes softVibrate {
+                0%, 100% { transform: scale(1); }
+                25% { transform: scale(1.02) rotate(-0.5deg); }
+                75% { transform: scale(1.02) rotate(0.5deg); }
+            }
+            .animate-vibrate {
+                animation: softVibrate 2.5s infinite ease-in-out;
+            }
+        `;
+        document.head.appendChild(style);
+        return () => { document.head.removeChild(style); };
+    }, []);
 
     useEffect(() => {
 
@@ -1005,6 +1091,15 @@ const Store = () => {
         }
     };
 
+    const handleExploreClick = (course) => {
+        const queryString = getQueryString();
+        if (course?.type === "books") {
+            router.push(`/book/${course.id}${queryString}`);
+        } else {
+            router.push(`/course/${course.id}${queryString}`);
+        }
+    };
+
     const handleAddtoCart = (course) => {
         const isInCart = cartCourses.some(item => item.id === course.id);
 
@@ -1114,1110 +1209,387 @@ const Store = () => {
     // }, [selectCourse, course])
 
 
-    return (
-        <div className="bg-gradient-to-br from-gray-50 via-indigo-50/30 to-indigo-50/30 lg:pt-4">
-            {/* Main Store Content */}
-            {/* Header Section - Fixed on mobile only - Hidden when using routeData */}
+    const FilterSidebarContent = () => (
+        <div className="space-y-4">
+            <button
+                onClick={clearAllFilters}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 text-white rounded-2xl text-sm font-bold shadow-md active:scale-[0.99] transition-all"
+                style={{ backgroundColor: primaryColor }}
+            >
+                <svg className="w-4 h-4 stroke-[3]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+                <span>Reset Filters</span>
+            </button>
+            <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-3">
+                <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Exam Type</h3>
+                {domains.filter(d => d.parentId === 0).map(domain => {
+                    const isActive = selectedDomain?.id === domain.id;
+                    return (
+                        <button key={domain.id}
+                            onClick={() => { if (selectedDomain?.id !== domain.id) { setSelectedDomain(domain); setSelectedExamStage(null); } }}
+                            className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all"
+                            style={{ backgroundColor: isActive ? primaryColor : '#f8fafc', color: isActive ? '#ffffff' : '#475569' }}>
+                            <span>{domain.name}</span>
+                            {isActive && <svg className="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
+                        </button>
+                    );
+                })}
+            </div>
+            {getExamStages().length > 0 && (
+                <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Exam Stage</h3>
+                    <div className="space-y-3.5 pl-0.5">
+                        {getExamStages().map((stage) => (
+                            <label key={stage.id} className="flex items-center gap-3 cursor-pointer group">
+                                <input type="radio" name="stage" checked={selectedExamStage?.id === stage.id}
+                                    onChange={() => setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage)}
+                                    className="w-4 h-4 border-slate-300" style={{ accentColor: primaryColor }} />
+                                <span className="text-xs font-semibold text-slate-600 group-hover:text-slate-900 transition-colors">{stage.name}</span>
+                            </label>
+                        ))}
+                    </div>
+                </div>
+            )}
+            {faculties.length > 0 && (
+                <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
+                    <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Faculty</h3>
+                        <button onClick={() => setSelectedFaculties([])} className="text-xs font-bold transition-all" style={{ color: primaryColor }}>Clear All</button>
+                    </div>
+                    <div className="space-y-4 pl-0.5">
+                        <label className="flex items-center gap-3 cursor-pointer group border-b border-slate-100 pb-2">
+                            <input type="checkbox" checked={selectedFaculties.length === faculties.length && faculties.length > 0}
+                                onChange={() => { if (selectedFaculties.length === faculties.length) setSelectedFaculties([]); else setSelectedFaculties([...faculties]); }}
+                                className="w-4 h-4 rounded border-slate-300" style={{ accentColor: primaryColor }} />
+                            <span className="text-xs font-bold text-slate-700">{selectedFaculties.length === faculties.length ? 'Deselect All' : 'Select All'}</span>
+                        </label>
+                        {faculties.map((fac) => {
+                            const isSelected = selectedFaculties.some(f => f.id === fac.id);
+                            const fullName = [fac?.firstName, fac?.lastName].filter(Boolean).join(' ');
+                            const initial = (fac?.firstName?.[0] || '') + (fac?.lastName?.[0] || '');
+                            return (
+                                <label key={fac.id} className="flex items-center gap-3 cursor-pointer group">
+                                    <input type="checkbox" checked={isSelected} onChange={() => toggleFaculty(fac)}
+                                        className="w-4 h-4 rounded border-slate-300" style={{ accentColor: primaryColor }} />
+                                    <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                        {fac.profile ? <img src={`${Endpoints.mediaBaseUrl}${fac.profile}`} alt={fullName} className="w-full h-full object-cover" />
+                                            : <span className="text-[9px] font-bold text-slate-500">{initial || '?'}</span>}
+                                    </div>
+                                    <span className="text-xs font-semibold text-slate-600 group-hover:text-slate-900 transition-colors truncate">{fullName}</span>
+                                </label>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 
-            <div className="lg:relative lg:z-auto fixed top-15 left-0 right-0 z-30 lg:bg-white lg:border-0 border-b lg:shadow-md shadow-sm bg-white border-indigo-100 lg:rounded-xl lg:mx-4">
-                <div className="max-w-[1800px] mx-auto px-2 pt-2.5 md:px-3 md:py-2">
-                    {/* Header Section - Course Store Title + Sort, Search, Cart */}
-                    <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-1">
-                        {/* Left: Title */}
+    return (
+        <div className="min-h-screen bg-[#fafbfc] text-slate-800 antialiased font-sans">
+
+            {/* GLOBAL HEADER */}
+            <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
+                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">
+
+                    <div className="flex items-center gap-3 flex-shrink-0 cursor-pointer" onClick={() => router.push('/store')}>
+                        <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-sm text-white" style={{ backgroundColor: primaryColor }}>
+                            <ShoppingCart className="h-3.5 w-3.5" />
+                        </div>
+                        <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 transition-colors" style={{ color: primaryColor }}>Course Store</h1>
+                    </div>
+
+                    <div className="flex-1 max-w-4xl flex items-center justify-end gap-3 md:gap-6">
+
+                        {/* Search Box */}
+                        <div className="relative w-full max-w-[160px] sm:max-w-xs">
+                            <span className="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-slate-400">
+                                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                                </svg>
+                            </span>
+                            <input type="text" placeholder="Search courses..." value={searchTerm}
+                                onChange={(e) => setSearchTerm(e.target.value)}
+                                className="w-full pl-8 pr-3 py-1.5 bg-slate-50 border border-slate-200/80 rounded-lg text-xs focus:outline-none focus:ring-2 focus:ring-[#0749A2]/10 focus:border-[#0749A2] transition-all" />
+                            {searchTerm && (
+                                <button onClick={() => setSearchTerm('')} className="absolute inset-y-0 right-0 flex items-center pr-2.5 text-slate-400 hover:text-slate-600">
+                                    <X className="w-3 h-3" />
+                                </button>
+                            )}
+                        </div>
+
                         {!shouldHideGlobalControls && (
-                            <div className="flex items-center gap-1.5">
-                                <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-sm text-white" style={{ backgroundColor: primaryColor }}>
-                                    <ShoppingCart className="h-3.5 w-3.5" />
-                                </div>
-                                <div>
-                                    <h1 className="text-sm md:text-base font-bold" style={{ color: primaryColor }}>
-                                        Course Store
-                                    </h1>
-                                    <p className="text-[9px] text-gray-600 hidden md:block">Explore our premium courses</p>
-                                </div>
+                            <div className="hidden lg:flex items-center gap-4 bg-slate-50 border border-slate-100 rounded-xl px-4 py-1.5">
+                                <ThemeDropdown label="PRODUCT TYPE" options={['All', ...productTypes]}
+                                    selectedValue={selectedProductType || 'All'}
+                                    onChange={(val) => setSelectedProductType(val === 'All' ? null : val)} />
+                                <div className="h-4 w-[1px] bg-slate-200" />
+                                <ThemeDropdown label="BATCH TYPE" options={['All', ...tags.map(t => t.tag)]}
+                                    selectedValue={selectedTag?.tag || 'All'}
+                                    onChange={(val) => setSelectedTag(val === 'All' ? null : tags.find(t => t.tag === val))} />
+                                <div className="h-4 w-[1px] bg-slate-200" />
+                                <ThemeDropdown label="PRICE" options={['All', 'Low to High', 'High to Low']}
+                                    selectedValue={priceSorting ? (priceSorting === 'low-to-high' ? 'Low to High' : 'High to Low') : 'All'}
+                                    onChange={(val) => setPriceSorting(val === 'All' ? '' : val === 'Low to High' ? 'low-to-high' : 'high-to-low')} />
                             </div>
                         )}
 
-                        {/* Right: Sort, Search, Cart in a row */}
-                        <div className="flex flex-wrap items-start gap-1.5 w-full lg:w-auto">
-                            {/* Mobile Filter Button */}
-                            <button
-                                onClick={() => setMobileFiltersOpen(true)}
-                                className="lg:hidden flex items-center gap-1.5 font-semibold px-3 py-1.5 rounded-lg shadow-sm border transition-all mb-2"
-                                style={{
-                                    backgroundColor: 'white',
-                                    borderColor: primaryColor,
-                                    color: primaryColor
-                                }}
-                            >
-                                <Filter className="h-3.5 w-3.5" />
-                                <span className="text-xs">Filters</span>
-                                {(selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting) && (
-                                    <span className="text-white text-[10px] rounded-full w-4 h-4 flex items-center justify-center" style={{ backgroundColor: primaryColor }}>
-                                        {selectedPapers.length + (selectedTag ? 1 : 0) + (selectedProductType ? 1 : 0) + (priceSorting ? 1 : 0)}
-                                    </span>
-                                )}
-                            </button>
-
-                            {/* View Cart Button - Desktop and Mobile */}
-                            {cartCourses?.length > 0 && (
-                                <button
-                                    onClick={handleShowCart}
-                                    className="flex text-white font-bold text-xs py-2 px-4 rounded-lg hover:shadow-lg transition-all shadow-lg items-center justify-center gap-2"
-                                    style={{ backgroundColor: primaryColor }}
-                                >
-                                    <ShoppingCart className="h-4 w-4" />
-                                    View Cart ({cartCourses.length})
-                                </button>
+                        <div className="relative p-2 bg-slate-50 border border-slate-100 rounded-xl cursor-pointer hover:bg-slate-100 transition-all flex-shrink-0" onClick={handleShowCart}>
+                            <svg className="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                            {cartCourses.length > 0 && (
+                                <span className="absolute -top-1.5 -right-1.5 text-white text-[9px] font-black h-4 w-4 rounded-full flex items-center justify-center"
+                                    style={{ backgroundColor: primaryColor }}>
+                                    {cartCourses.length}
+                                </span>
                             )}
-
-                            {/* Search Bar */}
-                            <div className="flex items-center gap-2 bg-white rounded-lg shadow-sm px-3 py-1.5 border border-gray-200 min-w-[200px] flex-1 lg:flex-initial">
-                                <div className="flex-shrink-0">
-                                    <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </div>
-                                <input
-                                    type="text"
-                                    placeholder="Search courses..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="flex-1 text-xs text-gray-700 placeholder-gray-400 border-none outline-none bg-transparent"
-                                />
-                                {searchTerm && (
-                                    <button
-                                        onClick={() => setSearchTerm('')}
-                                        className="flex-shrink-0 p-0.5 hover:bg-gray-100 rounded-full transition-colors"
-                                    >
-                                        <X className="w-3 h-3 text-gray-400" />
-                                    </button>
-                                )}
-                            </div>
-
                         </div>
+
                     </div>
-
-                    {/* Top Filters - Only Show When routeData Exists (Mobile Only) */}
-
-                    <div
-                        className="lg:hidden px-3 py-1.5 overflow-x-auto whitespace-nowrap"
-                        style={{
-                            WebkitOverflowScrolling: 'touch',
-                            backgroundColor: `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)`,
-                            borderColor: primaryColor
-                        }}
-                    >
-                        <div className="flex items-center gap-2 flex-nowrap w-max">
-                            {/* Exam Type Filter Pill */}
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('exam-type');
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: selectedDomain ? primaryColor : '#d1d5db',
-                                    backgroundColor: selectedDomain ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: selectedDomain ? primaryColor : '#374151'
-                                }}
-                            >
-                                {selectedDomain && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        1
-                                    </span>
-                                )}
-                                Exam Type
-                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                </svg>
-                            </button>
-
-                            {/* Exam Stage Filter Pill */}
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('exam-stage');
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: selectedExamStage ? primaryColor : '#d1d5db',
-                                    backgroundColor: selectedExamStage ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: selectedExamStage ? primaryColor : '#374151'
-                                }}
-                            >
-                                {selectedExamStage && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        1
-                                    </span>
-                                )}
-                                Exam Stage
-                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                </svg>
-                            </button>
-
-                            {/* Faculty Filter Pill */}
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('faculty');
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: selectedFaculties.length > 0 ? primaryColor : '#d1d5db',
-                                    backgroundColor: selectedFaculties.length > 0 ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: selectedFaculties.length > 0 ? primaryColor : '#374151'
-                                }}
-                            >
-                                {selectedFaculties.length > 0 && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        {selectedFaculties.length}
-                                    </span>
-                                )}
-                                Faculty
-                                <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                                </svg>
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('paper');
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: paperCount > 0 ? primaryColor : '#d1d5db',
-                                    backgroundColor: paperCount > 0 ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: paperCount > 0 ? primaryColor : '#374151'
-                                }}
-                            >
-                                {paperCount > 0 && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        {paperCount}
-                                    </span>
-                                )}
-                                Paper
-                                <ChevronDownIcon />
-                            </button>
-
-
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('product');
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: productCount ? primaryColor : '#d1d5db',
-                                    backgroundColor: productCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: productCount ? primaryColor : '#374151'
-                                }}
-                            >
-                                {productCount > 0 && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        1
-                                    </span>
-                                )}
-                                Product
-                                <ChevronDownIcon />
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('batch'); // same tab as product
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: batchCount ? primaryColor : '#d1d5db',
-                                    backgroundColor: batchCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: batchCount ? primaryColor : '#374151'
-                                }}
-                            >
-                                {batchCount > 0 && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        1
-                                    </span>
-                                )}
-                                Batch
-                                <ChevronDownIcon />
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setMobileFilterTab('price');
-                                    setMobileFiltersOpen(true);
-                                }}
-                                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0"
-                                style={{
-                                    borderColor: priceCount ? primaryColor : '#d1d5db',
-                                    backgroundColor: priceCount ? `rgb(${hexToRgb(primaryColor).r}, ${hexToRgb(primaryColor).g}, ${hexToRgb(primaryColor).b}, 0.05)` : '#f9fafb',
-                                    color: priceCount ? primaryColor : '#374151'
-                                }}
-                            >
-                                {priceCount > 0 && (
-                                    <span className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full text-white font-bold text-[7px]" style={{ backgroundColor: primaryColor }}>
-                                        1
-                                    </span>
-                                )}
-                                Price
-                                <ChevronDownIcon />
-                            </button>
-
-                            {/* Reset Button - Shows when filters are selected */}
-                            {(selectedDomain || selectedExamStage || selectedFaculties.length > 0 || selectedPapers.length > 0 || selectedTag || selectedProductType || priceSorting) && (
-                                <button
-                                    onClick={() => {
-                                        setSelectedDomain(null);
-                                        setSelectedExamStage(null);
-                                        setSelectedFaculties([]);
-                                        setSelectedPapers([]);
-                                        setSelectedTag(null);
-                                        setSelectedProductType(null);
-                                        setPriceSorting('');
-                                    }}
-                                    className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[10px] font-medium transition-all whitespace-nowrap flex-shrink-0 ml-1 ${routeData
-                                        ? 'border-red-500 bg-red-50 text-red-500 hover:bg-red-100'
-                                        : 'border-red-500 bg-red-50 text-red-500 hover:bg-red-100'
-                                        }`}
-                                >
-                                    <svg className="w-2.5 h-2.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                                    </svg>
-                                    Reset
-                                </button>
-                            )}
-
-                        </div>
-                    </div>
-
-
-                    {/* View Cart Button */}
-                    {/* {routeData && cartCourses?.length > 0 && (
-                        <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white px-3 py-2 border-t border-gray-200 shadow-lg z-30">
-                            <button
-                                onClick={handleShowCart}
-                                className="w-full text-white font-bold text-xs py-2 px-4 rounded-lg hover:shadow-lg transition-all shadow-lg flex items-center justify-center gap-2"
-                                style={{ backgroundColor: primaryColor }}
-                            >
-                                <ShoppingCart className="h-4 w-4" />
-                                View Cart ({cartCourses.length})
-                            </button>
-                        </div>
-                    )} */}
                 </div>
-            </div>
+            </header>
 
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 md:gap-8">
 
-            {/* Main Content - padding top only on mobile */}
-            <div className="lg:pt-4 lg:border-gray-200" style={{ paddingTop: !isMobile ? "10rem" : "1rem" }}>
-                <div className="max-w-[1800px] mx-auto px-4 md:px-4">
-                    {/* Main Layout - Sidebar + Content */}
-                    <div className="flex flex-col lg:flex-row gap-3">
+                <aside className="hidden lg:block w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-22 h-fit space-y-4">
+                    <FilterSidebarContent />
+                </aside>
 
-                        {/* Left Sidebar - Filters (Desktop Only) */}
-                        {/* Left Sidebar - Filters (Desktop Only) */}
-                        <div className="hidden lg:block w-full lg:w-72 flex-shrink-0">
-                            <div
-                                className="bg-white rounded-3xl p-4 sticky top-20 max-h-[calc(100vh-8rem)] overflow-y-auto"
-                                style={{
-                                    boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-                                    border: "1px solid #eef2f7"
-                                }}
-                            >
-                                {(selectedPapers.length > 0 ||
-                                    selectedTag ||
-                                    selectedProductType ||
-                                    priceSorting ||
-                                    searchTerm) && (
-                                        <div className="mb-4">
-                                            <button
-                                                onClick={clearAllFilters}
-                                                className="w-full text-white px-3 py-2.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all hover:scale-[1.02]"
-                                                style={{
-                                                    background: primaryColor,
-                                                    boxShadow: `0 8px 20px ${primaryColor}30`
-                                                }}
-                                            >
-                                                <X className="h-4 w-4" />
-                                                Reset Filters
+                <main className="flex-1 space-y-4 sm:space-y-6">
+
+                    <div className="lg:hidden flex items-center justify-between bg-white border border-slate-100 rounded-2xl p-3 shadow-sm">
+                        <div className="text-xs text-slate-500 font-bold tracking-tight">Filters & Sorting Options</div>
+                        <button onClick={() => setMobileFiltersOpen(true)}
+                            className="flex items-center gap-1.5 px-3.5 py-1.5 bg-slate-900 text-white rounded-xl text-xs font-bold active:scale-95 transition-all">
+                            <span>Filters</span>
+                        </button>
+                    </div>
+
+                    {getPapers().length > 0 && (
+                        <div className="bg-white border border-slate-100 rounded-2xl p-3 sm:p-4 shadow-sm flex items-center justify-between">
+                            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-0.5">
+                                <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Paper:</span>
+                                <div className="flex gap-2">
+                                    {getPapers().map((paper) => {
+                                        const isActive = selectedPapers.some(p => p.id === paper.id);
+                                        return (
+                                            <button key={paper.id} onClick={() => togglePaper(paper)}
+                                                className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-full border whitespace-nowrap transition-all ${isActive ? 'text-white border-transparent' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                                                style={{ backgroundColor: isActive ? primaryColor : undefined }}>
+                                                {paper.name}
                                             </button>
-                                        </div>
-                                    )}
-
-                                {/* EXAM TYPE */}
-                                <div className="mb-4">
-                                    <h3
-                                        className="text-[11px] font-semibold uppercase tracking-[2px] mb-3 pb-2 text-gray-500"
-                                        style={{
-                                            borderBottom: "1px solid #eef2f7"
-                                        }}
-                                    >
-                                        Exam Type
-                                    </h3>
-
-                                    <div className="space-y-1.5">
-                                        {domains
-                                            .filter(d => d.parentId === 0)
-                                            .map(domain => (
-                                                <div
-                                                    key={domain.id}
-                                                    onClick={(e) => {
-                                                        e.preventDefault();
-                                                        e.stopPropagation();
-
-                                                        if (selectedDomain?.id !== domain.id) {
-                                                            setSelectedDomain(domain);
-                                                            setSelectedExamStage(null);
-                                                        }
-                                                    }}
-                                                    className="w-full px-3 py-2 rounded-xl cursor-pointer flex items-center gap-3 transition-all duration-200"
-                                                    style={{
-                                                        backgroundColor:
-                                                            selectedDomain?.id === domain.id
-                                                                ? `${primaryColor}12`
-                                                                : "#fff",
-
-                                                        border:
-                                                            selectedDomain?.id === domain.id
-                                                                ? `1px solid ${primaryColor}40`
-                                                                : "1px solid transparent",
-
-                                                        color:
-                                                            selectedDomain?.id === domain.id
-                                                                ? primaryColor
-                                                                : "#475569"
-                                                    }}
-                                                >
-                                                    <div
-                                                        className="w-4 h-4 rounded-full border flex items-center justify-center"
-                                                        style={{
-                                                            borderColor:
-                                                                selectedDomain?.id === domain.id
-                                                                    ? primaryColor
-                                                                    : "#d1d5db",
-
-                                                            backgroundColor:
-                                                                selectedDomain?.id === domain.id
-                                                                    ? primaryColor
-                                                                    : "white"
-                                                        }}
-                                                    >
-                                                        {selectedDomain?.id === domain.id && (
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                                                        )}
-                                                    </div>
-
-                                                    <span className="text-sm font-medium">
-                                                        {domain.name}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                    </div>
+                                        );
+                                    })}
                                 </div>
-
-                                {/* EXAM STAGE */}
-                                {getExamStages().length > 0 && (
-                                    <div className="mb-4">
-                                        <h3
-                                            className="text-[11px] font-semibold uppercase tracking-[2px] mb-3 pb-2 text-gray-500"
-                                            style={{
-                                                borderBottom: "1px solid #eef2f7"
-                                            }}
-                                        >
-                                            Exam Stage
-                                        </h3>
-
-                                        <div className="space-y-1.5 max-h-56 overflow-y-auto">
-                                            {getExamStages().map(stage => (
-                                                <div
-                                                    key={stage.id}
-                                                    onClick={() =>
-                                                        setSelectedExamStage(
-                                                            selectedExamStage?.id === stage.id
-                                                                ? null
-                                                                : stage
-                                                        )
-                                                    }
-                                                    className="w-full px-3 py-2 rounded-xl cursor-pointer flex items-center gap-3 transition-all duration-200"
-                                                    style={{
-                                                        backgroundColor:
-                                                            selectedExamStage?.id === stage.id
-                                                                ? `${primaryColor}12`
-                                                                : "#fff",
-
-                                                        border:
-                                                            selectedExamStage?.id === stage.id
-                                                                ? `1px solid ${primaryColor}40`
-                                                                : "1px solid transparent",
-
-                                                        color:
-                                                            selectedExamStage?.id === stage.id
-                                                                ? primaryColor
-                                                                : "#475569"
-                                                    }}
-                                                >
-                                                    <div
-                                                        className="w-4 h-4 rounded-full border flex items-center justify-center"
-                                                        style={{
-                                                            borderColor:
-                                                                selectedExamStage?.id === stage.id
-                                                                    ? primaryColor
-                                                                    : "#d1d5db",
-
-                                                            backgroundColor:
-                                                                selectedExamStage?.id === stage.id
-                                                                    ? primaryColor
-                                                                    : "white"
-                                                        }}
-                                                    >
-                                                        {selectedExamStage?.id === stage.id && (
-                                                            <div className="w-1.5 h-1.5 rounded-full bg-white" />
-                                                        )}
-                                                    </div>
-
-                                                    <span className="text-sm font-medium">
-                                                        {stage.name}
-                                                    </span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* FACULTY */}
-                                {faculties.length > 0 && (
-                                    <div>
-                                        <h3
-                                            className="text-[11px] font-semibold uppercase tracking-[2px] mb-3 pb-2 text-gray-500"
-                                            style={{
-                                                borderBottom: "1px solid #eef2f7"
-                                            }}
-                                        >
-                                            Faculty
-                                        </h3>
-
-                                        <div className="space-y-1.5">
-                                            {/* SELECT ALL */}
-                                            <div
-                                                onClick={() => {
-                                                    if (
-                                                        selectedFaculties.length ===
-                                                        faculties.length
-                                                    ) {
-                                                        setSelectedFaculties([]);
-                                                    } else {
-                                                        setSelectedFaculties([...faculties]);
-                                                    }
-                                                }}
-                                                className="px-3 py-2 rounded-xl flex items-center gap-3 cursor-pointer"
-                                                style={{
-                                                    backgroundColor:
-                                                        selectedFaculties.length > 0
-                                                            ? `${primaryColor}12`
-                                                            : "#f8fafc",
-
-                                                    border:
-                                                        selectedFaculties.length > 0
-                                                            ? `1px solid ${primaryColor}30`
-                                                            : "1px solid #e2e8f0"
-                                                }}
-                                            >
-                                                <div
-                                                    className="w-4 h-4 rounded border flex items-center justify-center"
-                                                    style={{
-                                                        borderColor:
-                                                            selectedFaculties.length > 0
-                                                                ? primaryColor
-                                                                : "#d1d5db",
-
-                                                        backgroundColor:
-                                                            selectedFaculties.length > 0
-                                                                ? primaryColor
-                                                                : "white"
-                                                    }}
-                                                >
-                                                    {selectedFaculties.length > 0 && (
-                                                        <svg
-                                                            className="w-2.5 h-2.5 text-white"
-                                                            fill="none"
-                                                            stroke="currentColor"
-                                                            viewBox="0 0 24 24"
-                                                        >
-                                                            <path
-                                                                strokeLinecap="round"
-                                                                strokeLinejoin="round"
-                                                                strokeWidth={3}
-                                                                d="M5 13l4 4L19 7"
-                                                            />
-                                                        </svg>
-                                                    )}
-                                                </div>
-
-                                                <span className="text-sm font-semibold">
-                                                    {selectedFaculties.length === faculties.length
-                                                        ? "Deselect All"
-                                                        : "Select All"}
-                                                </span>
-                                            </div>
-
-                                            {/* FACULTY LIST */}
-                                            {faculties.map(faculty => {
-                                                const isSelected =
-                                                    selectedFaculties.some(
-                                                        f => f.id === faculty.id
-                                                    );
-
-                                                return (
-                                                    <div
-                                                        key={faculty.id}
-                                                        onClick={() => toggleFaculty(faculty)}
-                                                        className="px-3 py-2 rounded-xl cursor-pointer flex items-center gap-3 transition-all"
-                                                        style={{
-                                                            backgroundColor: isSelected
-                                                                ? `${primaryColor}10`
-                                                                : "transparent"
-                                                        }}
-                                                    >
-                                                        <div
-                                                            className={`w-4 h-4 rounded border flex items-center justify-center ${isSelected
-                                                                ? "bg-indigo-600 border-indigo-600"
-                                                                : "border-gray-300"
-                                                                }`}
-                                                        >
-                                                            {isSelected && (
-                                                                <svg
-                                                                    className="w-2.5 h-2.5 text-white"
-                                                                    fill="none"
-                                                                    stroke="currentColor"
-                                                                    viewBox="0 0 24 24"
-                                                                >
-                                                                    <path
-                                                                        strokeLinecap="round"
-                                                                        strokeLinejoin="round"
-                                                                        strokeWidth={3}
-                                                                        d="M5 13l4 4L19 7"
-                                                                    />
-                                                                </svg>
-                                                            )}
-                                                        </div>
-
-                                                        {faculty.profile && (
-                                                            <img
-                                                                src={`${Endpoints.mediaBaseUrl}${faculty.profile}`}
-                                                                alt={`${faculty.firstName} ${faculty.lastName}`}
-                                                                className="w-8 h-8 rounded-full object-cover border border-gray-200"
-                                                            />
-                                                        )}
-
-                                                        <span
-                                                            className={`text-sm truncate ${isSelected
-                                                                ? "font-semibold text-gray-900"
-                                                                : "text-gray-600"
-                                                                }`}
-                                                        >
-                                                            {faculty.firstName} {faculty.lastName}
-                                                        </span>
-                                                    </div>
-                                                );
-                                            })}
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                         </div>
+                    )}
 
-                        {/* Right Content Area */}
-                        <div className="flex-1 min-w-0">
+                    <section className="space-y-4">
+                        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                            <h2 className="text-sm sm:text-base font-bold text-slate-800 tracking-tight">
+                                {selectedTag ? `Batch: ${selectedTag.tag}` : 'All Courses'}
+                            </h2>
+                            <span className="text-xs text-slate-400 font-medium">{filteredCourses.length} courses</span>
+                        </div>
 
-                            {/* Filters Section - Paper-wise, Product Type, Batch Tag - Desktop Only */}
-                            <div className="w-full hidden lg:block bg-white rounded-xl shadow-sm p-2.5 border border-gray-100 mb-2.5 ">
-                                {/* Paper-wise Filter */}
-                                {getPapers().length > 0 && (
-                                    <div className="mb-1.5">
-                                        <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Paper-wise</h3>
-                                        <div className="flex flex-wrap gap-1.5">
-                                            {(() => {
-                                                const papers = getPapers();
-
-                                                // Sort papers in specific sequence: Both Group, Group 1, Group 2, then others
-                                                const sortedPapers = [...papers].sort((a, b) => {
-                                                    const nameA = a.name.toLowerCase().trim();
-                                                    const nameB = b.name.toLowerCase().trim();
-
-                                                    // Define priority order
-                                                    const getPriority = (name) => {
-                                                        if (name === 'both group') return 1;
-                                                        if (name === 'group 1') return 2;
-                                                        if (name === 'group 2') return 3;
-                                                        return 4; // All others
-                                                    };
-
-                                                    const priorityA = getPriority(nameA);
-                                                    const priorityB = getPriority(nameB);
-
-                                                    // If priorities are different, sort by priority
-                                                    if (priorityA !== priorityB) {
-                                                        return priorityA - priorityB;
-                                                    }
-
-                                                    // If both have same priority (both are "others"), sort alphabetically
-                                                    return nameA.localeCompare(nameB);
+                        {/* Course Listing */}
+                        {loading ? (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                                {[1, 2, 3, 4].map((n) => (
+                                    <div key={n} className="bg-white rounded-2xl border border-slate-100 p-4 space-y-4 animate-pulse">
+                                        <div className="w-full aspect-square bg-slate-200 rounded-xl" />
+                                        <div className="h-4 bg-slate-200 rounded w-3/4" />
+                                        <div className="h-6 bg-slate-200 rounded w-1/2 mt-4" />
+                                        <div className="grid grid-cols-2 gap-2 pt-2">
+                                            <div className="h-8 bg-slate-200 rounded-lg" />
+                                            <div className="h-8 bg-slate-200 rounded-lg" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : filteredCourses?.length > 0 ? (
+                            selectedTag ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                                    {filteredCourses.map((item) => {
+                                        const getPriceInfo = () => {
+                                            if (item?.coursePricing && item.coursePricing.length > 0) {
+                                                let minOriginalPrice = Infinity;
+                                                let minFinalPrice = Infinity;
+                                                let maxDiscount = 0;
+                                                item.coursePricing.forEach(pricing => {
+                                                    const originalPrice = pricing.price;
+                                                    const discount = pricing.discount || 0;
+                                                    const finalPrice = discount > 0 ? originalPrice - (originalPrice * (discount / 100)) : originalPrice;
+                                                    if (finalPrice < minFinalPrice) { minFinalPrice = finalPrice; minOriginalPrice = originalPrice; maxDiscount = discount; }
                                                 });
-
-                                                return (
-                                                    <>
-                                                        {sortedPapers.map(paper => {
-                                                            const isSelected = selectedPapers.some(p => p.id === paper.id);
-                                                            return (
-                                                                <div key={paper.id} className="relative inline-block">
-                                                                    <button
-                                                                        onClick={() => togglePaper(paper)}
-                                                                        className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all ${isSelected
-                                                                            ? 'bg-indigo-600 text-white shadow-lg'
-                                                                            : 'border-2 border-indigo-200 text-indigo-700 hover:border-indigo-700'
-                                                                            }`}
-                                                                    >
-                                                                        {paper.name}
-                                                                    </button>
-                                                                    {isSelected && (
-                                                                        <button
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                togglePaper(paper);
-                                                                            }}
-                                                                            className="absolute -top-0.5 -right-0.5 bg-white border border-red-400 rounded-full w-4 h-4 flex items-center justify-center shadow-sm hover:bg-red-50 hover:border-red-600 transition-all z-10"
-                                                                        >
-                                                                            <X className="h-2.5 w-2.5 text-red-500" />
-                                                                        </button>
-                                                                    )}
+                                                return { originalPrice: minOriginalPrice, finalPrice: minFinalPrice, discount: maxDiscount };
+                                            }
+                                            return { originalPrice: 0, finalPrice: 0, discount: 0 };
+                                        };
+                                        const priceInfo = getPriceInfo();
+                                        return (
+                                            <div
+                                                key={item.id}
+                                                className="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
+                                            >
+                                                <div className="relative w-full aspect-square overflow-hidden bg-slate-50">
+                                                    <img
+                                                        src={Endpoints?.mediaBaseUrl + item.logo}
+                                                        alt={item.title}
+                                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.01]"
+                                                    />
+                                                </div>
+                                                <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
+                                                    <div>
+                                                        <h3 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug line-clamp-2">
+                                                            {item.title}
+                                                        </h3>
+                                                    </div>
+                                                    <div className="flex items-center justify-between pt-2 border-t border-slate-50">
+                                                        <div>
+                                                            <div className="flex items-baseline gap-1.5">
+                                                                <span className="text-sm sm:text-base font-extrabold text-slate-900">
+                                                                    ₹{(priceInfo.finalPrice || 0).toLocaleString('en-IN')}
+                                                                </span>
+                                                                {priceInfo.discount > 0 && (
+                                                                    <span className="text-[11px] sm:text-xs text-slate-400 line-through font-medium">
+                                                                        ₹{(priceInfo.originalPrice || 0).toLocaleString('en-IN')}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        {priceInfo.discount > 0 && (
+                                                            <span className="text-[9px] sm:text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                                                {priceInfo.discount}% OFF
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                    <div className="grid grid-cols-2 gap-2 pt-0.5">
+                                                        <button onClick={(e) => { e.stopPropagation(); handleExploreClick(item); }}
+                                                            className="flex items-center justify-center px-2 py-2 sm:py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl text-xs font-semibold text-slate-600 active:scale-[0.98] transition-all">
+                                                            Explore
+                                                        </button>
+                                                        <button onClick={(e) => { e.stopPropagation(); handleAddtoCart(item); }}
+                                                            className={`flex items-center justify-center px-2 py-2 sm:py-2.5 rounded-xl text-xs font-semibold shadow-sm active:scale-[0.97] transition-all ${cartCourses.some(a => a.id === item?.id) ? 'bg-white border border-red-500 text-red-600' : 'text-white'}`}
+                                                            style={cartCourses.some(a => a.id === item?.id) ? {} : { backgroundColor: primaryColor }}>
+                                                            {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to Cart"}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            ) : (
+                                <>
+                                    {tags.map((tag) => {
+                                        const tagCourses = filteredCourses.filter(course => {
+                                            if (course.tags && Array.isArray(course.tags)) return course.tags.some(t => t.id === tag.id);
+                                            if (course.tag && Array.isArray(course.tag)) return course.tag.some(t => t.id === tag.id);
+                                            if (course.tagIds && Array.isArray(course.tagIds)) return course.tagIds.includes(tag.id);
+                                            return false;
+                                        });
+                                        if (tagCourses.length === 0) return null;
+                                        return (
+                                            <div key={tag.id} className="mb-6">
+                                                <div className="flex justify-start items-center gap-2 mb-3">
+                                                    <div className="w-fit h-8 rounded-lg flex items-center justify-start p-2 text-white text-sm font-bold" style={{ backgroundColor: primaryColor }}>
+                                                        {tag.tag} ({tag?.reference})
+                                                    </div>
+                                                </div>
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                                                    {tagCourses.map((item) => {
+                                                        const getPriceInfo = () => {
+                                                            if (item?.coursePricing && item.coursePricing.length > 0) {
+                                                                let minOriginalPrice = Infinity;
+                                                                let minFinalPrice = Infinity;
+                                                                let maxDiscount = 0;
+                                                                item.coursePricing.forEach(pricing => {
+                                                                    const originalPrice = pricing.price;
+                                                                    const discount = pricing.discount || 0;
+                                                                    const finalPrice = discount > 0 ? originalPrice - (originalPrice * (discount / 100)) : originalPrice;
+                                                                    if (finalPrice < minFinalPrice) { minFinalPrice = finalPrice; minOriginalPrice = originalPrice; maxDiscount = discount; }
+                                                                });
+                                                                return { originalPrice: minOriginalPrice, finalPrice: minFinalPrice, discount: maxDiscount };
+                                                            }
+                                                            return { originalPrice: 0, finalPrice: 0, discount: 0 };
+                                                        };
+                                                        const priceInfo = getPriceInfo();
+                                                        return (
+                                                            <div
+                                                                key={item.id}
+                                                                className="group bg-white rounded-2xl border border-slate-100 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col"
+                                                            >
+                                                                <div className="relative w-full aspect-square overflow-hidden bg-slate-50">
+                                                                    <img src={Endpoints?.mediaBaseUrl + item.logo} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.01]" />
                                                                 </div>
-                                                            );
-                                                        })}
-                                                    </>
-                                                );
-                                            })()}
-                                        </div>
+                                                                <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
+                                                                    <div>
+                                                                        <h3 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug line-clamp-2">{item.title}</h3>
+                                                                    </div>
+                                                                    <div className="flex items-center justify-between pt-2 border-t border-slate-50">
+                                                                        <div>
+                                                                            <div className="flex items-baseline gap-1.5">
+                                                                                <span className="text-sm sm:text-base font-extrabold text-slate-900">
+                                                                                    ₹{(priceInfo.finalPrice || 0).toLocaleString('en-IN')}
+                                                                                </span>
+                                                                                {priceInfo.discount > 0 && (
+                                                                                    <span className="text-[11px] sm:text-xs text-slate-400 line-through font-medium">
+                                                                                        ₹{(priceInfo.originalPrice || 0).toLocaleString('en-IN')}
+                                                                                    </span>
+                                                                                )}
+                                                                            </div>
+                                                                        </div>
+                                                                        {priceInfo.discount > 0 && (
+                                                                            <span className="text-[9px] sm:text-[10px] font-bold text-emerald-600 bg-emerald-50 px-1.5 py-0.5 rounded">
+                                                                                {priceInfo.discount}% OFF
+                                                                            </span>
+                                                                        )}
+                                                                    </div>
+                                                                    <div className="grid grid-cols-2 gap-2 pt-0.5">
+                                                                        <button onClick={(e) => { e.stopPropagation(); handleExploreClick(item); }}
+                                                                            className="flex items-center justify-center px-2 py-2 sm:py-2.5 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 rounded-xl text-xs font-semibold text-slate-600 active:scale-[0.98] transition-all">
+                                                                            Explore
+                                                                        </button>
+                                                                        <button onClick={(e) => { e.stopPropagation(); handleAddtoCart(item); }}
+                                                                            className={`flex items-center justify-center px-2 py-2 sm:py-2.5 rounded-xl text-xs font-semibold shadow-sm active:scale-[0.97] transition-all ${cartCourses.some(a => a.id === item?.id) ? 'bg-white border border-red-500 text-red-600' : 'text-white'}`}
+                                                                            style={cartCourses.some(a => a.id === item?.id) ? {} : { backgroundColor: primaryColor }}>
+                                                                            {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to Cart"}
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        );
+                                                    })}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </>
+                            )
+                        ) : (
+                            <div className="text-center py-8">
+                                <div className="bg-white rounded-3xl shadow-xl p-4 max-w-md mx-auto border border-gray-100">
+                                    <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner bg-gradient-to-br from-emerald-100 to-green-100">
+                                        <ShoppingCart className="h-16 w-16 text-emerald-600" />
                                     </div>
-                                )}
-                                {getPapers().length > 0 && (productTypes.length > 0 || tags.length > 0) && (
-                                    <div className="my-4 border-t border-gray-200" />
-                                )}
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                                    {/* Product Type Filter */}
-                                    {productTypes.length > 0 && (
-                                        <div>
-                                            <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Product Type</h3>
-                                            <select
-                                                value={selectedProductType || ''}
-                                                onChange={(e) => setSelectedProductType(e.target.value || null)}
-                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-emerald-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
-                                            >
-                                                <option value="">All Types</option>
-                                                {productTypes.map(type => (
-                                                    <option key={type} value={type} style={{ textTransform: 'capitalize' }}>
-                                                        {type}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-
-                                    {/* Batch Tag Filter */}
-                                    {tags.length > 0 && (
-                                        <div>
-                                            <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Batch Type</h3>
-                                            <select
-                                                value={selectedTag?.id || ''}
-                                                onChange={(e) => {
-                                                    if (e.target.value === '') {
-                                                        setSelectedTag(null);
-                                                    } else {
-                                                        const selectedId = isNaN(e.target.value) ? e.target.value : parseInt(e.target.value);
-                                                        const tag = tags.find(t => t.id === selectedId || String(t.id) === String(selectedId));
-                                                        setSelectedTag(tag || null);
-                                                    }
-                                                }}
-                                                className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-indigo-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
-                                            >
-                                                <option value="">All Tags</option>
-                                                {tags.map(tag => (
-                                                    <option key={tag.id} value={tag.id}>
-                                                        {tag.tag}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                    )}
-
-                                    {/* Sort by Price Filter */}
-                                    <div>
-                                        <h3 className="text-[10px] font-semibold text-gray-500 uppercase tracking-wide mb-1.5">Sort by Price</h3>
-                                        <select
-                                            value={priceSorting}
-                                            onChange={(e) => setPriceSorting(e.target.value)}
-                                            className="w-full px-2.5 py-2 border-2 border-gray-300 rounded-lg text-xs font-medium focus:border-indigo-600 focus:outline-none focus:ring-0 transition-colors hover:border-gray-400"
-                                        >
-                                            <option value="">All Prices</option>
-                                            <option value="low-to-high">Price: Low to High</option>
-                                            <option value="high-to-low">Price: High to Low</option>
-                                        </select>
-                                    </div>
+                                    <h3 className="text-2xl font-bold text-gray-800 mb-3">No Courses Found</h3>
+                                    <p className="text-gray-600 mb-4">Try adjusting your filters to see more courses!</p>
+                                    <button
+                                        onClick={clearAllFilters}
+                                        className="text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-lg"
+                                        style={{ backgroundColor: primaryColor }}
+                                    >
+                                        Clear All Filters
+                                    </button>
                                 </div>
                             </div>
-                            <div
-                                className="store-courses-scroll"
-                                style={{
-                                    height: isMobile ? "550px" : "",
-                                    overflowY: "scroll",
-                                    overflowX: "hidden"
-                                }}
-                            >
-                                {filteredCourses?.length > 0 && (
-                                    <div className="mb-5">
-                                        {selectedTag ? (
-                                            <>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5 place-items-center sm:place-items-start">
-                                                    {filteredCourses.map((item) => (
-                                                        <div
-                                                            onClick={() => handleCardClick(item)}
-                                                            key={item.id}
-                                                            className={`w-[80%] group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
-                                                                ? 'border-amber-200 hover:border-amber-400'
-                                                                : 'border-indigo-100 hover:border-indigo-400'
-                                                                }`}
-                                                        >
-                                                            {/* Course Image with Overlay */}
-                                                            <div className="relative w-full overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                                <img
-                                                                    src={Endpoints?.mediaBaseUrl + item.logo}
-                                                                    alt={item.title}
-                                                                    className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
-                                                                />
-                                                            </div>
-
-                                                            {/* Course Content */}
-                                                            <div className="p-2.5 flex-1 flex flex-col">
-                                                                <div className="flex items-start justify-between gap-1.5 mb-1">
-                                                                    <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-indigo-700`}>
-                                                                        {item.title}
-                                                                    </h3>
-                                                                </div>
-
-                                                                <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
-                                                                    {truncateDescription(item?.shortDescription)}
-                                                                    {item?.shortDescription?.length > 100 && (
-                                                                        <button
-                                                                            onClick={(e) => {
-                                                                                e.stopPropagation();
-                                                                                toggleExpandDescription(item?.shortDescription);
-                                                                            }}
-                                                                            className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
-                                                                        >
-                                                                            more
-                                                                        </button>
-                                                                    )}
-                                                                </p>
-
-                                                                {/* Pricing Section */}
-                                                                <div className="mb-2 mt-auto">
-                                                                    {(() => {
-                                                                        const cartItem = cartCourses.find(c => c.id === item.id);
-
-                                                                        const getPriceInfo = () => {
-                                                                            if (item?.coursePricing && item.coursePricing.length > 0) {
-                                                                                let minOriginalPrice = Infinity;
-                                                                                let minFinalPrice = Infinity;
-                                                                                let maxDiscount = 0;
-
-                                                                                item.coursePricing.forEach(pricing => {
-                                                                                    const originalPrice = pricing.price;
-                                                                                    const discount = pricing.discount || 0;
-                                                                                    const finalPrice = discount > 0
-                                                                                        ? originalPrice - (originalPrice * (discount / 100))
-                                                                                        : originalPrice;
-
-                                                                                    if (finalPrice < minFinalPrice) {
-                                                                                        minFinalPrice = finalPrice;
-                                                                                        minOriginalPrice = originalPrice;
-                                                                                        maxDiscount = discount;
-                                                                                    }
-                                                                                });
-
-                                                                                return {
-                                                                                    originalPrice: minOriginalPrice,
-                                                                                    finalPrice: minFinalPrice,
-                                                                                    discount: maxDiscount
-                                                                                };
-                                                                            }
-                                                                            return { originalPrice: 0, finalPrice: 0, discount: 0 };
-                                                                        };
-
-                                                                        const priceInfo = getPriceInfo();
-
-                                                                        if (cartItem && cartItem.finalPrice !== undefined && cartItem.finalPrice !== null) {
-                                                                            const cartPricing = item?.coursePricing?.find(p => p.id === cartItem.pricingId);
-                                                                            const discount = cartPricing?.discount || 0;
-                                                                            const originalPrice = cartPricing?.price || parseFloat(cartItem.finalPrice) * 1.3;
-
-                                                                            return (
-                                                                                <div className="space-y-1">
-                                                                                    <div className="flex items-center gap-1.5 flex-wrap">
-                                                                                        <span className="text-[10px] text-gray-500 italic">Starting</span>
-                                                                                        <span className={`text-sm font-bold`} style={{ color: primaryColor }}>
-                                                                                            ₹{parseFloat(cartItem.finalPrice).toFixed(2)}
-                                                                                        </span>
-                                                                                        {discount > 0 && (
-                                                                                            <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">
-                                                                                                {discount}% OFF
-                                                                                            </span>
-                                                                                        )}
-                                                                                    </div>
-                                                                                    {discount > 0 && (
-                                                                                        <span className="text-[9px] text-gray-400 line-through block">
-                                                                                            ₹{originalPrice.toFixed(2)}
-                                                                                        </span>
-                                                                                    )}
-                                                                                </div>
-                                                                            );
-                                                                        } else {
-                                                                            return (
-                                                                                <div className="space-y-1">
-                                                                                    <div className="flex items-center gap-1.5 flex-wrap">
-                                                                                        <span className="text-[10px] text-gray-500 italic">Starting</span>
-                                                                                        <span className={`text-sm font-bold`} style={{ color: priceInfo.finalPrice === 0 ? '#10b981' : primaryColor }}>
-                                                                                            {priceInfo.finalPrice === 0 ? '0' : `₹${priceInfo.finalPrice.toFixed(2)}`}
-                                                                                        </span>
-                                                                                        {priceInfo.discount > 0 && (
-                                                                                            <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">
-                                                                                                {priceInfo.discount}% OFF
-                                                                                            </span>
-                                                                                        )}
-                                                                                    </div>
-                                                                                    {priceInfo.discount > 0 && (
-                                                                                        <span className="text-[9px] text-gray-400 line-through block">
-                                                                                            ₹{priceInfo.originalPrice.toFixed(2)}
-                                                                                        </span>
-                                                                                    )}
-                                                                                </div>
-                                                                            );
-                                                                        }
-                                                                    })()}
-                                                                </div>
-
-                                                                {/* Action Buttons */}
-                                                                <div className="flex gap-2">
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            handleCardClick(item);
-                                                                        }}
-                                                                        className={`flex-1 border-2 font-semibold py-1.5 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 hover:scale-105`}
-                                                                        style={{
-                                                                            borderColor: primaryColor,
-                                                                            color: primaryColor,
-                                                                            backgroundColor: `${primaryColor}10`
-                                                                        }}
-                                                                    >
-                                                                        <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                                        </svg>
-                                                                        Explore
-                                                                    </button>
-                                                                    <button
-                                                                        onClick={(e) => {
-                                                                            e.stopPropagation();
-                                                                            handleAddtoCart(item);
-                                                                        }}
-                                                                        className={`flex-1 font-semibold py-2 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 transform hover:scale-105 border-2 ${cartCourses.some(a => a.id === item?.id)
-                                                                            ? 'bg-white border-red-500 text-red-600 hover:bg-red-50 shadow-sm hover:shadow-red-200/30'
-                                                                            : 'text-white border-transparent shadow-lg hover:shadow-lg'
-                                                                            }`}
-                                                                        style={cartCourses.some(a => a.id === item?.id) ? {} : {
-                                                                            backgroundColor: primaryColor,
-                                                                            boxShadow: `0 10px 15px -3px ${primaryColor}40`
-                                                                        }}
-                                                                    >
-                                                                        <ShoppingCart className="h-4 w-4" />
-                                                                        {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to cart"}
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    ))}
-                                                </div>
-                                            </>
-                                        ) : (
-                                            <>
-                                                {tags.map((tag, index) => {
-                                                    const tagCourses = filteredCourses.filter(course => {
-                                                        if (course.tags && Array.isArray(course.tags)) {
-                                                            return course.tags.some(t => t.id === tag.id);
-                                                        }
-                                                        if (course.tag && Array.isArray(course.tag)) {
-                                                            return course.tag.some(t => t.id === tag.id);
-                                                        }
-                                                        if (course.tagIds && Array.isArray(course.tagIds)) {
-                                                            return course.tagIds.includes(tag.id);
-                                                        }
-                                                        return false;
-                                                    });
-                                                    if (tagCourses.length === 0) return null;
-                                                    return (
-                                                        <div key={tag.id} className="mb-6">
-                                                            <div className="flex justify-center items-center gap-2 mb-3 pb-2" style={{ borderBottom: `1px solid ${primaryColor}` }}>
-                                                                <div className="w-fit h-8 rounded-lg flex items-center justify-start p-2 text-white text-sm font-bold" style={{ backgroundColor: primaryColor }}>
-                                                                    {tag.tag} ({tag?.reference})
-                                                                </div>
-                                                                {/* <h3 className="text-sm font-bold text-gray-800 uppercase tracking-wide">
-                                                                    {tag.tag}
-                                                                </h3> */}
-                                                            </div>
-                                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 md:gap-2.5 place-items-center sm:place-items-start">
-                                                                {tagCourses.map((item) => (
-                                                                    <div
-                                                                        onClick={() => handleCardClick(item)}
-                                                                        key={item.id}
-                                                                        className={`w-[80%] group bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border-2 flex flex-col transform hover:-translate-y-1 cursor-pointer ${routeData
-                                                                            ? 'border-amber-200 hover:border-amber-400'
-                                                                            : 'hover:border-indigo-400'
-                                                                            }`}
-                                                                        // style={{ width: '80% !important' }}
-                                                                    >
-                                                                        <div className="relative w-full overflow-hidden bg-gray-50 flex items-center justify-center">
-                                                                            <img
-                                                                                src={Endpoints?.mediaBaseUrl + item.logo}
-                                                                                alt={item.title}
-                                                                                className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-500"
-                                                                            />
-                                                                        </div>
-                                                                        <div className="p-2.5 flex-1 flex flex-col">
-                                                                            <div className="flex items-start justify-between gap-1.5 mb-1">
-                                                                                <h3 className={`text-xs md:text-sm font-bold line-clamp-2 flex-1 transition-colors text-gray-900 group-hover:text-indigo-700`}>
-                                                                                    {item.title}
-                                                                                </h3>
-                                                                            </div>
-                                                                            {/* <p className="text-gray-600 text-xs mb-2 line-clamp-2 leading-relaxed">
-                                                                                {truncateDescription(item?.shortDescription)}
-                                                                                {item?.shortDescription?.length > 100 && (
-                                                                                    <button
-                                                                                        onClick={(e) => {
-                                                                                            e.stopPropagation();
-                                                                                            toggleExpandDescription(item?.shortDescription);
-                                                                                        }}
-                                                                                        className={`font-medium ml-1 underline text-indigo-700 hover:text-indigo-800`}
-                                                                                    >
-                                                                                        more
-                                                                                    </button>
-                                                                                )}
-                                                                            </p> */}
-                                                                            <div className="mb-2 mt-auto">
-                                                                                {(() => {
-                                                                                    const cartItem = cartCourses.find(c => c.id === item.id);
-                                                                                    const getPriceInfo = () => {
-                                                                                        if (item?.coursePricing && item.coursePricing.length > 0) {
-                                                                                            let minOriginalPrice = Infinity;
-                                                                                            let minFinalPrice = Infinity;
-                                                                                            let maxDiscount = 0;
-                                                                                            item.coursePricing.forEach(pricing => {
-                                                                                                const originalPrice = pricing.price;
-                                                                                                const discount = pricing.discount || 0;
-                                                                                                const finalPrice = discount > 0 ? originalPrice - (originalPrice * (discount / 100)) : originalPrice;
-                                                                                                if (finalPrice < minFinalPrice) {
-                                                                                                    minFinalPrice = finalPrice;
-                                                                                                    minOriginalPrice = originalPrice;
-                                                                                                    maxDiscount = discount;
-                                                                                                }
-                                                                                            });
-                                                                                            return { originalPrice: minOriginalPrice, finalPrice: minFinalPrice, discount: maxDiscount };
-                                                                                        }
-                                                                                        return { originalPrice: 0, finalPrice: 0, discount: 0 };
-                                                                                    };
-                                                                                    const priceInfo = getPriceInfo();
-                                                                                    if (cartItem && cartItem.finalPrice !== undefined && cartItem.finalPrice !== null) {
-                                                                                        const cartPricing = item?.coursePricing?.find(p => p.id === cartItem.pricingId);
-                                                                                        const discount = cartPricing?.discount || 0;
-                                                                                        const originalPrice = cartPricing?.price || parseFloat(cartItem.finalPrice) * 1.3;
-                                                                                        return (
-                                                                                            <div className="space-y-1">
-                                                                                                <div className="flex items-center gap-1.5 flex-wrap">
-                                                                                                    <span className="text-[10px] text-gray-500 italic">Starting</span>
-                                                                                                    <span className="text-sm font-bold" style={{ color: primaryColor }}>₹{parseFloat(cartItem.finalPrice).toFixed(2)}</span>
-                                                                                                    {discount > 0 && <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">{discount}% OFF</span>}
-                                                                                                </div>
-                                                                                                {discount > 0 && <span className="text-[9px] text-gray-400 line-through block">₹{originalPrice.toFixed(2)}</span>}
-                                                                                            </div>
-                                                                                        );
-                                                                                    } else {
-                                                                                        return (
-                                                                                            <div className="space-y-1">
-                                                                                                <div className="flex items-center gap-1.5 flex-wrap">
-                                                                                                    <span className="text-[10px] text-gray-500 italic">Starting</span>
-                                                                                                    <span className="text-sm font-bold" style={{ color: priceInfo.finalPrice === 0 ? '#10b981' : primaryColor }}>
-                                                                                                        {priceInfo.finalPrice === 0 ? '0' : `₹${priceInfo.finalPrice.toFixed(2)}`}
-                                                                                                    </span>
-                                                                                                    {priceInfo.discount > 0 && <span className="text-[9px] font-semibold text-green-600 bg-green-50 px-1 py-0.5 rounded">{priceInfo.discount}% OFF</span>}
-                                                                                                    {priceInfo.discount > 0 && <span className="text-[9px] text-gray-400 line-through block">₹{priceInfo.originalPrice.toFixed(2)}</span>}
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        );
-                                                                                    }
-                                                                                })()}
-                                                                            </div>
-                                                                            <div className="flex gap-2">
-                                                                                <button onClick={(e) => { e.stopPropagation(); handleCardClick(item); }}
-                                                                                    className="flex-1 border-2 font-semibold py-1.5 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 hover:scale-105"
-                                                                                    style={{ borderColor: primaryColor, color: primaryColor, backgroundColor: `${primaryColor}10` }}
-                                                                                >
-                                                                                    <svg className="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                                                                                    </svg>
-                                                                                    Explore
-                                                                                </button>
-                                                                                <button onClick={(e) => { e.stopPropagation(); handleAddtoCart(item); }}
-                                                                                    className={`flex-1 font-semibold py-2 px-2 text-xs rounded-lg transition-all duration-300 flex items-center justify-center gap-1.5 transform hover:scale-105 border-2 ${cartCourses.some(a => a.id === item?.id) ? 'bg-white border-red-500 text-red-600 hover:bg-red-50 shadow-sm hover:shadow-red-200/30' : 'text-white border-transparent shadow-lg hover:shadow-lg'}`}
-                                                                                    style={cartCourses.some(a => a.id === item?.id) ? {} : { backgroundColor: primaryColor, boxShadow: `0 10px 15px -3px ${primaryColor}40` }}
-                                                                                >
-                                                                                    <ShoppingCart className="h-4 w-4" />
-                                                                                    {cartCourses.some(a => a.id === item?.id) ? "Remove" : "Add to cart"}
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                ))}
-                                                            </div>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </>
-                                        )}
-                                    </div>
-                                )}
-
-                                {/* Empty State */}
-                                {filteredCourses?.length === 0 && !loading && (
-                                    <div className="text-center py-8">
-                                        <div className="bg-white rounded-3xl shadow-xl p-4 max-w-md mx-auto border border-gray-100">
-                                            <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner bg-gradient-to-br from-emerald-100 to-green-100">
-                                                <ShoppingCart className="h-16 w-16 text-emerald-600" />
-                                            </div>
-                                            <h3 className="text-2xl font-bold text-gray-800 mb-3">No Courses Found</h3>
-                                            <p className="text-gray-600 mb-4">Try adjusting your filters to see more courses!</p>
-                                            <button
-                                                onClick={clearAllFilters}
-                                                className="text-white font-semibold py-2 px-6 rounded-lg transition-all duration-300 shadow-lg hover:shadow-lg"
-                                                style={{ backgroundColor: primaryColor }}
-                                            >
-                                                Clear All Filters
-                                            </button>
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                        )}
+                    </section>
+                </main>
             </div>
 
             {/* Mobile Filters Dialog */}
