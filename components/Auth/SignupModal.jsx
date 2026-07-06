@@ -13,20 +13,18 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     email: '',
   });
   const [addressForm, setAddressForm] = useState({
-    houseNumber: '',
+    houseNo: '',
     zipCode: '',
     address: '',
     stateName: '',
-    // cityId: '',
+    cityId: '',
     cityName: '',
   });
-
-  // console.log('Address Form State:', addressForm);
   const [errors, setErrors] = useState({});
   const [addressErrors, setAddressErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [tempSignupData, setTempSignupData] = useState(null);
-  const { login, auth, stateList } = useAuth();
+  const { login, auth } = useAuth();
   const { theme } = useTheme();
   const { setStudentAuth } = useStudent();
 
@@ -97,19 +95,19 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newErrors.email = 'Please enter a valid email address';
     }
 
-    if (!addressForm.houseNumber.trim()) {
-      newAddressErrors.houseNumber = 'House number is required';
-    }
-
-    if (!addressForm.zipCode.trim()) {
-      newAddressErrors.zipCode = 'Zip code is required';
-    }
-
     if (!addressForm.address.trim()) {
       newAddressErrors.address = 'Address is required';
     }
 
-    if (!addressForm.stateName) {
+    if (!addressForm.houseNo.trim()) {
+      newAddressErrors.houseNo = 'House No is required';
+    }
+
+    if (!addressForm.zipCode.trim()) {
+      newAddressErrors.zipCode = 'Zipcode is required';
+    }
+
+    if (!addressForm.stateName.trim()) {
       newAddressErrors.stateName = 'State is required';
     }
 
@@ -130,7 +128,11 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     }
 
     try {
-      const fullAddress = `${addressForm.houseNumber}, ${addressForm.address}, ${addressForm.cityName}, ${addressForm.stateName}, ${addressForm.zipCode}`;
+      const fullAddress = [
+        addressForm.houseNo.trim(),
+        addressForm.zipCode.trim(),
+        addressForm.address.trim()
+      ].filter(Boolean).join(', ');
 
       const registrationBody = {
         contact: tempSignupData?.phone,
@@ -142,7 +144,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         gender: "male",
         cityId: null,
         address: fullAddress,
-        userName: `${formData.firstname} ${formData.lastname}`,
+        zipCode: addressForm.zipCode.trim(),
+        userName: `${formData.firstname}${formData.lastname}`,
       };
 
       const registrationResponse = await Network.studentRegister(registrationBody);
@@ -197,7 +200,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       email: '',
     });
     setAddressForm({
-      houseNumber: '',
+      houseNo: '',
       zipCode: '',
       address: '',
       stateName: '',
@@ -263,12 +266,12 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
 
         {/* Form */}
         <form className="space-y-3" onSubmit={handleSubmit}>
-          {/* Address Information Note */}
-          <div className="rounded-xl bg-emerald-50 border border-emerald-200 p-4">
-            <p className="text-xs text-emerald-700 leading-relaxed">
-              <span className="font-semibold">Note:</span> Kindly enter your correct dispatch address, including all necessary details such as house number, street, city, and PIN code. Your books will be delivered to this address, so please double-check before submitting.
+          <div className="rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2">
+            <p className="text-xs text-emerald-800 leading-relaxed">
+              Note: Kindly enter your correct dispatch address, including all necessary details such as house number, street, city, and PIN code. Your books will be delivered to this address, so please double-check before submitting.
             </p>
           </div>
+
           {/* First Name & Last Name - 2 Columns */}
           <div className="grid grid-cols-2 gap-4">
             {/* First Name */}
@@ -348,7 +351,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
                 name="email"
                 type="email"
                 autoComplete="email"
-                className={`block w-full pl-12 pr-4 py-2 border-2 ${errors.email
+                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.email
                   ? 'border-red-300 focus:border-red-500'
                   : `border-gray-300 focus:border-indigo-700`
                   } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
@@ -365,30 +368,28 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             )}
           </div>
 
-          {/* House Number & Zip Code - 2 Columns */}
+          {/* House No & Zipcode */}
           <div className="grid grid-cols-2 gap-4">
-            {/* House Number */}
             <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">House Number</label>
+              <label className="block text-sm font-semibold text-slate-700">House No.</label>
               <input
                 type="text"
-                value={addressForm.houseNumber}
-                onChange={(e) => handleAddressInputChange('houseNumber', e.target.value)}
+                value={addressForm.houseNo}
+                onChange={(e) => handleAddressInputChange('houseNo', e.target.value)}
                 className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                placeholder="Enter house number"
+                placeholder="e.g. 12A"
               />
-              {addressErrors.houseNumber && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNumber}</p>}
+              {addressErrors.houseNo && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNo}</p>}
             </div>
 
-            {/* Zip Code */}
             <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">Zip Code</label>
+              <label className="block text-sm font-semibold text-slate-700">Zipcode</label>
               <input
                 type="number"
                 value={addressForm.zipCode}
                 onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
                 className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                placeholder="Enter zip code"
+                placeholder="e.g. 500001"
               />
               {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
             </div>
@@ -411,9 +412,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="grid grid-cols-2 gap-4">
             {/* State */}
             <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">
-                State
-              </label>
+              <label className="block text-sm font-semibold text-slate-700">State</label>
               <input
                 type="text"
                 value={addressForm.stateName}
@@ -432,9 +431,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
 
             {/* City */}
             <div className="space-y-1">
-              <label className="block text-sm font-semibold text-slate-700">
-                City
-              </label>
+              <label className="block text-sm font-semibold text-slate-700">City</label>
               <input
                 type="text"
                 value={addressForm.cityName}
@@ -470,17 +467,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="pt-1">
             <button
               type="submit"
-              disabled={
-                isLoading ||
-                !formData.firstname.trim() ||
-                !formData.lastname.trim() ||
-                !formData.email.trim() ||
-                !addressForm.houseNumber.trim() ||
-                !addressForm.zipCode.trim() ||
-                !addressForm.address.trim() ||
-                !addressForm.stateName.trim() ||
-                !addressForm.cityName.trim()
-              }
+              disabled={isLoading}
               className={`group relative w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
             >
               {isLoading ? (
@@ -513,3 +500,4 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
 };
 
 export default SignupModal;
+

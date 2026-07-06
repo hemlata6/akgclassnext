@@ -1229,7 +1229,7 @@ const Store = () => {
                         <button key={domain.id}
                             onClick={() => { if (selectedDomain?.id !== domain.id) { setSelectedDomain(domain); setSelectedExamStage(null); } }}
                             className="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-bold transition-all"
-                            style={{ backgroundColor: isActive ? primaryColor : '#f8fafc', color: isActive ? '#ffffff' : '#475569' }}>
+                            style={{ backgroundColor: isActive ? 'rgb(149 194 255 / 19%)' : '#f8fafc', color: isActive ? 'rgb(7, 73, 162)' : '#475569' }}>
                             <span>{domain.name}</span>
                             {isActive && <svg className="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>}
                         </button>
@@ -1244,7 +1244,7 @@ const Store = () => {
                             <label key={stage.id} className="flex items-center gap-3 cursor-pointer group">
                                 <input type="radio" name="stage" checked={selectedExamStage?.id === stage.id}
                                     onChange={() => setSelectedExamStage(selectedExamStage?.id === stage.id ? null : stage)}
-                                    className="w-4 h-4 border-slate-300" style={{ accentColor: primaryColor }} />
+                                    className="w-4 h-4 border-slate-300" style={{ accentColor: 'primaryColor' }} />
                                 <span className="text-xs font-semibold text-slate-600 group-hover:text-slate-900 transition-colors">{stage.name}</span>
                             </label>
                         ))}
@@ -1261,7 +1261,7 @@ const Store = () => {
                         <label className="flex items-center gap-3 cursor-pointer group border-b border-slate-100 pb-2">
                             <input type="checkbox" checked={selectedFaculties.length === faculties.length && faculties.length > 0}
                                 onChange={() => { if (selectedFaculties.length === faculties.length) setSelectedFaculties([]); else setSelectedFaculties([...faculties]); }}
-                                className="w-4 h-4 rounded border-slate-300" style={{ accentColor: primaryColor }} />
+                                className="w-4 h-4 rounded border-slate-300" style={{ accentColor: 'rgb(149 194 255 / 19%)' }} />
                             <span className="text-xs font-bold text-slate-700">{selectedFaculties.length === faculties.length ? 'Deselect All' : 'Select All'}</span>
                         </label>
                         {faculties.map((fac) => {
@@ -1271,7 +1271,7 @@ const Store = () => {
                             return (
                                 <label key={fac.id} className="flex items-center gap-3 cursor-pointer group">
                                     <input type="checkbox" checked={isSelected} onChange={() => toggleFaculty(fac)}
-                                        className="w-4 h-4 rounded border-slate-300" style={{ accentColor: primaryColor }} />
+                                        className="w-4 h-4 rounded border-slate-300" style={{ accentColor: 'rgb(149 194 255 / 19%)' }} />
                                     <div className="w-6 h-6 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center overflow-hidden flex-shrink-0">
                                         {fac.profile ? <img src={`${Endpoints.mediaBaseUrl}${fac.profile}`} alt={fullName} className="w-full h-full object-cover" />
                                             : <span className="text-[9px] font-bold text-slate-500">{initial || '?'}</span>}
@@ -1291,7 +1291,7 @@ const Store = () => {
 
             {/* GLOBAL HEADER */}
             <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
-                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">
 
                     <div className="flex items-center gap-3 flex-shrink-0 cursor-pointer" onClick={() => router.push('/store')}>
                         <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-sm text-white" style={{ backgroundColor: primaryColor }}>
@@ -1351,7 +1351,7 @@ const Store = () => {
                 </div>
             </header>
 
-            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 md:gap-8">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 md:gap-8">
 
                 <aside className="hidden lg:block w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-22 h-fit space-y-4">
                     <FilterSidebarContent />
@@ -1387,17 +1387,17 @@ const Store = () => {
                         </div>
                     )}
 
-                    <section className="space-y-4">
-                        <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+                    <section className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)] scrollbar-thin pr-1">
+                        {/* <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                             <h2 className="text-sm sm:text-base font-bold text-slate-800 tracking-tight">
                                 {selectedTag ? `Batch: ${selectedTag.tag}` : 'All Courses'}
                             </h2>
                             <span className="text-xs text-slate-400 font-medium">{filteredCourses.length} courses</span>
-                        </div>
+                        </div> */}
 
                         {/* Course Listing */}
                         {loading ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
                                 {[1, 2, 3, 4].map((n) => (
                                     <div key={n} className="bg-white rounded-2xl border border-slate-100 p-4 space-y-4 animate-pulse">
                                         <div className="w-full aspect-square bg-slate-200 rounded-xl" />
@@ -1412,7 +1412,7 @@ const Store = () => {
                             </div>
                         ) : filteredCourses?.length > 0 ? (
                             selectedTag ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 md:gap-4">
                                     {filteredCourses.map((item) => {
                                         const getPriceInfo = () => {
                                             if (item?.coursePricing && item.coursePricing.length > 0) {
@@ -1496,11 +1496,11 @@ const Store = () => {
                                         return (
                                             <div key={tag.id} className="mb-6">
                                                 <div className="flex justify-start items-center gap-2 mb-3">
-                                                    <div className="w-fit h-8 rounded-lg flex items-center justify-start p-2 text-white text-sm font-bold" style={{ backgroundColor: primaryColor }}>
-                                                        {tag.tag} ({tag?.reference})
+                                                    <div className="w-fit h-8 rounded-lg flex items-center justify-start p-2 text-black text-sm font-bold">
+                                                        {tag.tag}
                                                     </div>
                                                 </div>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 md:gap-4">
                                                     {tagCourses.map((item) => {
                                                         const getPriceInfo = () => {
                                                             if (item?.coursePricing && item.coursePricing.length > 0) {
@@ -1526,7 +1526,7 @@ const Store = () => {
                                                                 <div className="relative w-full aspect-square overflow-hidden bg-slate-50">
                                                                     <img src={Endpoints?.mediaBaseUrl + item.logo} alt={item.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.01]" />
                                                                 </div>
-                                                                <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
+                                                                <div className="p-2 flex-1 flex flex-col justify-between space-y-4">
                                                                     <div>
                                                                         <h3 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug line-clamp-2">{item.title}</h3>
                                                                     </div>

@@ -103,6 +103,7 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -238,6 +239,31 @@ html {
 
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
+}
+
+/* Thin custom scrollbar */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 20px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Firefox */
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
 }
 
 .line-clamp-2 {
@@ -379,4 +405,13 @@ html {
     transform: translate(0) scale(1);
     opacity: 1;
   }
+}
+
+main.grid.grid-cols-1.lg\:grid-cols-4.gap-6.md\:gap-8.items-start.bg-\[\#fafbfc\] {
+  margin-bottom: 0px !important;
+}
+
+.grid.text-\[12px\].whitespace-nowrap.font-bold.text-slate-900 {
+  margin-bottom: 0px !important;
+  gap: 0px !important;
 }

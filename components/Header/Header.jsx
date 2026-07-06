@@ -476,7 +476,7 @@ export const Header = ({ cartCount }) => {
 
             <nav className="hidden xl:flex items-center gap-8 h-full">
 
-              <div className="flex flex-col items-center">
+              <div className="flex flex-col items-center justify-center">
                 <Link href="/" className="flex items-center gap-2 cursor-pointer">
                   {/* <img src="/logo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" /> */}
                   <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
@@ -495,12 +495,12 @@ export const Header = ({ cartCount }) => {
 
             {/* Mobile Logo - Left side */}
             <Link href="/" className="flex items-center gap-2 cursor-pointer xl:hidden">
-              <button className="bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg">
+              <button className="bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg flex-shrink-0">
                 RJCE
               </button>
-              <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
-                RISHABH JAIN
-                <span className='text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
+              <div className="text-[12px] font-bold text-slate-900 leading-tight">
+                <span className="block">RISHABH JAIN</span>
+                <span className='block text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
               </div>
             </Link>
 

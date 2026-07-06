@@ -7,6 +7,7 @@ export default function Layout({ children }) {
   const [cartCount, setCartCount] = useState(0);
   const [shouldHideControls, setShouldHideControls] = useState(false);
   const [isStorePage, setIsStorePage] = useState(false);
+  const [isDetailPage, setIsDetailPage] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -36,6 +37,7 @@ export default function Layout({ children }) {
       
       setShouldHideControls(!!(isMobileParam || tokenParam));
       setIsStorePage(router.pathname === '/store');
+      setIsDetailPage(router.pathname.startsWith('/course/') || router.pathname.startsWith('/book/'));
     }
   }, [router.pathname, router.asPath]);
 
@@ -57,9 +59,9 @@ export default function Layout({ children }) {
   };
 
   return (
-    <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900">
+    <div className="font-sans text-slate-900 bg-white min-h-screen selection:bg-indigo-200 selection:text-indigo-900 overflow-x-hidden">
       {!shouldHideControls && !isStorePage && <Header cartCount={cartCount} />}
-      {!shouldHideControls && !isStorePage && <AnnouncementsHeader cartCount={cartCount} />}
+      {!shouldHideControls && !isStorePage && !isDetailPage && <AnnouncementsHeader cartCount={cartCount} />}
       {children}
       {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}
     </div>
