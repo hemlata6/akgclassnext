@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { ShoppingCart } from 'lucide-react';
@@ -19,7 +19,6 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 
   const { institute } = useAuth();
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const [allEmployee, setAllEmployee] = useState([]);
   // Format duration from coursePricing
   const formatDuration = (duration) => {
     if (!duration || isNaN(duration)) return "0 hr";
@@ -36,18 +35,6 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 
     return parts.length ? parts.join(" ") : "0 hr";
   };
-
-  useEffect(() => {
-    const fetchAllEmployee = async () => {
-      try {
-        const response = await Network.fetchEmployee(instId);
-        setAllEmployee(response.employees || []);
-      } catch (error) {
-        console.error('Error fetching employees:', error);
-      }
-    };
-    fetchAllEmployee();
-  }, []);
 
 
   // Format validity from first pricing
@@ -239,6 +226,56 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const [showSuccessBar, setShowSuccessBar] = useState(false);
   const [successBarMessage, setSuccessBarMessage] = useState('');
   const [showCopyAlert, setShowCopyAlert] = useState(false);
+  const [allEmployee, setAllEmployee] = useState([]);
+  const cardRef = useRef(null);
+  const placeholderRef = useRef(null);
+  const CARD_TOP = 175;
+
+  // Hybrid fixed/absolute to keep purchase card in view while scrolling
+  useEffect(() => {
+    const section = document.getElementById('course-content-section');
+    const card = cardRef.current;
+    const placeholder = placeholderRef.current;
+    if (!section || !card || !placeholder) return;
+
+    const syncWidth = () => {
+      card.style.width = `${placeholder.offsetWidth}px`;
+    };
+
+    const setFixed = () => {
+      card.style.position = 'fixed';
+      card.style.top = `${CARD_TOP}px`;
+      card.style.bottom = 'auto';
+      syncWidth();
+    };
+
+    const setAbsolute = () => {
+      card.style.position = 'absolute';
+      card.style.top = 'auto';
+      card.style.bottom = '0';
+      syncWidth();
+    };
+
+    const handleScroll = () => {
+      const sectionBottom = section.getBoundingClientRect().bottom;
+      const cardHeight = card.offsetHeight;
+
+      if (sectionBottom - CARD_TOP - cardHeight <= 0) {
+        setAbsolute();
+      } else {
+        setFixed();
+      }
+    };
+
+    setFixed();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', syncWidth);
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', syncWidth);
+    };
+  }, []);
 
   // console.log("CourseData", courseData)
 
@@ -276,6 +313,18 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
     window.addEventListener('cartUpdated', handleCartUpdate);
     return () => window.removeEventListener('cartUpdated', handleCartUpdate);
+  }, []);
+
+    useEffect(() => {
+    const fetchAllEmployee = async () => {
+      try {
+        const response = await Network.fetchEmployee(instId);
+        setAllEmployee(response.employees || []);
+      } catch (error) {
+        console.error('Error fetching employees:', error);
+      }
+    };
+    fetchAllEmployee();
   }, []);
 
   // Fetch all courses for suggestions
@@ -814,7 +863,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   console.log('courseData', courseData)
 
   return (
-    <section className="bg-[#fafbfc] relative">
+    <section id="course-content-section" className="bg-[#fafbfc] relative">
       <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
         <nav className="py-4 text-xs font-medium text-slate-500 flex items-center space-x-2">
           <span className="hover:text-[#0749A2] cursor-pointer" onClick={() => router.push('/store')}>Home</span>
@@ -851,10 +900,30 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                 </div>
                 <div className="flex flex-col xs:flex-row xs:items-center justify-between pt-3 sm:pt-4 mt-1 gap-3 xs:gap-0">
                   <div className="flex items-center gap-2.5 sm:gap-3">
-                    <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-blue-50 border-2 border-blue-100 flex items-center justify-center text-[#0749A2] font-extrabold text-xs sm:text-sm shadow-sm flex-shrink-0">EA</div>
+                    {/* <div className="h-9 w-9 sm:h-10 sm:w-10 rounded-full bg-blue-50 border-2 border-blue-100 flex items-center justify-center text-[#0749A2] font-extrabold text-xs sm:text-sm shadow-sm flex-shrink-0">EA</div>
                     <div className="min-w-0">
                       <p className="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">Expert Faculty</p>
                       <p className="text-sm sm:text-base font-bold text-slate-800 truncate">CA {courseData?.faculty || 'Abhishek Zavare'}</p>
+                    </div> */}
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {allEmployee
+                          ?.filter((employee) =>
+                            employee.courseIds?.includes(Number(courseData?.id))
+                          )
+                          .map((employee) => (
+                            <div key={employee.id} className="flex items-center gap-1.5">
+                              <img
+                                src={Endpoints.mediaBaseUrl + employee.profile}
+                                className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
+                                alt={employee.firstName}
+                              />
+                              <span className="text-xs font-bold text-slate-800 whitespace-nowrap">
+                                {employee.firstName} {employee.lastName}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
                     </div>
                   </div>
                   <button
@@ -891,7 +960,8 @@ const CourseContent = ({ courseData, onAddToCart }) => {
               </div>
             </div>
           </div>
-          <div className="hidden lg:block lg:col-span-1 lg:sticky lg:top-6">
+          <div className="hidden lg:block lg:col-span-1" ref={placeholderRef}></div>
+          <div className="hidden lg:block fixed top-[96px] right-[150px] pb-[20px]" ref={cardRef}>
             <div className="bg-white rounded-2xl border border-slate-100 shadow-md p-4 space-y-6">
               <div>
                 <div className="flex items-center space-x-2">

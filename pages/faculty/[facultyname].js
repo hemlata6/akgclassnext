@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import Layout from '../../components/Layout';
@@ -72,6 +72,49 @@ const FacultyProfile = ({ }) => {
         }
         return null;
     }, [facultyState]);
+
+    const imageRef = useRef(null);
+    const placeholderRef = useRef(null);
+    const IMAGE_TOP = 245;
+    const IMAGE_WIDTH = 350;
+
+    // Hybrid fixed/absolute to keep image in view while scrolling description
+    useEffect(() => {
+        const section = document.getElementById('faculty-hero-section');
+        const image = imageRef.current;
+        const placeholder = placeholderRef.current;
+        if (!section || !image || !placeholder) return;
+
+        const setFixed = () => {
+            image.style.position = 'fixed';
+            image.style.top = `${IMAGE_TOP}px`;
+            image.style.bottom = 'auto';
+            image.style.width = `${IMAGE_WIDTH}px`;
+        };
+
+        const setAbsolute = () => {
+            image.style.position = 'absolute';
+            image.style.top = 'auto';
+            image.style.bottom = '0';
+            image.style.width = `${IMAGE_WIDTH}px`;
+        };
+
+        const handleScroll = () => {
+            const sectionBottom = section.getBoundingClientRect().bottom;
+            const imageHeight = image.offsetHeight;
+
+            if (sectionBottom - IMAGE_TOP - imageHeight <= 0) {
+                setAbsolute();
+            } else {
+                setFixed();
+            }
+        };
+
+        setFixed();
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        handleScroll();
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -174,8 +217,10 @@ const FacultyProfile = ({ }) => {
 
                         </div>
 
-                        <div className={`flex flex-col md:flex-row items-start gap-12 md:min-h-auto`}>
-                            <div className="w-full md:w-1/3 md:sticky md:top-28 self-start">
+                        <div className={`flex flex-col md:flex-row items-start gap-12 relative`}>
+                            {/* Placeholder preserves flex layout while fixed image floats on top */}
+                            <div className="hidden md:block md:w-1/3" ref={placeholderRef}></div>
+                            <div className="faculty image fixed top-[245px]" ref={imageRef}>
                                 <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square bg-slate-100">
                                     <img
                                         src={facultyImage}
@@ -206,8 +251,8 @@ const FacultyProfile = ({ }) => {
                             <div className="w-full md:w-2/3 md:overflow-y-auto md:pr-2">
                                 <div className="space-y-6 bg-white rounded-xl shadow-lg pt-0 pb-[2rem] px=[2rem] border border-slate-100">
                                     {/* <div> */}
-                                        {/* <h2 className="text-2xl font-bold text-slate-900 mb-4">About</h2> */}
-                                        {/* {faculty?.description && (
+                                    {/* <h2 className="text-2xl font-bold text-slate-900 mb-4">About</h2> */}
+                                    {/* {faculty?.description && (
                                             <div className="text-lg text-slate-700 leading-relaxed mb-4">
                                                 {faculty.description}
                                             </div>
@@ -217,7 +262,7 @@ const FacultyProfile = ({ }) => {
                                                 <div className="text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload.address }} />
                                             </div>
                                         )} */}
-                                        <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload?.address }} />
+                                    <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload?.address }} />
                                     {/* </div> */}
 
                                     {/* {faculty?.journey && (
