@@ -74,7 +74,7 @@ const DownloadAppPage = () => {
     return (
         <>
             <Header cartCount={0} />
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-12 md:py-24">
+            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-blue-100 py-12 md:py-24">
                 <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
                     {/* Header Section */}
@@ -112,13 +112,13 @@ const DownloadAppPage = () => {
                         {downloadLinks.map((link) => (
                             <div
                                 key={link.id}
-                                className={`bg-white rounded-2xl border-2 border-slate-200 cursor-pointer transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl hover:border-indigo-300 overflow-hidden group`}
+                                className={`bg-white rounded-2xl border-2 border-slate-200 cursor-pointer transition-all duration-300 transform hover:-translate-y-2 hover:shadow-2xl hover:border-[#0a459a]/40 overflow-hidden group`}
                                 onMouseEnter={() => setHoveredCard(link.id)}
                                 onMouseLeave={() => setHoveredCard(null)}
                                 onClick={() => handleDownload(link.url)}
                             >
                                 {/* Gradient Background */}
-                                <div className={`h-1.5 bg-gradient-to-r from-indigo-600 to-blue-500`}></div>
+                                <div className={`h-1.5 bg-gradient-to-r from-[#0a459a] to-[#073373]`}></div>
 
                                 <div className="p-8 flex flex-col items-center text-center h-full">
                                     {/* Icon Container */}
@@ -132,7 +132,7 @@ const DownloadAppPage = () => {
                                     <h3 className="font-bold text-slate-900 text-lg mb-1">{link.name}</h3>
 
                                     {/* Platform Badge */}
-                                    <span className={`inline-block mb-4 text-xs font-semibold px-3 py-1 rounded-full ${primaryClass} bg-opacity-10 text-indigo-700`}>
+                                    <span className={`inline-block mb-4 text-xs font-semibold px-3 py-1 rounded-full ${primaryClass} bg-opacity-10 text-[#0a459a]`}>
                                         {link.platform}
                                     </span>
 
@@ -142,7 +142,7 @@ const DownloadAppPage = () => {
                                     {/* Download Button */}
                                     <button
                                         onClick={() => handleDownload(link.url)}
-                                        className={`w-full bg-gradient-to-r from-indigo-600 to-blue-600 text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:shadow-lg hover:from-indigo-700 hover:to-blue-700 active:scale-95 transform hover:scale-105`}
+                                        className={`w-full bg-gradient-to-r from-[#0a459a] to-[#073373] text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 hover:shadow-lg hover:from-[#073373] hover:to-[#05214c] active:scale-95 transform hover:scale-105`}
                                     >
                                         {hoveredCard === link.id ? 'Start Download' : 'Download Now'}
                                     </button>

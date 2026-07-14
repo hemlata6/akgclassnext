@@ -1,202 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { LAYOUT_PADDING, Icons } from '../../../constants/Icons';
-import Network from '../../../config/Network';
-import Endpoints from '../../../config/endpoints';
-import instId from '../../../config/instituteId';
+import React from 'react';
+import { PlayCircle } from 'lucide-react';
 
 export const StudentGallery = () => {
-    const [gallery, setGallery] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [itemsPerView, setItemsPerView] = useState(4);
-    const [canGoPrev, setCanGoPrev] = useState(false);
-    const [canGoNext, setCanGoNext] = useState(true);
-
-    const fallbackGallery = [
-        '/vghub/student.jpg',
-        '/vghub/6745-4887-6.jpg',
-        '/vghub/6619-4887-6.jpg',
-        '/vghub/4782-2760-5.jpg',
-        '/vghub/4276-7635-9.jpg'
+    const studentShortsData = [
+        { name: "Ananya Sharma", score: "Audit Exemption 78", course: "CA Inter Audit Regular", previewText: "Strategy shared for writing structural answers exactly according to ICAI framework helped immensely!" },
+        { name: "Rahul Jaiswal", score: "AIR 14 Secured", course: "CA Final Advanced Audit", previewText: "Professional Ethics modules and clause breakdown matrices changed the full flow of my preparation." },
+        { name: "Priyesh Solanki", score: "Audit Exemption 72", course: "CA Inter Audit + SM Combo", previewText: "Integrated study approach coupled with Concise Chartbooks allowed me to finish the curriculum in just 3 days!" },
+        { name: "Sneha Reddy", score: "Cleared Final Both Groups", course: "CA Final Audit Batch", previewText: "The Ex-Big 4 structural strategies guidelines made standard disclosures logical instead of dry memorization." }
     ];
 
-    useEffect(() => {
-        fetchGallery();
-        handleResize();
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
-    useEffect(() => {
-        updateNavigationButtons();
-    }, [currentIndex, gallery, itemsPerView]);
-
-    const handleResize = () => {
-        if (typeof window !== 'undefined') {
-            const width = window.innerWidth;
-            if (width < 640) setItemsPerView(1);
-            else if (width < 1024) setItemsPerView(2);
-            else if (width < 1280) setItemsPerView(3);
-            else setItemsPerView(4);
-        }
-    };
-
-    const getEffectiveGallery = () => {
-        if (gallery.length > 0) return gallery;
-        return fallbackGallery.map((img, index) => ({ id: `fallback-${index}`, img }));
-    };
-
-    const updateNavigationButtons = () => {
-        const effectiveLength = getEffectiveGallery().length;
-        setCanGoPrev(currentIndex > 0);
-        setCanGoNext(currentIndex < effectiveLength - itemsPerView);
-    };
-
-    const handlePrev = () => {
-        if (currentIndex > 0) {
-            setCurrentIndex(currentIndex - 1);
-        }
-    };
-
-    const handleNext = () => {
-        const effectiveLength = getEffectiveGallery().length;
-        if (currentIndex < effectiveLength - itemsPerView) {
-            setCurrentIndex(currentIndex + 1);
-        }
-    };
-
-    const fetchGallery = async () => {
-        try {
-            setLoading(true);
-            const response = await Network.fetchGalley(instId);
-
-            if (response && Array.isArray(response)) {
-                // Map the array of image paths to objects with full URLs
-                const galleryItems = response.map((imagePath, index) => ({
-                    id: index,
-                    img: Endpoints.mediaBaseUrl + imagePath,
-                    // title: `Student ${index + 1}`,
-                    // type: 'PHOTO'
-                }));
-                setGallery(galleryItems);
-            }
-        } catch (error) {
-            console.error('Error fetching gallery:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
     return (
-        <section className="py-12 bg-white border-t border-slate-200">
-            <div className={LAYOUT_PADDING}>
-                <div className="text-center mb-10">
-                    <span className="text-green-600 font-bold tracking-widest text-xs uppercase">Face 2 Face Glimpse</span>
-                    <h2 className="text-2xl md:text-2xl font-bold text-slate-900 mt-1">Student Wall of Love</h2>
-                </div>
-
-                {loading ? (
-                    <div className="flex justify-center py-8">
-                        <p className="text-slate-500">Loading gallery...</p>
-                    </div>
-                ) : (
-                    <div>
-                        {/* Carousel Container */}
-                        <div className="overflow-hidden">
-                            <div
-                                className="flex gap-4 transition-transform duration-500 ease-in-out"
-                                style={{
-                                    transform: `translateX(-${currentIndex * (100 / itemsPerView)}%)`
-                                }}
-                            >
-                                {getEffectiveGallery().map((item, idx) => (
-                                    <div
-                                        key={item.id}
-                                        className="flex-shrink-0"
-                                        style={{
-                                            width: `calc((100% - ${(itemsPerView - 1) * 1}rem) / ${itemsPerView})`
-                                        }}
-                                    >
-                                        <div className="gallery-card bg-white shadow-md border border-slate-200 rounded-2xl p-2 hover:shadow-lg transition-shadow">
-                                            <div className={`bg-slate-100 rounded-xl overflow-hidden flex items-center justify-center ${gallery.length === 0 ? 'aspect-[3/4]' : ''}`} style={{ minHeight: '200px' }}>
-                                                <img
-                                                    src={item.img}
-                                                    className="gallery-image w-full h-full object-contain hover:opacity-95 transition-all duration-500"
-                                                    alt={item.title || `Student feedback ${idx + 1}`}
-                                                    onError={(e) => {
-                                                        e.target.style.display = 'none';
-                                                        e.target.parentElement.innerHTML = '<div class="flex items-center justify-center text-slate-400 p-8">No Image</div>';
-                                                    }}
-                                                />
-                                            </div>
-                                            {item.title && <p className="font-bold text-xs text-slate-900 mt-2 text-center">{item.title}</p>}
-                                            {item.type && <span className="text-[9px] text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full mt-1 uppercase font-bold block text-center">{item.type}</span>}
-                                        </div>
-                                    </div>
-                                ))}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
+            <div className="mb-8 border-b border-slate-200 pb-5">
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 font-bold">Success Stories</h3>
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-bold">Student Reviews & Exemption Shorts</h2>
+            </div>
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+                {studentShortsData.map((short, idx) => (
+                    <div key={idx} className="bg-slate-950 rounded-2xl border border-slate-800 shadow-md relative overflow-hidden aspect-[9/16] group transition-all duration-300 hover:shadow-xl hover:-translate-y-1.5 cursor-pointer">
+                        <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-black/40 to-black/95 z-10"></div>
+                        <div className="absolute inset-0 bg-slate-900 flex items-center justify-center z-0 select-none">
+                            <div className="flex flex-col items-center gap-2 text-slate-700 group-hover:text-[#0a459a] transition-colors duration-300">
+                                <PlayCircle className="w-12 h-12 transform group-hover:scale-110 transition-transform duration-300" />
+                                <span className="text-[10px] font-black uppercase tracking-widest">Click to Play Short</span>
                             </div>
                         </div>
-
-                        {/* Navigation Buttons */}
-                        {getEffectiveGallery().length > itemsPerView && (
-                            <div className="flex justify-center items-center gap-4 mt-6">
-                                <button
-                                    onClick={handlePrev}
-                                    disabled={!canGoPrev}
-                                    className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <Icons.ChevronLeft />
-                                </button>
-                                <button
-                                    onClick={handleNext}
-                                    disabled={!canGoNext}
-                                    className={`bg-emerald-600 text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 hover:bg-emerald-700 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                        }`}
-                                >
-                                    <Icons.ChevronRight />
-                                </button>
+                        <div className="absolute top-4 left-4 z-20 flex items-center">
+                            <span className="text-[9px] font-black text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded-md uppercase tracking-wider shadow font-bold">★ {short.score}</span>
+                        </div>
+                        <div className="absolute bottom-0 inset-x-0 p-5 z-20 flex flex-col justify-end space-y-2">
+                            <div className="space-y-0.5">
+                                <h4 className="text-sm font-black text-white tracking-tight font-bold">{short.name}</h4>
+                                <p className="text-[10px] text-blue-300 font-extrabold uppercase tracking-wide font-bold">{short.course}</p>
                             </div>
-                        )}
+                            <p className="text-[11px] text-slate-300 font-medium leading-relaxed line-clamp-3 bg-black/20 p-2 rounded-lg backdrop-blur-sm border border-white/5 shadow-inner font-bold">"{short.previewText}"</p>
+                        </div>
                     </div>
-                )}
+                ))}
             </div>
-            <style jsx>{`
-                .gallery-card {
-                    animation: galleryFloat 4.5s ease-in-out infinite;
-                    will-change: transform;
-                }
-
-                .gallery-card:nth-child(odd) {
-                    animation-duration: 5.2s;
-                }
-
-                .gallery-card:nth-child(even) {
-                    animation-duration: 4.3s;
-                }
-
-                .gallery-card:hover {
-                    animation: galleryZoom 900ms ease-in-out infinite;
-                }
-
-                @keyframes galleryFloat {
-                    0%, 100% {
-                        transform: translateY(0);
-                    }
-                    50% {
-                        transform: translateY(-8px);
-                    }
-                }
-
-                @keyframes galleryZoom {
-                    0%, 100% {
-                        transform: scale(1);
-                    }
-                    50% {
-                        transform: scale(1.05);
-                    }
-                }
-            `}</style>
         </section>
     );
 };

@@ -130,6 +130,7 @@ const Store = () => {
     // ] = useState(null);
     const [navigationStateChanged, setNavigationStateChanged] = useState(0); // Trigger navigation handler when header navigation happens
     const [pendingBatchTag, setPendingBatchTag] = useState(null); // Pending batch tag from URL query param
+    const [pendingStage, setPendingStage] = useState(null); // Pending exam stage from footer URL param
     const paperCount = selectedPapers.length;
     const productCount = selectedProductType ? 1 : 0;
     const batchCount = selectedTag ? 1 : 0;
@@ -175,10 +176,12 @@ const Store = () => {
             const isMobileParam = params.get('isMobile');
             const tokenParam = params.get('token');
             const batchTagParam = params.get('batchTag');
+            const stageParam = params.get('stage');
 
             if (isMobileParam) setRouteData(isMobileParam);
             if (tokenParam) setTokenFromUrl(tokenParam);
             if (batchTagParam) setPendingBatchTag(batchTagParam);
+            if (stageParam) setPendingStage(stageParam);
         }
     }, [router.asPath]);
 
@@ -607,6 +610,11 @@ const Store = () => {
             return;
         }
 
+        // Skip default selection if processing a stage from footer URL param
+        if (pendingStage) {
+            return;
+        }
+
         if (domains.length > 0 && !selectedDomain) {
             // Select first exam type by default
             const firstDomain = domains.find(d => d.parentId === 0);
@@ -703,6 +711,51 @@ const Store = () => {
             window.history.replaceState({}, '', url.toString());
         }
     }, [tags, pendingBatchTag, shouldHideGlobalControls]);
+
+    // Select exam stage from footer URL param (e.g. ?stage=CA-Intermediate)
+    useEffect(() => {
+        if (shouldHideGlobalControls || !pendingStage) {
+            return;
+        }
+        if (pendingStage && domains.length > 0) {
+            const normalizeName = (value) => (value || '')
+                .toLowerCase()
+                .replace(/[\s-]+/g, ' ')
+                .trim();
+
+            const targetStage = normalizeName(pendingStage);
+            let matchedStage = null;
+            let matchedDomain = null;
+
+            for (const domain of domains) {
+                if (domain.child && domain.child.length > 0) {
+                    const stage = domain.child.find(child => {
+                        const childName = normalizeName(child.name);
+                        return childName.includes(targetStage) || targetStage.includes(childName);
+                    });
+                    if (stage) {
+                        matchedStage = stage;
+                        matchedDomain = domain;
+                        break;
+                    }
+                }
+            }
+
+            if (matchedStage) {
+                if (matchedDomain && (!selectedDomain || selectedDomain.id !== matchedDomain.id)) {
+                    setSelectedDomain(matchedDomain);
+                }
+                setSelectedExamStage(matchedStage);
+            }
+
+            setPendingStage(null);
+
+            // Clean up the URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('stage');
+            window.history.replaceState({}, '', url.toString());
+        }
+    }, [domains, pendingStage, shouldHideGlobalControls]);
 
     // Select 'lecture' product type by default
     // useEffect(() => {

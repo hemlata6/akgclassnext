@@ -1,116 +1,109 @@
 import React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
+import { ShieldCheck, Layers, MapPin, Phone, Mail, Calendar, ExternalLink } from 'lucide-react';
 
 export const Footer = () => {
   const router = useRouter();
-  const { institute } = useAuth();
-  // console.log('institute', institute);
-
-  const handleCourseClick = (examStage) => {
-    const isMobile = sessionStorage.getItem('isMobile');
-    const token = sessionStorage.getItem('token');
-
-    sessionStorage.setItem('storeNavigationState', JSON.stringify({
-      source: 'footer',
-      selectedDomainName: 'CA',
-      selectedExamStageName: examStage,
-      isMobile: isMobile ? true : false,
-      token: token || null
-    }));
-    router.push('/store');
-  };
-
+  const { institute, instituteAppSettingsModals } = useAuth();
 
   return (
-    <footer className="bg-slate-950 text-slate-500 pt-10 pb-24 md:pb-10 border-t border-slate-900">
-      <div className={LAYOUT_PADDING}>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-xs">
-          <div className="col-span-2 md:col-span-1">
-            <div
-              onClick={() => window.location.href = "/"}
-              className="text-white font-bold text-lg mb-2 flex items-center gap-2 cursor-pointer">
-              {/* <div className="h-10 w-10 bg-indigo-700 rounded flex items-center justify-center text-[10px]">
-                <img src={institute?.logo !== null ? Endpoints?.mediaBaseUrl + institute?.logo : "/logo.png"} alt={institute?.institue ? institute?.institue : "logo"} className="h-full w-full object-contain" />
-              </div> */}
-              {institute?.institue ? institute?.institue : "Rishabh Jain"}
+    <footer className="bg-[#111827] text-slate-400 text-xs border-t border-slate-800 tracking-wide">
+      {/* Contact Banner */}
+      <div className="bg-[#0a459a] py-5 px-4">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-white/80 text-xs sm:text-sm font-semibold mb-3 tracking-wide">
+            Call for Lecture / Books / Test Series Enquiry:
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-0 gap-y-1.5 text-white font-bold text-sm sm:text-base md:text-lg">
+            <a href="tel:9318492718" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">9318492718</a>
+            <span className="text-white/20 hidden sm:inline">|</span>
+            <a href="tel:7703880232" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">7703880232</a>
+            <span className="text-white/20 hidden sm:inline">|</span>
+            <a href="tel:8882090148" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">8882090148</a>
+            <span className="text-white/20 hidden sm:inline">|</span>
+            <a href="tel:9220362206" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">9220362206</a>
+          </div>
+        </div>
+      </div>
+      {/* Upper Link Directories Layer Block Grid */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8">
+        {/* Column 1: Core Corporate Branding Narrative (Span 4) */}
+        <div className="lg:col-span-4 space-y-4">
+            <div onClick={() => router.push('/')} className="flex items-center gap-2.5 shrink-0 select-none cursor-pointer">
+              <div className="bg-[#0a459a] text-white font-black text-base px-2.5 py-1 rounded-lg tracking-tight">RJCE</div>
+            <div className="space-y-0.5">
+              <h3 className="font-black text-white tracking-tight text-sm leading-none font-bold">
+                {institute?.institue ? institute?.institue?.toUpperCase() : "RISHABH JAIN"}
+              </h3>
+              <span className="text-[8px] uppercase tracking-widest text-slate-400 font-extrabold block font-bold">Commerce Education</span>
             </div>
-            <p>Best Rishabh Jain for Accounts, Advanced Accounts & Financial Reporting — Decoding Accounting Concepts to Build Confident, Exam-Ready CA Professionals.</p>
           </div>
-          <div>
-            <h4 className="text-white font-bold mb-3">Courses</h4>
-            <ul className="space-y-1.5">
-              <li
-                onClick={() => handleCourseClick('CSEET')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CSEET
-              </li>
-              <li
-                onClick={() => handleCourseClick('CS Executive')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CS Executive
-              </li>
-              <li
-                onClick={() => handleCourseClick('CS Professional')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                CS Professional
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-3">Legal</h4>
-            <ul className="space-y-1.5">
-              <li
-                onClick={() => router.push('/privacy-policy')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                Privacy Policy
-              </li>
-              <li
-                onClick={() => router.push('/terms-of-use')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                Terms of Use
-              </li>
-              <li
-                onClick={() => router.push('/refund-policy')}
-                className="cursor-pointer hover:text-indigo-400 transition-colors"
-              >
-                Refund Policy
-              </li>
-              <li
-                onClick={() => router.push('/contact-us')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
-              >
-                Contact us
-              </li>
-              <li
-                onClick={() => router.push('/download-app')}
-                className="cursor-pointer hover:text-emerald-400 transition-colors"
-              >
-                Download App
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h4 className="text-white font-bold mb-3">Contact</h4>
-            <ul className="space-y-1.5">
-              <li>Call: {institute?.instituteAppSettingsModals?.contact|| "9318492718"}</li>
-              <li>{institute?.email || "info.rishabhjain@gmail.com"}</li>
-              <li>{institute?.address}</li>
-            </ul>
+          <p className="text-slate-400 leading-relaxed font-medium">
+            {instituteAppSettingsModals?.appBio || "RJCE is a premier commerce education institute dedicated to providing top-notch learning resources and guidance for aspiring professionals."}
+          </p>
+          <div className="pt-1 flex flex-wrap items-center gap-4 text-slate-500 font-bold text-[10px] uppercase">
+            <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4 text-emerald-500" /> ISO 9001 Certified</span>
+            <span className="flex items-center gap-1">🔒 Razorpay Secure Sync</span>
           </div>
         </div>
-        <div className="border-t border-slate-900 mt-8 pt-6 text-center text-[10px]">
-          © 2026 {institute?.institue ? institute?.institue : "Rishabh Jain"} Education. All rights reserved.
-          {/* <div>Tech partner <a href="https://www.classiolabs.com" target="_blank" rel="noopener noreferrer" style={{ color: '#ffc107' }} className="font-semibold hover:underline">Classio Labs</a> </div> */}
+
+        {/* Column 2: Product & Course Inventory Links (Span 3) */}
+        <div className="lg:col-span-3 space-y-3.5 lg:pl-6">
+          <h4 className="text-white font-black uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold">
+            <Layers className="w-3.5 h-3.5 text-[#0a459a]" /> Academic Products
+          </h4>
+          <ul className="space-y-2.5 font-semibold">
+            <li><span onClick={() => router.push('/store?stage=CA-Intermediate')} className="cursor-pointer hover:text-white transition-colors">CA Inter Audit Batches</span></li>
+            <li><span onClick={() => router.push('/store?stage=CA-Intermediate')} className="cursor-pointer hover:text-white transition-colors">Strategic Management Classes</span></li>
+            <li><span onClick={() => router.push('/store?stage=CA-Intermediate')} className="cursor-pointer hover:text-white transition-colors">CA Inter Combo Lecture Packs</span></li>
+            <li><span onClick={() => router.push('/store?stage=CA-Final')} className="cursor-pointer hover:text-white transition-colors">CA Final Advanced Audit Courses</span></li>
+            <li><span onClick={() => router.push('/store?stage=CA-Final')} className="cursor-pointer hover:text-white transition-colors">QA Striker & MCQ Master Books</span></li>
+            <li><span onClick={() => router.push('/free-resources')} className="cursor-pointer hover:text-white transition-colors text-emerald-400">Free Resources Vault Hub</span></li>
+          </ul>
         </div>
+
+        {/* Column 3: General & Statutory Policy Management (Span 2) */}
+        <div className="lg:col-span-2 space-y-3.5">
+          <h4 className="text-white font-black uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#0a459a]" /> Corporate Linkages
+          </h4>
+          <ul className="space-y-2.5 font-semibold">
+            {/* <li><span onClick={() => router.push('/')} className="cursor-pointer hover:text-white transition-colors">About Us Focus</span></li> */}
+            {/* <li><span onClick={() => router.push('/download-app')} className="cursor-pointer hover:text-white transition-colors">App Storefront</span></li> */}
+            <li><span onClick={() => router.push('/terms-of-use')} className="cursor-pointer hover:text-white transition-colors">Terms & Conditions</span></li>
+            <li><span onClick={() => router.push('/refund-policy')} className="cursor-pointer hover:text-white transition-colors">Refund Policy</span></li>
+            <li><span onClick={() => router.push('/privacy-policy')} className="cursor-pointer hover:text-white transition-colors">Privacy Policy</span></li>
+            <li><span onClick={() => router.push('/download-app')} className="cursor-pointer hover:text-white transition-colors">App Download</span></li>
+            <li><span onClick={() => router.push('/contact-us')} className="cursor-pointer hover:text-white transition-colors">Contact Us</span></li>
+            {/* <li><span onClick={() => router.push('/contact-us')} className="cursor-pointer hover:text-white transition-colors">Franchise Deck</span></li> */}
+          </ul>
+        </div>
+
+        {/* Column 4: Contact Directory Coordinates (Span 3) */}
+        <div className="lg:col-span-3 space-y-3.5 lg:pl-2">
+          <h4 className="text-white font-black uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold">
+            <MapPin className="w-3.5 h-3.5 text-[#0a459a]" /> Help Desk Coordinates
+          </h4>
+          <ul className="space-y-2.5 font-semibold text-slate-400">
+            <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span>{institute?.instituteAppSettingsModals?.contact || "+91 98765 43210"}</span></li>
+            <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span className="break-all">{institute?.email || "info.rishabhjain@gmail.com"}</span></li>
+            <li className="flex items-start gap-2"><MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" /> <span className="leading-normal">{institute?.address || "Main F2F Head Center, Pune, Maharashtra, India"}</span></li>
+            <li className="flex items-center gap-2 pt-0.5"><Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span>Mon-Sat (10AM - 6PM)</span></li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Lower Disclaimer Copyright Segment */}
+      <div className="border-t border-slate-800 py-6 text-center text-[11px] font-semibold text-slate-500 max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex flex-wrap justify-center sm:justify-start gap-x-4 gap-y-1">
+          <p>© {new Date().getFullYear()} {institute?.institue || "Rishabh Jain Commerce Education (RJCE)"} Pvt Ltd.</p>
+          {/* <span className="hidden sm:inline text-slate-700">|</span> */}
+          {/* <p>CIN: U80902MH2023PTC402159</p> */}
+        </div>
+        {/* <p className="flex items-center gap-1">Platform Infrastructure Architecture Mapped Perfectly <ExternalLink className="w-3 h-3" /></p> */}
       </div>
     </footer>
   );

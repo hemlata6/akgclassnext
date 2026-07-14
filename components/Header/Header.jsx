@@ -13,12 +13,20 @@ import AppDownloadModal from '../Modals/AppDownloadModal';
 import Endpoints from '@/config/endpoints';
 import { Typography } from '@mui/material';
 
+const Layers = () => <Icons.Book className="w-3.5 h-3.5 text-[#0a459a]" />;
+const ChevronDown = ({ className }) => <Icons.ChevronDown className={className} />;
+const ArrowRight = ({ className }) => <Icons.ChevronRight className={className} />;
+const Smartphone = ({ className }) => <Icons.Phone className={className} />;
+const User = ({ className }) => <Icons.User className={className} />;
+const ShoppingBag = ({ className }) => <Icons.Cart className={className} />;
+const MenuIcon = ({ className }) => <Icons.Menu className={className} />;
+const CloseIcon = ({ className }) => <Icons.X className={className} />;
+
 export const StickyMobileFooter = ({ cartCount }) => {
   const router = useRouter();
   const theme = useTheme();
   const [isMobile, setIsMobile] = useState(false);
   const { institute } = useAuth();
-
 
   useEffect(() => {
     const checkMobile = () => {
@@ -33,7 +41,7 @@ export const StickyMobileFooter = ({ cartCount }) => {
   if (!isMobile) return null;
 
   return (
-    <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
+    <div className={`fixed bottom-0 left-0 right-0 ${theme.primaryClass} bg-opacity-5 border-t z-50 !grid !grid-cols-5 font-bold shadow-[0_-4px_10px_rgba(0,0,0,0.05)]`} style={{ backgroundColor: 'rgba(255, 255, 255, 0.98)', borderColor: `var(--theme-primary, #2196F3)` }}>
       {[
         { l: "Call", i: <Icons.Phone />, a: `tel:+${institute?.instituteAppSettingsModals?.contact}` },
         { l: "Cart", i: <Icons.Cart />, action: () => router.push('/cart'), badge: cartCount },
@@ -76,244 +84,81 @@ export const StickyMobileFooter = ({ cartCount }) => {
 };
 
 export const Header = ({ cartCount }) => {
-
   const router = useRouter();
   const { theme, changeTheme } = useTheme();
-  const { user, logout, institute, instituteAppSettingsModals } = useAuth();
+  const { user, logout } = useAuth();
   const { studentData } = useStudent();
-  const [scrolled, setScrolled] = useState(false);
+  
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [hoveredMenu, setHoveredMenu] = useState(null);
-  const [courses, setCourses] = useState([]);
-  const [books, setBooks] = useState([]);
-  const [loadingCourses, setLoadingCourses] = useState(true);
-  const [announcements, setAnnouncements] = useState([]);
+  const [domains, setDomains] = useState([]);
+  const [domainLoading, setDomainLoading] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignupModal, setShowSignupModal] = useState(false);
   const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
-  const [openMobileSubmenu, setOpenMobileSubmenu] = useState(null);
-  const [showThemeMenu, setShowThemeMenu] = useState(false);
-  const [isMarqueeHovered, setIsMarqueeHovered] = useState(false);
+  const [exploreDropdownOpen, setExploreDropdownOpen] = useState(false);
 
-  // Domain states for Lectures
-  const [domains, setDomains] = useState([]);
-  const [domainLoading, setDomainLoading] = useState(false);
+  const [facultyDropdownOpen, setFacultyDropdownOpen] = useState(false);
+  const [facultyList, setFacultyList] = useState([]);
+  const [facultyLoading, setFacultyLoading] = useState(false);
+  const [mobileFacultyOpen, setMobileFacultyOpen] = useState(false);
 
-  // Domain states for Books
-  const [booksDomains, setBooksDomains] = useState([]);
-  const [booksLoading, setBooksLoading] = useState(false);
-  const [booksCurrentLevel, setBooksCurrentLevel] = useState('first');
-  const [booksSelectedParentDomain, setBooksSelectedParentDomain] = useState(null);
-  const [booksSelectedFirstLevelDomain, setBooksSelectedFirstLevelDomain] = useState(null);
-  const [booksSelectedSecondLevelDomain, setBooksSelectedSecondLevelDomain] = useState(null);
-
-  const [expandedLecture, setExpandedLecture] = useState(null);
-  const [expandedBook, setExpandedBook] = useState(null);
-
-  const [employees, setEmployees] = useState([]);
-  const [employeesLoading, setEmployeesLoading] = useState(false);
-
-  // Fetch employee list for Faculty menu
-  const fetchEmployeeList = async () => {
-    try {
-      setEmployeesLoading(true);
-      const response = await Network.fetchEmployee(instId);
-      if (response?.errorCode === 0 && response?.employees) {
-        const filteredEmployees = response.employees.filter(
-          emp => emp.showInApp === true
-        );
-        // console.log('filteredEmployees', filteredEmployees, response)
-        setEmployees(filteredEmployees);
-      } else {
-        // console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
-        setEmployees([]);
-      }
-    } catch (error) {
-      console.error('Error fetching employee list:', error);
-      setEmployees([]);
-    } finally {
-      setEmployeesLoading(false);
-    }
-  };
-
-  // Handle faculty click
-  const handleFaculty = (faculty) => {
-    const fullName = typeof faculty === 'string'
-      ? faculty
-      : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
-
-    const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
-    const facultyState = {
-      faculty: faculty,
-    };
-
-    router.push(
-      {
-        pathname: '/faculty/[facultyname]',
-        query: {
-          facultyname: facultyName,
-          state: JSON.stringify(facultyState),
-        },
-      },
-      `/faculty/${facultyName}`
-    );
-  };
-
-  // console.log('domains', domains, booksDomains);
-
-
-  useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handler);
-    return () => window.removeEventListener('scroll', handler);
-  }, []);
-
-  // Fetch courses and separate into courses and books
-  useEffect(() => {
-
-    fetchCoursesData();
-    fetchAnnouncements();
-  }, [user]);
+  // SCROLL TRIGGER DETECTOR DETACHMENT STATE
+  const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
   useEffect(() => {
     fetchDomainsForMenu();
-    fetchEmployeeList();
+    fetchFacultyForMenu();
+
+    const handleScroll = () => {
+      // 40px corresponds to the approx height of the system utility pre-header
+      if (window.scrollY > 40) {
+        setIsHeaderFixed(true);
+      } else {
+        setIsHeaderFixed(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Refresh student data when user changes (e.g., after signup/login)
-  useEffect(() => {
-    // This will trigger a re-render when studentData updates
-  }, [studentData]);
-
-  // Automatically show signup form if user is logged in but has no address
-  useEffect(() => {
-    if (user && studentData) {
-      const hasAddress = studentData?.address && studentData?.address.trim() !== '' && studentData?.address.trim().toLowerCase() !== 'india';
-      if (!hasAddress) {
-        // Check if the signup modal was already shown in this session
-        const addressPromptShown = sessionStorage.getItem('addressPromptShown');
-        if (!addressPromptShown) {
-          // Store temp signup data with existing student info
-          localStorage.setItem('tempSignup', JSON.stringify({
-            phone: studentData?.contact || '',
-            otp: '',
-            existingStudent: studentData,
-            isExistingUser: true
-          }));
-          setShowSignupModal(true);
-          sessionStorage.setItem('addressPromptShown', 'true');
-        }
-      }
-    }
-  }, [user, studentData]);
-
-  const fetchCoursesData = async () => {
-    try {
-      setLoadingCourses(true);
-      const response = await Network.getFreeCourseList(instId);
-      const allCourses = response?.courses || response || [];
-
-      // Filter active courses and separate by domain
-      const activeCourses = Array.isArray(allCourses) ? allCourses.filter(c => c.active === true) : [];
-
-      const courseList = Array.isArray(activeCourses)
-        ? activeCourses.filter(c => c.type !== "books")
-        : [];
-
-      // Filter books: only active courses that have "Books" domain
-      const bookCourses = Array.isArray(activeCourses)
-        ? activeCourses.filter(c => c.type === "books")
-        : [];
-
-      setCourses(courseList);
-      setBooks(bookCourses);
-    } catch (error) {
-      console.error('Error fetching courses:', error);
-      setCourses([]);
-      setBooks([]);
-    } finally {
-      setLoadingCourses(false);
-    }
-  };
-
-  // console.log('announcements', announcements);
-
-
-  const fetchAnnouncements = async () => {
-    try {
-      const response = await Network.getAnnouncementList(instId);
-      const announcementList = response?.announcement || response || [];
-      setAnnouncements(Array.isArray(announcementList) ? announcementList : []);
-    } catch (error) {
-      console.error('Error fetching announcements:', error);
-      setAnnouncements([]);
-    }
-  };
-
-  // Fetch domains for Lectures menu
   const fetchDomainsForMenu = async () => {
     try {
       setDomainLoading(true);
       const response = await Network.fetchDomain(instId);
       const availableDomains = response?.domains || [];
-      // console.log('availableDomains', availableDomains);
       setDomains(availableDomains);
-      setDomainLoading(false);
     } catch (error) {
       console.error('Error fetching domains:', error);
+    } finally {
       setDomainLoading(false);
     }
   };
 
-  // Fetch domains for Books menu
-  const fetchBooksDomainsForMenu = async () => {
+  const fetchFacultyForMenu = async () => {
     try {
-      setBooksLoading(true);
-      const response = await Network.fetchDomain(instId);
-      const availableDomains = response?.domains || [];
-      setBooksDomains(availableDomains);
-      setBooksCurrentLevel('first');
-      setBooksSelectedParentDomain(null);
-      setBooksLoading(false);
+      setFacultyLoading(true);
+      const response = await fetch(`${Endpoints.baseURL}admin/employee/fetch-public-employee/${instId}`);
+      const data = await response.json();
+      if (data.status && data.employees?.length > 0) {
+        setFacultyList(data.employees.filter(fac => fac.showInApp === true));
+      } else {
+        setFacultyList([
+          { id: 1, firstName: 'CA Rishabh', lastName: 'Jain', designation: 'Director & Lead Faculty' },
+          { id: 2, firstName: 'Prof. Commerce', lastName: 'Team', designation: 'Faculty Team' }
+        ]);
+      }
     } catch (error) {
-      console.error('Error fetching book domains:', error);
-      setBooksLoading(false);
+      console.error('Error fetching faculty:', error);
+      setFacultyList([
+        { id: 1, firstName: 'CA Rishabh', lastName: 'Jain', designation: 'Director & Lead Faculty' },
+        { id: 2, firstName: 'Prof. Commerce', lastName: 'Team', designation: 'Faculty Team' }
+      ]);
+    } finally {
+      setFacultyLoading(false);
     }
   };
 
-  // Handle first level domain click for Books
-  const handleBooksFirstLevelDomainClick = (domain) => {
-    if (domain.child && domain.child?.length > 0 && !booksShowSecondLevel) {
-      setBooksSelectedParentDomain(domain);
-      setBooksSelectedFirstLevelDomain(domain);
-      setBooksCurrentLevel('second');
-    } else if (domain.child && domain.child.length > 0) {
-      sessionStorage.setItem('storeNavigationState', JSON.stringify({
-        source: 'header',
-        selectedDomainId: domain.id,
-        selectedDomainName: domain.name,
-        isMobile: false,
-        productType: 'books'
-      }));
-      router.push('/store');
-    }
-  };
-
-  // Handle second level domain click for Books
-  const handleBooksSecondLevelDomainClick = (domain) => {
-    sessionStorage.setItem('storeNavigationState', JSON.stringify({
-      source: 'header',
-      selectedDomainId: booksSelectedParentDomain?.id,
-      selectedDomainName: booksSelectedParentDomain?.name,
-      selectedExamStageId: domain.id,
-      selectedExamStageName: domain.name,
-      isMobile: false,
-      productType: 'books'
-    }));
-    router.push('/store');
-  };
-
-  // Handle child domain click for CA/CMA menus
   const handleDomainChildClick = (childDomain, parentDomain) => {
     sessionStorage.setItem('storeNavigationState', JSON.stringify({
       source: 'header',
@@ -324,754 +169,269 @@ export const Header = ({ cartCount }) => {
       isMobile: false,
       productType: 'lecture'
     }));
+    setExploreDropdownOpen(false);
+    setMobileMenuOpen(false);
     router.push('/store');
   };
 
-  // Handle back button for Books
-  const handleBooksBackToFirstLevel = () => {
-    setBooksCurrentLevel('first');
-    setBooksSelectedParentDomain(null);
-    setBooksSelectedFirstLevelDomain(null);
-  };
+    // Handle faculty click
+    const handleFacultyRedirect = (faculty) => {
+        const fullName = typeof faculty === 'string'
+            ? faculty
+            : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
 
-  // Books domain hierarchy logic
-  const booksShowSecondLevel = booksDomains?.length === 1;
-  const booksFirstLevelDomains = booksShowSecondLevel ? booksDomains[0].child || [] : booksDomains;
-  const booksSecondLevelDomains = booksSelectedParentDomain?.child || [];
+        if (!fullName) return;
+        const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+        const facultyState = {
+            faculty: faculty,
+        };
 
-  const NavItem = ({ label, hasSub, subItems, onClick, onSubItemClick, onMouseEnter }) => (
-    <div
-      className="relative group h-full flex items-center"
-      onMouseEnter={() => {
-        hasSub && setHoveredMenu(label);
-        onMouseEnter && onMouseEnter();
-      }}
-      onMouseLeave={() => hasSub && setHoveredMenu(null)}
-    >
-      <button
-        onClick={onClick}
-        className={`hover:${theme.textClass} transition-colors whitespace-nowrap uppercase text-[11px] tracking-wide font-bold text-slate-600 flex items-center gap-1 py-4`}
-      >
-        {label} {hasSub && <Icons.ChevronDown />}
-      </button>
-      {hasSub && (
-        <div className={`absolute top-full left-0 w-64 bg-white border-t-2 ${theme.borderClass} shadow-xl rounded-b-lg overflow-y-auto max-h-[400px] transition-all duration-300 ${hoveredMenu === label ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-          {subItems && subItems?.length > 0 ? (
-            subItems.map((sub, i) => (
-              <div
-                key={i}
-                onClick={() => {
-                  if (onSubItemClick && sub.id) {
-                    onSubItemClick(sub.id);
-                  }
-                }}
-                className="px-4 py-3 hover:bg-slate-50 cursor-pointer border-b border-slate-50 last:border-0 flex justify-between items-center group/item"
-              >
-                <span className={`text-xs font-semibold text-slate-600 group-hover/item:${theme.textClass}`}>{sub.label}</span>
-                {sub.tag && <span className="text-[9px] bg-red-50 text-red-600 px-1.5 py-0.5 rounded font-bold">{sub.tag}</span>}
-              </div>
-            ))
-          ) : (
-            <div className="px-4 py-3 text-xs text-slate-400 text-center">Loading...</div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-
-  const MENU_DATA = {
-    lectures: ["CA Foundation", "CA Inter", "CA Final", "CS Executive", "CMA Inter"],
-    books: ["Textbooks", "Scanner", "Chart Book", "Combos"]
-  };
-
-  const navigateTo = (view, data = null) => {
-    window.scrollTo(0, 0);
-    if (view === 'home' && data) {
-      setActiveCategory(data);
-      setCurrentView('home');
-      setTimeout(() => { const el = document.getElementById('courses'); if (el) el.scrollIntoView({ behavior: 'smooth' }); }, 100);
-    } else {
-      setCurrentView(view);
-      if (data) setSelectedItem(data);
-    }
-  };
+        router.push(
+            {
+                pathname: '/faculty/[facultyname]',
+                query: {
+                    facultyname: facultyName,
+                    state: JSON.stringify(facultyState),
+                },
+            },
+            `/faculty/${facultyName}`
+        );
+    };
 
   return (
     <>
-      <header className="sticky top-0 z-50 font-sans shadow-lg shadow-slate-200/50">
-        <div className="relative bg-white">
-
-          {/* --- A. TOP ANNOUNCEMENT STRIP --- */}
-          {/* <div className="bg-[#0749A2] text-slate-300 h-11 flex items-center justify-between pl-24 md:pl-44 lg:pl-56 pr-4 text-[11px] md:text-xs tracking-wide border-b border-[#0B3276]"> */}
-          <div className="bg-[#0749A2] text-white min-h-[44px] md:h-[52px] flex items-center justify-between px-3 md:px-6 lg:px-12 gap-2">
-
-            {/* Left Side */}
-            <div className="hidden md:flex items-center gap-2 md:gap-8 flex-shrink-0">
-
-              <a
-                href={`mailto:${institute?.email}`}
-                className="flex items-center gap-1 md:gap-2 text-sm font-medium hover:text-green-400 transition"
-              >
-                <span className="text-xs md:text-base">✉️</span>
-                <span className="hidden md:inline">{institute?.email || "info.rishabhjain@gmail.com"}</span>
-              </a>
-
-              <a
-                href={`tel:${institute?.instituteAppSettingsModals?.contact}`}
-                className="flex items-center gap-1 md:gap-2 text-sm font-medium hover:text-green-400 transition"
-              >
-                <span className="text-xs md:text-base">📞</span>
-                <span className="hidden sm:inline">{institute?.instituteAppSettingsModals?.contact}</span>
-              </a>
-
-            </div>
-
-            {/* Center Menu */}
-            <div className="flex items-center gap-3 md:gap-6 lg:gap-10 uppercase font-semibold text-xs md:text-sm overflow-x-auto no-scrollbar flex-1 justify-center">
-
-              <Link href="/blog" className="hover:text-green-400 transition whitespace-nowrap">
-                Blog
-              </Link>
-
-              <Link href="/free-resources" className="hover:text-green-400 transition whitespace-nowrap">
-                Free Resources
-              </Link>
-
-              {/* <a href="#" className="hover:text-green-400 transition whitespace-nowrap">
-                Gallery
-              </a> */}
-
-              <a
-                href="#"
-                className="text-yellow-300 transition whitespace-nowrap"
-              >
-                Become Franchise Partner
-              </a>
-
-              <Link href="/store" className="hover:text-green-400 transition whitespace-nowrap">
-                Books
-              </Link>
-
-            </div>
-
-            {/* Right Buttons */}
-            <div className="flex items-center gap-1.5 md:gap-3 flex-shrink-0">
-
-              <button className="hidden md:flex items-center justify-center h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#0B3276] border border-[#0749A2] text-white font-semibold text-sm hover:bg-[#0749A2] transition">
-                TRACK ORDER
-              </button>
-
-              <button onClick={() => setShowAppDownloadModal(true)} className="hidden md:flex items-center gap-1 md:gap-2 h-7 md:h-8 px-2 md:px-4 rounded-xl bg-[#0B3276] text-white font-semibold text-sm hover:bg-[#0749A2] transition whitespace-nowrap">
-                <span className="text-xs md:text-base">📱</span>
-                <span className="hidden xs:inline">DOWNLOAD APP</span>
-              </button>
-
-            </div>
-
-          </div>
-          {/* </div> */}
-
-          {/* --- B. MAIN MENU BAR --- */}
-          <div className={`h-18 bg-white flex items-center px-2 md:px-12 justify-between transition-all duration-300 ${scrolled ? 'py-0' : 'py-1'}`}>
-
-            <nav className="hidden xl:flex items-center gap-8 h-full">
-
-              <div className="flex flex-col items-center justify-center">
-                <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  {/* <img src="/logo.png" alt="Next Gen CA" className="h-16 md:h-16 object-contain" /> */}
-                  <button className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-lg font-bold transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
-                    {/* <Icons.User /> */}
-                    RJCE
-                  </button>
-                  <div className="grid text-[12px] whitespace-nowrap font-bold text-slate-900">
-                    RISHABH JAIN
-                    <span className='text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
-                  </div>
-                </Link>
-              </div>
-
-            </nav>
-            
-
-            {/* Mobile Logo - Left side */}
-            <Link href="/" className="flex items-center gap-2 cursor-pointer xl:hidden">
-              <button className="bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-3 rounded-lg text-xs font-bold transition-all shadow-lg flex-shrink-0">
-                RJCE
-              </button>
-              <div className="text-[12px] font-bold text-slate-900 leading-tight">
-                <span className="block">RISHABH JAIN</span>
-                <span className='block text-[8px] font-medium text-[#B8BED3]'>COMMERCE EDUCATION</span>
-              </div>
-            </Link>
-
-            <div className="relative hidden">
-              <button
-                onClick={() => setShowThemeMenu(!showThemeMenu)}
-                className="p-2 rounded-full relative text-slate-700 hover:bg-slate-100 transition-colors"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.098 19.902a3.75 3.75 0 005.304 0l6.401-6.402M6.75 21A3.75 3.75 0 013 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 003.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008z" />
-                </svg>
-              </button>
-
-              {showThemeMenu && (
-                <div className="absolute right-0 top-full mt-2 w-40 bg-white border border-gray-200 rounded-lg shadow-xl z-50">
-                  <div className="py-1">
-                    <button
-                      onClick={() => {
-                        changeTheme('purple');
-                        setShowThemeMenu(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
-                    >
-                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: 'rgb(55, 48, 163)' }}></div>
-                      <span>Purple</span>
-                    </button>
-                    <button
-                      onClick={() => {
-                        changeTheme('blue');
-                        setShowThemeMenu(false);
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-slate-700 hover:bg-slate-50 transition flex items-center gap-2"
-                    >
-                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: '#2196F3' }}></div>
-                      <span>Blue</span>
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            <div className="flex items-center gap-10 h-full hidden xl:flex">
-              {/* <button onClick={() => router.push('/')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors relative group">Home</button> */}
-
-              {/* Dynamic Domain Menus */}
-              {domains.map(domain => (
-                <div
-                  key={domain.id}
-                  className="relative group h-full flex items-center"
-                  onMouseEnter={() => setHoveredMenu(domain.name)}
-                  onMouseLeave={() => setHoveredMenu(null)}
-                >
-                  <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
-                    {domain.name} <Icons.ChevronDown />
-                  </button>
-                  <div
-                    className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg 
-    transition-all duration-200 transform origin-top
-    ${hoveredMenu === domain.name
-                        ? 'opacity-100 visible translate-y-0'
-                        : 'opacity-0 invisible translate-y-2'
-                      } p-2`}
-                  >
-                    {domainLoading ? (
-                      <div className="px-4 py-3 text-sm text-slate-400">Loading...</div>
-                    ) : (
-                      <>
-                        {(domain.child || []).length > 0 ? (
-                          domain.child.map(child => (
-                            <button
-                              key={child.id}
-                              onClick={() => handleDomainChildClick(child, domain)}
-                              className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                            >
-                              {child.name}
-                            </button>
-                          ))
-                        ) : (
-                          <div className="px-4 py-3 text-sm text-slate-400 text-center">No items</div>
-                        )}
-                      </>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {/* <div
-                className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('Books');
-                  fetchBooksDomainsForMenu();
-                }}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
-                  Books <Icons.ChevronDown />
-                </button>
-
-                <div
-                  className={`absolute top-full left-0 w-60 bg-white border border-slate-100 shadow-xl rounded-lg
-    transition-all duration-200 transform origin-top
-    ${hoveredMenu === 'Books'
-                      ? 'opacity-100 visible translate-y-0'
-                      : 'opacity-0 invisible translate-y-2'
-                    } p-2`}
-                >
-                  {booksLoading ? (
-                    <div className="px-4 py-3 text-sm text-slate-400">
-                      Loading...
-                    </div>
-                  ) : (
-                    <>
-                      BACK
-                      {booksCurrentLevel === 'second' && (
-                        <button
-                          onClick={handleBooksBackToFirstLevel}
-                          className="w-full text-left px-4 py-2 text-sm font-semibold text-indigo-600 hover:bg-slate-50 rounded-md"
-                        >
-                          ← Back
-                        </button>
-                      )}
-
-                      FIRST LEVEL
-                      {booksCurrentLevel === 'first' &&
-                        booksFirstLevelDomains.map((domain) => (
-                          <button
-                            key={domain.id}
-                            onClick={() => handleBooksFirstLevelDomainClick(domain)}
-                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                          >
-                            {domain.name}
-                          </button>
-                        ))}
-
-                      SECOND LEVEL
-                      {booksCurrentLevel === 'second' &&
-                        booksSecondLevelDomains.map((domain) => (
-                          <button
-                            key={domain.id}
-                            onClick={() => handleBooksSecondLevelDomainClick(domain)}
-                            className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                          >
-                            {domain.name}
-                          </button>
-                        ))}
-                    </>
-                  )}
-                  <a href="https://ultimateca.com/ca-inter.php?sub_auth=Taxation#ca-foundation-new-syllabus" target="_blank" rel="noopener noreferrer">
-                    <button
-                      // key={domain.id}
-                      // onClick={() => handleFirstLevelDomainClick(domain)}
-                      className="block w-full text-left px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
-                    >
-                      CA Inter
-                    </button>
-                  </a>
-                </div>
-              </div> */}
-
-              <button className="font-semibold text-slate-600 text-sm transition-colors relative group/test">
-                Test-Series
-                <span className="ml-1.5 text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold align-middle">Coming Soon</span>
-              </button>
-
-              {/* Faculty Menu */}
-              <div
-                className="relative group h-full flex items-center"
-                onMouseEnter={() => {
-                  setHoveredMenu('Faculty');
-                }}
-                onMouseLeave={() => setHoveredMenu(null)}
-              >
-                <button
-                  className={`hover:text-slate-900 transition-colors whitespace-nowrap font-semibold text-slate-600 flex items-center gap-1 text-sm py-4`}
-                >
-                  Faculty <Icons.ChevronDown className="w-3 h-3" />
-                </button>
-                <div className={`absolute top-full left-0 w-64 bg-white border border-slate-200 shadow-xl rounded-lg overflow-y-auto max-h-[400px] transition-all duration-200 ${hoveredMenu === 'Faculty' ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'}`}>
-
-                  {employeesLoading ? (
-                    <div className="px-4 py-3 text-xs text-slate-400 text-center">Loading faculty...</div>
-                  ) : employees.length > 0 ? (
-                    employees.map((e) => {
-                      const fullName = [e?.firstName, e?.lastName].filter(Boolean).join(' ');
-                      return (
-                        <button
-                          key={e?.id || fullName}
-                          onClick={() => {
-                            handleFaculty(e);
-                            setHoveredMenu(null);
-                          }}
-                          className={`w-full text-left px-4 py-3 text-sm transition-all flex items-center justify-between group hover:bg-slate-50 hover:text-indigo-700 border-b border-slate-100 last:border-0 text-slate-700`}
-                        >
-                          <span className="truncate font-semibold">{fullName}</span>
-                          <Icons.ChevronRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </button>
-                      );
-                    })
-                  ) : (
-                    <div className="px-4 py-3 text-xs text-slate-500 text-center">No faculty available</div>
-                  )}
-                </div>
-              </div>
-
-
-              <button onClick={() => router.push('/store?batchTag=F2F+Pune')} className="font-semibold text-[#0B3276] hover:text-[#0749A2] text-sm transition-colors">F2F Pune</button>
-
-              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#0749A2] hover:text-[#0B3276] text-sm transition-colors">Student Feedback</button>
-
-
-              {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
-            </div>
-
-            <div className="flex items-center gap-5">
-              {/* {user ? (
-                <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
-                    <Icons.User size={16} />
-                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
-                  </button>
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-sm font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                      {studentData?.email && <p className="text-xs text-slate-500">{studentData.email}</p>}
-                    </div>
-                    <button
-                      onClick={async () => {
-                        await logout();
-                        router.push('/');
-                      }}
-                      className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition font-semibold"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
-                  <Icons.User />
-                  Account
-                </button>
-              )} */}
-              {user ? (
-                <div className="relative group hidden md:block">
-                  <button className={`${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-2 rounded-lg text-xs font-bold shadow-md transition-all flex items-center gap-2 whitespace-nowrap`}>
-                    <Icons.User size={16} />
-                    {(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}
-                  </button>
-                  <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-                    <div className="px-4 py-3 border-b border-gray-100">
-                      <p className="text-[11px] font-semibold text-slate-900">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                      {studentData?.email && <p className="text-[11px] text-slate-500">{studentData.email}</p>}
-                    </div>
-                    <button
-                      onClick={async () => {
-                        await logout();
-                        router.push('/');
-                      }}
-                      className="w-full text-left px-4 py-2 text-[11px] text-red-600 hover:bg-red-50 transition font-semibold"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button onClick={() => setShowLoginModal(true)} className="hidden md:flex ${theme.primaryClass} ${theme.primaryHoverClass} bg-[#0749A2] hover:bg-[#0B3276] text-white px-3 py-2 rounded-lg text-[11px] font-medium transition-all items-center gap-2 shadow-lg hover:shadow-slate-300 hover:-translate-y-0.5`">
-                  <Icons.User />
-                  Account
-                </button>
-              )}
-
-              <button
-                onClick={() => router.push('/cart')}
-                className="relative text-slate-600 hover:text-indigo-700 transition-colors">
-                <Icons.Cart />
-                {cartCount > 0 && <span className="absolute -top-1.5 -right-1.5 h-4 w-4 bg-indigo-600 text-white text-[11px] font-bold rounded-full flex items-center justify-center border-2 border-white">{cartCount}</span>}
-              </button>
-
-              <button className="xl:hidden text-slate-700 p-1" onClick={() => setMobileMenuOpen(true)}>
-                <Icons.Menu />
-              </button>
-            </div>
-          </div>
-
-          {/* --- C. FLOATING LOGO --- */}
-          {/* <div className="absolute top-0 left-0 h-full z-50 flex flex-col justify-center pl-4 md:pl-12 cursor-pointer" onClick={() => router.push('/')}>
-            <div className="bg-white shadow-xl h-[calc(100%+16px)] flex items-center px-6 rounded-b-lg border-b-[3px] border-indigo-600 transform transition-transform hover:translate-y-1 duration-300 origin-top">
-              <div className="flex flex-col items-center">
-                <Link href="/" className="flex items-center gap-2 cursor-pointer">
-                  <img src="/vghub/bghublogo.jpeg" alt="Next Gen CA" className="h-16 md:h-16 object-contain" />
-
-                </Link>
-              </div>
-            </div>
-          </div> */}
+      {/* 1. SYSTEM UTILITY PRE-HEADER (Stays relative, scrolls up away naturally) */}
+      <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-3 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
+        <div className="flex items-center gap-2">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <a href="mailto:info.rishabhjain@gmail.com" className="hover:text-white transition-colors duration-200 font-bold">info.rishabhjain@gmail.com</a>
         </div>
+        <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
+          <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</a>
+          <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</a>
+          <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
+          <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
+        </div>
+      </div>
 
-        {/* Mobile Menu Drawer */}
-        {mobileMenuOpen && (
-          <div className="fixed inset-0 z-[100] xl:hidden">
-            <div className="absolute inset-0 bg-[#0B3276]/20 backdrop-blur-sm" onClick={() => setMobileMenuOpen(false)}></div>
-            <div className="absolute top-0 right-0 bottom-0 w-[280px] bg-white shadow-2xl p-6 overflow-y-auto animate-in slide-in-from-right duration-300">
-              <div className="flex justify-between items-center mb-8 border-b border-slate-100 pb-4">
-                <h3 className="font-bold text-lg text-slate-900">Menu</h3>
-                <button onClick={() => setMobileMenuOpen(false)} className="text-slate-400 hover:text-slate-900"><Icons.X /></button>
-              </div>
-              <div className="flex flex-col gap-1">
-                <button onClick={() => router.push('/')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Home</button>
-                {/* <button className="text-left font-bold text-rose-600 py-3 bg-rose-50 px-2 rounded-md flex items-center gap-2"><Icons.Gift /> Birthday Offer</button> */}
-                {/* Dynamic Domain Mobile Submenus */}
-                {domains.map(domain => (
-                  <div key={domain.id} className="">
-                    <button
-                      onClick={() => {
-                        const key = `domain-${domain.id}`;
-                        if (openMobileSubmenu === key) {
-                          setOpenMobileSubmenu(null);
-                        } else {
-                          setOpenMobileSubmenu(key);
-                        }
-                      }}
-                      className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
-                    >
-                      <span>{domain.name}</span>
-                      <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === `domain-${domain.id}` ? 'rotate-180' : ''}`} />
-                    </button>
-                    {openMobileSubmenu === `domain-${domain.id}` && (
-                      <div className="space-y-1 mt-1 pl-2">
-                        {domainLoading ? (
-                          <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                            <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
-                            <span>Loading...</span>
-                          </div>
-                        ) : (
-                          <>
-                            {(domain.child || []).map(child => (
-                              <button
-                                key={child.id}
-                                onClick={() => {
-                                  handleDomainChildClick(child, domain);
-                                  setMobileMenuOpen(false);
-                                  setOpenMobileSubmenu(null);
-                                }}
-                                className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
-                              >
-                                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 flex-shrink-0"></span>
-                                <span className="truncate">{child.name}</span>
-                              </button>
-                            ))}
-                          </>
-                        )}
-                      </div>
+      {/* 2. DUMMY BUFFER - Replaces layout void spacing ONLY when header snaps to absolute fixed */}
+      {isHeaderFixed && <div className="h-[73px] w-full invisible pointer-events-none"></div>}
+
+      {/* 3. MAIN HEADER (Toggles seamlessly between normal path and fixed-top upon scroll breakpoint) */}
+      <header className={`${isHeaderFixed ? 'fixed top-0 left-0 w-full z-50 shadow-md' : 'relative z-40'} bg-white/70 border-b border-slate-200/60 px-4 sm:px-8 py-4 flex justify-between items-center backdrop-blur-xl transition-all duration-300 font-bold`}>
+        <div className="flex items-center gap-10">
+          {/* LOGO */}
+          <div onClick={() => router.push('/')} className="flex items-center gap-3 shrink-0 select-none group cursor-pointer">
+            <div className="bg-gradient-to-br from-[#0a459a] to-[#05214c] text-white font-bold text-xl px-3 py-2 rounded-xl tracking-tight shadow-[0_4px_12px_rgba(10,69,154,0.3)] transition-transform duration-300 group-hover:scale-105">
+              RJCE
+            </div>
+            <div className="space-y-0.5">
+              <h1 className="font-bold text-slate-900 tracking-tight text-xs sm:text-base leading-none group-hover:text-[#0a459a] transition-colors duration-200">RISHABH JAIN</h1>
+              <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-slate-400 font-bold block">Commerce Education</span>
+            </div>
+          </div>
+
+          {/* DESKTOP NAVIGATION CONTENT */}
+          <div className="hidden lg:flex items-center gap-6 border-l border-slate-200/80 pl-6 relative">
+
+            {/* EXPLORE DROPDOWN BUTTON */}
+            <div className="relative">
+              <button
+                onClick={() => {
+                  setExploreDropdownOpen(!exploreDropdownOpen);
+                  setFacultyDropdownOpen(false);
+                }}
+                className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200/70 border border-slate-200 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm active:scale-95"
+              >
+                <Layers /> Explore Lectures
+                <ChevronDown className={`w-4 h-4 text-[#0a459a] transition-transform duration-300 ${exploreDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {exploreDropdownOpen && (
+                <div className="absolute left-0 top-[calc(100%+12px)] w-56 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50 max-h-[380px] overflow-y-auto">
+                  {domainLoading ? (
+                    <div className="px-4 py-3 text-xs text-slate-400 font-bold">Loading categories...</div>
+                  ) : domains.length > 0 ? (
+                    domains.map((parentDomain) => (
+                      (parentDomain.child || []).map((child) => (
+                        <button
+                          key={child.id}
+                          onClick={() => handleDomainChildClick(child, parentDomain)}
+                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
+                        >
+                          {child.name}
+                          <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />
+                        </button>
+                      ))
+                    ))
+                  ) : (
+                    <div className="px-4 py-3 text-xs text-slate-400">No categories active</div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* NAV LINKS WITH DYNAMIC FACULTY DROPDOWN */}
+            <nav className="flex items-center gap-6 text-xs font-bold text-slate-500 tracking-wider uppercase relative">
+              <a href="#" className="hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1">
+                Test-Series <span className="bg-rose-50 text-rose-600 border border-rose-100 text-[9px] px-1.5 py-0.5 rounded font-bold tracking-tighter">Soon</span>
+              </a>
+
+              {/* FACULTY DROPDOWN NAV ANCHOR */}
+              <div className="relative">
+                <button
+                  onClick={() => {
+                    setFacultyDropdownOpen(!facultyDropdownOpen);
+                    setExploreDropdownOpen(false);
+                  }}
+                  className="hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1 uppercase tracking-wider font-bold"
+                >
+                  Faculty
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${facultyDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {facultyDropdownOpen && (
+                  <div className="absolute left-0 top-[calc(100%+16px)] w-48 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50 max-h-[300px] overflow-y-auto normal-case">
+                    {facultyLoading ? (
+                      <div className="px-4 py-3 text-xs text-slate-400 font-bold">Loading...</div>
+                    ) : facultyList.length > 0 ? (
+                      facultyList.map((fac) => (
+                        <button
+                          key={fac.id}
+                          onClick={() => handleFacultyRedirect(fac)}
+                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-2.5 rounded-xl transition-all flex items-center justify-between group"
+                        >
+                          {[fac.firstName, fac.lastName].filter(Boolean).join(' ')}
+                          <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />
+                        </button>
+                      ))
+                    ) : (
+                      <div className="px-4 py-3 text-xs text-slate-400">No active faculty found</div>
                     )}
                   </div>
-                ))}
-
-                <div className="">
-                  <button
-                    onClick={() => {
-                      if (openMobileSubmenu === 'books') {
-                        setOpenMobileSubmenu(null);
-                        setBooksCurrentLevel('first');
-                        setBooksSelectedParentDomain(null);
-                      } else {
-                        setOpenMobileSubmenu('books');
-                        fetchBooksDomainsForMenu();
-                      }
-                    }}
-                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
-                  >
-                    <span>Books</span>
-                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'books' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {openMobileSubmenu === 'books' && (
-                    <div className="space-y-1 mt-1 pl-2">
-                      {booksLoading ? (
-                        <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce"></div>
-                          <span>Loading...</span>
-                        </div>
-                      ) : booksCurrentLevel === 'first' && booksFirstLevelDomains.length === 0 ? (
-                        <p className="px-4 py-2 text-xs text-slate-400">No categories available</p>
-                      ) : (
-                        <>
-                          {booksCurrentLevel === 'second' && (
-                            <button
-                              onClick={handleBooksBackToFirstLevel}
-                              className="w-full text-left px-4 py-2 text-xs font-semibold text-white bg-amber-600 hover:bg-amber-700 rounded-lg flex items-center gap-2 transition-all"
-                            >
-                              <Icons.ChevronLeft size={14} />
-                              Back to Categories
-                            </button>
-                          )}
-                          {booksCurrentLevel === 'first' && booksFirstLevelDomains.map((domain) => (
-                            <button
-                              key={domain.id}
-                              onClick={() => {
-                                handleBooksFirstLevelDomainClick(domain);
-                                if (domain.child && domain.child.length > 0 && booksShowSecondLevel) {
-                                  setMobileMenuOpen(false);
-                                  setOpenMobileSubmenu(null);
-                                  setBooksCurrentLevel('first');
-                                  setBooksSelectedParentDomain(null);
-                                }
-                              }}
-                              className={`w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg ${booksSelectedFirstLevelDomain?.id === domain.id
-                                ? 'bg-amber-100 text-amber-700 font-semibold'
-                                : 'text-slate-600 hover:bg-amber-50 hover:text-amber-700'
-                                }`}
-                            >
-                              <span className="truncate">{domain.name}</span>
-                              {!booksShowSecondLevel && domain.child && domain.child.length > 0 && (
-                                <Icons.ChevronRight size={16} />
-                              )}
-                            </button>
-                          ))}
-                          {booksCurrentLevel === 'second' && booksSelectedParentDomain && (
-                            <>
-                              <div className="px-4 py-2 text-xs font-bold text-amber-700 bg-amber-50 rounded-lg mb-1">
-                                {booksSelectedParentDomain.name}
-                              </div>
-                              {booksSecondLevelDomains.map((domain) => (
-                                <button
-                                  key={domain.id}
-                                  onClick={() => {
-                                    handleBooksSecondLevelDomainClick(domain);
-                                    setMobileMenuOpen(false);
-                                    setOpenMobileSubmenu(null);
-                                    setBooksCurrentLevel('first');
-                                    setBooksSelectedParentDomain(null);
-                                  }}
-                                  className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center gap-2 rounded-lg text-slate-600 hover:bg-amber-50 hover:text-amber-700"
-                                >
-                                  <span className="w-1.5 h-1.5 rounded-full bg-amber-400 flex-shrink-0"></span>
-                                  <span className="truncate">{domain.name}</span>
-                                </button>
-                              ))}
-                            </>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  )}
-                </div>
-                {/* Faculty Menu */}
-                <div className="">
-                  <button
-                    onClick={() => {
-                      if (openMobileSubmenu === 'faculty') {
-                        setOpenMobileSubmenu(null);
-                      } else {
-                        setOpenMobileSubmenu('faculty');
-                        if (employees.length === 0) {
-                          fetchEmployeeList();
-                        }
-                      }
-                    }}
-                    className="w-full flex items-center justify-between text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md"
-                  >
-                    <span>Faculty</span>
-                    <Icons.ChevronDown className={`w-4 h-4 transition-transform ${openMobileSubmenu === 'faculty' ? 'rotate-180' : ''}`} />
-                  </button>
-                  {openMobileSubmenu === 'faculty' && (
-                    <div className="space-y-1 mt-1 pl-2">
-                      {employeesLoading ? (
-                        <div className="px-4 py-2 text-xs text-slate-500 flex items-center gap-2">
-                          <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-bounce"></div>
-                          <span>Loading faculty...</span>
-                        </div>
-                      ) : employees.length > 0 ? (
-                        employees.map((e) => {
-                          const fullName = [e?.firstName, e?.lastName].filter(Boolean).join(' ');
-                          return (
-                            <button
-                              key={e?.id || fullName}
-                              onClick={() => {
-                                handleFaculty(e);
-                                setMobileMenuOpen(false);
-                                setOpenMobileSubmenu(null);
-                              }}
-                              className="w-full text-left px-4 py-2.5 text-sm transition-all flex items-center justify-between rounded-lg text-slate-600 hover:bg-indigo-50 hover:text-indigo-700"
-                            >
-                              <span className="truncate">{fullName}</span>
-                              <Icons.ChevronRight size={16} />
-                            </button>
-                          );
-                        })
-                      ) : (
-                        <p className="px-4 py-2 text-xs text-slate-400">No faculty available</p>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                <button onClick={() => router.push('/free-resources')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Free Resources</button>
-
-                <button onClick={() => router.push('/blog')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">Blog</button>
-
-                <button className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md relative group/test">
-                  Test-Series
-                  <span className="ml-1.5 text-[9px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold">Coming Soon</span>
-                </button>
-
-                {user && <button onClick={() => router.push('/my-purchases')} className="text-left font-medium text-slate-600 py-3 hover:bg-slate-50 px-2 rounded-md">My Purchases</button>}
-
-                {/* Mobile Socials */}
-                <div className="flex gap-4 mt-4 px-2">
-                  <a href="#" className="text-slate-400 hover:text-red-500"><Icons.Youtube /></a>
-                  <a href="#" className="text-slate-400 hover:text-pink-500"><Icons.Instagram /></a>
-                  <a href="#" className="text-slate-400 hover:text-sky-400"><Icons.Telegram /></a>
-                  <a href="#" className="text-slate-400 hover:text-green-500"><Icons.Whatsapp /></a>
-                </div>
-
-                <button onClick={() => setShowAppDownloadModal(true)} className={`bg-[#0749A2] ${theme.primaryClass} ${theme.primaryHoverClass} text-white px-4 py-3.5 rounded-lg font-bold text-sm mt-6 w-full flex items-center justify-center gap-2`}>
-                  <Icons.Download /> Download App
-                </button>
-              </div>
-              <div className="border-t border-slate-100 bg-slate-50 py-4 space-y-2">
-                {user ? (
-                  <>
-                    <div className="bg-white p-3 rounded-lg border border-slate-100 mb-3">
-                      <p className="font-semibold text-slate-900 text-sm">{(studentData?.firstName && studentData?.lastName) ? `${studentData.firstName} ${studentData.lastName}` : (user?.firstName && user?.lastName) ? `${user.firstName} ${user.lastName}` : user?.name}</p>
-                      {studentData?.email && <p className="text-xs text-slate-500 mt-0.5">{studentData.email}</p>}
-                    </div>
-                    <button
-                      onClick={async () => {
-                        await logout();
-                        setMobileMenuOpen(false);
-                        router.push('/');
-                      }}
-                      className="w-full text-left px-4 py-2.5 font-bold text-white text-sm bg-red-600 hover:bg-red-700 rounded-lg transition flex items-center justify-center gap-2"
-                    >
-                      <Icons.X size={16} />
-                      Logout
-                    </button>
-                  </>
-                ) : (
-                  <button
-                    onClick={() => { setShowLoginModal(true); setMobileMenuOpen(false); }}
-                    className={`w-full px-4 py-3 font-bold text-white text-sm ${theme.primaryClass} ${theme.primaryHoverClass} rounded-lg transition flex items-center justify-center gap-2`}
-                  >
-                    <Icons.User size={16} />
-                    Login / Signup
-                  </button>
                 )}
               </div>
-            </div>
 
+              <Link
+                href="/store?batchTag=F2F%20Pune"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-[#0a459a] transition-colors duration-200"
+              >
+                F2F Pune
+              </Link>
+              <Link href="/store?productType=books" className="hover:text-[#0a459a] transition-colors duration-200">Books Hub</Link>
+            </nav>
+          </div>
+        </div>
+
+        {/* RIGHT ACTION ITEMS */}
+        <div className="flex items-center gap-2 sm:gap-3">
+          <button onClick={() => setShowAppDownloadModal(true)} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm">
+            <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Download Our App
+          </button>
+
+          {user ? (
+            <button onClick={() => router.push('/my-purchases')} className="bg-gradient-to-r from-[#0a459a] to-[#073373] text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 shadow-[0_4px_12px_rgba(10,69,154,0.2)] hover:shadow-[0_4px_20px_rgba(10,69,154,0.35)] hover:-translate-y-0.5">
+              <User className="w-3.5 h-3.5 text-white" /> <span className="hidden xs:inline">Dashboard</span>
+            </button>
+          ) : (
+            <button onClick={() => setShowLoginModal(true)} className="bg-gradient-to-r from-[#0a459a] to-[#073373] text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 shadow-[0_4px_12px_rgba(10,69,154,0.2)] hover:shadow-[0_4px_20px_rgba(10,69,154,0.35)] hover:-translate-y-0.5">
+              <User className="w-3.5 h-3.5 text-white" /> <span className="hidden xs:inline">Account</span>
+            </button>
+          )}
+
+          <button onClick={() => router.push('/cart')} className="p-2 sm:p-2.5 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 relative shadow-sm transition-colors duration-200">
+            <ShoppingBag className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-600" />
+            {cartCount > 0 && (
+              <span className="absolute -top-1 -right-1 h-4 w-4 bg-red-600 rounded-full border border-white text-[9px] text-white flex items-center justify-center font-bold">
+                {cartCount}
+              </span>
+            )}
+          </button>
+
+          {/* MOBILE RESPONSIVE TRIGGER TOGGLE BUTTON */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="flex lg:hidden p-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 shadow-sm transition-colors"
+          >
+            {mobileMenuOpen ? <CloseIcon className="w-4 h-4" /> : <MenuIcon className="w-4 h-4" />}
+          </button>
+        </div>
+
+        {/* MOBILE SLIDEOUT NAV DRAWER */}
+        {mobileMenuOpen && (
+          <div className="fixed inset-0 top-[73px] z-50 lg:hidden flex">
+            <div className="absolute inset-0 bg-slate-900/20 backdrop-blur-xs" onClick={() => setMobileMenuOpen(false)}></div>
+            <div className="relative w-full max-w-[300px] bg-white border-r border-slate-200 h-[calc(100vh-73px)] p-4 flex flex-col justify-between overflow-y-auto shadow-xl">
+              <div className="space-y-4">
+                <div className="font-bold text-slate-400 text-[10px] tracking-widest uppercase px-2">Explore Lectures</div>
+                <div className="flex flex-col gap-1">
+                  {domainLoading ? (
+                    <div className="px-2 py-1 text-xs text-slate-400">Loading categories...</div>
+                  ) : domains.length > 0 ? (
+                    domains.map((parentDomain) => (
+                      (parentDomain.child || []).map((child) => (
+                        <button
+                          key={child.id}
+                          onClick={() => handleDomainChildClick(child, parentDomain)}
+                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-slate-50 px-3 py-2.5 rounded-xl transition-all"
+                        >
+                          {child.name}
+                        </button>
+                      ))
+                    ))
+                  ) : (
+                    <div className="px-2 py-1 text-xs text-slate-400">No categories active</div>
+                  )}
+                </div>
+
+                <div className="h-px bg-slate-100 my-2"></div>
+
+                {/* MOBILE DYNAMIC FACULTY COLLAPSIBLE MENU */}
+                <div className="font-bold text-slate-400 text-[10px] tracking-widest uppercase px-2 flex justify-between items-center cursor-pointer" onClick={() => setMobileFacultyOpen(!mobileFacultyOpen)}>
+                  <span>Faculty Members</span>
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${mobileFacultyOpen ? 'rotate-180' : ''}`} />
+                </div>
+
+                {mobileFacultyOpen && (
+                  <div className="flex flex-col gap-1 pl-2 border-l border-slate-100 transition-all duration-300">
+                    {/* <Link href="/faculty" onClick={() => setMobileMenuOpen(false)} className="w-full text-left font-extrabold text-xs text-[#0a459a] px-3 py-2 hover:bg-slate-50 rounded-xl">
+                      View All Faculty
+                    </Link> */}
+                    {facultyList.map((fac) => (
+                      <button
+                        key={fac.id}
+                        onClick={() => handleFacultyRedirect(fac)}
+                        className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-slate-50 px-3 py-2 rounded-xl transition-all"
+                      >
+                        {[fac.firstName, fac.lastName].filter(Boolean).join(' ')}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                <div className="h-px bg-slate-100 my-2"></div>
+
+                <nav className="flex flex-col gap-1 text-xs font-bold text-slate-600 uppercase tracking-wider">
+                  <Link href="/store?batchTag=F2F%20Pune" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2.5 hover:bg-slate-50 hover:text-[#0a459a] rounded-xl transition-all">F2F Pune</Link>
+                  <Link href="/store" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2.5 hover:bg-slate-50 hover:text-[#0a459a] rounded-xl transition-all">Books Hub</Link>
+                </nav>
+              </div>
+
+              <div className="pt-4 border-t border-slate-100">
+                <button onClick={() => { setMobileMenuOpen(false); setShowAppDownloadModal(true); }} className="w-full flex items-center justify-center gap-1.5 bg-[#0a459a] text-white font-bold text-xs px-4 py-3 rounded-xl shadow-md">
+                  <Smartphone className="w-3.5 h-3.5 text-white" /> Download Our App
+                </button>
+              </div>
+            </div>
           </div>
         )}
-        <style>{`@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } } .animate-marquee { animation: marquee 30s linear infinite; }`}</style>
       </header>
-      {/* Login and Signup Modals */}
-      <LoginModal
-        isOpen={showLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onSignupClick={() => setShowSignupModal(true)}
-      />
-      <SignupModal
-        isOpen={showSignupModal}
-        onClose={() => setShowSignupModal(false)}
-        onLoginClick={() => {
-          setShowSignupModal(false);
-          setShowLoginModal(true);
-        }}
-      />
-      <AppDownloadModal
-        open={showAppDownloadModal}
-        onClose={() => setShowAppDownloadModal(false)}
-        brandColor={`var(--theme-primary, #0749A2)`}
-      />
+
+      {/* Auth Modals */}
+      <LoginModal isOpen={showLoginModal} onClose={() => setShowLoginModal(false)} onSignupClick={() => setShowSignupModal(true)} />
+      <SignupModal isOpen={showSignupModal} onClose={() => setShowSignupModal(false)} onLoginClick={() => { setShowSignupModal(false); setShowLoginModal(true); }} />
+      <AppDownloadModal open={showAppDownloadModal} onClose={() => setShowAppDownloadModal(false)} brandColor="#0a459a" />
     </>
   );
 };
-

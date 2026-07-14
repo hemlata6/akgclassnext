@@ -25,8 +25,8 @@ export default function ContactUsPage() {
     const [loading, setLoading] = useState(false);
     const [showThankYou, setShowThankYou] = useState(false);
     const [errors, setErrors] = useState({});
-    const {institute} = useAuth();
-
+    const { institute } = useAuth();
+    // console.log('institute?.contact', institute);
     // Fetch courses when type is selected as "course"
     useEffect(() => {
         if (formData.type === 'course') {
@@ -174,9 +174,9 @@ export default function ContactUsPage() {
                 <div className="flex-1 flex items-center justify-center py-20 px-4">
                     <div className="text-center max-w-xl">
                         <div className="mb-8 relative">
-                            <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative bg-indigo-100">
-                                <div className="absolute inset-0 rounded-full animate-ping opacity-20 bg-indigo-600"></div>
-                                <svg className="w-20 h-20 relative z-10 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div className="w-40 h-40 mx-auto rounded-full flex items-center justify-center relative bg-blue-50">
+                                <div className="absolute inset-0 rounded-full animate-ping opacity-20 bg-[#0a459a]"></div>
+                                <svg className="w-20 h-20 relative z-10 text-[#0a459a]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                                 </svg>
                             </div>
@@ -189,7 +189,7 @@ export default function ContactUsPage() {
                                 setShowThankYou(false);
                                 router.push('/');
                             }}
-                            className="inline-flex items-center gap-3 px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl bg-indigo-600 hover:bg-indigo-700"
+                            className="inline-flex items-center gap-3 px-8 py-4 text-white font-bold rounded-lg transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0a459a] hover:bg-[#073373]"
                         >
                             <Icons.Back />
                             Back to Home
@@ -210,7 +210,7 @@ export default function ContactUsPage() {
                     <div className="text-center mb-12">
                         <button
                             onClick={() => router.push('/')}
-                            className={`inline-flex items-center gap-2 text-indigo-600 mb-8 font-semibold transition-colors hover:opacity-80`}
+                            className={`inline-flex items-center gap-2 text-[#0a459a] mb-8 font-semibold transition-colors hover:opacity-80`}
                         >
                             <Icons.Back /> Back to Home
                         </button>
@@ -224,39 +224,40 @@ export default function ContactUsPage() {
                         {/* Contact Info Cards */}
                         <div className="lg:col-span-1 space-y-6">
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-indigo-100">
-                                    <Icons.Phone className="text-indigo-600" />
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-blue-50">
+                                    <Icons.Phone className="text-[#0a459a]" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 9am to 6pm</p>
-                                <p><a href="tel:9318492718" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-9318492718
+                                <p><a href={`tel:${institute?.contact || "+91-9874563210"}`} className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
+                                    {/* +91-9318492718 */}
+                                    {institute?.contact ? institute?.contact : "+91-9874563210"}
                                 </a></p>
-                                <p>
-                                    <a href="tel:7703880232" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                {/* <p>
+                                    <a href="tel:7703880232" className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
                                         +91-7703880232
                                     </a>
                                 </p>
-                                <p> <a href="tel:8882090148" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                <p> <a href="tel:8882090148" className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
                                     +91-8882090148
                                 </a></p>
-                                <p> <a href="tel:9220362235" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                <p> <a href="tel:9220362235" className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
                                     +91-9220362235
-                                </a></p>
+                                </a></p> */}
                             </div>
 
                             <div className="bg-white rounded-2xl p-6 shadow-md border border-slate-200">
-                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-indigo-100">
-                                    <Icons.Mail className="text-indigo-600" />
+                                <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-blue-50">
+                                    <Icons.Mail className="text-[#0a459a]" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                <a href={`mailto:${institute?.email}`} className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
                                     {institute?.email}
                                 </a>
                             </div>
 
-                            <div className="rounded-2xl p-6 shadow-md text-white bg-indigo-600">
+                            <div className="rounded-2xl p-6 shadow-md text-white bg-[#0a459a]">
                                 <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                                     <Icons.BookOpen />
                                 </div>
@@ -275,7 +276,7 @@ export default function ContactUsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            First Name <span className="text-indigo-600">*</span>
+                                            First Name <span className="text-[#0a459a]">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -283,14 +284,14 @@ export default function ContactUsPage() {
                                             value={formData.firstName}
                                             onChange={handleInputChange}
                                             placeholder="First Name"
-                                            className={`w-full px-4 py-3 border ${errors.firstName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
+                                            className={`w-full px-4 py-3 border ${errors.firstName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent transition-all`}
                                         />
                                         {errors.firstName && <p className="text-red-500 text-xs mt-1.5">{errors.firstName}</p>}
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Last Name <span className="text-indigo-600">*</span>
+                                            Last Name <span className="text-[#0a459a]">*</span>
                                         </label>
                                         <input
                                             type="text"
@@ -298,7 +299,7 @@ export default function ContactUsPage() {
                                             value={formData.lastName}
                                             onChange={handleInputChange}
                                             placeholder="Last Name"
-                                            className={`w-full px-4 py-3 border ${errors.lastName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
+                                            className={`w-full px-4 py-3 border ${errors.lastName ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent transition-all`}
                                         />
                                         {errors.lastName && <p className="text-red-500 text-xs mt-1.5">{errors.lastName}</p>}
                                     </div>
@@ -307,7 +308,7 @@ export default function ContactUsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Phone <span className="text-indigo-600">*</span>
+                                            Phone <span className="text-[#0a459a]">*</span>
                                         </label>
                                         <input
                                             type="tel"
@@ -315,14 +316,14 @@ export default function ContactUsPage() {
                                             value={formData.phone}
                                             onChange={handleInputChange}
                                             placeholder="+91 7703880232"
-                                            className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
+                                            className={`w-full px-4 py-3 border ${errors.phone ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent transition-all`}
                                         />
                                         {errors.phone && <p className="text-red-500 text-xs mt-1.5">{errors.phone}</p>}
                                     </div>
 
                                     <div>
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Email <span className="text-indigo-600">*</span>
+                                            Email <span className="text-[#0a459a]">*</span>
                                         </label>
                                         <input
                                             type="email"
@@ -330,7 +331,7 @@ export default function ContactUsPage() {
                                             value={formData.email}
                                             onChange={handleInputChange}
                                             placeholder=" info.vgsh@gmail.com"
-                                            className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all`}
+                                            className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent transition-all`}
                                         />
                                         {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>}
                                     </div>
@@ -338,13 +339,13 @@ export default function ContactUsPage() {
 
                                 <div className="mb-5">
                                     <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                        Type <span className="text-indigo-600">*</span>
+                                        Type <span className="text-[#0a459a]">*</span>
                                     </label>
                                     <select
                                         name="type"
                                         value={formData.type}
                                         onChange={handleTypeChange}
-                                        className={`w-full px-4 py-3 border ${errors.type ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white cursor-pointer transition-all`}
+                                        className={`w-full px-4 py-3 border ${errors.type ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent bg-white cursor-pointer transition-all`}
                                     >
                                         <option value="">-- Select Your Type --</option>
                                         <option value="course">Course</option>
@@ -356,12 +357,12 @@ export default function ContactUsPage() {
                                 {formData.type && (
                                     <div className="mb-5 animate-in slide-in-from-top duration-300">
                                         <label className="block text-sm font-semibold text-slate-700 mb-2">
-                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span className="text-indigo-600">*</span>
+                                            Select {formData.type === 'course' ? 'Course' : 'Test Series'} <span className="text-[#0a459a]">*</span>
                                         </label>
                                         <select
                                             value={formData.selectedContent?.id || ''}
                                             onChange={handleContentChange}
-                                            className={`w-full px-4 py-3 border ${errors.selectedContent ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent bg-white cursor-pointer transition-all`}
+                                            className={`w-full px-4 py-3 border ${errors.selectedContent ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent bg-white cursor-pointer transition-all`}
                                         >
                                             <option value="">-- Select {formData.type === 'course' ? 'Course' : 'Test Series'} --</option>
                                             {(formData.type === 'course' ? courses : testSeries).map(item => (
@@ -384,14 +385,14 @@ export default function ContactUsPage() {
                                         onChange={handleInputChange}
                                         placeholder="Tell us more about your query..."
                                         rows="4"
-                                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none transition-all"
+                                        className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent resize-none transition-all"
                                     />
                                 </div>
 
                                 <button
                                     type="submit"
                                     disabled={loading}
-                                    className="w-full py-4 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 bg-indigo-600 hover:bg-indigo-700"
+                                    className="w-full py-4 text-white font-bold text-lg rounded-lg transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 bg-[#0a459a] hover:bg-[#073373]"
                                 >
                                     {loading ? (
                                         <>

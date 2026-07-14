@@ -9,7 +9,11 @@
   --theme-primary-hover-class: hover:bg-[#0B3276];
   --theme-text-class: text-[#0749A2];
   --theme-border-class: border-[#0749A2];
-  --font-family-base: 'Inter', sans-serif;
+  --font-family-base: 'Inter', system-ui, sans-serif;
+}
+
+html, body {
+  font-family: var(--font-family-base);
 }
 
 /* Theme-aware dynamic classes */

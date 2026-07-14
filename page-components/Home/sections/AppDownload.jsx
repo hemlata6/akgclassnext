@@ -1,66 +1,53 @@
 import React from 'react';
-import { LAYOUT_PADDING } from '../../../constants/Icons';
+import { Smartphone, Monitor, Laptop } from 'lucide-react';
 
 export const AppDownload = () => (
-  <section id="app" className="bg-[#0749A2] py-10 relative overflow-hidden">
-    <div className={LAYOUT_PADDING}>
-      <div className="flex flex-col md:flex-row items-center justify-between gap-8 relative z-10">
-        <div className="text-center md:text-left">
-          <h2 className="text-2xl font-bold text-white mb-2">Classroom in Your Pocket</h2>
-          <p className="text-slate-400 text-sm mb-4 max-w-md">
-            Unlimited views, offline downloads, and live chat with CA VIVEK GABA.
+  <section className="max-w-7xl mx-auto px-6 pb-20">
+    <div className="bg-gradient-to-r from-white via-slate-50/50 to-white border border-slate-200 rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(10,69,154,0.03)] relative overflow-hidden transition-all duration-300 hover:shadow-[0_16px_48px_rgba(10,69,154,0.06)]">
+      <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-50/50 rounded-full pointer-events-none blur-3xl"></div>
+      <div className="absolute -right-20 -top-20 w-80 h-80 bg-indigo-50/30 rounded-full pointer-events-none blur-3xl"></div>
+
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 relative z-10">
+        {/* Classy Structured Copy Blocks */}
+        <div className="space-y-3 max-w-xl">
+          <span className="text-[9px] font-black bg-blue-50 text-[#0a459a] border border-blue-200/60 px-3 py-1 rounded-full uppercase tracking-widest shadow-sm inline-block font-bold">
+            CROSS-PLATFORM ARCHITECTURE
+          </span>
+          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight font-bold">
+            One Centralized Hub. Available Across All Stores.
+          </h2>
+          <p className="text-slate-500 text-xs font-semibold leading-relaxed">
+            Seamlessly transit between screen viewports. Access encrypted offline video lectures, read downloaded reference notes, and check performance metrics on any phone or laptop device flawlessly.
           </p>
-          <div className="flex flex-wrap justify-center md:justify-start gap-3">
-            <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.ekatvamacademy&pcampaignid=web_share"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="bg-white text-slate-900 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-slate-200 transition"
-            >
-              Google Play
-            </a>
-            <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
-              App Store
-            </button>
-            <button className="bg-white/10 text-white border border-white/20 px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition">
-              Window Store
-            </button>
-          </div>
         </div>
 
-        {/* Device Illustrations */}
-        <div className="hidden md:flex items-end gap-4 relative">
-          {/* Laptop */}
-          <div className="relative">
-            <svg width="200" height="140" viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Laptop Screen */}
-              <rect x="20" y="10" width="160" height="100" rx="4" fill="#1e293b" stroke="#475569" strokeWidth="2" />
-              <rect x="25" y="15" width="150" height="90" rx="2" fill="#0f172a" />
-              {/* Laptop Base */}
-              <path d="M 10 110 L 190 110 L 195 120 L 5 120 Z" fill="#334155" stroke="#475569" strokeWidth="2" />
-              <rect x="85" y="115" width="30" height="3" rx="1.5" fill="#64748b" />
-              {/* Screen Content */}
-              <circle cx="100" cy="60" r="15" fill="#10b981" opacity="0.3" />
-              <rect x="35" y="75" width="60" height="4" rx="2" fill="#64748b" />
-              <rect x="35" y="85" width="40" height="4" rx="2" fill="#64748b" />
-            </svg>
-          </div>
-
-          {/* Phone */}
-          <div className="relative mb-2">
-            <svg width="80" height="140" viewBox="0 0 80 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-              {/* Phone Body */}
-              <rect x="10" y="5" width="60" height="130" rx="8" fill="#1e293b" stroke="#475569" strokeWidth="2" />
-              <rect x="15" y="15" width="50" height="100" rx="2" fill="#0f172a" />
-              {/* Home Button */}
-              <circle cx="40" cy="125" r="6" fill="#334155" stroke="#475569" strokeWidth="1.5" />
-              {/* Screen Content */}
-              <circle cx="40" cy="50" r="12" fill="#10b981" opacity="0.3" />
-              <rect x="20" y="70" width="40" height="3" rx="1.5" fill="#64748b" />
-              <rect x="20" y="78" width="30" height="3" rx="1.5" fill="#64748b" />
-              <rect x="20" y="86" width="35" height="3" rx="1.5" fill="#64748b" />
-            </svg>
-          </div>
+        {/* Immersive White Glass Button Grid Deck */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 shrink-0">
+          {/* Android */}
+          <a
+            href="https://play.google.com/store/apps/details?id=com.classiolabs.ekatvamacademy&pcampaignid=web_share"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-white border border-slate-200 hover:border-[#0a459a] p-3.5 rounded-2xl flex flex-col justify-center items-center text-center transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(10,69,154,0.06)] min-w-[130px] active:scale-95"
+          >
+            <Smartphone className="w-5 h-5 text-emerald-500 mb-1.5 transition-transform group-hover:scale-110" />
+            <span className="text-[10px] font-black font-bold text-slate-800 tracking-tight">Android App</span>
+          </a>
+          {/* iOS */}
+          <a href="#" className="bg-white border border-slate-200 hover:border-[#0a459a] p-3.5 rounded-2xl flex flex-col justify-center items-center text-center transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(10,69,154,0.06)] min-w-[130px] active:scale-95">
+            <Smartphone className="w-5 h-5 text-sky-500 mb-1.5 transition-transform group-hover:scale-110" />
+            <span className="text-[10px] font-black font-bold text-slate-800 tracking-tight">Apple iOS</span>
+          </a>
+          {/* Windows */}
+          <a href="#" className="bg-white border border-slate-200 hover:border-[#0a459a] p-3.5 rounded-2xl flex flex-col justify-center items-center text-center transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(10,69,154,0.06)] min-w-[130px] active:scale-95">
+            <Monitor className="w-5 h-5 text-blue-500 mb-1.5 transition-transform group-hover:scale-110" />
+            <span className="text-[10px] font-black font-bold text-slate-800 tracking-tight">Windows PC</span>
+          </a>
+          {/* macOS */}
+          <a href="#" className="bg-white border border-slate-200 hover:border-[#0a459a] p-3.5 rounded-2xl flex flex-col justify-center items-center text-center transition-all duration-300 group hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(10,69,154,0.06)] min-w-[130px] active:scale-95">
+            <Laptop className="w-5 h-5 text-purple-500 mb-1.5 transition-transform group-hover:scale-110" />
+            <span className="text-[10px] font-black font-bold text-slate-800 tracking-tight">macOS Apple</span>
+          </a>
         </div>
       </div>
     </div>

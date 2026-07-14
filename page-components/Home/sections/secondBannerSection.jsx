@@ -1,127 +1,85 @@
 import React, { useState, useEffect } from 'react';
+import {
+    ChevronDown,
+    Smartphone,
+    ArrowRight,
+    ShoppingBag,
+    User,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    ArrowUpRight,
+    BookOpen,
+    Layers,
+    Video,
+    FileText,
+    HelpCircle,
+    Volume2,
+    Lightbulb,
+    Tv,
+    PlayCircle,
+    Monitor,
+    Laptop,
+    Download,
+    Mail,
+    Phone,
+    MapPin,
+    ExternalLink,
+    ShieldCheck,
+    Calendar
+} from 'lucide-react';
 import { useRouter } from 'next/router';
-import { Icons, LAYOUT_PADDING } from '../../../constants/Icons';
-import Network from '../../../config/Network';
-import instId from '../../../config/instituteId';
-import Endpoints from '../../../config/endpoints';
 
 export const SecondBannerSection = () => {
     const router = useRouter();
-    const [slides, setSlides] = useState([]);
-    const [currentSlide, setCurrentSlide] = useState(0);
-
-    // Fetch banners from API
-    useEffect(() => {
-        fetchBanners();
-    }, []);
-
-    const fetchBanners = async () => {
-        try {
-            const response = await Network.getBannersApi(instId);
-            if (response && response.banners && response.banners.length > 0) {
-                const activeBanners = response.banners.filter(
-                    banner =>
-                        banner.active &&
-                        banner.group?.toLowerCase() === "mid banner"
-                );
-
-                if (activeBanners.length > 0) {
-                    const bannerSlides = activeBanners.map(banner => ({
-                        ...banner,
-                        mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
-                        desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
-                        alt: banner.title || 'Banner',
-                        bg: 'bg-[#0749A2]'
-                    }));
-                    setSlides(bannerSlides);
-                }
-            }
-        } catch (error) {
-            console.error('Error fetching banners:', error);
-        }
-    };
-
-    // Auto-slide every 5 seconds if multiple banners
-    useEffect(() => {
-        if (slides.length <= 1) return;
-        const timer = setInterval(() => {
-            setCurrentSlide(prev => (prev + 1) % slides.length);
-        }, 5000);
-        return () => clearInterval(timer);
-    }, [slides.length]);
-
-    // If image banners exist from API, render them as carousel
-    if (slides.length > 0) {
-        return (
-            <section className="py-6 md:py-8">
-                <div className={LAYOUT_PADDING}>
-                    <div className="relative overflow-hidden rounded-2xl">
-                        <div
-                            className="flex transition-transform duration-500 ease-in-out"
-                            style={{ transform: `translateX(-${currentSlide * 100}%)` }}
-                        >
-                            {slides.map((slide, i) => (
-                                <div key={i} className="w-full flex-shrink-0 relative">
-                                    <img
-                                        src={slide.mobileSrc}
-                                        alt={slide.alt}
-                                        className="w-full h-auto object-cover rounded-2xl"
-                                    />
-                                    {slide.title && (
-                                        <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-2xl">
-                                            <h2 className="text-white text-xl md:text-3xl font-bold text-center px-4">
-                                                {slide.title}
-                                            </h2>
-                                        </div>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
-
-                        {/* Dots navigation */}
-                        {slides.length > 1 && (
-                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-2">
-                                {slides.map((_, i) => (
-                                    <button
-                                        key={i}
-                                        onClick={() => setCurrentSlide(i)}
-                                        className={`w-2 h-2 rounded-full transition-all ${
-                                            i === currentSlide
-                                                ? 'bg-white w-6'
-                                                : 'bg-white/50'
-                                        }`}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </div>
-                </div>
-            </section>
-        );
-    }
 
     // Fallback: Static promotional banner matching the image style
     return (
-        <section className="py-6 md:py-8">
-            <div className={LAYOUT_PADDING}>
-                <div className="bg-[#0749A2] rounded-2xl px-6 md:px-10 py-5 md:py-7 flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
-                    {/* Left: Text */}
-                    <div className="text-center md:text-left">
-                        <h2 className="text-white text-lg md:text-2xl font-bold leading-tight">
-                            Get Ready For Nov/Dec 2026 Exams
-                        </h2>
-                        <p className="text-blue-200/70 text-xs md:text-sm mt-1 font-medium">
-                            Enroll now and start your preparation with expert faculty
-                        </p>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-0 pt-0">
+            <div className="mb-4 sm:mb-6 border-b border-slate-200 pb-3 sm:pb-4">
+                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 font-bold">Exemption Assistance Engine</h3>
+                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-bold">100% Free Learning Resources</h2>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+                <div className="bg-gradient-to-br from-[#0c1a30] to-[#0a459a] rounded-3xl border border-blue-500/20 shadow-lg p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden aspect-auto md:aspect-video group transition-all duration-300 hover:shadow-xl">
+                    <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_16px]"></div>
+                    <div className="space-y-3 z-10 relative">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-black bg-blue-500/30 text-blue-200 border border-blue-400/30 px-2 py-0.5 rounded uppercase tracking-wider">CA INTERMEDIATE</span>
+                            <span className="text-[9px] font-bold text-emerald-300 flex items-center gap-1">⚡ Free Vault</span>
+                        </div>
+                        <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight max-w-md font-bold">Unlock Complete CA Inter Audit & SM Free Resource Panel</h3>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pt-2 max-w-sm text-[11px] text-slate-300 font-semibold">
+                            <span className="flex items-center gap-1.5"><Video className="w-3.5 h-3.5 text-blue-400" /> Revision Videos & Marathons</span>
+                            <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-blue-400" /> Important Notes & E-Books</span>
+                            <span className="flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5 text-blue-400" /> Subjective Tests & MCQs</span>
+                            <span className="flex items-center gap-1.5"><Volume2 className="w-3.5 h-3.5 text-blue-400" /> Audio Notes & Exam Tips</span>
+                        </div>
                     </div>
-
-                    {/* Right: Button */}
-                    <button
-                        onClick={() => router.push('/store')}
-                        className="flex-shrink-0 bg-white text-[#0749A2] font-bold text-sm md:text-base px-6 md:px-8 py-2.5 md:py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
-                    >
-                        ENROLL TODAY
-                    </button>
+                    <div className="pt-4 z-10 relative flex items-center justify-between border-t border-white/10 mt-4">
+                        <button onClick={() => router.push('/free-resources')} className="bg-white text-[#0a459a] font-black px-5 py-3 rounded-xl text-[11px] tracking-wider uppercase shadow-md hover:bg-slate-50 transition-all flex items-center gap-1.5 group/btn active:scale-95 font-bold">Explore Inter Vault <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" /></button>
+                        <div className="hidden sm:flex items-center gap-1 text-[10px] text-blue-200/60 font-bold uppercase tracking-wider"><Lightbulb className="w-4 h-4 text-yellow-400" /> <span>Includes Motivation Corner</span></div>
+                    </div>
+                </div>
+                <div className="bg-gradient-to-br from-[#1a0b2e] to-[#311B92] rounded-3xl border border-purple-500/20 shadow-lg p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden aspect-auto md:aspect-video group transition-all duration-300 hover:shadow-xl">
+                    <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_16px]"></div>
+                    <div className="space-y-3 z-10 relative">
+                        <div className="flex items-center gap-2">
+                            <span className="text-[9px] font-black bg-purple-500/30 text-purple-200 border border-purple-400/30 px-2 py-0.5 rounded uppercase tracking-wider">CA FINAL EXPERT LEVEL</span>
+                            <span className="text-[9px] font-bold text-amber-300 flex items-center gap-1">⭐ Exemption Kit</span>
+                        </div>
+                        <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight max-w-md font-bold">Access Advanced Auditing & Professional Ethics Materials</h3>
+                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pt-2 max-w-sm text-[11px] text-purple-200/90 font-semibold">
+                            <span className="flex items-center gap-1.5"><Video className="w-3.5 h-3.5 text-purple-400" /> Revision Videos & Marathons</span>
+                            <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-purple-400" /> Important Notes & E-Books</span>
+                            <span className="flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5 text-purple-400" /> Subjective Tests & MCQs</span>
+                            <span className="flex items-center gap-1.5"><Volume2 className="w-3.5 h-3.5 text-purple-400" /> Professional Ethics Audio Notes</span>
+                        </div>
+                    </div>
+                    <div className="pt-4 z-10 relative flex items-center justify-between border-t border-white/10 mt-4">
+                        <button onClick={() => router.push('/free-resources')} className="bg-white text-[#311B92] font-black px-5 py-3 rounded-xl text-[11px] tracking-wider uppercase shadow-md hover:bg-slate-50 transition-all flex items-center gap-1.5 group/btn active:scale-95 font-bold">Explore Final Vault <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" /></button>
+                        <div className="hidden sm:flex items-center gap-1 text-[10px] text-purple-300/60 font-bold uppercase tracking-wider"><Tv className="w-4 h-4 text-purple-400" /> <span>Ex-Big 4 Guidance Deck</span></div>
+                    </div>
                 </div>
             </div>
         </section>

@@ -1,30 +1,76 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_CLASS, TEXT_GREEN } from '../../../constants/Icons';
+import { Icons, LAYOUT_PADDING, BRAND_GREEN_CLASS } from '../../../constants/Icons';
 import { useAuth } from '../../../config/AuthContext';
 import Network from '../../../config/Network';
 import Endpoints from '../../../config/endpoints';
 import instId from '../../../config/instituteId';
 import CourseConfigModal from './CourseConfigModal';
 import { useTheme } from '@mui/material';
+import {
+    ChevronDown,
+    Smartphone,
+    ArrowRight,
+    ShoppingBag,
+    User,
+    ChevronLeft,
+    ChevronRight,
+    Clock,
+    ArrowUpRight,
+    BookOpen,
+    Layers,
+    Video,
+    FileText,
+    HelpCircle,
+    Volume2,
+    Lightbulb,
+    Tv,
+    PlayCircle,
+    Monitor,
+    Laptop,
+    Download,
+    Mail,
+    Phone,
+    MapPin,
+    ExternalLink,
+    ShieldCheck,
+    Calendar
+} from 'lucide-react';
+
+// Target Layout Specific Icon Proxies
+// const BookOpen = ({ className }) => <Icons.Book className={className} />;
+// const ArrowUpRight = ({ className }) => <Icons.ChevronRight className={className} />;
+
+// Cleanly parse HTML strings into safe text and clear any implicit whitespace entity codes
+const stripHtmlTags = (htmlString) => {
+    if (!htmlString) return '';
+    return htmlString
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '')  // Remove entire style blocks
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, '') // Remove entire script blocks
+        .replace(/<[^>]*>/g, '')                      // Strip literal HTML tags
+        .replace(/&nbsp;/gi, ' ')                    // Convert html non-breaking space entities
+        .replace(/\u00a0/g, ' ')                      // Convert explicit unicode spaces
+        .replace(/\s+/g, ' ')                        // Collapse multiple sequential whitespace fragments
+        .trim();                                      // Clean dangling boundaries
+};
 
 export const BookStore = ({ employeeCourseId }) => {
     const router = useRouter();
     const theme = useTheme();
     const { authToken } = useAuth();
-    const [active, setActive] = useState(null);
     const [activeDomain, setActiveDomain] = useState(null);
     const [coursesData, setCoursesData] = useState([]);
-    const [tags, setTags] = useState([]);
     const [domains, setDomains] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [itemsPerView, setItemsPerView] = useState(8);
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedBook, setSelectedBook] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
 
+    // CAROUSEL DISPLAY CONTROLLER STATES
+    const [currentIndex, setCurrentIndex] = useState(0);
+    const [itemsPerView, setItemsPerView] = useState(4);
+    const [carouselGap, setCarouselGap] = useState(24); // 24px = gap-6 desktop, 16px = gap-4 mobile
 
     const hasEmployeeCourseSelection = (() => {
         if (!employeeCourseId) return false;
@@ -35,19 +81,22 @@ export const BookStore = ({ employeeCourseId }) => {
     })();
 
     useEffect(() => {
-        fetchTags();
         fetchDomains();
 
-        // Handle responsive items per view
+        // Responsive Breakpoint Monitor Matrix
         const handleResize = () => {
             if (window.innerWidth < 768) {
-                setItemsPerView(2);
+                setItemsPerView(1); // 1 Card on Mobile
+                setCarouselGap(16); // gap-4 on mobile
             } else if (window.innerWidth < 1024) {
-                setItemsPerView(3);
-            } else if (window.innerWidth < 1536) {
-                setItemsPerView(4);
+                setItemsPerView(2); // 2 Cards on Tablets
+                setCarouselGap(24); // gap-6 on tablet/desktop
+            } else if (window.innerWidth < 1280) {
+                setItemsPerView(3); // 3 Cards on Mid-screens
+                setCarouselGap(24);
             } else {
-                setItemsPerView(5);
+                setItemsPerView(4); // 4 Cards on Large Desktop
+                setCarouselGap(24);
             }
         };
 
@@ -76,30 +125,10 @@ export const BookStore = ({ employeeCourseId }) => {
         }
     }, []);
 
-    const fetchTags = async () => {
-        try {
-            const response = await Network.fetchTags(instId);
-            const tagList = Array.isArray(response?.tags) ? response.tags : (Array.isArray(response) ? response : []);
-            setTags(tagList);
-        } catch (err) {
-            console.error('Error fetching tags:', err);
-            setTags([]);
-        }
-    };
-
     const fetchDomains = async () => {
         try {
             const response = await Network.fetchDomain(instId);
             const domainList = Array.isArray(response?.domains) ? response.domains : (Array.isArray(response) ? response : []);
-
-            // Get only first-level children (children of parent domains where parentId === 0)
-            // const firstLevelChildren = [];
-            // domainList.forEach(domain => {
-            //     if (domain.parentId === 0 && domain.child && Array.isArray(domain.child)) {
-            //         firstLevelChildren.push(...domain.child);
-            //     }
-            // });
-
             setDomains(domainList);
         } catch (err) {
             console.error('Error fetching domains:', err);
@@ -109,7 +138,7 @@ export const BookStore = ({ employeeCourseId }) => {
 
     useEffect(() => {
         fetchCourses();
-    }, [tags]);
+    }, []);
 
     const fetchCourses = async () => {
         try {
@@ -117,12 +146,8 @@ export const BookStore = ({ employeeCourseId }) => {
             const response = authToken ? await Network.getStudentAuthCourse(authToken) : await Network.getFreeCourseList(instId);
             const courses = response?.courses || response || [];
 
-            // Filter courses that have "Book" domain, are active, AND have "Featured Course" tag
             const bookCourses = Array.isArray(courses)
-                ? courses.filter(c =>
-                    c.active
-                    && c.type === "books"
-                )
+                ? courses.filter(c => c.active && c.type === "books")
                 : [];
 
             setCoursesData(bookCourses);
@@ -136,14 +161,17 @@ export const BookStore = ({ employeeCourseId }) => {
         }
     };
 
+    // CORRECTED DOMAIN EXAM TIERS FILTRATION MATCH ENGINE
     const filtered = coursesData.filter(c => {
-        // Filter by domain if selected
-        const domainMatch = activeDomain === null || (c.domain && Array.isArray(c.domain) && c.domain.some(d => d.id === activeDomain));
+        if (activeDomain === null) return true;
 
-        return domainMatch;
+        // Match string names or standard tracking IDs seamlessly across standard dynamic endpoints arrays
+        return c.examStageId === activeDomain ||
+            c.domainId === activeDomain ||
+            (Array.isArray(c.domain) && c.domain.some(d => d.id === activeDomain || d.name === activeDomain)) ||
+            (c.examStage && (c.examStage.id === activeDomain || c.examStage.name === activeDomain));
     });
 
-    // Reset currentIndex when filtering changes
     useEffect(() => {
         setCurrentIndex(0);
     }, [activeDomain]);
@@ -159,22 +187,24 @@ export const BookStore = ({ employeeCourseId }) => {
     const canGoPrev = currentIndex > 0;
     const canGoNext = currentIndex < filtered.length - itemsPerView;
 
-    const handleAddToCartFromModal = (cartItem) => {
-        // Preserve the actual book type from the source object
-        const itemWithType = { ...cartItem, type: selectedBook?.type || cartItem.type };
+    const handleExploreAllClick = () => {
+        sessionStorage.setItem('storeNavigationState', JSON.stringify({
+            source: 'books',
+            isMobile: false,
+            productType: 'books'
+        }));
+        router.push('/store');
+    };
 
-        // Check if already in cart
-        const existingCartIndex = cartCourses.findIndex(
-            item => item.coursePricingId === itemWithType.coursePricingId
-        );
+    const handleAddToCartFromModal = (cartItem) => {
+        const itemWithType = { ...cartItem, type: selectedBook?.type || cartItem.type };
+        const existingCartIndex = cartCourses.findIndex(item => item.coursePricingId === itemWithType.coursePricingId);
 
         let updatedCart;
         if (existingCartIndex !== -1) {
-            // Update existing item
             updatedCart = [...cartCourses];
             updatedCart[existingCartIndex] = itemWithType;
         } else {
-            // Add new item
             updatedCart = [...cartCourses, itemWithType];
         }
 
@@ -183,259 +213,196 @@ export const BookStore = ({ employeeCourseId }) => {
         window.dispatchEvent(new Event('cartUpdated'));
     };
 
-    const handleExploreMoreClick = (type) => {
-        sessionStorage.setItem('storeNavigationState', JSON.stringify({
-            source: 'books',
-            isMobile: false,
-            productType: type
-        }));
-        router.push('/store');
-    }
-
     return (
-        <section id="books" className="py-12 bg-white">
-            <div className={LAYOUT_PADDING}>
-                <div className="mb-8">
-                    <div className="flex items-center justify-between mb-4 gap-2">
-                        <div>
-                            {/* <span className={`${TEXT_GREEN} font-bold tracking-widest text-xs uppercase`}>Book Store</span> */}
-                            <h2 className="text-2xl md:text-3xl font-bold text-slate-900">Featured books
-                            </h2>
-                        </div>
-                        {/* Mobile: Explore Store button next to title */}
-                        {!hasEmployeeCourseSelection && (
-                            <button
-                                onClick={() => handleExploreMoreClick('books')}
-                                className={`md:hidden ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all flex items-center gap-2 flex-shrink-0`}
-                            >
-                                Explore Store <Icons.ChevronRight size={16} />
-                            </button>
-                        )}
+        <section id="books-catalog" className="max-w-7xl mx-auto px-4 sm:px-6 pb-12 pt-12">
+            {/* SECTION CONTROL ROW HEADER */}
+            <div className="mb-8 border-b border-slate-200 pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div className="space-y-1">
+                    <div className="flex items-center gap-3 md:justify-start">
+                        <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Exclusive Educational Resources</h3>
                     </div>
-                    <div className="flex justify-start md:justify-end">
-                        <div className="flex items-center gap-4 w-full md:w-auto">
-                            {/* Domain Filter */}
-                            <div className="bg-white p-1 rounded-full shadow-sm border border-slate-200 inline-flex overflow-x-auto max-w-full">
-                                <button
-                                    onClick={() => setActiveDomain(null)}
-                                    className={`ml-2 px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === null ? `${BRAND_GREEN_CLASS} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
-                                >
-                                    All
-                                </button>
-                                {domains.flatMap(d => d.child || []).map(child => (
-                                    <button
-                                        key={child.id}
-                                        onClick={() => setActiveDomain(child.id)}
-                                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${activeDomain === child.id ? `${BRAND_GREEN_CLASS} text-white shadow-md` : 'text-slate-500 hover:text-slate-800'}`}
-                                    >
-                                        {child.name}
-                                    </button>
-                                ))}
-                            </div>
-                            {/* Desktop: Explore Store button with filters */}
-                            {!hasEmployeeCourseSelection && (
-                                <button
-                                    onClick={() => handleExploreMoreClick('books')}
-                                    className={`hidden md:flex ${BRAND_GREEN_CLASS} hover:bg-indigo-800 text-white px-4 py-2 rounded-lg text-sm font-bold shadow-md transition-all items-center gap-2`}
-                                >
-                                    Explore Store <Icons.ChevronRight size={16} />
-                                </button>
-                            )}
-                        </div>
-                    </div>
+                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">RJCE Master Book Repository</h2>
                 </div>
 
-                {loading && (
-                    <div className="flex justify-center py-12">
-                        <p className="text-slate-500">Loading books...</p>
-                    </div>
-                )}
-
-                {error && (
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-8 text-red-700">
-                        {error}
-                    </div>
-                )}
-
-                {!loading && coursesData.length === 0 && (
-                    <div className="text-center py-12">
-                        <p className="text-slate-500">No books available at the moment.</p>
-                    </div>
-                )}
-
-                {!loading && filtered.length > 0 && (
-                    <div>
-                        {/* Carousel Container */}
-                        <div className="overflow-hidden">
-                            <div
-                                className="flex gap-6 transition-transform duration-500 ease-in-out"
-                                style={{
-                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${1.5 / itemsPerView}rem)))`
-                                }}
+                <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">
+                    <div className="flex items-center gap-2 bg-slate-200/60 p-1 rounded-xl w-fit border border-slate-200 overflow-x-auto max-w-full">
+                        <button
+                            onClick={() => setActiveDomain(null)}
+                            className={`text-xs font-semibold px-7 py-2 rounded-lg transition-all whitespace-nowrap ${activeDomain === null ? 'bg-[#0a459a] text-white shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
+                        >
+                            All Books
+                        </button>
+                        {domains.flatMap(d => d.child || []).map(child => (
+                            <button
+                                key={child.id}
+                                onClick={() => setActiveDomain(child.id)} // Dynamic mapping against nested children IDs
+                                className={`text-xs font-semibold px-7 py-2 rounded-lg transition-all whitespace-nowrap ${activeDomain === child.id ? 'bg-[#0a459a] text-white shadow-md' : 'text-slate-600 hover:text-slate-900'}`}
                             >
-                                {filtered.map((book, i) => {
-                                    // Get lowest price with discount from coursePricing array
-                                    const pricing = book.coursePricing && Array.isArray(book.coursePricing) && book.coursePricing.length > 0
-                                        ? book.coursePricing.reduce((lowest, current) => {
-                                            const currentDiscounted = current.price - (current.price * current.discount / 100);
-                                            const lowestDiscounted = lowest.price - (lowest.price * lowest.discount / 100);
-                                            return currentDiscounted < lowestDiscounted ? current : lowest;
-                                        })
-                                        : null;
+                                {child.name}
+                            </button>
+                        ))}
+                    </div>
 
-                                    const originalPrice = pricing ? pricing.price : 0;
-                                    const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
-                                    const hasDiscount = pricing && pricing.discount > 0;
+                    {/* Desktop View Unified Redirect Hook Action Anchor */}
+                    <button
+                        onClick={handleExploreAllClick}
+                        className="hidden md:flex items-center gap-1.5 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-95 whitespace-nowrap"
+                    >
+                        Explore Store <Icons.ChevronRight size={14} />
+                    </button>
+                </div>
 
-                                    return (
-                                        <div
-                                            key={i}
-                                            className="group bg-white rounded-2xl overflow-hidden shadow-lg shadow-slate-200/50 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-100 flex flex-col flex-shrink-0"
-                                            style={{
-                                                width: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`,
-                                                minWidth: `calc((100% - ${(itemsPerView - 1) * 0.75}rem) / ${itemsPerView})`
-                                            }}
-                                        >
-                                            {/* Image Area */}
-                                            <div
-                                                onClick={() => router.push(`/book/${book.id}`)}
-                                                className="relative overflow-hidden cursor-pointer"
-                                                style={{ aspectRatio: '1/1' }}
-                                            >
-                                                {book?.logo && (
+            </div>
+            
+
+            {/* STATUS INTERFACES PADS */}
+            {loading && (
+                <div className="flex justify-center py-12">
+                    <p className="text-slate-500 font-semibold text-sm">Loading book repository...</p>
+                </div>
+            )}
+
+            {error && (
+                <div className="bg-red-50 border border-red-200 rounded-2xl p-4 mb-8 text-red-700 font-semibold text-xs">
+                    {error}
+                </div>
+            )}
+
+            {!loading && filtered.length === 0 && (
+                <div className="text-center py-12">
+                    <p className="text-slate-500 font-semibold text-sm">No books active under this selection tier currently.</p>
+                </div>
+            )}
+
+            {/* SLIDING CAROUSEL LIST MODULE CATALOG */}
+            {!loading && filtered.length > 0 && (
+                <div className="relative group/carousel">
+                    <div className="overflow-hidden px-1 py-4 -mx-1">
+                        <div
+                            className="flex gap-4 sm:gap-6 transition-transform duration-500 ease-in-out"
+                            style={{
+                                transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
+                            }}
+                        >
+                            {filtered.map((book, idx) => {
+                                const pricing = book.coursePricing && Array.isArray(book.coursePricing) && book.coursePricing.length > 0
+                                    ? book.coursePricing.reduce((lowest, current) => {
+                                        const currentDiscounted = current.price - (current.price * current.discount / 100);
+                                        const lowestDiscounted = lowest.price - (lowest.price * lowest.discount / 100);
+                                        return currentDiscounted < lowestDiscounted ? current : lowest;
+                                    })
+                                    : null;
+
+                                const originalPrice = pricing ? pricing.price : 0;
+                                const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
+                                const hasDiscount = pricing && pricing.discount > 0;
+
+                                // Clean description typography natively via sanitization script layers
+                                const cleanDescription = stripHtmlTags(book.shortDescription);
+
+                                return (
+                                    <div
+                                        key={idx}
+                                        onClick={() => router.push(`/book/${book.id}`)}
+                                        className="bg-white border border-slate-200/70 rounded-2xl p-4 sm:p-5 hover:border-[#0a459a] transition-all duration-300 flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_12px_24px_rgba(10,69,154,0.06)] flex-shrink-0 group cursor-pointer"
+                                        style={{
+                                            width: `calc((100% - ${(itemsPerView - 1) * carouselGap}px) / ${itemsPerView})`,
+                                            minWidth: `calc((100% - ${(itemsPerView - 1) * carouselGap}px) / ${itemsPerView})`
+                                        }}
+                                    >
+                                        <div className="space-y-4">
+                                            {/* MOCKUP 3D BOOK COVER THUMBNAIL CONTAINER */}
+                                            <div className="w-full aspect-[2.3/2.5] bg-slate-50 border border-slate-200 rounded-xl relative overflow-hidden flex items-center justify-center p-4 shadow-inner group-hover:bg-slate-100/50 transition-colors">
+                                                <div className="absolute left-0 top-0 bottom-0 w-3 bg-[#0a459a]/20 border-r border-slate-300/30 z-10"></div>
+                                                <BookOpen className="w-8 h-8 text-[#0a459a]/30 absolute right-4 top-4 z-10" />
+
+                                                {book?.logo ? (
                                                     <img
                                                         src={`${Endpoints?.mediaBaseUrl}${book?.logo}`}
                                                         alt={book.title}
-                                                        className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                                                        className="absolute inset-0 w-full h-full p-0 object-top object-cover group-hover:scale-105 transition-all duration-500"
                                                     />
+                                                ) : (
+                                                    <p className="text-[11px] font-semibold text-slate-800 text-center leading-snug tracking-tight px-4 line-clamp-4 relative z-10">
+                                                        {book.title}
+                                                    </p>
                                                 )}
-                                                {/* Dark gradient overlay at bottom */}
-                                                <div className="absolute inset-0 from-black/70 via-black/20 to-transparent"></div>
-                                                
-                                                {/* Badge - top left */}
-                                                {/* <div className="absolute top-3 left-3 z-10">
-                                                    <span className="bg-red-600 text-white text-[9px] font-bold px-2 py-0.5 rounded-sm uppercase tracking-wider">
-                                                        {course.badge || "New"}
-                                                    </span>
-                                                </div> */}
-
-                                                {/* Domain label - bottom left over gradient */}
-                                                {/* <div className="absolute bottom-3 left-3 z-10">
-                                                    {course.domain && Array.isArray(course.domain) && course.domain.length > 0 && (
-                                                        <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-sm border border-white/30 uppercase tracking-wider">
-                                                            {course.domain[0].name}
-                                                        </span>
-                                                    )}
-                                                </div> */}
                                             </div>
 
-                                            {/* Content Area */}
-                                            <div className="p-4 flex-1 flex flex-col">
-                                                <h3
-                                                    onClick={() => router.push(`/book/${book.id}`)}
-                                                    className="text-sm font-bold text-slate-900 leading-snug mb-3 cursor-pointer hover:text-indigo-700 transition-colors line-clamp-2"
-                                                >
+                                            {/* TITLE & METADATA DESCRIPTION */}
+                                            <div className="space-y-1">
+                                                <h4 className="font-bold text-slate-900 text-sm leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-[#0a459a] transition-colors">
                                                     {book.title}
-                                                </h3>
-                                                
-                                                <div className="mt-auto flex items-center justify-between border-t border-slate-100 pt-3">
-                                                    <div className="flex flex-col">
-                                                        <span className="text-[9px] text-slate-500 font-medium uppercase tracking-wider">Starting Price</span>
-                                                        <div className="flex items-center gap-2 mt-0.5">
-                                                            {hasDiscount ? (
-                                                                <>
-                                                                    <span className="text-xs text-slate-400 line-through font-medium">
-                                                                        ₹{originalPrice.toLocaleString('en-IN')}
-                                                                    </span>
-                                                                    <span className="text-[10px] font-bold text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
-                                                                        {pricing.discount}% OFF
-                                                                    </span>
-                                                                </>
-                                                            ) : null}
-                                                            <span className="text-lg font-extrabold text-slate-900">
-                                                                {hasDiscount
-                                                                    ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`)
-                                                                    : (originalPrice === 0 ? 'Free' : `₹${originalPrice.toLocaleString('en-IN')}`)
-                                                                }
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                    <div className='flex items-center gap-2'>
-                                                        <button
-                                                            onClick={(e) => {
-                                                                e.stopPropagation();
-
-                                                                const isInCart = cartCourses.some(item => item.id === book.id);
-
-                                                                if (isInCart) {
-                                                                    const updatedCart = cartCourses.filter(item => item.id !== book.id);
-                                                                    setCartCourses(updatedCart);
-                                                                    localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
-                                                                    window.dispatchEvent(new Event('cartUpdated'));
-                                                                } else {
-                                                                    if (!book.coursePricing || book.coursePricing.length === 0) {
-                                                                        return;
-                                                                    }
-                                                                    setSelectedCourse(course);
-                                                                    setShowConfigModal(true);
-                                                                }
-                                                            }}
-                                                            className="text-white h-9 w-9 rounded-full flex items-center justify-center hover:scale-110 transition-transform shadow-md"
-                                                            style={{
-                                                                backgroundColor: cartCourses.some(item => item.id === book.id) ? '#dc2626' : (theme?.primary || '#2196F3'),
-                                                                transform: cartCourses.some(item => item.id === book.id) ? 'scale(1.1)' : 'scale(1)',
-                                                                boxShadow: cartCourses.some(item => item.id === book.id) ? '0 10px 15px -3px rgba(220, 38, 38, 0.35)' : '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-                                                            }}
-                                                        >
-                                                            {cartCourses.some(item => item.id === book.id) ? <Icons.X /> : <Icons.Cart />}
-                                                        </button>
-                                                        {cartCourses.some(item => item.id === book.id) && (
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    router.push('/cart');
-                                                                }}
-                                                                className="h-9 px-3 text-white rounded-full flex items-center justify-center gap-1.5 hover:scale-105 transition-all shadow-md text-xs font-semibold"
-                                                                style={{
-                                                                    backgroundColor: theme?.primary || '#2196F3',
-                                                                }}
-                                                            >
-                                                                View Cart
-                                                            </button>
-                                                        )}
-                                                    </div>
-                                                </div>
+                                                </h4>
+                                                <p className="text-[11px] text-slate-500 font-semibold leading-normal line-clamp-2">
+                                                    {cleanDescription || "Comprehensive educational framework curated explicitly for professional exam staging strategies."}
+                                                </p>
                                             </div>
                                         </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
 
-                        {/* Navigation Buttons */}
-                        <div className="flex justify-center items-center gap-4 mt-6">
-                            <button
-                                onClick={handlePrev}
-                                disabled={!canGoPrev}
-                                className={`${BRAND_GREEN_CLASS} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                    }`}
-                            >
-                                <Icons.ChevronLeft />
-                            </button>
-                            <button
-                                onClick={handleNext}
-                                disabled={!canGoNext}
-                                className={`${BRAND_GREEN_CLASS} text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100' : 'opacity-30 cursor-not-allowed'
-                                    }`}
-                            >
-                                <Icons.ChevronRight />
-                            </button>
+                                        {/* PRICING ACTION BUTTON FOOTER */}
+                                        <div className="border-t border-slate-100 pt-4 mt-4 flex items-center justify-between">
+                                            <div className="flex flex-col">
+                                                {hasDiscount && (
+                                                    <span className="text-[10px] text-slate-400 line-through font-semibold leading-none">
+                                                        ₹{originalPrice.toLocaleString('en-IN')}
+                                                    </span>
+                                                )}
+                                                <span className="text-sm font-semibold text-slate-900 mt-0.5 leading-none">
+                                                    {pricing ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`) : 'Free'}
+                                                </span>
+                                            </div>
+
+                                            <button
+                                                onClick={(e) => {
+                                                    if (!book.coursePricing || book.coursePricing.length === 0) return;
+                                                    e.stopPropagation();
+                                                    setSelectedBook(book);
+                                                    setShowConfigModal(true);
+                                                }}
+                                                className="text-[#0a459a] font-semibold text-[11px] uppercase tracking-wider flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform group-hover:underline"
+                                            >
+                                                Access Book <ArrowUpRight className="w-3.5 h-3.5" />
+                                            </button>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
-                )}
+
+                    {/* CAROUSEL NAVIGATION CONTROLS */}
+                    <div className="flex justify-center items-center gap-4 mt-6">
+                        <button
+                            onClick={handlePrev}
+                            disabled={!canGoPrev}
+                            className={`bg-[#0a459a] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100 active:scale-95' : 'opacity-20 cursor-not-allowed'
+                                }`}
+                        >
+                            <Icons.ChevronLeft size={20} />
+                        </button>
+                        <button
+                            onClick={handleNext}
+                            disabled={!canGoNext}
+                            className={`bg-[#0a459a] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100 active:scale-95' : 'opacity-20 cursor-not-allowed'
+                                }`}
+                        >
+                            <Icons.ChevronRight size={20} />
+                        </button>
+                    </div>
+                </div>
+            )}
+            {/* Mobile View Explore Store — aligned to end */}
+            <div className="md:hidden flex justify-center w-full mt-5 mb-2">
+                <button
+                    onClick={handleExploreAllClick}
+                    className="flex items-center gap-2 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all shadow-md active:scale-95"
+                >
+                    Explore Store <Icons.ChevronRight size={20} />
+                </button>
             </div>
 
-            {/* Book Config Modal */}
+            {/* DYNAMIC BOOK PRICING CONFIG MODAL */}
             {showConfigModal && selectedBook && (
                 <CourseConfigModal
                     course={selectedBook}
@@ -446,4 +413,3 @@ export const BookStore = ({ employeeCourseId }) => {
         </section>
     );
 };
-
