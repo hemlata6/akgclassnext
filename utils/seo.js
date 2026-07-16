@@ -105,7 +105,7 @@ export const generateBlogStructuredData = (blog, url) => {
   const {
     title = '',
     description = '',
-    image = 'https://nextgencaclass.netlify.app/logo.png',
+    image = 'https://nextgencaacademy.com/logo.png',
     publishedDate = new Date().toISOString(),
     modifiedDate = new Date().toISOString(),
     author = 'CA Class',
@@ -134,7 +134,7 @@ export const generateBlogStructuredData = (blog, url) => {
       url: 'https://caclassestest.netlify.app',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://nextgencaclass.netlify.app/logo.png',
+        url: 'https://nextgencaacademy.com/logo.png',
       },
     },
     mainEntityOfPage: {
@@ -154,7 +154,7 @@ export const generateOrganizationStructuredData = () => {
     '@type': 'EducationalOrganization',
     name: 'CA Class',
     url: 'https://caclassestest.netlify.app',
-    logo: 'https://nextgencaclass.netlify.app/logo.png',
+    logo: 'https://nextgencaacademy.com/logo.png',
     description: 'Expert coaching for CA Final - Financial Reporting & Ind AS by NextGenCA',
     sameAs: [
       // Add your social media URLs
@@ -197,7 +197,7 @@ export const generateBreadcrumbStructuredData = (breadcrumbs) => {
  * @returns {string} Image URL
  */
 export const getBlogImage = (blog, baseUrl = '') => {
-  if (!blog) return 'https://nextgencaclass.netlify.app/logo.png';
+  if (!blog) return 'https://nextgencaacademy.com/logo.png';
 
   // Helper to fix old CDN URLs
   const fixCdnUrl = (url) => {
@@ -215,7 +215,7 @@ export const getBlogImage = (blog, baseUrl = '') => {
   if (blog.logo) return fixCdnUrl(baseUrl + blog.logo);
 
   // Default fallback
-  return 'https://nextgencaclass.netlify.app/logo.png';
+  return 'https://nextgencaacademy.com/logo.png';
 };
 
 /**
