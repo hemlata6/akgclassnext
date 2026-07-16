@@ -78,8 +78,11 @@ const FacultyProfile = ({ }) => {
     const IMAGE_TOP = 245;
     const IMAGE_WIDTH = 350;
 
-    // Hybrid fixed/absolute to keep image in view while scrolling description
+    // Hybrid fixed/absolute to keep image in view while scrolling description (desktop only)
     useEffect(() => {
+        const isDesktop = window.innerWidth >= 768;
+        if (!isDesktop) return;
+
         const section = document.getElementById('faculty-hero-section');
         const image = imageRef.current;
         const placeholder = placeholderRef.current;
@@ -218,34 +221,18 @@ const FacultyProfile = ({ }) => {
                         </div>
 
                         <div className={`flex flex-col md:flex-row items-start gap-12 relative`}>
-                            {/* Placeholder preserves flex layout while fixed image floats on top */}
+                            {/* Placeholder preserves flex layout while fixed image floats on top (desktop only) */}
                             <div className="hidden md:block md:w-1/3" ref={placeholderRef}></div>
-                            <div className="faculty image fixed top-[245px]" ref={imageRef}>
-                                <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square bg-slate-100">
-                                    <img
-                                        src={facultyImage}
-                                        alt={faculty?.name}
-                                        className="w-full h-full object-contain object-center"
-                                    />
+                            <div className="w-full md:w-auto sticky top-4 z-10 md:static" ref={imageRef}>
+                                <div className="faculty-image">
+                                    <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square bg-slate-100 max-w-[300px] mx-auto md:max-w-none">
+                                        <img
+                                            src={facultyImage}
+                                            alt={faculty?.name}
+                                            className="w-full h-full object-contain object-center"
+                                        />
+                                    </div>
                                 </div>
-                                {/* Faculty Info Card */}
-                                {/* <div className="mt-6 bg-white rounded-xl shadow-lg p-6 border border-slate-100">
-                                    <h1 className="text-2xl font-bold text-slate-900 mb-1">{faculty?.name}</h1>
-                                    <p className="text-teal-700 font-semibold mb-4" style={{ color: theme.primary }}>{faculty?.subtitle}</p>
-                                    {faculty?.tagLine && (
-                                        <p className="text-sm text-slate-600 mb-4">{faculty?.tagLine}</p>
-                                    )}
-                                    {faculty?.highlights && faculty.highlights.length > 0 && (
-                                        <div className="space-y-2">
-                                            {faculty.highlights.map((highlight, idx) => (
-                                                <div key={idx} className="flex items-start gap-2">
-                                                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1" style={{ backgroundColor: theme.primary }}></div>
-                                                    <p className="text-xs text-slate-600">{highlight}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-                                </div> */}
                             </div>
 
                             <div className="w-full md:w-2/3 md:overflow-y-auto md:pr-2">

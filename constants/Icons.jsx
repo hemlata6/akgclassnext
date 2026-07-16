@@ -53,7 +53,7 @@ export const Icons = {
   File: () => <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
 };
 
-export const LAYOUT_PADDING = "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8";
+export const LAYOUT_PADDING = "max-w-7xl mx-auto px-2 sm:px-6 lg:px-8";
 // Theme colors - these will be used by components that haven't been converted to useTheme yet
 // Brand theme colors (#0749A2 / #0B3276)
 export const BRAND_GREEN = "#0749A2";

@@ -389,7 +389,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                     {/* Book Cover Container */}
                                     <div className="relative bg-white rounded-lg shadow-lg overflow-hidden border border-slate-100 transform transition-all duration-500 group-hover:scale-105 group-hover:shadow-xl lg:h-full">
                                         <div
-                                            className="bg-gradient-to-br from-emerald-900 to-emerald-700 flex items-center justify-center aspect-video lg:aspect-video lg:h-full"
+                                            className="bg-gradient-to-br from-emerald-900 to-emerald-700 flex items-center justify-center aspect-square lg:h-full"
                                         >
                                             {bookData?.logo ? (
                                                 <img
