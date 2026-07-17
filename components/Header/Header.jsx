@@ -219,6 +219,7 @@ export const Header = ({ cartCount }) => {
   return (
     <>
       {/* 1. SYSTEM UTILITY PRE-HEADER (Stays relative, scrolls up away naturally) */}
+      {!router.pathname.startsWith('/faculty/') && (
       <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-3 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -230,7 +231,7 @@ export const Header = ({ cartCount }) => {
           <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
           <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
         </div>
-      </div>
+      </div>)}
 
       {/* 2. DUMMY BUFFER - Replaces layout void spacing ONLY when header snaps to absolute fixed */}
       {isHeaderFixed && <div className="h-[73px] w-full invisible pointer-events-none"></div>}
