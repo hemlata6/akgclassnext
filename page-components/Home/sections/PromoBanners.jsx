@@ -29,10 +29,13 @@ export const PromoBanners = () => {
                 );
 
                 if (activeBanners.length > 0) {
+                    const resolveUrl = (path) =>
+                        String(path).startsWith('http') ? path : Endpoints.mediaBaseUrl + path;
+
                     const bannerSlides = activeBanners.map(banner => ({
                         ...banner,
-                        mobileSrc: Endpoints.mediaBaseUrl + banner.banner,
-                        desktopSrc: Endpoints.mediaBaseUrl + banner.banner,
+                        mobileSrc: resolveUrl(banner.banner),
+                        desktopSrc: resolveUrl(banner.banner),
                         alt: banner.title || 'Banner',
                         bg: 'bg-slate-900'
                     }));
