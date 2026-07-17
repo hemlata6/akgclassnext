@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
@@ -102,6 +102,10 @@ export const Header = ({ cartCount }) => {
   const [facultyLoading, setFacultyLoading] = useState(false);
   const [mobileFacultyOpen, setMobileFacultyOpen] = useState(false);
 
+  // REFS FOR CLICK-OUTSIDE DETECTION
+  const facultyDropdownRef = useRef(null);
+  const exploreDropdownRef = useRef(null);
+
   // SCROLL TRIGGER DETECTOR DETACHMENT STATE
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
 
@@ -120,6 +124,20 @@ export const Header = ({ cartCount }) => {
 
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // CLICK OUTSIDE HANDLER FOR BOTH DROPDOWNS
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (facultyDropdownRef.current && !facultyDropdownRef.current.contains(e.target)) {
+        setFacultyDropdownOpen(false);
+      }
+      if (exploreDropdownRef.current && !exploreDropdownRef.current.contains(e.target)) {
+        setExploreDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const fetchDomainsForMenu = async () => {
@@ -235,7 +253,7 @@ export const Header = ({ cartCount }) => {
           <div className="hidden lg:flex items-center gap-6 border-l border-slate-200/80 pl-6 relative">
 
             {/* EXPLORE DROPDOWN BUTTON */}
-            <div className="relative">
+            <div className="relative" ref={exploreDropdownRef}>
               <button
                 onClick={() => {
                   setExploreDropdownOpen(!exploreDropdownOpen);
@@ -248,7 +266,7 @@ export const Header = ({ cartCount }) => {
               </button>
 
               {exploreDropdownOpen && (
-                <div className="absolute left-0 top-[calc(100%+12px)] w-56 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50 max-h-[380px] overflow-y-auto">
+                <div className="absolute left-0 top-[calc(100%+12px)] w-56 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50">
                   {domainLoading ? (
                     <div className="px-4 py-3 text-xs text-slate-400 font-bold">Loading categories...</div>
                   ) : domains.length > 0 ? (
@@ -278,7 +296,7 @@ export const Header = ({ cartCount }) => {
               </a>
 
               {/* FACULTY DROPDOWN NAV ANCHOR */}
-              <div className="relative">
+              <div className="relative" ref={facultyDropdownRef}>
                 <button
                   onClick={() => {
                     setFacultyDropdownOpen(!facultyDropdownOpen);
@@ -291,7 +309,7 @@ export const Header = ({ cartCount }) => {
                 </button>
 
                 {facultyDropdownOpen && (
-                  <div className="absolute left-0 top-[calc(100%+16px)] w-48 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50 max-h-[300px] overflow-y-auto normal-case">
+                  <div className="absolute left-0 top-[calc(100%+16px)] w-48 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50 normal-case">
                     {facultyLoading ? (
                       <div className="px-4 py-3 text-xs text-slate-400 font-bold">Loading...</div>
                     ) : facultyList.length > 0 ? (
@@ -299,7 +317,7 @@ export const Header = ({ cartCount }) => {
                         <button
                           key={fac.id}
                           onClick={() => handleFacultyRedirect(fac)}
-                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-2.5 rounded-xl transition-all flex items-center justify-between group"
+                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3.5 rounded-xl transition-all flex items-center justify-between group"
                         >
                           {[fac.firstName, fac.lastName].filter(Boolean).join(' ')}
                           <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />

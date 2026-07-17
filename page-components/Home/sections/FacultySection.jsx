@@ -168,7 +168,7 @@ const FacultyAndStatsSection = () => {
             <div className="pt-12 pb-20 overflow-hidden">
                 <div className="text-center mb-10 px-4">
                     <span className="text-indigo-600 font-bold tracking-widest text-xs uppercase bg-indigo-50 px-3 py-1 rounded-full shadow-sm">Dream Team</span>
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 mt-3">Learn From The Masters</h2>
+                    <h2 className="text-3xl md:text-3xl font-bold text-slate-900 mt-3">Learn From The Masters</h2>
                 </div>
 
                 {/* Infinite Marquee */}

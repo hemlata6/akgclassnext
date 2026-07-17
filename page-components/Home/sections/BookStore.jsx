@@ -244,16 +244,18 @@ export const BookStore = ({ employeeCourseId }) => {
                     </div>
 
                     {/* Desktop View Unified Redirect Hook Action Anchor */}
-                    <button
-                        onClick={handleExploreAllClick}
-                        className="hidden md:flex items-center gap-1.5 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-95 whitespace-nowrap"
-                    >
-                        Explore Store <Icons.ChevronRight size={14} />
-                    </button>
+                    {!hasEmployeeCourseSelection && (
+                        <button
+                            onClick={handleExploreAllClick}
+                            className="hidden md:flex items-center gap-1.5 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-95 whitespace-nowrap"
+                        >
+                            Explore Store <Icons.ChevronRight size={14} />
+                        </button>
+                    )}
                 </div>
 
             </div>
-            
+
 
             {/* STATUS INTERFACES PADS */}
             {loading && (
@@ -393,14 +395,16 @@ export const BookStore = ({ employeeCourseId }) => {
                 </div>
             )}
             {/* Mobile View Explore Store — aligned to end */}
-            <div className="md:hidden flex justify-center w-full mt-5 mb-2">
-                <button
-                    onClick={handleExploreAllClick}
-                    className="flex items-center gap-2 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all shadow-md active:scale-95"
-                >
-                    Explore Store <Icons.ChevronRight size={20} />
-                </button>
-            </div>
+            {!hasEmployeeCourseSelection && (
+                <div className="md:hidden flex justify-center w-full mt-5 mb-2">
+                    <button
+                        onClick={handleExploreAllClick}
+                        className="flex items-center gap-2 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all shadow-md active:scale-95"
+                    >
+                        Explore Store <Icons.ChevronRight size={20} />
+                    </button>
+                </div>
+            )}
 
             {/* DYNAMIC BOOK PRICING CONFIG MODAL */}
             {showConfigModal && selectedBook && (

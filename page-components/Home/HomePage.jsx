@@ -150,12 +150,12 @@ export default function HomePage() {
       {/* {showPopup && <PromoPopup onClose={() => setShowPopup(false)} />} */}
       <PromoBanners />
       {/* <HeroSection onExploreClick={handleScrollToCourses} /> */}
-      {/* <FacultyAndStatsSection /> */}
+      <FacultyAndStatsSection />
       {/* <WhyChooseUs /> */}
       {/* <AboutSection /> */}
-      <BookStore />
-      <SecondBannerSection />
       <CoursesSection />
+      <SecondBannerSection />
+      <BookStore />
       {/* <MarathonGallery /> */}
       <StudentGallery />
       {/* <FreeResources /> */}

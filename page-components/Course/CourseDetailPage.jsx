@@ -1051,55 +1051,57 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                   </div>
                 )}
                 {/* Watch Time - selectable chips */}
-                <div>
-                  <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Watch Time</label>
-                  <div className="flex flex-wrap gap-2">
-                    {courseData?.coursePricing?.length > 0 ? (
-                      [...new Set(courseData.coursePricing
-                        .filter(p => {
-                          const sm = (selectedMode || modes[0] || '').split(" + ");
-                          return (!selectedMode && !modes.length) ||
-                            ((sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
-                              (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
-                              (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
-                              (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
-                              (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null));
-                        })
-                        .map(p => String(p.watchTime))
-                      )].map((wt) => {
-                        const currentWatchTime = priceInfo?.watchTime !== undefined && priceInfo?.watchTime !== null ? String(priceInfo.watchTime) : '';
-                        const isActive = currentWatchTime === wt || (!currentWatchTime && wt === '');
-                        return (
-                          <button
-                            key={wt || 'unlimited'}
-                            type="button"
-                            onClick={() => {
-                              const allPricing = courseData?.coursePricing || [];
-                              const sm = (selectedMode || modes[0] || '').split(" + ");
-                              const match = allPricing.find(p =>
-                                String(p.watchTime) === wt &&
-                                (sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
-                                (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
-                                (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
-                                (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
-                                (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null)
-                              );
-                              if (match) setSelectedValidity(match);
-                            }}
-                            className={`px-4 py-2 text-xs font-bold rounded-xl border transition-all ${isActive
-                              ? 'border-[#0749A2] bg-blue-50/50 text-[#0749A2] shadow-sm'
-                              : 'border-slate-200 text-slate-600 hover:bg-slate-50'
-                              }`}
-                          >
-                            {wt ? `${wt}x` : 'Unlimited'}
-                          </button>
-                        );
-                      })
-                    ) : (
-                      <span className="text-xs text-slate-400">N/A</span>
-                    )}
-                  </div>
-                </div>
+                {(() => {
+                  const filteredWatchTimes = [...new Set((courseData?.coursePricing || [])
+                    .filter(p => {
+                      const sm = (selectedMode || modes[0] || '').split(" + ");
+                      return (!selectedMode && !modes.length) ||
+                        ((sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
+                          (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
+                          (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
+                          (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
+                          (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null));
+                    })
+                    .map(p => p.watchTime ? String(p.watchTime) : '')
+                  )];
+                  if (filteredWatchTimes.length === 0) return null;
+                  return (
+                    <div>
+                      <label className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-2">Watch Time</label>
+                      <div className="flex flex-wrap gap-2">
+                        {filteredWatchTimes.map((wt) => {
+                          const currentWatchTime = priceInfo?.watchTime !== undefined && priceInfo?.watchTime !== null ? String(priceInfo.watchTime) : '';
+                          const isActive = currentWatchTime === wt;
+                          return (
+                            <button
+                              key={wt || 'unlimited'}
+                              type="button"
+                              onClick={() => {
+                                const allPricing = courseData?.coursePricing || [];
+                                const sm = (selectedMode || modes[0] || '').split(" + ");
+                                const match = allPricing.find(p =>
+                                  String(p.watchTime) === wt &&
+                                  (sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
+                                  (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
+                                  (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
+                                  (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
+                                  (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null)
+                                );
+                                if (match) setSelectedValidity(match);
+                              }}
+                              className={`px-4 py-2 text-xs font-bold rounded-xl border transition-all ${isActive
+                                ? 'border-[#0749A2] bg-blue-50/50 text-[#0749A2] shadow-sm'
+                                : 'border-slate-200 text-slate-600 hover:bg-slate-50'
+                                }`}
+                            >
+                              {wt ? `${wt}x` : 'Unlimited'}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  );
+                })()}
               </div>
               <div className="space-y-2.5 pt-1">
                 {cartCourses.some(item => item.id === courseData?.id) ? (
@@ -1242,48 +1244,50 @@ const CourseContent = ({ courseData, onAddToCart }) => {
               </div>
             </div>
             {/* Watch Time */}
-            <div>
-              <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Watch Time</label>
-              <div className="flex flex-wrap gap-2">
-                {courseData?.coursePricing?.length > 0 ? (
-                  [...new Set(courseData.coursePricing
-                    .filter(p => {
-                      const sm = (selectedMode || modes[0] || '').split(" + ");
-                      return (!selectedMode && !modes.length) ||
-                        ((sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
-                          (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
-                          (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
-                          (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
-                          (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null));
-                    })
-                    .map(p => String(p.watchTime))
-                  )].map((wt) => {
-                    const currentWatchTime = priceInfo?.watchTime !== undefined && priceInfo?.watchTime !== null ? String(priceInfo.watchTime) : '';
-                    const isActive = currentWatchTime === wt || (!currentWatchTime && wt === '');
-                    return (
-                      <button key={wt || 'unlimited'} type="button" onClick={() => {
-                        const allPricing = courseData?.coursePricing || [];
-                        const sm = (selectedMode || modes[0] || '').split(" + ");
-                        const match = allPricing.find(p =>
-                          String(p.watchTime) === wt &&
-                          (sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
-                          (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
-                          (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
-                          (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
-                          (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null)
-                        );
-                        if (match) setSelectedValidity(match);
-                      }}
-                        className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all ${isActive ? 'border-[#0749A2] bg-blue-50/50 text-[#0749A2]' : 'border-slate-200 text-slate-600'}`}>
-                        {wt ? `${wt}x` : 'Unlimited'}
-                      </button>
-                    );
-                  })
-                ) : (
-                  <span className="text-xs text-slate-400">N/A</span>
-                )}
-              </div>
-            </div>
+            {(() => {
+              const filteredWatchTimes = [...new Set((courseData?.coursePricing || [])
+                .filter(p => {
+                  const sm = (selectedMode || modes[0] || '').split(" + ");
+                  return (!selectedMode && !modes.length) ||
+                    ((sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
+                      (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
+                      (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
+                      (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
+                      (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null));
+                })
+                .map(p => p.watchTime ? String(p.watchTime) : '')
+              )];
+              if (filteredWatchTimes.length === 0) return null;
+              return (
+                <div>
+                  <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-2">Watch Time</label>
+                  <div className="flex flex-wrap gap-2">
+                    {filteredWatchTimes.map((wt) => {
+                      const currentWatchTime = priceInfo?.watchTime !== undefined && priceInfo?.watchTime !== null ? String(priceInfo.watchTime) : '';
+                      const isActive = currentWatchTime === wt;
+                      return (
+                        <button key={wt || 'unlimited'} type="button" onClick={() => {
+                          const allPricing = courseData?.coursePricing || [];
+                          const sm = (selectedMode || modes[0] || '').split(" + ");
+                          const match = allPricing.find(p =>
+                            String(p.watchTime) === wt &&
+                            (sm.includes("Recorded") ? p.onlineContentAccess === true : p.onlineContentAccess === null) &&
+                            (sm.includes("Live Access") ? p.liveAccess === true : p.liveAccess === null) &&
+                            (sm.includes("Pendrive") ? p.offlineContentAccess === true : p.offlineContentAccess === null) &&
+                            (sm.includes("Face to Face") ? p.faceToFaceAccess === true : p.faceToFaceAccess === null) &&
+                            (sm.includes("Test-Series") ? p.quizAccess === true : p.quizAccess === null)
+                          );
+                          if (match) setSelectedValidity(match);
+                        }}
+                          className={`px-3 py-1.5 text-xs font-bold rounded-xl border transition-all ${isActive ? 'border-[#0749A2] bg-blue-50/50 text-[#0749A2]' : 'border-slate-200 text-slate-600'}`}>
+                          {wt ? `${wt}x` : 'Unlimited'}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
 
           <div className="space-y-2.5 pt-1">

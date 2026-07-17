@@ -1,14 +1,14 @@
-import React, { useEffect, useMemo, useState, useRef } from 'react';
+import React, { useEffect, useMemo, useState, useRef  } from 'react';
 import { useRouter } from 'next/router';
-import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
+import { LAYOUT_PADDING } from '../../constants/Icons';
 import Layout from '../../components/Layout';
-import { useTheme } from '../../config/ThemeContext';
 import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import Endpoints from '@/config/endpoints';
 import { CoursesSection } from '@/page-components/Home/sections/CoursesSection';
 import { BookStore } from '@/page-components/Home/sections/BookStore';
 import { Footer } from '@/components/Shared/SharedComponents';
+
 
 const parseFacultyStateQuery = (rawState) => {
     if (!rawState) return null;
@@ -52,11 +52,53 @@ const parseFacultyStateQuery = (rawState) => {
 const FacultyProfile = ({ }) => {
 
     const router = useRouter();
-    const { theme } = useTheme();
+    // const { theme } = useTheme();
     const { facultyname, state } = router?.query || {};
-    const [employees, setEmployees] = useState([]);
-    const [employeesLoading, setEmployeesLoading] = useState(false);
-    const [showFacultyDropdown, setShowFacultyDropdown] = useState(false);
+    // const [employees, setEmployees] = useState([]);
+    // const [employeesLoading, setEmployeesLoading] = useState(false);
+    // const [showFacultyDropdown, setShowFacultyDropdown] = useState(false);
+
+    const [banner, setBanner] = useState(null);
+
+    // Fetch banner from API — re-fetch when faculty name changes
+    useEffect(() => {
+        setBanner(null);
+        fetchBanner();
+    }, [facultyname]);
+
+    const fetchBanner = async () => {
+        try {
+            const response = await Network.getBannersApi(instId);
+            if (response && response.banners && response.banners.length > 0) {
+                const normalize = (str) => (str || '').toLowerCase().trim().replace(/\s+/g, '-');
+                const matchingBanner = response.banners.find(
+                    banner =>
+                        banner.active && normalize(banner.group) === normalize(facultyname)
+                );
+
+                if (matchingBanner) {
+                    const firstBanner = matchingBanner;
+                    setBanner({
+                        ...firstBanner,
+                        mobileSrc: Endpoints.mediaBaseUrl + firstBanner.banner,
+                        desktopSrc: Endpoints.mediaBaseUrl + firstBanner.banner,
+                        alt: firstBanner.title || 'Banner',
+                    });
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching banners:', error);
+        }
+    };
+
+    const handleBannerClick = () => {
+        const isRedirectBanner = String(banner?.type || '').toLowerCase() === 'link';
+        const targetUrl = banner?.contentLink;
+
+        if (isRedirectBanner && targetUrl) {
+            window.open(targetUrl, '_blank', 'noopener,noreferrer');
+        }
+    };
 
     const facultyState = useMemo(() => {
         return parseFacultyStateQuery(state);
@@ -119,39 +161,39 @@ const FacultyProfile = ({ }) => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    useEffect(() => {
-        window.scrollTo(0, 0);
-        fetchEmployeeList();
-    }, []);
+    // useEffect(() => {
+    //     window.scrollTo(0, 0);
+    //     fetchEmployeeList();
+    // }, []);
 
-    // Fetch employee list
-    const fetchEmployeeList = async () => {
-        try {
-            setEmployeesLoading(true);
-            const response = await Network.fetchEmployee(instId);
-            if (response?.errorCode === 0 && response?.employees) {
-                const filteredEmployees = response.employees.filter(
-                    emp => emp.showInApp === true
-                );
-                setEmployees(filteredEmployees);
-            } else {
-                console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
-                setEmployees([]);
-            }
-        } catch (error) {
-            console.error('Error fetching employee list:', error);
-            setEmployees([]);
-        } finally {
-            setEmployeesLoading(false);
-        }
-    };
+    // // Fetch employee list
+    // const fetchEmployeeList = async () => {
+    //     try {
+    //         setEmployeesLoading(true);
+    //         const response = await Network.fetchEmployee(instId);
+    //         if (response?.errorCode === 0 && response?.employees) {
+    //             const filteredEmployees = response.employees.filter(
+    //                 emp => emp.showInApp === true
+    //             );
+    //             setEmployees(filteredEmployees);
+    //         } else {
+    //             console.log('Failed to fetch employee list:', response?.message || 'Unknown error');
+    //             setEmployees([]);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching employee list:', error);
+    //         setEmployees([]);
+    //     } finally {
+    //         setEmployeesLoading(false);
+    //     }
+    // };
 
     // Handle faculty navigation
-    const handleFaculty = (employee) => {
-        const fullName = [employee?.firstName, employee?.lastName].filter(Boolean).join(' ');
-        router.push(`/faculty/${employee?.id || fullName.toLowerCase().replace(/\s+/g, '-')}`);
-        setShowFacultyDropdown(false);
-    };
+    // const handleFaculty = (employee) => {
+    //     const fullName = [employee?.firstName, employee?.lastName].filter(Boolean).join(' ');
+    //     router.push(`/faculty/${employee?.id || fullName.toLowerCase().replace(/\s+/g, '-')}`);
+    //     setShowFacultyDropdown(false);
+    // };
 
     const fallbackFaculty = useMemo(() => {
         if (!facultyPayload && !facultyState?.fullName) return null;
@@ -203,26 +245,38 @@ const FacultyProfile = ({ }) => {
 
     return (
         <Layout>
+            {banner && (
+                <section className="relative w-full bg-gradient-to-br from-[#0749A2] via-[#0B3276] to-[#0749A2] overflow-hidden">
+                    <div
+                        onClick={handleBannerClick}
+                        className={`w-full aspect-[3/1] md:aspect-[3/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl ${banner?.contentLink ? 'cursor-pointer' : ''}`}
+                    >
+                        {/* Mobile */}
+                        <img
+                            src={banner.mobileSrc}
+                            alt={banner.alt}
+                            className="md:hidden w-full h-full object-cover"
+                        />
+
+                        {/* Desktop */}
+                        <img
+                            src={banner.desktopSrc}
+                            alt={banner.alt}
+                            className="hidden md:block w-full h-full object-cover"
+                        />
+
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0" />
+                    </div>
+                </section>
+            )}
             <div id="faculty-profile-container" data-page="faculty-profile" className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
                 {/* Hero Section */}
                 <section id="faculty-hero-section" data-section="faculty-hero" className="bg-white pt-4 pb-16" style={{ backgroundColor: '#ffffff' }}>
                     <div className={LAYOUT_PADDING}>
-                        <div className="flex items-center gap-4 mb-8">
-                            <button
-                                onClick={() => router.push('/')}
-                                className="back-button inline-flex items-center gap-2 transition-colors hover:opacity-70"
-                                style={{ color: theme.primary }}
-                            >
-                                <Icons.ChevronLeft />
-                                Back to Home
-                            </button>
-
-
-                        </div>
-
                         <div className={`flex flex-col md:flex-row items-start gap-12 relative`}>
                             {/* Placeholder preserves flex layout while fixed image floats on top (desktop only) */}
-                            <div className="hidden md:block md:w-1/3" ref={placeholderRef}></div>
+                            {/* <div className="hidden md:block md:w-1/3" ref={placeholderRef}></div>
                             <div className="w-full md:w-auto sticky top-4 z-10 md:static" ref={imageRef}>
                                 <div className="faculty-image">
                                     <div className="relative rounded-2xl overflow-hidden shadow-2xl aspect-square bg-slate-100 max-w-[300px] mx-auto md:max-w-none">
@@ -233,9 +287,9 @@ const FacultyProfile = ({ }) => {
                                         />
                                     </div>
                                 </div>
-                            </div>
+                            </div> */}
 
-                            <div className="w-full md:w-2/3 md:overflow-y-auto md:pr-2">
+                            <div className="w-full md:overflow-y-auto">
                                 <div className="space-y-6 bg-white rounded-xl shadow-lg pt-0 pb-[2rem] px=[2rem] border border-slate-100">
                                     {/* <div> */}
                                     {/* <h2 className="text-2xl font-bold text-slate-900 mb-4">About</h2> */}
@@ -249,7 +303,13 @@ const FacultyProfile = ({ }) => {
                                                 <div className="text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload.address }} />
                                             </div>
                                         )} */}
-                                    <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload?.address }} />
+                                    {facultyPayload?.address ? (
+                                        <div className="description text-lg text-slate-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: facultyPayload.address }} />
+                                    ) : faculty?.description ? (
+                                        <div className="description text-lg text-slate-700 leading-relaxed">
+                                            {faculty.description}
+                                        </div>
+                                    ) : null}
                                     {/* </div> */}
 
                                     {/* {faculty?.journey && (
@@ -268,7 +328,6 @@ const FacultyProfile = ({ }) => {
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </section>
 
@@ -276,7 +335,7 @@ const FacultyProfile = ({ }) => {
                 {employeeCourseIds && employeeCourseIds.length > 0 && (
                     <>
                         <CoursesSection employeeCourseId={employeeCourseIds} />
-                        {/* <BookStore employeeCourseId={employeeCourseIds} /> */}
+                        <BookStore employeeCourseId={employeeCourseIds} />
                     </>
                 )}
 

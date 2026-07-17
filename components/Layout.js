@@ -37,7 +37,7 @@ export default function Layout({ children }) {
       
       setShouldHideControls(!!(isMobileParam || tokenParam));
       setIsStorePage(router.pathname === '/store');
-      setIsDetailPage(router.pathname.startsWith('/course/') || router.pathname.startsWith('/book/'));
+      setIsDetailPage(router.pathname.startsWith('/course/') || router.pathname.startsWith('/book/') || router.pathname.startsWith('/faculty/'));
     }
   }, [router.pathname, router.asPath]);
 
