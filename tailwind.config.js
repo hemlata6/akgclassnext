@@ -25,6 +25,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-family-base)', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'sans-serif'],
+        montserrat: ['Montserrat', 'sans-serif'],
+        bebas: ['"Bebas Neue"', '"Anton"', 'sans-serif'],
       },
       animation: {
         marquee: 'marquee 20s linear infinite',
