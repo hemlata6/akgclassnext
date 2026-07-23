@@ -103,7 +103,7 @@ const CourseHeader = ({ courseData, onBack, onAddToCart }) => {
 
   const handleShare = async () => {
     const baseUrl = window.location.hostname === 'localhost'
-      ? 'http://localhost:3000'
+      ? 'http://localhost:5003'
       : 'https://nextgencaacademy.com/';
 
     const shareUrl = `${baseUrl}/course/${courseData?.id}`;

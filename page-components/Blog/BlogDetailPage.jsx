@@ -181,8 +181,8 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     // Share blog function
     const handleShare = async () => {
         const baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-            ? 'http://localhost:3000'
-            : 'https://nextgencaacademy.com';
+            ? 'http://localhost:5003'
+            : 'https://nextgencaacademy.com/';
 
         const shareUrl = `${baseUrl}/blog/${cId}/${slug}`;
 

@@ -41,7 +41,7 @@ npm run dev
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:5003](http://localhost:5003) with your browser to see the result.
 
 ### Building for Production
 
