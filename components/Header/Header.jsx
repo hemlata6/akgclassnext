@@ -248,8 +248,8 @@ export const Header = ({ cartCount }) => {
             <a href="mailto:info.rishabhjain@gmail.com" className="hover:text-white transition-colors duration-200 font-bold">info.rishabhjain@gmail.com</a>
           </div>
           <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
-            <a href="/blog" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</a>
-            <a href="/free-resources" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</a>
+            <Link href="/blog" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</Link>
+            <Link href="/free-resources" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</Link>
             <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
             <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
           </div>

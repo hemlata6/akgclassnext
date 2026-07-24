@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState, useRef  } from 'react';
+import React, { useEffect, useMemo, useState, useRef, useCallback  } from 'react';
 import { useRouter } from 'next/router';
 import { LAYOUT_PADDING } from '../../constants/Icons';
 import Layout from '../../components/Layout';
@@ -61,12 +61,7 @@ const FacultyProfile = ({ }) => {
     const [banner, setBanner] = useState(null);
 
     // Fetch banner from API — re-fetch when faculty name changes
-    useEffect(() => {
-        setBanner(null);
-        fetchBanner();
-    }, [facultyname]);
-
-    const fetchBanner = async () => {
+    const fetchBanner = useCallback(async () => {
         try {
             const response = await Network.getBannersApi(instId);
             if (response && response.banners && response.banners.length > 0) {
@@ -89,7 +84,12 @@ const FacultyProfile = ({ }) => {
         } catch (error) {
             console.error('Error fetching banners:', error);
         }
-    };
+    }, [facultyname]);
+
+    useEffect(() => {
+        setBanner(null);
+        fetchBanner();
+    }, [facultyname, fetchBanner]);
 
     const handleBannerClick = () => {
         const isRedirectBanner = String(banner?.type || '').toLowerCase() === 'link';
