@@ -21,12 +21,15 @@
     "@mui/icons-material": "^7.3.7",
     "@mui/material": "^7.3.7",
     "axios": "^1.13.2",
+    "buttercms": "^3.0.3",
     "html-react-parser": "^5.0.0",
     "lucide-react": "^0.562.0",
     "next": "^14.2.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-helmet-async": "^2.0.5"
+    "react-helmet": "^6.1.0",
+    "react-helmet-async": "^2.0.5",
+    "react-router-dom": "^7.18.1"
   },
   "devDependencies": {
     "@netlify/plugin-nextjs": "^5.15.5",

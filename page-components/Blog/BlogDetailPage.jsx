@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Head from 'next/head';
-import { BRAND_GREEN, Icons } from '../../constants/Icons';
+import { Helmet } from 'react-helmet';
+import { Avatar } from '@mui/material';
+import { Icons, LAYOUT_PADDING, BRAND_GREEN, BRAND_GREEN_HOVER } from '../../constants/Icons';
 import { Footer } from '../../components/Shared/SharedComponents';
-import { ShareButtons } from '../../components/Shared/ShareButtons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
 import Network from '../../config/Network';
-import { Avatar } from '@mui/material';
+import butter from '../../config/buttercms';
+import instId from '../../config/instituteId';
 import { PlayCircle, FileText, Clock, BookOpen, Folder, Music } from 'lucide-react';
+import YouTubePlayer from '../FreeResources/YouTubePlayer';
 import LoginModal from '../../components/Auth/LoginModal';
 import SignupModal from '../../components/Auth/SignupModal';
-import YouTubePlayer from '../FreeResources/YouTubePlayer';
 
-export const BlogDetailPage = ({ blogData, error, cId }) => {
+export const BlogDetailPage = () => {
     const router = useRouter();
     const { isAuthenticated } = useAuth();
     const { authToken } = useAuth();
-    const { slug } = router.query;
-
-    const [blog, setBlog] = useState(blogData || null);
-    const [loading, setLoading] = useState(!blogData);
+    const { cId, slug } = router.query;
+    const [blog, setBlog] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [blogAttachment, setBlogAttachment] = useState([]);
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSignupModal, setShowSignupModal] = useState(false);
@@ -35,30 +35,27 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
         { type: 'image', url: 'https://placehold.co/1280x720/2d3748/FFF?text=All+India+Rankers', title: 'Proven Results' }
     ]);
 
-    // console.log('Blog params:', { cId, slug, hasBlogData: !!blogData });
-    // console.log('blogblogblogblog', blog);
+    // // console.log('blog', blog);
 
 
-    // Helper function to truncate text to N words
-    const truncateToWords = (text, wordLimit = 50) => {
-        if (!text) return '';
-        // Remove HTML tags
-        const plainText = text.replace(/<[^>]*>/g, '');
-        const words = plainText.trim().split(/\s+/);
-        if (words.length <= wordLimit) return plainText;
-        return words.slice(0, wordLimit).join(' ') + '... read more';
+    const slugify = (str) => {
+        if (!str) return '';
+        return str.toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '');
     };
 
+    // Decode and slugify the title from URL params
+    // const slug = slug ? decodeURIComponent(slug) : '';
+    const normalizedUrlSlug = slugify(slug);
+    // // console.log('blogblogblogblog', blog);
+
     useEffect(() => {
-        if (blogData) {
-            setBlog(blogData);
-            setLoading(false);
-            return;
-        }
         if (cId) {
+            // getMergedSchedules();
             fetchBlogDetail();
         }
-    }, [cId, blogData]);
+    }, [cId, slug])
 
     useEffect(() => {
         fetchBanners();
@@ -68,6 +65,7 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
         if (blog?.id) {
             fetchAttachment();
         }
+
     }, [blog]);
 
     const fetchBlogDetail = async () => {
@@ -78,13 +76,14 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
 
             if (response && response.errorCode === 0 && blogDetail?.id) {
                 setBlog(blogDetail);
+
             } else {
                 setBlog(null);
             }
             setLoading(false);
         } catch (error) {
             setLoading(false);
-            console.error('Error fetching blog:', error);
+            console.error('Error fetching banners:', error);
         }
     };
 
@@ -93,20 +92,23 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
             const response = await Network.fetchBlogAttachment(blog?.id);
             if (response && response.contentList && response.contentList.length > 0) {
                 setBlogAttachment(response.contentList);
+
             } else {
                 setBlogAttachment([]);
             }
         } catch (error) {
-            console.error('Error fetching attachments:', error);
+            console.error('Error fetching banners:', error);
         }
     };
 
     const fetchBanners = async () => {
         try {
-            const instId = require('../../config/instituteId').default;
             const response = await Network.getBannersApi(instId);
             if (response && response.banners && response.banners.length > 0) {
+                // Filter only active banners
                 const activeBanners = response.banners.filter(banner => banner.active && banner?.group === 'blog');
+
+
                 if (activeBanners.length > 0) {
                     const bannerSlides = activeBanners.map(banner => ({
                         ...banner,
@@ -122,10 +124,57 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
         }
     };
 
+    const getMergedSchedules = async () => {
+        try {
+            setLoading(true);
+            // Always use 0 for parentId since we're not using it in the route anymore
+            const apiParentId = 0;
+
+            let response = await Network.fetchFreePublicScheduleApi(cId, apiParentId);
+            // butter.page.retrieve(fetchFreePublicScheduleApi(cId, apiParentId), "simple-page")
+            //     .then(response => {
+            //         // console.log(response.data);
+            //     });
+            const blogList = response?.contentList;
+            const blogFilter = blogList?.filter(item => item.entityType === 'blog');
+
+            // Find the blog that matches the title
+            const matchedBlog = blogFilter?.find(item => {
+                const itemSlug = slugify(item.title);
+
+                // Match against the normalized slug, original slug, or exact title
+                return itemSlug === normalizedUrlSlug ||
+                    itemSlug === slugify(slug) ||
+                    item.title === slug ||
+                    item.title === decodeURIComponent(slug);
+            });
+
+            if (matchedBlog) {
+
+                setBlog(matchedBlog);
+                // Signal to react-snap that page is ready
+                if (window && typeof window !== 'undefined') {
+                    window.snapSaveState = () => ({});
+                }
+            } else {
+                // console.log('No matching blog found');
+                // Set a flag to show "not found" instead of staying in loading
+                setBlog(null);
+            }
+            setLoading(false);
+        } catch (err) {
+            console.error('Error fetching schedule:', err);
+            setBlog(null);
+            setLoading(false);
+        }
+    };
+
     // Force meta tag update when blog changes
     useEffect(() => {
         if (blog?.title) {
-            document.title = `${blog.title}`;
+            document.title = `${blog.seo_title ? blog.seo_title : blog?.blog?.title || blog.title}`;
+            // Scroll to top when blog changes
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
     }, [blog]);
 
@@ -151,6 +200,19 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     }
 
     // Format date
+    // const formatDate = (dateStr) => {
+    //     try {
+    //         return new Date(dateStr).toLocaleDateString('en-US', {
+    //             month: 'short',
+    //             day: 'numeric',
+    //             year: 'numeric'
+    //         });
+    //     } catch {
+    //         return 'Recently';
+    //     }
+    // };
+
+    // Format date
     const formatDate = (dateStr) => {
         try {
             return new Date(dateStr).toLocaleDateString('en-US', {
@@ -160,6 +222,19 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
             });
         } catch {
             return 'Recently';
+        }
+    };
+
+    // JSON-LD structured data for SEO
+    const structuredData = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": blog.title,
+        "image": blog.featured_image ? blog.featured_image : Endpoints.mediaBaseUrl + blog?.blog?.thumb,
+        "datePublished": blog.published,
+        "author": {
+            "@type": "Person",
+            "name": blog.author?.first_name || "calasses"
         }
     };
 
@@ -181,21 +256,29 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
 
     // Share blog function
     const handleShare = async () => {
-        const baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-            ? 'http://localhost:3000'
-            : 'https://vgstudyhub.netlify.app';
+        // Use localhost for testing, production URL for deployment
+        const baseUrl = window.location.hostname === 'localhost'
+            ? 'http://localhost:60001'
+            : 'https://caclasses.in';
 
-        const shareUrl = `${baseUrl}/blog/${cId}/${slug}`;
+        // Include cId as query parameter
+        const queryParams = new URLSearchParams();
+        if (cId) queryParams.append('cId', cId);
 
+        const shareUrl = `${baseUrl}/share/blog/${cId}/${normalizedUrlSlug}`;
+        // console.log(shareUrl, "shareUrl")
         const shareData = {
-            title: blog.seo_title || blog.title || 'Blog Post',
+            title: blog.seo_title ? blog.seo_title : blog?.blog?.title || blog.title,
+            // text: stripHtml(blog.meta_description ? blog.meta_description : blog?.blog?.blog || blog.summary || ''),
             url: shareUrl
         };
 
         try {
             if (navigator.share) {
+                // Use native share API if available (mobile devices)
                 await navigator.share(shareData);
             } else {
+                // Fallback: Copy to clipboard
                 await navigator.clipboard.writeText(shareUrl);
                 alert('Link copied to clipboard!');
             }
@@ -287,18 +370,34 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
         setSelectedVideo(null);
     };
 
-    // Sanitize blog HTML to remove style tags that might affect the page
-    const sanitizeBlogHtml = (html) => {
-        if (!html) return '';
-        // Remove all <style> tags and their content to prevent global style leaks
-        let sanitized = html.replace(/<style[^>]*>[\s\S]*?<\/style>/gi, '');
-        // Also remove style attributes that target body, html, or * selector
-        sanitized = sanitized.replace(/style="([^"]*(?:body|html|\*)[^"]*)"/gi, '');
-        return sanitized;
-    };
 
     return (
-        <div className="bg-white">
+        <div className="bg-white min-h-screen pb-20 md:pb-0">
+            <Helmet>
+                <title>{blog.seo_title ? blog.seo_title : blog?.blog?.title || blog.title} | calasses</title>
+                <meta name="description" content="" />
+
+                <link rel="canonical" href={`https://caclasses.in/blog/${cId}/${normalizedUrlSlug}`} />
+
+                <meta property="og:title" content={blog.seo_title ? blog.seo_title : blog?.blog?.title || blog.title} />
+                <meta property="og:description" content="" />
+                <meta property="og:image" content={blog.featured_image ? blog.featured_image : Endpoints.mediaBaseUrl + blog?.blog?.thumb} />
+                <meta property="og:url" content={`https://caclasses.in/blog/${cId}/${normalizedUrlSlug}`} />
+                <meta property="og:type" content="article" />
+
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:title" content={blog.seo_title ? blog.seo_title : blog?.blog?.title || blog.title} />
+                <meta name="twitter:description" content="" />
+                <meta name="twitter:image" content={blog.featured_image ? blog.featured_image : Endpoints.mediaBaseUrl + blog?.blog?.thumb} />
+
+                <meta property="article:published_time" content={blog.published} />
+                <meta property="article:author" content={blog.author?.first_name || 'calasses'} />
+
+                <script type="application/ld+json">
+                    {JSON.stringify(structuredData)}
+                </script>
+            </Helmet>
+
             <div className="py-8 px-4 md:px-8 max-w-7xl mx-auto">
                 <div className="flex flex-col lg:flex-row gap-6">
                     {/* Left Section - Blog Content */}
@@ -352,20 +451,13 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                             />
                         )}
                         {(blog.body || blog?.blog?.blog) ? (
-                            <div className="prose prose-slate prose-lg max-w-none prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg" style={{ contain: 'layout style paint', isolation: 'isolate' }}>
+                            <div className="prose prose-slate prose-lg max-w-none prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg">
                                 <div
-                                    className="blog-content"
-                                    dangerouslySetInnerHTML={{ __html: sanitizeBlogHtml(blog.body || blog?.blog?.blog || '') }}
+                                    dangerouslySetInnerHTML={{ __html: blog.body || blog?.blog?.blog || '' }}
                                 />
                                 <style jsx>{`
-                                    .blog-content {
-                                        all: revert-layer;
-                                        margin: 0;
-                                        padding: 0;
-                                    }
-                                    
-                                    /* All links should be clickable with pointer cursor - scoped to blog content only */
-                                    :global(.prose) a {
+                                    /* All links should be clickable with pointer cursor */
+                                    div :global(a) {
                                         cursor: pointer !important;
                                         color: #059669 !important;
                                         transition: all 0.3s ease;
@@ -373,13 +465,13 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                                     }
                                     
                                     /* Text links - add underline on hover */
-                                    :global(.prose) a:hover {
+                                    div :global(a:hover) {
                                         color: #047857 !important;
                                         text-decoration: underline;
                                     }
                                     
                                     /* Image links - special styling */
-                                    :global(.prose) a:has(img) {
+                                    div :global(a:has(img)) {
                                         display: inline-block;
                                         border: none !important;
                                         background: none !important;
@@ -387,17 +479,17 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
                                     }
                                     
                                     /* Images within links */
-                                    :global(.prose) a img {
+                                    div :global(a img) {
                                         cursor: pointer;
                                         transition: all 0.3s ease;
                                     }
                                     
                                     /* Image hover effect - no underline for images */
-                                    :global(.prose) a:has(img):hover {
+                                    div :global(a:has(img):hover) {
                                         text-decoration: none !important;
                                     }
                                     
-                                    :global(.prose) a img:hover {
+                                    div :global(a img:hover) {
                                         opacity: 0.8;
                                         transform: scale(1.02);
                                     }
@@ -621,4 +713,3 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
 };
 
 export default BlogDetailPage;
-

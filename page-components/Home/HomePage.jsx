@@ -166,6 +166,7 @@ export default function HomePage() {
       {/* <StudentHub />
       <AppDownload />
       <CounsellingStrip /> */}
+      <BlogSection />
       <AppDownload />
       <Footer />
 

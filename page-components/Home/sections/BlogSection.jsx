@@ -11,6 +11,21 @@ export const BlogSection = () => {
     const [loading, setLoading] = useState(true);
     const [courseId, setCourseId] = useState(null);
 
+    // Deduplicate items by entityId (fallback to id)
+    const dedupeByEntityId = (items = []) => {
+        const seen = new Set();
+        const unique = [];
+        for (const item of items) {
+            const key = item?.entityId ?? item?.id;
+            if (key == null || seen.has(key)) {
+                continue;
+            }
+            seen.add(key);
+            unique.push(item);
+        }
+        return unique;
+    };
+
     useEffect(() => {
         fetchBlogsForHomepage();
     }, []);
@@ -38,7 +53,8 @@ export const BlogSection = () => {
                 const response = await Network.fetchAllContentFromCourse(body);
                 if (response?.errorCode === 0 && response?.contentList) {
                     const blogList = response.contentList.filter(item => item.entityType === 'blog');
-                    setBlogs(blogList.slice(0, 4)); // Ensure max 4 blogs
+                    const uniqueBlogs = dedupeByEntityId(blogList);
+                    setBlogs(uniqueBlogs.slice(0, 4)); // Ensure max 4 blogs
                 }
             }
         } catch (error) {
