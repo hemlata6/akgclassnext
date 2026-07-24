@@ -125,14 +125,14 @@ export const PromoBanners = () => {
                             className="hidden md:block w-full h-full object-cover"
                         />
 
-                        {/* Dark Overlay */}
+                        {/* Dark Overlay
                         <div className="absolute inset-0 bg-gradient-to-r from-[#071226]/95 via-[#071226]/80 to-[#071226]/30" />
 
-                        {/* Content Overlay */}
+                        
                         <div className="absolute inset-0 flex items-center justify-start px-4 sm:px-6 md:px-10 lg:px-16 xl:px-24">
                             <div className="w-full max-w-[800px] text-white">
                                 
-                                {/* ===== BADGES ===== */}
+                                ===== BADGES =====
                                 <div className="flex flex-wrap gap-3 mb-[30px] font-montserrat">
                                     <span
                                         className="inline-flex items-center gap-1.5 h-10 px-[18px] text-sm font-bold leading-none rounded-lg"
@@ -177,75 +177,75 @@ export const PromoBanners = () => {
                                     </span>
                                 </div>
 
-                                {/* ===== HEADING ===== */}
+                                ===== HEADING =====
                                 <div className="font-bebas">
-                                    {/* SCORE HIGH WITH */}
-                                    <p className="text-white uppercase tracking-[0px] font-bold leading-[0.9] text-[24px] sm:text-[40px]">
+                                    SCORE HIGH WITH
+                                    <p className="text-white uppercase tracking-[0px] font-bold leading-[0.9] text-[24px] sm:text-[35px]">
                                         SCORE HIGH WITH
                                     </p>
 
-                                    {/* AUDIT MAESTRO - Gold Gradient Text */}
+                                    AUDIT MAESTRO - Gold Gradient Text
                                     <h2
                                         className="bg-gradient-to-b from-[#F6D56B] via-[#E5B24B] to-[#C8871F] bg-clip-text text-transparent font-black leading-[0.9] tracking-[0px] mb-0 pt-[5px] pb-[5px] drop-shadow-[0_4px_8px_rgba(185,125,34,0.4)]"
                                         style={{
-                                            fontSize: 'clamp(40px, 10vw, 92px)',
+                                            fontSize: 'clamp(40px, 10vw, 80px)',
                                             WebkitTextStroke: '0.5px rgba(246,213,107,0.15)',
                                         }}
                                     >
                                         AUDIT MAESTRO
                                     </h2>
 
-                                    {/* CA RISHABHH JAINN */}
+                                    CA RISHABHH JAINN
                                     <p className="text-white font-bold leading-[0.9] tracking-[0px] mt-[-4px]">
-                                        <span className="font-bebas flex items-center gap-[8px]" style={{ fontSize: 'clamp(28px, 6vw, 40px)' }}>
+                                        <span className="font-bebas flex items-center gap-[8px]" style={{ fontSize: 'clamp(28px, 6vw, 35px)' }}>
                                             CA RISHABHH JAINN
                                             <div className="w-[62%] h-px bg-gradient-to-r from-[#D9A441] via-[#D9A441]/60 to-transparent"></div>
                                         </span>
                                     </p>
                                 </div>
 
-                                {/* ===== DIVIDER ===== */}
+                                ===== DIVIDER =====
                                 
 
-                                {/* ===== STATS ===== */}
+                                ===== STATS =====
                                 <div className="flex flex-wrap gap-x-0 gap-y-4 mt-[30px] mb-0 font-montserrat w-full">
-                                    {/* Stat 1 */}
+                                    Stat 1
                                     <div className="flex flex-row items-start gap-3 min-w-[120px] flex-1">
-                                        <Award className="text-[#D9A441] w-14 h-14 mt-1 shrink-0" strokeWidth={1.5} />
+                                        <Award className="text-[#D9A441] w-12 h-12 mt-0 shrink-0" strokeWidth={1.5} />
                                         <div className="flex flex-col items-start">
-                                            <span className="text-[#D9A441] text-[32px] font-bold leading-none">1000+</span>
+                                            <span className="text-[#D9A441] text-[25px] font-bold leading-none">1000+</span>
                                             <span className="text-white text-base uppercase font-bold leading-tight mt-1">EXEMPTIONS</span>
                                         </div>
                                     </div>
-                                    {/* Stat 2 */}
+                                    Stat 2
                                     <div className="flex flex-row items-start gap-3 min-w-[120px] flex-1">
-                                        <BadgeCheck className="text-[#D9A441] w-14 h-14 mt-1 shrink-0" strokeWidth={1.5} />
+                                        <BadgeCheck className="text-[#D9A441] w-12 h-12 mt-0 shrink-0" strokeWidth={1.5} />
                                         <div className="flex flex-col items-start">
-                                            <span className="text-[#D9A441] text-[32px] font-bold leading-none">75+</span>
+                                            <span className="text-[#D9A441] text-[25px] font-bold leading-none">75+</span>
                                             <span className="text-white text-base uppercase font-bold leading-tight mt-1">ALL INDIA RANKS</span>
                                         </div>
                                     </div>
-                                    {/* Stat 3 */}
+                                    Stat 3
                                     <div className="flex flex-row items-start gap-3 min-w-[120px] flex-1">
-                                        <Medal className="text-[#D9A441] w-14 h-14 mt-1 shrink-0" strokeWidth={1.5} />
+                                        <Medal className="text-[#D9A441] w-12 h-12 mt-0 shrink-0" strokeWidth={1.5} />
                                         <div className="flex flex-col items-start">
-                                            <span className="text-[#D9A441] text-[32px] font-bold leading-none">14+</span>
+                                            <span className="text-[#D9A441] text-[25px] font-bold leading-none">14+</span>
                                             <span className="text-white text-base uppercase font-bold leading-tight mt-1">YEARS OF EXCELLENCE</span>
                                         </div>
                                     </div>
-                                    {/* Stat 4 */}
+                                    Stat 4
                                     <div className="flex flex-row items-start gap-3 min-w-[120px] flex-1">
-                                        <Users className="text-[#D9A441] w-14 h-14 mt-1 shrink-0" strokeWidth={1.5} />
+                                        <Users className="text-[#D9A441] w-12 h-12 mt-0 shrink-0" strokeWidth={1.5} />
                                         <div className="flex flex-col items-start">
-                                            <span className="text-[#D9A441] text-[32px] font-bold leading-none">200K+</span>
+                                            <span className="text-[#D9A441] text-[25px] font-bold leading-none">200K+</span>
                                             <span className="text-white text-base uppercase font-bold leading-tight mt-1">STUDENTS MENTORED</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* ===== CTA BUTTONS ===== */}
-                                <div className="flex flex-wrap items-center gap-4 mt-[20px] font-montserrat">
-                                    {/* Primary Button */}
+                                ===== CTA BUTTONS =====
+                                <div className="flex flex-wrap items-center gap-4 mt-[10px] font-montserrat">
+                                    Primary Button
                                     <button className="group/btn relative inline-flex items-center justify-center h-[54px] w-[230px] rounded-lg font-bold text-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-[#D9A441]/30 active:scale-[0.98]"
                                         style={{
                                             background: 'linear-gradient(180deg, #F6D56B 0%, #E5B24B 40%, #C8871F 100%)',
@@ -257,24 +257,9 @@ export const PromoBanners = () => {
                                             <ArrowRight className="w-4 h-4 text-gray-900 group-hover/btn:translate-x-0.5 transition-transform" strokeWidth={2.5} />
                                         </span>
                                     </button>
-
-                                    {/* Secondary Button */}
-                                    {/* <button className="group/btn relative inline-flex items-center justify-center h-[54px] w-[230px] rounded-lg font-bold text-sm overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-[#D9A441]/15 active:scale-[0.98]"
-                                        style={{
-                                            background: 'transparent',
-                                            border: '2px solid #D9A441',
-                                            color: '#FFFFFF',
-                                        }}
-                                    >
-                                        <span className="mr-3">EXPLORE COURSE</span>
-                                        <span className="inline-flex items-center justify-center w-7 h-7 rounded-full border-2 border-white/80">
-                                            <ArrowRight className="w-4 h-4 text-white group-hover/btn:translate-x-0.5 transition-transform" strokeWidth={2.5} />
-                                        </span>
-                                    </button> */}
                                 </div>
-
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 ))}
 

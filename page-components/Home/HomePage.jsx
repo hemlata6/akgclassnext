@@ -20,6 +20,7 @@ import { PromoBanners } from './sections/PromoBanners';
 import FacultyAndStatsSection from './sections/FacultySection';
 import ContactSupportSection from './sections/ContactSupportSection';
 import { SecondBannerSection } from './sections/secondBannerSection';
+import WatchVideoSection from './sections/WatchVideoSection';
 import { Headphones, User } from 'lucide-react';
 
 const SOCIAL_PROOF_DATA = [
@@ -157,7 +158,8 @@ export default function HomePage() {
       <SecondBannerSection />
       <BookStore />
       {/* <MarathonGallery /> */}
-      <StudentGallery />
+      <WatchVideoSection />
+      {/* <StudentGallery /> */}
       {/* <FreeResources /> */}
       {/* <StudentSupportSection />
       <ContactSupportSection /> */}

@@ -2,7 +2,7 @@ import React from 'react';
 import { Smartphone, Monitor, Laptop } from 'lucide-react';
 
 export const AppDownload = () => (
-  <section className="max-w-7xl mx-auto px-6 pb-20">
+  <section className="max-w-7xl mx-auto px-6 pb-20 pt-20">
     <div className="bg-gradient-to-r from-white via-slate-50/50 to-white border border-slate-200 rounded-3xl p-8 sm:p-10 shadow-[0_12px_40px_rgba(10,69,154,0.03)] relative overflow-hidden transition-all duration-300 hover:shadow-[0_16px_48px_rgba(10,69,154,0.06)]">
       <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-blue-50/50 rounded-full pointer-events-none blur-3xl"></div>
       <div className="absolute -right-20 -top-20 w-80 h-80 bg-indigo-50/30 rounded-full pointer-events-none blur-3xl"></div>

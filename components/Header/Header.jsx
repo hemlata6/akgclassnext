@@ -88,7 +88,7 @@ export const Header = ({ cartCount }) => {
   const { theme, changeTheme } = useTheme();
   const { user, logout } = useAuth();
   const { studentData } = useStudent();
-  
+
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [domains, setDomains] = useState([]);
   const [domainLoading, setDomainLoading] = useState(false);
@@ -101,10 +101,12 @@ export const Header = ({ cartCount }) => {
   const [facultyList, setFacultyList] = useState([]);
   const [facultyLoading, setFacultyLoading] = useState(false);
   const [mobileFacultyOpen, setMobileFacultyOpen] = useState(false);
+  const [comboDropdownOpen, setComboDropdownOpen] = useState(false);
 
   // REFS FOR CLICK-OUTSIDE DETECTION
   const facultyDropdownRef = useRef(null);
   const exploreDropdownRef = useRef(null);
+  const comboDropdownRef = useRef(null);
 
   // SCROLL TRIGGER DETECTOR DETACHMENT STATE
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
@@ -126,7 +128,7 @@ export const Header = ({ cartCount }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // CLICK OUTSIDE HANDLER FOR BOTH DROPDOWNS
+  // CLICK OUTSIDE HANDLER FOR DROPDOWNS
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (facultyDropdownRef.current && !facultyDropdownRef.current.contains(e.target)) {
@@ -134,6 +136,9 @@ export const Header = ({ cartCount }) => {
       }
       if (exploreDropdownRef.current && !exploreDropdownRef.current.contains(e.target)) {
         setExploreDropdownOpen(false);
+      }
+      if (comboDropdownRef.current && !comboDropdownRef.current.contains(e.target)) {
+        setComboDropdownOpen(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -192,46 +197,62 @@ export const Header = ({ cartCount }) => {
     router.push('/store');
   };
 
-    // Handle faculty click
-    const handleFacultyRedirect = (faculty) => {
-        const fullName = typeof faculty === 'string'
-            ? faculty
-            : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
+  const handleComboDomainClick = (childDomain, parentDomain) => {
+    sessionStorage.setItem('storeNavigationState', JSON.stringify({
+      source: 'header',
+      selectedDomainId: parentDomain?.id,
+      selectedDomainName: parentDomain?.name,
+      selectedExamStageId: childDomain.id,
+      selectedExamStageName: childDomain.name,
+      isMobile: false,
+      productType: 'lecture',
+      batchTag: 'Combo'
+    }));
+    setComboDropdownOpen(false);
+    setMobileMenuOpen(false);
+    router.push('/store?batchTag=Combo');
+  };
 
-        if (!fullName) return;
-        const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
-        const facultyState = {
-            faculty: faculty,
-        };
+  // Handle faculty click
+  const handleFacultyRedirect = (faculty) => {
+    const fullName = typeof faculty === 'string'
+      ? faculty
+      : [faculty?.firstName, faculty?.lastName].filter(Boolean).join(' ');
 
-        router.push(
-            {
-                pathname: '/faculty/[facultyname]',
-                query: {
-                    facultyname: facultyName,
-                    state: JSON.stringify(facultyState),
-                },
-            },
-            `/faculty/${facultyName}`
-        );
+    if (!fullName) return;
+    const facultyName = fullName.toLowerCase().trim().replace(/\s+/g, '-');
+    const facultyState = {
+      faculty: faculty,
     };
+
+    router.push(
+      {
+        pathname: '/faculty/[facultyname]',
+        query: {
+          facultyname: facultyName,
+          state: JSON.stringify(facultyState),
+        },
+      },
+      `/faculty/${facultyName}`
+    );
+  };
 
   return (
     <>
       {/* 1. SYSTEM UTILITY PRE-HEADER (Stays relative, scrolls up away naturally) */}
       {!router.pathname.startsWith('/faculty/') && (
-      <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-3 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
-        <div className="flex items-center gap-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-          <a href="mailto:info.rishabhjain@gmail.com" className="hover:text-white transition-colors duration-200 font-bold">info.rishabhjain@gmail.com</a>
-        </div>
-        <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
-          <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</a>
-          <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</a>
-          <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
-          <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
-        </div>
-      </div>)}
+        <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-3 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
+          <div className="flex items-center gap-2">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <a href="mailto:info.rishabhjain@gmail.com" className="hover:text-white transition-colors duration-200 font-bold">info.rishabhjain@gmail.com</a>
+          </div>
+          <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
+            <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</a>
+            <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</a>
+            <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
+            <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
+          </div>
+        </div>)}
 
       {/* 2. DUMMY BUFFER - Replaces layout void spacing ONLY when header snaps to absolute fixed */}
       {isHeaderFixed && <div className="h-[73px] w-full invisible pointer-events-none"></div>}
@@ -326,6 +347,43 @@ export const Header = ({ cartCount }) => {
                       ))
                     ) : (
                       <div className="px-4 py-3 text-xs text-slate-400">No active faculty found</div>
+                    )}
+                  </div>
+                )}
+              </div>
+              {/* COMBO DROPDOWN */}
+              <div className="relative" ref={comboDropdownRef}>
+                <button
+                  onClick={() => {
+                    setComboDropdownOpen(!comboDropdownOpen);
+                    setExploreDropdownOpen(false);
+                    setFacultyDropdownOpen(false);
+                  }}
+                  className="hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1 uppercase tracking-wider font-bold"
+                >
+                  Combo
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${comboDropdownOpen ? 'rotate-180' : ''}`} />
+                </button>
+
+                {comboDropdownOpen && (
+                  <div className="absolute left-0 top-[calc(100%+16px)] w-56 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50 normal-case">
+                    {domainLoading ? (
+                      <div className="px-4 py-3 text-xs text-slate-400 font-bold">Loading categories...</div>
+                    ) : domains.length > 0 ? (
+                      domains.map((parentDomain) => (
+                        (parentDomain.child || []).map((child) => (
+                          <button
+                            key={child.id}
+                            onClick={() => handleComboDomainClick(child, parentDomain)}
+                            className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
+                          >
+                            {child.name}
+                            <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />
+                          </button>
+                        ))
+                      ))
+                    ) : (
+                      <div className="px-4 py-3 text-xs text-slate-400">No categories active</div>
                     )}
                   </div>
                 )}
