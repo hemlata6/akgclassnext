@@ -101,6 +101,7 @@ export const Header = ({ cartCount }) => {
   const [facultyList, setFacultyList] = useState([]);
   const [facultyLoading, setFacultyLoading] = useState(false);
   const [mobileFacultyOpen, setMobileFacultyOpen] = useState(false);
+  const [mobileComboOpen, setMobileComboOpen] = useState(false);
   const [comboDropdownOpen, setComboDropdownOpen] = useState(false);
 
   // REFS FOR CLICK-OUTSIDE DETECTION
@@ -247,8 +248,8 @@ export const Header = ({ cartCount }) => {
             <a href="mailto:info.rishabhjain@gmail.com" className="hover:text-white transition-colors duration-200 font-bold">info.rishabhjain@gmail.com</a>
           </div>
           <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
-            <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</a>
-            <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</a>
+            <a href="/blog" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</a>
+            <a href="/free-resources" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</a>
             <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
             <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
           </div>
@@ -488,6 +489,36 @@ export const Header = ({ cartCount }) => {
                 )}
 
                 <div className="h-px bg-slate-100 my-2"></div>
+
+                <div className="h-px bg-slate-100 my-2"></div>
+
+                {/* MOBILE COMBO COLLAPSIBLE MENU */}
+                <div className="font-bold text-slate-400 text-[10px] tracking-widest uppercase px-2 flex justify-between items-center cursor-pointer" onClick={() => setMobileComboOpen(!mobileComboOpen)}>
+                  <span>Combo Batches</span>
+                  <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${mobileComboOpen ? 'rotate-180' : ''}`} />
+                </div>
+
+                {mobileComboOpen && (
+                  <div className="flex flex-col gap-1 pl-2 border-l border-slate-100 transition-all duration-300">
+                    {domainLoading ? (
+                      <div className="px-2 py-1 text-xs text-slate-400">Loading categories...</div>
+                    ) : domains.length > 0 ? (
+                      domains.map((parentDomain) => (
+                        (parentDomain.child || []).map((child) => (
+                          <button
+                            key={child.id}
+                            onClick={() => handleComboDomainClick(child, parentDomain)}
+                            className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-slate-50 px-3 py-2 rounded-xl transition-all"
+                          >
+                            {child.name}
+                          </button>
+                        ))
+                      ))
+                    ) : (
+                      <div className="px-2 py-1 text-xs text-slate-400">No categories active</div>
+                    )}
+                  </div>
+                )}
 
                 <nav className="flex flex-col gap-1 text-xs font-bold text-slate-600 uppercase tracking-wider">
                   <Link href="/store?batchTag=F2F%20Pune" onClick={() => setMobileMenuOpen(false)} className="px-3 py-2.5 hover:bg-slate-50 hover:text-[#0a459a] rounded-xl transition-all">F2F Pune</Link>

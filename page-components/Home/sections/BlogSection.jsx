@@ -115,58 +115,60 @@ export const BlogSection = () => {
 
                 {/* Blog Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
-                    {blogs.map((blog, idx) => (
-                        <div
-                            key={blog.id || idx}
-                            onClick={() => handleBlogClick(blog)}
-                            className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200 group cursor-pointer"
-                        >
-                            {/* Blog Image */}
-                            <div className="h-44 overflow-hidden relative bg-gradient-to-br from-gray-50 to-gray-100">
-                                {(blog.img || blog.thumb || blog.logo) ? (
-                                    <img
-                                        src={Endpoints.mediaBaseUrl + (blog.img || blog.thumb || blog.logo)}
-                                        alt={blog.title || 'Blog'}
-                                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                                    />
-                                ) : (
-                                    <div className="flex items-center justify-center h-full">
-                                        <Icons.FileText className="w-12 h-12 text-emerald-500 opacity-70" />
+                    {blogs.map((blog, idx) => {
+                        return (
+                            <div
+                                key={blog.id || idx}
+                                onClick={() => handleBlogClick(blog)}
+                                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200 group cursor-pointer"
+                            >
+                                {/* Blog Image */}
+                                <div className="h-44 overflow-hidden relative bg-gradient-to-br from-gray-50 to-gray-100">
+                                    {(blog?.blog?.img || blog?.blog?.thumb || blog?.blog?.logo) ? (
+                                        <img
+                                            src={Endpoints.mediaBaseUrl + (blog?.blog?.img || blog?.blog?.thumb || blog?.blog?.logo)}
+                                            alt={blog.title || 'Blog'}
+                                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <div className="flex items-center justify-center h-full">
+                                            <Icons.FileText className="w-12 h-12 text-emerald-500 opacity-70" />
+                                        </div>
+                                    )}
+                                    <div className="absolute top-3 left-3 bg-emerald-600/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
+                                        Article
                                     </div>
-                                )}
-                                <div className="absolute top-3 left-3 bg-emerald-600/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-white">
-                                    Article
-                                </div>
-                            </div>
-
-                            {/* Blog Content */}
-                            <div className="p-4">
-                                <div className="flex items-center gap-2 text-[10px] text-slate-400 mb-2 font-bold uppercase">
-                                    <span className="flex items-center gap-1">
-                                        <Icons.Calendar className="w-3 h-3" />
-                                        {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-US', {
-                                            month: 'short',
-                                            day: 'numeric',
-                                            year: 'numeric'
-                                        }) : 'Recent'}
-                                    </span>
                                 </div>
 
-                                <h3 className="font-bold text-base text-slate-900 mb-2 leading-tight group-hover:text-emerald-700 transition-colors line-clamp-2">
-                                    {blog.title || 'Untitled'}
-                                </h3>
+                                {/* Blog Content */}
+                                <div className="p-4">
+                                    <div className="flex items-center gap-2 text-[10px] text-slate-400 mb-2 font-bold uppercase">
+                                        <span className="flex items-center gap-1">
+                                            <Icons.Calendar className="w-3 h-3" />
+                                            {blog.createdAt ? new Date(blog.createdAt).toLocaleDateString('en-US', {
+                                                month: 'short',
+                                                day: 'numeric',
+                                                year: 'numeric'
+                                            }) : 'Recent'}
+                                        </span>
+                                    </div>
 
-                                <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-3">
-                                    <div dangerouslySetInnerHTML={{ __html: blog.desc || blog.description || 'Click to read more...' }} />
-                                </p>
+                                    <h3 className="font-bold text-base text-slate-900 mb-2 leading-tight group-hover:text-emerald-700 transition-colors line-clamp-2">
+                                        {blog.title || 'Untitled'}
+                                    </h3>
 
-                                <button className="text-emerald-700 text-xs font-bold flex items-center gap-1 group/btn">
-                                    Read More
-                                    <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
-                                </button>
+                                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2 mb-3">
+                                        <div dangerouslySetInnerHTML={{ __html: blog?.blog?.desc || blog?.blog?.description }} />
+                                    </p>
+
+                                    <button className="text-emerald-700 text-xs font-bold flex items-center gap-1 group/btn">
+                                        Read More
+                                        <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
                 </div>
 
                 {/* Explore Blog Button */}

@@ -407,78 +407,81 @@ export const BlogListPage = () => {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {selectedScheduleList.map((item, idx) => (
-              <div
-                key={item.id || idx}
-                className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200 group cursor-pointer"
-                onClick={() => handleCardClick(item)}
-              >
-                <div className="h-48 overflow-hidden relative bg-gradient-to-br from-gray-50 to-gray-100">
-                  {(typeof item.img === 'string' && item.img) || (typeof item.thumb === 'string' && item.thumb) || (typeof item.logo === 'string' && item.logo) ? (
-                    <img
-                      src={(typeof item.img === 'string' ? Endpoints?.mediaBaseUrl + item.img : null) || (typeof item.thumb === 'string' ? Endpoints?.mediaBaseUrl + item.thumb : null) || (typeof item.logo === 'string' ? Endpoints?.mediaBaseUrl + item.logo : null)}
-                      alt={item.title || 'Content'}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                  ) : (
-                    <div className="flex items-center justify-center h-full">
-                      {!courseId && !item?.entityType ? (
-                        <Icons.Book className="w-16 h-16 text-blue-500 opacity-70" />
-                      ) : item?.entityType?.toLowerCase() === 'folder' ? (
-                        <Icons.Folder className="w-16 h-16 text-yellow-500 opacity-70" />
-                      ) : (
-                        <Icons.FileText className="w-16 h-16 text-blue-500 opacity-70" />
+            {selectedScheduleList.map((item, idx) => {
+              console.log('Blgssssss', item)
+              return (
+                <div
+                  key={item.id || idx}
+                  className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200 group cursor-pointer"
+                  onClick={() => handleCardClick(item)}
+                >
+                  <div className="h-48 overflow-hidden relative bg-gradient-to-br from-gray-50 to-gray-100">
+                    {(typeof item?.blog?.img === 'string' && item?.blog?.img) || (typeof item?.blog?.thumb === 'string' && item?.blog?.thumb) || (typeof item?.blog?.logo === 'string' && item?.blog?.logo) ? (
+                      <img
+                        src={(typeof item?.blog?.img === 'string' ? Endpoints?.mediaBaseUrl + item?.blog?.img : null) || (typeof item?.blog?.thumb === 'string' ? Endpoints?.mediaBaseUrl + item?.blog?.thumb : null) || (typeof item?.blog?.logo === 'string' ? Endpoints?.mediaBaseUrl + item?.blog?.logo : null)}
+                        alt={item?.blog?.title || 'Content'}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="flex items-center justify-center h-full">
+                        {!courseId && !item?.entityType ? (
+                          <Icons.Book className="w-16 h-16 text-blue-500 opacity-70" />
+                        ) : item?.entityType?.toLowerCase() === 'folder' ? (
+                          <Icons.Folder className="w-16 h-16 text-yellow-500 opacity-70" />
+                        ) : (
+                          <Icons.FileText className="w-16 h-16 text-blue-500 opacity-70" />
+                        )}
+                      </div>
+                    )}
+
+                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-800">
+                      {item.entityType === 'folder' ? '📁 Folder' : '📄 Content'}
+                    </div>
+                  </div>
+
+                  <div className="p-5">
+                    <div className="flex items-center gap-3 text-[10px] text-slate-400 mb-3 font-bold uppercase">
+                      <span className="flex items-center gap-1">
+                        <Icons.Calendar /> {item.date || item.blog?.updatedAt ? (() => {
+                          try {
+                            const dateStr = item.blog?.updatedAt || item.date;
+                            return new Date(dateStr).toLocaleDateString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric'
+                            });
+                          } catch {
+                            return 'Recently Added';
+                          }
+                        })() : 'Recently Added'}
+                      </span>
+                      {item?.blog?.author && typeof item?.blog?.author === 'string' && (
+                        <>
+                          <span>•</span>
+                          <span className="flex items-center gap-1">
+                            <Icons.User /> {item?.blog?.author}
+                          </span>
+                        </>
                       )}
                     </div>
-                  )}
 
-                  <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider text-indigo-800">
-                    {item.entityType === 'folder' ? '📁 Folder' : '📄 Content'}
+                    <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
+                      {String(item.title || item.name || 'Untitled')}
+                    </h3>
+
+                    <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
+                      <div dangerouslySetInnerHTML={{ __html: String(item.desc || item.description || 'Click to explore more...') }} />
+                      {/* {String(item.desc || item.description || 'Click to explore more...')} */}
+                    </p>
+
+                    <button className="mt-4 text-emerald-700 text-xs font-bold flex items-center gap-1 group/btn">
+                      {item.entityType === 'folder' ? 'Open Folder' : 'Read More'}{' '}
+                      <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                    </button>
                   </div>
                 </div>
-
-                <div className="p-5">
-                  <div className="flex items-center gap-3 text-[10px] text-slate-400 mb-3 font-bold uppercase">
-                    <span className="flex items-center gap-1">
-                      <Icons.Calendar /> {item.date || item.blog?.updatedAt ? (() => {
-                        try {
-                          const dateStr = item.blog?.updatedAt || item.date;
-                          return new Date(dateStr).toLocaleDateString('en-US', {
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
-                          });
-                        } catch {
-                          return 'Recently Added';
-                        }
-                      })() : 'Recently Added'}
-                    </span>
-                    {item?.blog?.author && typeof item?.blog?.author === 'string' && (
-                      <>
-                        <span>•</span>
-                        <span className="flex items-center gap-1">
-                          <Icons.User /> {item?.blog?.author}
-                        </span>
-                      </>
-                    )}
-                  </div>
-
-                  <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
-                    {String(item.title || item.name || 'Untitled')}
-                  </h3>
-
-                  <p className="text-xs text-slate-500 leading-relaxed line-clamp-2">
-                    <div dangerouslySetInnerHTML={{ __html: String(item.desc || item.description || 'Click to explore more...') }} />
-                    {/* {String(item.desc || item.description || 'Click to explore more...')} */}
-                  </p>
-
-                  <button className="mt-4 text-emerald-700 text-xs font-bold flex items-center gap-1 group/btn">
-                    {item.entityType === 'folder' ? 'Open Folder' : 'Read More'}{' '}
-                    <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
-                  </button>
-                </div>
-              </div>
-            ))}
+              )
+            })}
           </div>
         )}
 
