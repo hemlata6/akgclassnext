@@ -1346,11 +1346,14 @@ const Store = () => {
             <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">
 
-                    <div className="flex items-center gap-3 flex-shrink-0 cursor-pointer" onClick={() => router.push('/store')}>
-                        <div className="w-7 h-7 rounded-lg flex items-center justify-center shadow-sm text-white" style={{ backgroundColor: primaryColor }}>
-                            <ShoppingCart className="h-3.5 w-3.5" />
+                    <div onClick={() => router.push('/')} className="flex items-center gap-3 shrink-0 select-none group cursor-pointer">
+                        <div className="bg-gradient-to-br from-[#0a459a] to-[#05214c] text-white font-bold text-xl px-3 py-2 rounded-xl tracking-tight shadow-[0_4px_12px_rgba(10,69,154,0.3)] transition-transform duration-300 group-hover:scale-105">
+                            RJCE
                         </div>
-                        <h1 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 transition-colors" style={{ color: primaryColor }}>Course Store</h1>
+                        <div className="space-y-0.5">
+                            <h1 className="font-bold text-slate-900 tracking-tight text-xs sm:text-base leading-none group-hover:text-[#0a459a] transition-colors duration-200">RISHABH JAIN</h1>
+                            <span className="text-[8px] sm:text-[9px] uppercase tracking-widest text-slate-400 font-bold block">Commerce Education</span>
+                        </div>
                     </div>
 
                     <div className="flex-1 max-w-4xl flex items-center justify-end gap-3 md:gap-6">
@@ -1442,7 +1445,7 @@ const Store = () => {
 
                     <section className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)] scrollbar-thin pr-1">
                         {/* <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-                            <h2 className="text-sm sm:text-base font-bold text-slate-800 tracking-tight">
+                            <h2 className="text-sm sm:text-base font-bold tracking-tight text-slate-900">
                                 {selectedTag ? `Batch: ${selectedTag.tag}` : 'All Courses'}
                             </h2>
                             <span className="text-xs text-slate-400 font-medium">{filteredCourses.length} courses</span>
@@ -1497,7 +1500,7 @@ const Store = () => {
                                                 </div>
                                                 <div className="p-4 flex-1 flex flex-col justify-between space-y-4">
                                                     <div>
-                                                        <h3 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug line-clamp-2">
+                                                        <h3 className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 leading-snug line-clamp-2">
                                                             {item.title}
                                                         </h3>
                                                     </div>
@@ -1581,7 +1584,7 @@ const Store = () => {
                                                                 </div>
                                                                 <div className="p-2 flex-1 flex flex-col justify-between space-y-4">
                                                                     <div>
-                                                                        <h3 className="font-bold text-xs sm:text-sm text-slate-800 leading-snug line-clamp-2">{item.title}</h3>
+                                                                        <h3 className="text-xs sm:text-sm font-bold tracking-tight text-slate-900 leading-snug line-clamp-2">{item.title}</h3>
                                                                     </div>
                                                                     <div className="flex items-center justify-between pt-2 border-t border-slate-50">
                                                                         <div>
@@ -1629,7 +1632,7 @@ const Store = () => {
                                     <div className="w-32 h-32 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner bg-gradient-to-br from-emerald-100 to-green-100">
                                         <ShoppingCart className="h-16 w-16 text-emerald-600" />
                                     </div>
-                                    <h3 className="text-2xl font-bold text-gray-800 mb-3">No Courses Found</h3>
+                                    <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">No Courses Found</h3>
                                     <p className="text-gray-600 mb-4">Try adjusting your filters to see more courses!</p>
                                     <button
                                         onClick={clearAllFilters}
@@ -1659,7 +1662,7 @@ const Store = () => {
                         <div className="flex flex-col h-full bg-white">
                             {/* Header */}
                             <div className="bg-white px-4 py-3 flex items-center justify-between shadow-sm border-b border-emerald-600/20 sticky top-0">
-                                <h2 className="text-base font-black text-black">Refine Filters</h2>
+                                <h2 className="text-base font-bold tracking-tight text-slate-900">Refine Filters</h2>
                                 {(selectedDomain || selectedExamStage || selectedFaculties.length > 0) && (
                                     <button
                                         onClick={() => {

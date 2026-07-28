@@ -24,7 +24,7 @@ export const FreeResources = () => {
                 <div className="grid md:grid-cols-2 gap-8 items-start">
                     <div>
                         <span className="text-slate-500 font-bold tracking-widest text-xs uppercase">Study Material</span>
-                        <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-4">Free Resources</h2>
+                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-4">Free Resources</h2>
                         <div className="space-y-3">
                             {FREE_RESOURCES.map((res, i) => (
                                 <div
@@ -52,7 +52,7 @@ export const FreeResources = () => {
                     </div>
                     <div className="bg-gradient-to-br from-[#0749A2] to-[#0B3276] rounded-2xl p-6 md:p-8 text-center md:text-left relative overflow-hidden text-white shadow-2xl shadow-[#0749A2]/20 sticky top-24">
                         <div className="relative z-10">
-                            <h2 className="text-2xl font-bold mb-2">Study on the Go!</h2>
+                            <h2 className="text-2xl font-bold tracking-tight mb-2">Study on the Go!</h2>
                             <p className="text-slate-400 text-sm mb-4 max-w-xs">Download the {institute?.institue ? institute?.institue : "Rishabh Jain"} App for offline viewing, live classes, and unlimited access to study materials.</p>
                             <div className="flex flex-wrap justify-center md:justify-start gap-3">
                                 <a

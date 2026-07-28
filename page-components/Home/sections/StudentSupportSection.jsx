@@ -43,7 +43,7 @@ export const StudentSupportSection = () => {
                     <div className="lg:col-span-7">
                         <div className="mb-4">
                             <span className="text-slate-500 font-bold tracking-widest text-xs uppercase">Support</span>
-                            <h2 className="text-2xl font-bold text-slate-900 mt-1">Frequently Asked Questions</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mt-1">Frequently Asked Questions</h2>
                         </div>
                         <div className="space-y-3">
                             {FAQS.map((item, i) => (

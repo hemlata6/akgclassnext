@@ -79,7 +79,7 @@ const AnnouncementPage = () => {
           <div className="text-center mb-8 sm:mb-12 lg:mb-16">
             <div className="flex items-center justify-center gap-2 sm:gap-3 mb-3 sm:mb-4">
               <div className="text-3xl sm:text-4xl">📢</div>
-              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold" style={{ backgroundImage: `linear-gradient(to right, ${theme.primary}, ${theme.primaryHover})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight" style={{ backgroundImage: `linear-gradient(to right, ${theme.primary}, ${theme.primaryHover})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                 Announcements
               </h1>
             </div>
@@ -109,7 +109,7 @@ const AnnouncementPage = () => {
             <div className="p-6 sm:p-8 text-white" style={{ backgroundImage: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryHover})` }}>
               <div className="flex items-center gap-3 sm:gap-4">
                 <div className="text-2xl sm:text-3xl">📢</div>
-                <h2 className="text-xl sm:text-2xl font-bold">Latest Announcements</h2>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Latest Announcements</h2>
                 <div className="ml-auto bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                   {announcementList.length} {announcementList.length === 1 ? 'announcement' : 'announcements'}
                 </div>
@@ -205,7 +205,7 @@ const AnnouncementPage = () => {
             <div className="sticky top-0 p-6 sm:p-8 flex items-center justify-between text-white" style={{ backgroundImage: `linear-gradient(135deg, ${theme.primary}, ${theme.primaryHover})` }}>
               <div className="flex items-center gap-3">
                 <span className="text-2xl">📢</span>
-                <h2 className="text-xl sm:text-2xl font-bold">Announcement Details</h2>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Announcement Details</h2>
               </div>
               <button
                 onClick={closeDialog}
@@ -217,7 +217,7 @@ const AnnouncementPage = () => {
 
             {/* Content */}
             <div className="p-6 sm:p-8">
-              <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-4">
+              <h3 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 mb-4">
                 {selectedAnnouncement.title || 'Important Announcement'}
               </h3>
 

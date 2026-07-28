@@ -33,7 +33,7 @@ const BookConfigModal = ({ book, onClose, onAddToCart }) => {
           >
             <Icons.X />
           </button>
-          <h2 className="text-2xl font-bold text-white mb-2">{book?.title}</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-white mb-2">{book?.title}</h2>
           <p className="text-white/90 text-sm">Study Material</p>
         </div>
 

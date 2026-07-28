@@ -61,7 +61,7 @@ function FRCoursePage({ institute }) {
                                     <span className="text-gray-400 text-xs font-medium">CA Final FR</span>
                                 </div>
 
-                                <h1 className="text-3xl md:text-5xl font-extrabold text-white leading-tight mb-3 md:mb-6">
+                                <h1 className="text-3xl md:text-5xl font-bold tracking-tight text-white leading-tight mb-3 md:mb-6">
                                     Master FR with <br className="hidden lg:block" />
                                     <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">
                                         Concept Clarity
@@ -115,7 +115,7 @@ function FRCoursePage({ institute }) {
                 <section className="py-12 md:py-16 bg-[#0b1221]">
                     <div className="max-w-6xl mx-auto px-4">
                         <div className="text-center mb-10 md:mb-12">
-                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">My Journey</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white">My Journey</h2>
                             <p className="text-gray-400 text-xs md:text-sm mt-2">From Academic Excellence to Leading Educator</p>
                         </div>
 
@@ -177,7 +177,7 @@ function FRCoursePage({ institute }) {
                         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
 
                             <div>
-                                <h2 className="text-2xl md:text-4xl font-bold mb-2"> FR Course Highlights</h2>
+                                <h2 className="text-2xl md:text-4xl font-bold tracking-tight mb-2"> FR Course Highlights</h2>
                                 <p className="text-gray-400 text-sm md:text-base mb-6 md:mb-8">Designed for 100% Conceptual Clarity</p>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
@@ -217,7 +217,7 @@ function FRCoursePage({ institute }) {
                 <section className="py-12 md:py-16 bg-[#0f172a]">
                     <div className="max-w-6xl mx-auto px-4">
                         <div className="text-center mb-8 md:mb-12">
-                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">{institute?.institue ? institute?.institue : "Rishabh Jain"} FR Books</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white">{institute?.institue ? institute?.institue : "Rishabh Jain"} FR Books</h2>
                             <p className="text-gray-400 text-xs md:text-sm mt-2">Hardcopy delivered to your doorstep</p>
                         </div>
 
@@ -270,7 +270,7 @@ function FRCoursePage({ institute }) {
                                 </div>
                             </div>
                             <div className="md:w-2/3 text-center md:text-left">
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Test Series</h3>
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">Test Series</h3>
                                 <p className="text-sm md:text-base text-gray-400 mb-6">Rigorous testing mechanism included with FR course.</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-left">
                                     <DetailBox title="Case Study Based MCQ Tests" desc="Instant AI Evaluation & Suggested Answers available after Test Submission" />
@@ -291,7 +291,7 @@ function FRCoursePage({ institute }) {
                                 </div>
                             </div>
                             <div className="md:w-2/3 text-center md:text-left">
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Doubt Support</h3>
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">Doubt Support</h3>
                                 <p className="text-sm md:text-base text-gray-400 mb-6">We resolve every query</p>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 text-left">
                                     <DetailBox title="Live Doubt Sessions" desc="Interactive sessions conducted over Zoom / G-meet" />
@@ -312,7 +312,7 @@ function FRCoursePage({ institute }) {
                                 </div>
                             </div>
                             <div className="md:w-2/3 text-center md:text-left">
-                                <h3 className="text-xl md:text-2xl font-bold text-white mb-2">Career Mentorship Included with FR batch</h3>
+                                <h3 className="text-xl md:text-2xl font-bold tracking-tight text-white mb-2">Career Mentorship Included with FR batch</h3>
                                 <p className="text-sm md:text-base text-gray-400 mb-6">Pathway to a successful career</p>
                                 <div className="flex flex-wrap justify-center md:justify-start gap-2 md:gap-3">
                                     {["Articleship Guide", "Placement Prep", "Resume Building", "Interview Skills", "Time Mgmt", "Job vs Practice"].map((tag, i) => (
@@ -331,7 +331,7 @@ function FRCoursePage({ institute }) {
                 <section id="pricing" className="py-12 md:py-16 bg-[#0b1221]">
                     <div className="max-w-5xl mx-auto px-4">
                         <div className="text-center mb-8 md:mb-10">
-                            <h2 className="text-2xl md:text-3xl font-extrabold text-white">Compare Batches</h2>
+                            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-white">Compare Batches</h2>
                             <p className="text-gray-500 text-sm mt-2">Choose what suits you</p>
                         </div>
 
@@ -537,7 +537,7 @@ function BookCard({ title, desc, tags, highlight, image }) {
                     className="w-full h-full object-cover"
                 />
             </div>
-            <h3 className="text-sm md:text-lg font-bold text-white mb-1">{title}</h3>
+            <h3 className="text-sm md:text-lg font-bold tracking-tight text-white mb-1">{title}</h3>
             <p className="text-[10px] md:text-sm text-gray-400 mb-3 leading-tight">{desc}</p>
             <div className="flex gap-1 md:gap-2 mt-auto flex-wrap justify-center">
                 {tags.map((tag, i) => (
@@ -574,7 +574,7 @@ function MobilePriceCard({ title, price, features, rec, url }) {
     return (
         <div className={`p-4 md:p-6 rounded-2xl border ${rec ? 'border-green-600 bg-green-900/10' : 'border-gray-800 bg-gray-900'}`}>
             <div className="flex justify-between items-center mb-3">
-                <h3 className="text-base font-bold text-white">{title}</h3>
+                <h3 className="text-base font-bold tracking-tight text-white">{title}</h3>
                 {rec && <span className="text-[10px] font-bold bg-green-600 text-white px-2 py-0.5 rounded">BEST</span>}
             </div>
             <p className="text-xl font-black text-white mb-4">₹{price}</p>

@@ -12,8 +12,8 @@ export const StudentGallery = () => {
     return (
         <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-16">
             <div className="mb-8 border-b border-slate-200 pb-5">
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 font-bold">Success Stories</h3>
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-bold">Student Reviews & Exemption Shorts</h2>
+                <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Success Stories</h3>
+                <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">Student Reviews & Exemption Shorts</h2>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
                 {studentShortsData.map((short, idx) => (
@@ -30,7 +30,7 @@ export const StudentGallery = () => {
                         </div>
                         <div className="absolute bottom-0 inset-x-0 p-5 z-20 flex flex-col justify-end space-y-2">
                             <div className="space-y-0.5">
-                                <h4 className="text-sm font-black text-white tracking-tight font-bold">{short.name}</h4>
+                                <h4 className="text-sm font-bold tracking-tight text-white">{short.name}</h4>
                                 <p className="text-[10px] text-blue-300 font-extrabold uppercase tracking-wide font-bold">{short.course}</p>
                             </div>
                             <p className="text-[11px] text-slate-300 font-medium leading-relaxed line-clamp-3 bg-black/20 p-2 rounded-lg backdrop-blur-sm border border-white/5 shadow-inner font-bold">"{short.previewText}"</p>

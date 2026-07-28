@@ -24,7 +24,7 @@ export const MarathonGallery = () => {
             <div className={LAYOUT_PADDING}>
                 <div className="text-center mb-10">
                     <span className="text-slate-400 font-bold tracking-widest text-xs uppercase">The Vibe</span>
-                    <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mt-1">Face-to-Face Marathons</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mt-1">Face-to-Face Marathons</h2>
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-4 h-[500px] md:h-[400px]">
                     <div className="col-span-1 md:col-span-2 row-span-1 md:row-span-2 relative rounded-2xl overflow-hidden group bg-black shadow-2xl shadow-indigo-500/10">

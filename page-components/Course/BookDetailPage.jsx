@@ -633,7 +633,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
 
                         {/* Description */}
                         <div className="bg-white rounded-lg shadow-sm p-3 border border-slate-100">
-                            <h2 className="text-sm font-bold text-slate-900 mb-2 flex items-center gap-1.5">
+                            <h2 className="text-sm font-bold tracking-tight text-slate-900 mb-2 flex items-center gap-1.5">
                                 <div className="h-4 w-0.5 bg-emerald-600 rounded-full"></div>
                                 About This Book
                             </h2>
@@ -652,7 +652,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                             <div className="bg-white rounded-2xl shadow-lg p-4 border border-slate-100 lg:h-[calc(100vh-120px)] overflow-hidden">
                                 <div className="flex items-center gap-3 mb-4">
                                     <div className={`h-1 w-10 rounded-full flex-shrink-0 ${BRAND_GREEN_CLASS}`}></div>
-                                    <h2 className="text-lg sm:text-xl font-bold text-slate-900 truncate">Related Books</h2>
+                                    <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 truncate">Related Books</h2>
                                 </div>
                                 <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 lg:gap-4 lg:overflow-y-auto lg:pr-2" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                                     {suggestedCourses.map((suggestedCourse) => (
@@ -668,7 +668,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
                                                 />
                                             </div>
                                             <div className="p-3 sm:p-4">
-                                                <h3 className="text-sm font-bold text-slate-900 line-clamp-2 mb-2 min-h-[40px] break-words">
+                                                <h3 className="text-sm font-bold tracking-tight text-slate-900 line-clamp-2 mb-2 min-h-[40px] break-words">
                                                     {suggestedCourse.title}
                                                 </h3>
                                                 <div className="flex items-center gap-2 mb-3">

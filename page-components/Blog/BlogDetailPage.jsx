@@ -566,7 +566,7 @@ export const BlogDetailPage = () => {
                                     {/* Content Section */}
                                     <div className="p-3 flex-grow flex flex-col">
                                         {/* Title */}
-                                        <h3 className="text-slate-900 font-semibold text-sm mb-1.5 line-clamp-2 leading-tight group-hover:text-emerald-700 transition-colors">
+                                        <h3 className="text-sm font-bold tracking-tight text-slate-900 mb-1.5 line-clamp-2 leading-tight group-hover:text-emerald-700 transition-colors">
                                             {item?.title || 'Resource Title'}
                                         </h3>
 
@@ -610,7 +610,7 @@ export const BlogDetailPage = () => {
                                 <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <span className="text-3xl">🔐</span>
                                 </div>
-                                <h2 className="text-2xl font-bold mb-2">Login Required</h2>
+                                <h2 className="text-2xl font-bold tracking-tight mb-2">Login Required</h2>
                                 <p className="text-white/90 text-sm">
                                     You need to be logged in to access this content
                                 </p>

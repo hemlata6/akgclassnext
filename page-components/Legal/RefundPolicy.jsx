@@ -36,7 +36,7 @@ const RefundPolicy = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Non-tangible irrevocable goods ("Digital products")</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Non-tangible irrevocable goods ("Digital products")</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
                 We do not issue refunds for non-tangible irrevocable goods ("digital products") once the order is confirmed and the product is sent.
               </p>
@@ -46,12 +46,12 @@ const RefundPolicy = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Contact us for any issues:</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Contact us for any issues:</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
                 If you have any questions about our Returns and Refunds Policy, please contact us:
               </p>
               <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-slate-700"><strong>By email:</strong> info.{institute?.email || ""}.com</p>
+                <p className="text-slate-700"><strong>By email:</strong> support@rishabhjain.com</p>
               </div>
             </section>
 

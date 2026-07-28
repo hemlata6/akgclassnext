@@ -6,7 +6,7 @@ export const CounsellingStrip = () => (
     <div className={LAYOUT_PADDING}>
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
         <div>
-          <h2 className="text-lg font-bold">Confused about CA preparation?</h2>
+          <h2 className="text-lg font-bold tracking-tight">Confused about CA preparation?</h2>
           <p className="text-emerald-100 text-xs">Talk to our counselors for a personalized study plan.</p>
         </div>
         <div className="flex gap-3">

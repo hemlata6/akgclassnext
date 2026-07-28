@@ -215,9 +215,9 @@ export const CoursesSection = ({ employeeCourseId }) => {
             <div className="mb-8 border-b border-slate-200 pb-5 flex flex-col md:flex-row md:items-end justify-between gap-4">
                 <div className="space-y-1">
                     <div className="flex items-center gap-3 md:justify-start">
-                        <h3 className="text-xs font-semibold uppercase tracking-widest text-slate-400">Premium Video Coaching</h3>
+                        <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400">Premium Video Coaching</h3>
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">Trending Exam Batches</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">Our Trending Courses</h2>
                 </div>
 
                 <div className="flex items-center gap-3 flex-wrap md:flex-nowrap">

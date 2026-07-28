@@ -481,7 +481,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {/* Header Section */}
                 <div className="text-center mb-2">
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">
                         🎁 Free Educational Resources
                     </h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -684,7 +684,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <span className="text-3xl">🎓</span>
                                     </div>
-                                    <h2 className="text-2xl font-bold mb-2">Enroll in Free Course</h2>
+                                    <h2 className="text-2xl font-bold tracking-tight mb-2">Enroll in Free Course</h2>
                                     <p className="text-white/90 text-sm">
                                         Get instant access to this premium content
                                     </p>
@@ -694,7 +694,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                             {/* Content */}
                             <div className="p-6">
                                 <div className="text-center mb-6">
-                                    <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                                    <h3 className="text-lg font-bold tracking-tight text-slate-900 mb-2">
                                         {enrollingCourse?.title}
                                     </h3>
                                     <p className="text-gray-600 text-sm">
@@ -704,7 +704,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
 
                                 {/* Benefits */}
                                 <div className="bg-indigo-50 rounded-xl p-4 mb-6">
-                                    <h4 className="font-semibold text-gray-800 mb-2 text-sm">What you'll get:</h4>
+                                    <h4 className="font-bold tracking-tight text-slate-900 mb-2 text-sm">What you'll get:</h4>
                                     <ul className="space-y-2 text-sm text-gray-700">
                                         <li className="flex items-start">
                                             <span className="text-indigo-600 mr-2">✓</span>
@@ -766,7 +766,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                                     <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
                                         <span className="text-3xl">🔐</span>
                                     </div>
-                                    <h2 className="text-2xl font-bold mb-2">Login Required</h2>
+                                    <h2 className="text-2xl font-bold tracking-tight mb-2">Login Required</h2>
                                     <p className="text-white/90 text-sm">
                                         You need to be logged in to start the access
                                     </p>

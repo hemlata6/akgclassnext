@@ -181,7 +181,7 @@ export default function ContactUsPage() {
                                 </svg>
                             </div>
                         </div>
-                        <h1 className="text-5xl font-bold text-slate-900 mb-4">Thank You!</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4">Thank You!</h1>
                         <p className="text-xl text-slate-600 mb-3">Your message has been received</p>
                         <p className="text-slate-500 mb-10">We will connect you soon</p>
                         <button
@@ -214,7 +214,7 @@ export default function ContactUsPage() {
                         >
                             <Icons.Back /> Back to Home
                         </button>
-                        <h1 className="text-5xl font-bold text-slate-900 mb-4">Get In Touch</h1>
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4">Get In Touch</h1>
                         <p className="text-lg text-slate-600 max-w-2xl mx-auto">
                             We'd love to hear from you, please drop us a line if you've any query related to our program and courses.
                         </p>
@@ -227,7 +227,7 @@ export default function ContactUsPage() {
                                 <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-blue-50">
                                     <Icons.Phone className="text-[#0a459a]" />
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
+                                <h3 className="text-lg font-bold tracking-tight text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 9am to 6pm</p>
                                 <p><a href={`tel:${institute?.contact || "+91-9874563210"}`} className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
                                     {/* +91-9318492718 */}
@@ -250,7 +250,7 @@ export default function ContactUsPage() {
                                 <div className="w-14 h-14 rounded-xl flex items-center justify-center mb-4 bg-blue-50">
                                     <Icons.Mail className="text-[#0a459a]" />
                                 </div>
-                                <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
+                                <h3 className="text-lg font-bold tracking-tight text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
                                 <a href={`mailto:${institute?.email}`} className="font-semibold text-[#0a459a] hover:opacity-80 transition-opacity">
                                     {institute?.email}
@@ -261,7 +261,7 @@ export default function ContactUsPage() {
                                 <div className="w-14 h-14 bg-white/20 rounded-xl flex items-center justify-center mb-4">
                                     <Icons.BookOpen />
                                 </div>
-                                <h3 className="text-lg font-bold mb-2">Office</h3>
+                                <h3 className="text-lg font-bold tracking-tight mb-2">Office</h3>
                                 <p className="text-sm opacity-90">
                                     {institute?.address}
                                 </p>
@@ -271,7 +271,7 @@ export default function ContactUsPage() {
                         {/* Contact Form */}
                         <div className="lg:col-span-2">
                             <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-md border border-slate-200 p-8">
-                                <h2 className="text-2xl font-bold text-slate-900 mb-6">Send us a message</h2>
+                                <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-6">Send us a message</h2>
 
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                                     <div>
@@ -330,7 +330,7 @@ export default function ContactUsPage() {
                                             name="email"
                                             value={formData.email}
                                             onChange={handleInputChange}
-                                            placeholder=" info.vgsh@gmail.com"
+                                            placeholder=" support@rishabhjain.com"
                                             className={`w-full px-4 py-3 border ${errors.email ? 'border-red-400' : 'border-slate-300'} rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0a459a] focus:border-transparent transition-all`}
                                         />
                                         {errors.email && <p className="text-red-500 text-xs mt-1.5">{errors.email}</p>}

@@ -15,7 +15,7 @@ export const StudentProvider = ({ children }) => {
   const [authToken, setAuthToken] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
-  console.log('studentData in use Student', studentData)
+  // console.log('studentData in use Student', studentData)
 
   // Initialize from localStorage on mount
   useEffect(() => {

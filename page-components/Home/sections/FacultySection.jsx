@@ -97,7 +97,7 @@ const FacultyAndStatsSection = () => {
             <div className="pt-12 pb-20 overflow-hidden">
                 <div className="text-center mb-10 px-4">
                     <span className="text-indigo-600 font-bold tracking-widest text-xs uppercase bg-indigo-50 px-3 py-1 rounded-full shadow-sm">Dream Team</span>
-                    <h2 className="text-3xl md:text-3xl font-bold text-slate-900 mt-3">Learn From The Masters</h2>
+                    <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mt-3">Learn From The Masters</h2>
                 </div>
 
                 {/* Infinite Marquee */}
@@ -122,19 +122,11 @@ const FacultyAndStatsSection = () => {
                                         />
 
                                         {/* Text */}
-                                        <div className="absolute bottom-0 left-0 right-0 p-3">
-                                            <div className="w-8 h-0.5 bg-[#0749A2] rounded-full mb-2"></div>
-                                            <h3 className="text-sm font-bold leading-tight text-white">
+                                        <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-12">
+                                            <div className="w-10 h-1 bg-[#0749A2] rounded-full mb-2"></div>
+                                            <h3 className="text-sm font-bold tracking-tight leading-tight text-white">
                                                 {f.firstName} {f.lastName}
                                             </h3>
-
-                                            <p className="text-[10px] text-indigo-300 font-bold uppercase">
-                                                {f.designation}
-                                            </p>
-
-                                            <p className="text-[9px] text-slate-300 line-clamp-2">
-                                                {f.userRole}
-                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -165,17 +157,9 @@ const FacultyAndStatsSection = () => {
 
                                             <div className="absolute bottom-0 left-0 right-0 p-5 bg-gradient-to-t from-black/95 via-black/60 to-transparent pt-12">
                                                 <div className="w-10 h-1 bg-[#0749A2] rounded-full mb-2"></div>
-                                                <h3 className="text-xl font-bold text-white">
+                                                <h3 className="text-xl font-bold tracking-tight text-white">
                                                     {f.firstName} {f.lastName}
                                                 </h3>
-                                                {/* 
-                                                <p className="text-xs text-indigo-300 font-bold uppercase mt-1">
-                                                    {f.designation}
-                                                </p>
-
-                                                <p className="text-[10px] text-slate-300 mt-2 line-clamp-2">
-                                                    {f.userRole}
-                                                </p> */}
                                             </div>
                                         </div>
                                     </div>

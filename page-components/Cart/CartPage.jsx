@@ -654,7 +654,7 @@ export default function CartPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Your cart is empty</h2>
+          <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-2">Your cart is empty</h2>
           <p className="text-slate-500 mb-8">Looks like you haven't added any courses or books yet.</p>
           <button
             onClick={() => {
@@ -692,7 +692,7 @@ export default function CartPage() {
         </div>
       )}
       <div className={`py-12 ${LAYOUT_PADDING}`}>
-        <h1 className="text-2xl font-bold text-slate-900 mb-8">Your Cart ({cartItems.length})</h1>
+        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-8">Your Cart ({cartItems.length})</h1>
         <div className="flex flex-col lg:flex-row gap-8">
           <div className="flex-1 space-y-4">
             {cartItems.map((item, idx) => (
@@ -743,7 +743,7 @@ export default function CartPage() {
           </div>
           <div className="w-full lg:w-4/12">
             <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm sticky top-24">
-              <h3 className="font-bold text-lg text-slate-900 mb-4">Order Summary</h3>
+              <h3 className="text-lg font-bold tracking-tight text-slate-900 mb-4">Order Summary</h3>
               <div className="space-y-3 mb-6 pb-6 border-b border-slate-100 text-sm">
                 <div className="flex justify-between text-slate-600">
                   <span>Subtotal</span>

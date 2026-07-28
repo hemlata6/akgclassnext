@@ -167,7 +167,7 @@ export const generateOrganizationStructuredData = () => {
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
-      email: 'contact@lecturedekho.in',
+      email: 'support@rishabhjain.com',
     },
   };
 };

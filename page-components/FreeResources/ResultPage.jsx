@@ -377,7 +377,7 @@ const Result = () => {
                     <div className="w-20 h-20 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                         <XCircle className="h-10 w-10 text-red-600" />
                     </div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-4">No Results Available</h2>
+                    <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">No Results Available</h2>
                     <p className="text-lg text-gray-600 mb-6">
                         Unable to load quiz results. Please try again later.
                     </p>
@@ -406,7 +406,7 @@ const Result = () => {
                         )}
                     </div>
 
-                    <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 mb-2">
                         {testResults?.passed ? 'Congratulations!' : 'Test Completed'}
                     </h1>
 
@@ -424,7 +424,7 @@ const Result = () => {
                         <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4" style={{ backgroundColor: `${BRAND_GREEN}20` }}>
                             <Target className="h-6 w-6 sm:h-8 sm:w-8" style={{ color: BRAND_GREEN }} />
                         </div>
-                        <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Test Performance Analysis</h2>
+                        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 mb-2">Test Performance Analysis</h2>
                         <p className="text-sm sm:text-base text-gray-600 px-4">Complete overview of your overall and section-wise performance</p>
                     </div>
 
@@ -499,7 +499,7 @@ const Result = () => {
 
                                 {/* Overall Statistics */}
                                 <div className="space-y-4 sm:space-y-6">
-                                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Overall Test Statistics</h3>
+                                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mb-3 sm:mb-4">Overall Test Statistics</h3>
 
                                     <div className={`grid gap-3 sm:gap-4 ${testResults?.sectionWiseResults && Object.keys(testResults?.sectionWiseResults).length > 1
                                         ? 'grid-cols-1 sm:grid-cols-3 xl:grid-cols-1'
@@ -523,7 +523,7 @@ const Result = () => {
 
                                     {/* Performance Breakdown */}
                                     <div className="pt-3 sm:pt-4">
-                                        <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-3">Performance Breakdown</h4>
+                                        <h4 className="text-base sm:text-lg font-bold tracking-tight text-slate-900 mb-3">Performance Breakdown</h4>
                                         <div className="space-y-3">
                                             {performanceData.map((item, index) => {
                                                 const Icon = item.icon;
@@ -555,7 +555,7 @@ const Result = () => {
                         {testResults?.sectionWiseResults && Object.keys(testResults?.sectionWiseResults).length > 1 && (
                             <div className="space-y-6 sm:space-y-8">
                                 <div className="text-center xl:text-left">
-                                    <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Section-wise Performance</h3>
+                                    <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 mb-2">Section-wise Performance</h3>
                                     <p className="text-sm sm:text-base text-gray-600">Detailed performance breakdown by individual sections</p>
                                 </div>
 
@@ -567,7 +567,7 @@ const Result = () => {
                                             <div key={section.sectionId} className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg sm:rounded-xl p-4 sm:p-6 border border-gray-200 hover:shadow-md transition-shadow duration-200">
                                                 {/* Section Header */}
                                                 <div className="text-center mb-4">
-                                                    <h4 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 truncate" title={section.sectionName}>
+                                                    <h4 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 mb-2 truncate" title={section.sectionName}>
                                                         {section.sectionName}
                                                     </h4>
                                                     <div className="flex items-center justify-center space-x-2">
@@ -642,7 +642,7 @@ const Result = () => {
                 {/* {testResults?.passed && (
           <div className="mt-6 sm:mt-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl p-6 sm:p-8 text-center text-white">
             <Trophy className="h-10 w-10 sm:h-12 sm:w-12 mx-auto mb-3 sm:mb-4" />
-            <h3 className="text-xl sm:text-2xl font-bold mb-3 sm:mb-4">Certificate Earned!</h3>
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight mb-3 sm:mb-4">Certificate Earned!</h3>
             <p className="text-yellow-100 mb-4 sm:mb-6 text-sm sm:text-base px-4">
               Congratulations! You've earned a certificate for passing this test.
               Download your certificate to showcase your achievement.
@@ -707,7 +707,7 @@ const Result = () => {
                             <div className="w-12 h-12 sm:w-16 sm:h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
                                 <Trophy className="h-6 w-6 sm:h-8 sm:w-8 text-yellow-600" />
                             </div>
-                            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Leaderboard</h2>
+                            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-slate-900 mb-2">Leaderboard</h2>
                             <p className="text-sm sm:text-base text-gray-600 px-4">See how you performed compared to other participants</p>
                         </div>
 
@@ -825,7 +825,7 @@ const Result = () => {
                             <div className="mx-auto px-4 sm:px-6 py-3 sm:py-4">
                                 <div className="flex items-start justify-between mb-3 sm:mb-4">
                                     <div className="min-w-0 flex-1">
-                                        <h3 className="text-lg sm:text-2xl font-bold truncate">Solutions & Explanations</h3>
+                                        <h3 className="text-lg sm:text-2xl font-bold tracking-tight truncate">Solutions & Explanations</h3>
                                         <p className="text-blue-100 text-sm sm:text-base">
                                             {selectedSectionFilter === 'all'
                                                 ? `All ${solutions.length} questions with detailed solutions`
@@ -887,7 +887,7 @@ const Result = () => {
                                                 <div className="bg-gray-50 px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
                                                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-2 sm:space-y-0">
                                                         <div className="flex flex-col">
-                                                            <h4 className="text-lg sm:text-xl font-semibold text-gray-900">
+                                                            <h4 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900">
                                                                 Question {selectedSectionFilter === 'all' ? solutions.findIndex(s => s.id === solution.id) + 1 : index + 1}
                                                             </h4>
                                                             {solution.sectionName && (

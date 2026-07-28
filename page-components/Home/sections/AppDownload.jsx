@@ -13,7 +13,7 @@ export const AppDownload = () => (
           <span className="text-[9px] font-black bg-blue-50 text-[#0a459a] border border-blue-200/60 px-3 py-1 rounded-full uppercase tracking-widest shadow-sm inline-block font-bold">
             CROSS-PLATFORM ARCHITECTURE
           </span>
-          <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight leading-tight font-bold">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 leading-tight">
             One Centralized Hub. Available Across All Stores.
           </h2>
           <p className="text-slate-500 text-xs font-semibold leading-relaxed">

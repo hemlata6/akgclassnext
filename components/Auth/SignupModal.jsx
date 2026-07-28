@@ -233,7 +233,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           </div>
 
           <div className="space-y-1">
-            <h2 className="text-2xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <h2 className="text-2xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Create Account
             </h2>
             <p className="text-gray-600 text-xs">

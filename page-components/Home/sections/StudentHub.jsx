@@ -15,7 +15,7 @@ export const StudentHub = () => {
         <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
             <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-slate-900">Free Resources</h3>
+              <h3 className="text-xl font-bold tracking-tight text-slate-900">Free Resources</h3>
               <span onClick={handleNavigateToResources} className="text-[10px] text-indigo-600 font-bold uppercase cursor-pointer hover:text-indigo-700 transition-colors">View Library</span>
             </div>
             <div className="grid grid-cols-2 gap-3 mb-4">

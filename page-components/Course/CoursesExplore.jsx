@@ -517,7 +517,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
           </button>
           {
             !routeData && (
-              <h1 className="text-base sm:text-lg font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-base sm:text-lg font-bold tracking-tight bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
                 Course Details
               </h1>
             )
@@ -573,7 +573,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
                     />
                   </div>
                   <div className="p-3 sm:p-4">
-                    <h2 className="text-lg sm:text-xl font-bold text-gray-900 mb-2">
+                    <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 mb-2">
                       {course.title}
                     </h2>
                     <p className="text-gray-600 text-sm mb-3 line-clamp-3 break-words">
@@ -657,7 +657,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
               {/* Right: Course Configuration (restored full code) */}
               <div style={{ marginTop: !isMobile ? "10px" : "" }}>
                 <div className="bg-white rounded-2xl shadow-lg p-2 sm:p-3 border border-gray-100 sticky top-24 overflow-hidden h-full">
-                  <h3 className="text-sm sm:text-base font-bold text-gray-900 mb-3">Course Configuration</h3>
+                  <h3 className="text-sm sm:text-base font-bold tracking-tight text-slate-900 mb-3">Course Configuration</h3>
                   {/* Lecture Mode */}
                   <div className="mb-3 w-full overflow-hidden">
                     <label className="block text-xs font-semibold text-gray-700 mb-1.5">Lecture Mode</label>
@@ -914,7 +914,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
                     ? 'bg-gradient-to-r from-amber-400 to-amber-500'
                     : 'bg-gradient-to-r from-blue-600 to-purple-600'
                     }`}></div>
-                  <h2 className="text-lg sm:text-xl font-bold text-gray-800 truncate">Suggested Courses</h2>
+                  <h2 className="text-lg sm:text-xl font-bold tracking-tight text-slate-900 truncate">Suggested Courses</h2>
                 </div>
                 <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 lg:gap-4 lg:overflow-y-auto lg:pr-2" style={{ maxHeight: 'calc(100vh - 200px)', overflowY: 'auto' }}>
                   {suggestedCourses.map((suggestedCourse) => (
@@ -936,7 +936,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
                         />
                       </div>
                       <div className="p-3 sm:p-4">
-                        <h3 className="text-sm font-bold text-gray-900 line-clamp-2 mb-2 min-h-[40px] break-words">
+                        <h3 className="text-sm font-bold tracking-tight text-slate-900 line-clamp-2 mb-2 min-h-[40px] break-words">
                           {suggestedCourse.title}
                         </h3>
                         {/* <p className="text-xs text-gray-600 line-clamp-2 mb-3">
@@ -1036,7 +1036,7 @@ const CourseExplore = ({ course: propCourse, allCourses: propAllCourses, onBack,
       >
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-xl font-bold text-gray-900">Course Description</h3>
+            <h3 className="text-xl font-bold tracking-tight text-slate-900">Course Description</h3>
             <button
               onClick={() => setIsDescriptionModalOpen(false)}
               className="p-2 rounded-full hover:bg-gray-100 transition-colors"

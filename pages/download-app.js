@@ -83,7 +83,7 @@ const DownloadAppPage = () => {
                             <Icons.Download size={48} className="text-white" />
                         </div>
 
-                        <h1 className="text-4xl md:text-6xl font-bold text-slate-900 mb-4">
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-4">
                             Get {institute?.institue ? institute?.institue : "Rishabh Jain"}
                         </h1>
 

@@ -62,7 +62,7 @@ export const HeroSection = ({ onExploreClick }) => {
             <div className={`${LAYOUT_PADDING} relative z-10 flex flex-col-reverse lg:flex-row items-center gap-10`}>
                 <div className="flex-1 text-center lg:text-left">
                     <span className="inline-block px-3 py-1 bg-indigo-50 border border-indigo-100 text-indigo-700 text-[10px] font-bold uppercase tracking-wider rounded-full mb-4 shadow-sm">India's #1 IDT Faculty</span>
-                    <h1 className="text-3xl md:text-6xl font-extrabold text-slate-900 mb-4 md:mb-6 leading-tight">Smart Prep for <br /><span className="text-indigo-700 drop-shadow-sm">IDT</span> & <span className="text-slate-500">AFM</span></h1>
+                    <h1 className="text-3xl md:text-6xl font-bold tracking-tight text-slate-900 mb-4 md:mb-6 leading-tight">Smart Prep for <br /><span className="text-indigo-700 drop-shadow-sm">IDT</span> & <span className="text-slate-500">AFM</span></h1>
                     <p className="text-slate-600 text-base md:text-lg max-w-lg mx-auto lg:mx-0 mb-8 leading-relaxed">
                         Join the future of CA preparation. Personalized learning paths powered by expert logic.
                     </p>

@@ -411,7 +411,7 @@ const ProceedToCheckoutForm = ({ cartCourses, onClose, totalAmount }) => {
                                 <div className="inline-flex items-center justify-center w-16 h-16 bg-white/20 backdrop-blur-md rounded-full mb-4">
                                     <Icons.CreditCard className="w-8 h-8 text-white" />
                                 </div>
-                                <h2 className="text-2xl font-bold text-white mb-2">Checkout Details</h2>
+                                <h2 className="text-2xl font-bold tracking-tight text-white mb-2">Checkout Details</h2>
                                 <p className="text-white/90 text-sm">Complete your payment to unlock your courses</p>
                             </div>
                         </div>

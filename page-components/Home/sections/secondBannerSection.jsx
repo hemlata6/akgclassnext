@@ -1,87 +1,162 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import {
-    ChevronDown,
-    Smartphone,
     ArrowRight,
-    ShoppingBag,
-    User,
-    ChevronLeft,
-    ChevronRight,
-    Clock,
-    ArrowUpRight,
-    BookOpen,
-    Layers,
     Video,
     FileText,
     HelpCircle,
     Volume2,
     Lightbulb,
-    Tv,
-    PlayCircle,
-    Monitor,
-    Laptop,
-    Download,
-    Mail,
-    Phone,
-    MapPin,
-    ExternalLink,
+    Sparkles,
     ShieldCheck,
-    Calendar
+    GraduationCap
 } from 'lucide-react';
-import { useRouter } from 'next/router';
+import YoutubeVideoCarouselSection from './YoutubeVideoCarouselSection';
+
+// Playcode.io safe router mock fallback
+const usePlaycodeRouter = () => {
+    try {
+        const { useRouter } = require('next/router');
+        return useRouter();
+    } catch (e) {
+        return {
+            push: (path) => console.log(`[Playcode Mock Navigation]: Navigating to ${path}`)
+        };
+    }
+};
 
 export const SecondBannerSection = () => {
-    const router = useRouter();
+    const router = usePlaycodeRouter();
 
-    // Fallback: Static promotional banner matching the image style
     return (
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-0 pt-0">
-            <div className="mb-4 sm:mb-6 border-b border-slate-200 pb-3 sm:pb-4">
-                <h3 className="text-xs font-black uppercase tracking-widest text-slate-400 font-bold">Exemption Assistance Engine</h3>
-                <h2 className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 font-bold">100% Free Learning Resources</h2>
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 pb-8 pt-4 font-sans">
+            {/* Header Title Bar */}
+            <div className="mb-4 border-b border-slate-200 pb-3 flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+                <div>
+                    <h3 className="text-xs font-black uppercase tracking-widest text-indigo-600 flex items-center gap-1.5">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-400" />
+                        Comprehensive Learning Hub
+                    </h3>
+                    <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-slate-900 mt-1">
+                        100% Free CA Master Resource Vault
+                    </h2>
+                </div>
+                <span className="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200 w-fit">
+                    Updated for Upcoming Exams
+                </span>
             </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                <div className="bg-gradient-to-br from-[#0c1a30] to-[#0a459a] rounded-3xl border border-blue-500/20 shadow-lg p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden aspect-auto md:aspect-video group transition-all duration-300 hover:shadow-xl">
-                    <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_16px]"></div>
-                    <div className="space-y-3 z-10 relative">
-                        <div className="flex items-center gap-2">
-                            <span className="text-[9px] font-black bg-blue-500/30 text-blue-200 border border-blue-400/30 px-2 py-0.5 rounded uppercase tracking-wider">CA INTERMEDIATE</span>
-                            <span className="text-[9px] font-bold text-emerald-300 flex items-center gap-1">⚡ Free Vault</span>
+
+            {/* Half-and-Half Layout: Banner Left | YouTube Carousel Right */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Left Half: Banner Card */}
+                <div className="bg-gradient-to-br from-[#0b1329] via-[#0f172a] to-[#1e1b4b] rounded-3xl border border-indigo-500/30 shadow-2xl p-4 sm:p-6 relative overflow-hidden group transition-all duration-300 hover:border-indigo-400/50 h-full flex flex-col">
+                    {/* Background Pattern Effects */}
+                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+                    <div className="absolute -top-24 -right-24 w-96 h-96 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                    <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                    <div className="relative z-10 flex flex-col justify-start gap-4">
+                        {/* Content Block */}
+                        <div className="space-y-4">
+                            {/* Badges */}
+                            <div className="flex flex-wrap items-center gap-2">
+                                <span className="text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1">
+                                    <GraduationCap className="w-3.5 h-3.5 text-indigo-400" /> CA Inter & CA Final
+                                </span>
+                                <span className="text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1">
+                                    ⚡ Instant Access
+                                </span>
+                                <span className="text-[10px] font-extrabold text-amber-300 flex items-center gap-1">
+                                    ⭐ Zero Cost Registration
+                                </span>
+                            </div>
+
+                            {/* Title & Description */}
+                            <div>
+                                <h3 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white leading-tight">
+                                    Open Educational Resources
+                                </h3>
+                                <p className="text-slate-300 text-sm mt-1.5 font-medium leading-relaxed">
+                                    Unlock Open Educational resources for Inter Audit and Strategic Management and Final Advanced Auditing
+                                </p>
+                            </div>
+
+                            {/* Stats Counter Row */}
+                            <div className="grid grid-cols-3 gap-2">
+                                <div className="text-center bg-white/5 rounded-lg p-2 border border-white/10">
+                                    <p className="text-white font-extrabold text-base">1000+</p>
+                                    <p className="text-[9px] text-slate-400 font-medium">Exemption</p>
+                                </div>
+                                <div className="text-center bg-white/5 rounded-lg p-2 border border-white/10">
+                                    <p className="text-white font-extrabold text-base">200+</p>
+                                    <p className="text-[9px] text-slate-400 font-medium">All India Rankers</p>
+                                </div>
+                                <div className="text-center bg-white/5 rounded-lg p-2 border border-white/10">
+                                    <p className="text-white font-extrabold text-base">100000+</p>
+                                    <p className="text-[9px] text-slate-400 font-medium">Student taught</p>
+                                </div>
+                            </div>
+
+                            {/* Feature Highlights Grid */}
+                            <div className="grid grid-cols-2 gap-3 text-[11px] text-slate-200 font-semibold">
+                                <div className="bg-white/5 border border-white/10 rounded-lg p-2 backdrop-blur-sm flex items-center gap-1.5">
+                                    <FileText className="w-3.5 h-3.5 text-blue-400 shrink-0" />
+                                    <span>Class Notes</span>
+                                </div>
+                                <div className="bg-white/5 border border-white/10 rounded-lg p-2 backdrop-blur-sm flex items-center gap-1.5">
+                                    <HelpCircle className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
+                                    <span>QnA & MCQ Book Pdfs</span>
+                                </div>
+                                <div className="bg-white/5 border border-white/10 rounded-lg p-2 backdrop-blur-sm flex items-center gap-1.5">
+                                    <FileText className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                    <span>Test Papers</span>
+                                </div>
+                                <div className="bg-white/5 border border-white/10 rounded-lg p-2 backdrop-blur-sm flex items-center gap-1.5">
+                                    <Volume2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                                    <span>Imp exam Pdfs</span>
+                                </div>
+                            </div>
                         </div>
-                        <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight max-w-md font-bold">Unlock Complete CA Inter Audit & SM Free Resource Panel</h3>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pt-2 max-w-sm text-[11px] text-slate-300 font-semibold">
-                            <span className="flex items-center gap-1.5"><Video className="w-3.5 h-3.5 text-blue-400" /> Revision Videos & Marathons</span>
-                            <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-blue-400" /> Important Notes & E-Books</span>
-                            <span className="flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5 text-blue-400" /> Subjective Tests & MCQs</span>
-                            <span className="flex items-center gap-1.5"><Volume2 className="w-3.5 h-3.5 text-blue-400" /> Audio Notes & Exam Tips</span>
+
+                        {/* Bonus Tag */}
+                        <div className="flex items-center gap-2 text-[11px] text-emerald-300 font-bold bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2">
+                            <span className="text-emerald-400">🎯</span>
+                            <span>CA Intermediate Audit and Strategic Management (SM) and CA Final Audit content</span>
                         </div>
-                    </div>
-                    <div className="pt-4 z-10 relative flex items-center justify-between border-t border-white/10 mt-4">
-                        <button onClick={() => router.push('/free-resources')} className="bg-white text-[#0a459a] font-black px-5 py-3 rounded-xl text-[11px] tracking-wider uppercase shadow-md hover:bg-slate-50 transition-all flex items-center gap-1.5 group/btn active:scale-95 font-bold">Explore Inter Vault <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" /></button>
-                        <div className="hidden sm:flex items-center gap-1 text-[10px] text-blue-200/60 font-bold uppercase tracking-wider"><Lightbulb className="w-4 h-4 text-yellow-400" /> <span>Includes Motivation Corner</span></div>
+
+                        {/* CTA Buttons */}
+                        <div className="space-y-2">
+                            <button
+                                onClick={() => router.push('/free-resources?level=inter')}
+                                className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-extrabold px-4 py-3 rounded-xl text-xs tracking-wider uppercase shadow-lg hover:from-blue-500 hover:to-indigo-500 transition-all flex items-center justify-between group/btn active:scale-[0.98]"
+                            >
+                                <span>🚀 Explore Free Resources</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                            </button>
+
+                            {/* <div className="relative flex items-center gap-2">
+                                <div className="flex-1 h-px bg-white/10"></div>
+                                <span className="text-[8px] text-slate-500 font-bold uppercase tracking-widest shrink-0">or</span>
+                                <div className="flex-1 h-px bg-white/10"></div>
+                            </div>
+
+                            <button
+                                onClick={() => router.push('/free-resources?level=final')}
+                                className="w-full bg-white text-slate-900 font-extrabold px-3 py-2.5 rounded-xl text-[10px] tracking-wider uppercase shadow-lg hover:bg-slate-100 transition-all flex items-center justify-between group/btn active:scale-[0.98]"
+                            >
+                                <span>⭐ Explore Final Resources</span>
+                                <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                            </button> */}
+                        </div>
                     </div>
                 </div>
-                <div className="bg-gradient-to-br from-[#1a0b2e] to-[#311B92] rounded-3xl border border-purple-500/20 shadow-lg p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden aspect-auto md:aspect-video group transition-all duration-300 hover:shadow-xl">
-                    <div className="absolute inset-0 opacity-5 bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:12px_16px]"></div>
-                    <div className="space-y-3 z-10 relative">
-                        <div className="flex items-center gap-2">
-                            <span className="text-[9px] font-black bg-purple-500/30 text-purple-200 border border-purple-400/30 px-2 py-0.5 rounded uppercase tracking-wider">CA FINAL EXPERT LEVEL</span>
-                            <span className="text-[9px] font-bold text-amber-300 flex items-center gap-1">⭐ Exemption Kit</span>
-                        </div>
-                        <h3 className="text-lg sm:text-2xl font-black text-white tracking-tight leading-tight max-w-md font-bold">Access Advanced Auditing & Professional Ethics Materials</h3>
-                        <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 pt-2 max-w-sm text-[11px] text-purple-200/90 font-semibold">
-                            <span className="flex items-center gap-1.5"><Video className="w-3.5 h-3.5 text-purple-400" /> Revision Videos & Marathons</span>
-                            <span className="flex items-center gap-1.5"><FileText className="w-3.5 h-3.5 text-purple-400" /> Important Notes & E-Books</span>
-                            <span className="flex items-center gap-1.5"><HelpCircle className="w-3.5 h-3.5 text-purple-400" /> Subjective Tests & MCQs</span>
-                            <span className="flex items-center gap-1.5"><Volume2 className="w-3.5 h-3.5 text-purple-400" /> Professional Ethics Audio Notes</span>
-                        </div>
-                    </div>
-                    <div className="pt-4 z-10 relative flex items-center justify-between border-t border-white/10 mt-4">
-                        <button onClick={() => router.push('/free-resources')} className="bg-white text-[#311B92] font-black px-5 py-3 rounded-xl text-[11px] tracking-wider uppercase shadow-md hover:bg-slate-50 transition-all flex items-center gap-1.5 group/btn active:scale-95 font-bold">Explore Final Vault <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-0.5 transition-transform" /></button>
-                        <div className="hidden sm:flex items-center gap-1 text-[10px] text-purple-300/60 font-bold uppercase tracking-wider"><Tv className="w-4 h-4 text-purple-400" /> <span>Ex-Big 4 Guidance Deck</span></div>
-                    </div>
+
+                {/* Right Half: YouTube Video Carousel */}
+                <div className="h-full">
+                    <YoutubeVideoCarouselSection compact />
                 </div>
             </div>
         </section>
     );
 };
+
+export default SecondBannerSection;

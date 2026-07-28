@@ -465,7 +465,7 @@ export const BlogListPage = () => {
                       )}
                     </div>
 
-                    <h3 className="font-bold text-lg text-slate-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
+                    <h3 className="text-lg font-bold tracking-tight text-slate-900 mb-2 leading-snug group-hover:text-emerald-700 transition-colors line-clamp-2">
                       {String(item.title || item.name || 'Untitled')}
                     </h3>
 

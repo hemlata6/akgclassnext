@@ -88,7 +88,7 @@ const FacultyProfile = () => {
                     <div className={LAYOUT_PADDING}>
                         <div className="text-center mb-10">
                             <span className="text-emerald-700 font-bold tracking-widest text-xs uppercase">Meet the Mentors</span>
-                            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mt-2">Our Faculty Panel</h2>
+                            <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mt-2">Our Faculty Panel</h2>
                         </div>
                         <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                             {facultyCards.map((card, index) => (
@@ -155,7 +155,7 @@ const FacultyProfile = () => {
                 {/* Key Highlights Section */}
                 <section id="faculty-highlights-section" data-section="faculty-highlights" className="py-16">
                     <div className={LAYOUT_PADDING}>
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-12 text-center">
+                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-12 text-center">
                             Key Highlights & <span className="text-emerald-800">Achievements</span>
                         </h2>
 
@@ -164,7 +164,7 @@ const FacultyProfile = () => {
                             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">📚</div>
-                                    <h3 className="text-xl font-bold text-slate-900">Education & Qualification</h3>
+                                    <h3 className="text-xl font-bold tracking-tight text-slate-900">Education & Qualification</h3>
                                 </div>
                                 <ul className="space-y-4">
                                     <li className="flex gap-3">
@@ -188,7 +188,7 @@ const FacultyProfile = () => {
                             <div className="bg-white rounded-2xl shadow-lg border border-slate-100 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">💼</div>
-                                    <h3 className="text-xl font-bold text-slate-900">Corporate Experience</h3>
+                                    <h3 className="text-xl font-bold tracking-tight text-slate-900">Corporate Experience</h3>
                                 </div>
                                 <ul className="space-y-4">
                                     <li className="flex gap-3">
@@ -219,7 +219,7 @@ const FacultyProfile = () => {
                             <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-2xl shadow-lg border border-emerald-200 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">👥</div>
-                                    <h3 className="text-xl font-bold text-slate-900">Mentorship Impact</h3>
+                                    <h3 className="text-xl font-bold tracking-tight text-slate-900">Mentorship Impact</h3>
                                 </div>
                                 <ul className="space-y-4">
                                     <li className="flex gap-3">
@@ -241,7 +241,7 @@ const FacultyProfile = () => {
                             <div className="bg-gradient-to-br from-amber-50 to-yellow-100 rounded-2xl shadow-lg border border-amber-200 p-8 hover:shadow-xl transition-shadow">
                                 <div className="flex items-center gap-3 mb-6">
                                     <div className="text-4xl">🏆</div>
-                                    <h3 className="text-xl font-bold text-slate-900">Highest Marks by Students</h3>
+                                    <h3 className="text-xl font-bold tracking-tight text-slate-900">Highest Marks by Students</h3>
                                 </div>
                                 <div className="space-y-4">
                                     <div className="flex items-center justify-between bg-white/70 rounded-xl p-4">
@@ -261,7 +261,7 @@ const FacultyProfile = () => {
                 {/* Specializations Section */}
                 <section id="faculty-specializations-section" data-section="faculty-specializations" className="py-16 bg-slate-50">
                     <div className={LAYOUT_PADDING}>
-                        <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8 text-center">
+                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-8 text-center">
                             Areas of <span className="text-emerald-800">Specialization</span>
                         </h2>
 
@@ -273,7 +273,7 @@ const FacultyProfile = () => {
                             ].map((spec, i) => (
                                 <div key={i} className="bg-white rounded-xl shadow-md border border-slate-200 p-6 text-center hover:shadow-lg hover:border-emerald-300 transition-all">
                                     <div className="text-4xl mb-4">{spec.icon}</div>
-                                    <h3 className="text-lg font-bold text-slate-900">{spec.title}</h3>
+                                    <h3 className="text-lg font-bold tracking-tight text-slate-900">{spec.title}</h3>
                                 </div>
                             ))}
                         </div>

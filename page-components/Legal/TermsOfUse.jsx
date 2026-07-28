@@ -57,7 +57,7 @@ const TermsOfUse = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Disclaimer and Limitation of Liability</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Disclaimer and Limitation of Liability</h2>
               <div className="bg-amber-50 border-l-4 border-amber-500 p-6 mb-4">
                 <p className="text-slate-700 leading-relaxed mb-4">
                   YOU AGREE THAT YOUR USE OF THE SITE SHALL BE AT YOUR SOLE RISK, AND {institute?.institue ? institute?.institue : "Rishabh Jain"} WILL NOT BE HELD LIABLE IN ANY WAY FOR YOUR USE OF THE SITE OR FOR ANY INFORMATION CONTAINED ON THE SITE. ALL CONTENT CONTAINED IN OR REFERRED TO ON THE SITE IS PROVIDED "AS IS," WITHOUT ANY REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. TO THE FULLEST EXTENT PERMITTED BY LAW, {institute?.institue ? institute?.institue : "Rishabh Jain"} DISCLAIMS ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING, WITHOUT LIMITATION, ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. {institute?.institue ? institute?.institue : "Rishabh Jain"} MAKES NO WARRANTIES THAT THE SITE WILL BE ERROR-FREE, OR THAT ANY ERRORS WILL BE CORRECTED, OR THAT THE SITE OR THE SERVER FROM WHICH THE SITE IS OPERATED WILL BE FREE OF VIRUSES OR OTHER POTENTIALLY HARMFUL CODES.
@@ -69,33 +69,33 @@ const TermsOfUse = () => {
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Indemnification</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Indemnification</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
                 You agree to indemnify, hold harmless and defend {institute?.institue ? institute?.institue : "Rishabh Jain"} from and against any and all claims, damages, losses, liabilities, judgments, awards, settlements, costs and expenses (including attorney's fees and court costs) arising out of or resulting from your use of this Website or the violation by you of any of these Terms of Use.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Limitation Period</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Limitation Period</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
                 YOU AGREE THAT ANY CAUSE OF ACTION ARISING OUT OF OR RELATED TO THIS SITE OR YOUR USE OF THIS SITE MUST COMMENCE WITHIN ONE (1) YEAR AFTER THE CAUSE OF ACTION ACCRUES, AND WILL THEREAFTER BE PERMANENTLY BARRED.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Entire Agreement</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Entire Agreement</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
                 These Terms of Use constitute the entire agreement between you and {institute?.institue ? institute?.institue : "Rishabh Jain"} concerning your use of the Website and the contents of the Website. If any provision is deemed invalid by a court of competent jurisdiction, the remaining provisions shall remain in full force and effect. No waiver of any the Terms of Use shall be deemed a further or continuing waiver of such term or condition or any other term or condition, and any failure by {institute?.institue ? institute?.institue : "Rishabh Jain"} to assert any right or provision under these Terms of Use shall not constitute a waiver of such right or provision.
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Contact Information</h2>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">Contact Information</h2>
               <p className="text-slate-700 leading-relaxed mb-4">
                 If you have any questions about these Terms of Use, please contact us at:
               </p>
               <div className="bg-slate-50 p-6 rounded-xl border border-slate-200">
-                <p className="text-slate-700 mb-2"><strong>Email:</strong> info.vgsh@gmail.com</p>
+                <p className="text-slate-700 mb-2"><strong>Email:</strong> support@rishabhjain.com</p>
                 <p className="text-slate-700 mb-2"><strong>Phone:</strong> 7703880232</p>
                 <p className="text-slate-700"><strong>Location:</strong> D-223/1, Vikas Marg, Near Laxmi Nagar Metra Gate No. 5, Delhi - 110092, India</p>
               </div>

@@ -40,7 +40,7 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">PERSONAL INFORMATION</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">PERSONAL INFORMATION</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 "Personal Information" shall mean the information which identifies a Learner i.e., first and last name, identification number, email address, age, gender, location, photograph and/or phone number provided at the time of registration or any time thereafter on the Platform.
                             </p>
@@ -53,7 +53,7 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">INFORMATION WE COLLECT:</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">INFORMATION WE COLLECT:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We may collect both personal and non-personal identifiable information from You in a variety of ways, including, but not limited to, when You visit our Platform, register on the Platform, and in connection with other activities, services, features or resources we make available on our Platform. However, please note that-
                             </p>
@@ -63,39 +63,39 @@ const PrivacyPolicy = () => {
                                 <li>We do not store Personal Information on our servers unless required for the on-going operation of our Platform.</li>
                             </ul>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">Personal Identifiable Information:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">Personal Identifiable Information:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We may collect personal-identifiable information such as Your name and emails address to enable Your access to the Platform and services/products offered therein. We will collect personal-identifiable information from You only if such information is voluntarily submitted by You to us. You can always refuse to provide such personal identification information; however, it may prevent You from accessing services or products provided on the Platform or from engaging in certain activities on the Platform.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">Non-Personal Identifiable Information:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">Non-Personal Identifiable Information:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 When You interact with our Platform, we may collect non-personal-identifiable information such as the browser name, language preference, referring site, and the date and time of each user request, operating system and the Internet service providers utilized and other similar information.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">Cookies:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">Cookies:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 To enhance User experience, our Platform may use 'cookies'. A cookie is a string of information that a website stores on a visitor's computer, and that the visitor's browser provides to the website each time the visitor returns for record-keeping purposes. You may choose to set Your web browser to refuse cookies, or to notify You when cookies are being sent; however, please note that in doing so, some parts of the Platform may not function properly.
                             </p>
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">HOW WE USE and SHARE THE INFORMATION COLLECTED</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">HOW WE USE and SHARE THE INFORMATION COLLECTED</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We may collect and use Your Personal Information for the following purposes:
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">To provide access to our Platform and/or the services/products offered therein:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">To provide access to our Platform and/or the services/products offered therein:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We use the Your information as collected by us to allow You to access the Platform and the services/products offered therein, including without limitation to provide customer service, fulfil purchases through the Platform, verify User information and to resolve any glitches with our Platform. The legal basis for this processing is consent or, where applicable, our legitimate interests in the proper administration of our Platform, and/or the performance of a contract between You and us.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">To improve our Platform and maintain safety:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">To improve our Platform and maintain safety:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We use Your information to improve and customize the Platform and services/products offered by us. Further, we also use Your information to prevent, detect, investigate, and take measures against criminal activity, fraud, misuse of or damage to our Platform or network, and other threats and violations to a third party's or our rights and property, or the safety of our Users, or others. The legal basis for this processing is consent or, where applicable, our legitimate interests in the proper administration of our Platform, and/or the performance of a contract between You and us.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">To communicate with You or market our services/products:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">To communicate with You or market our services/products:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We may use the email address submitted by You to communicate with You about Your orders on our Platform, our offers, new products, services or even receive Your feedback on the Platform or any services/products offered therein. It may also be used to respond to Your inquiries, questions, and/or other requests. If at any time You would like to unsubscribe from receiving future emails, please write to us at the contact information provided below. The legal basis for this processing is consent or, where applicable, our legitimate interests in the proper administration of our Platform, and/or the performance of a contract between You and us.
                             </p>
@@ -110,26 +110,26 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">YOUR CHOICES:</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">YOUR CHOICES:</h2>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3">Limit the information You provide:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3">Limit the information You provide:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 You always have an option to choose the information You provide to us, including the option to update or delete Your information. However, please note that lack of certain information may not allow You access to the Platform or any of its features, in part or in full. For example: information required for Your registration on the Platform.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">Limit the communications You receive from us:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">Limit the communications You receive from us:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 Further, You will also have the option to choose what kind of communication You would like to receive from us. However, there may be certain communications that are required for legal or security purposes, including changes to various legal agreements, that you may not be able to limit.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">Reject Cookies and other similar technologies:</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">Reject Cookies and other similar technologies:</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 You may reject or remove cookies from Your web browser; You will always have the option to change the default settings on Your web browser if the same is set to 'accept cookies'. However, please note that some of the services/products offered on the Platform may not function or be available to You, when the cookies are rejected, removed or disabled.
                             </p>
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">YOUR RIGHTS:</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">YOUR RIGHTS:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 In general, all Learners have the rights specified herein this section. However, depending on where you are situated, you may have certain specific rights in respect of your Personal Information accorded by the laws of the country you are situated in. To understand Your rights, please refer to the Country Specific Additional Rights below.
                             </p>
@@ -150,7 +150,7 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">PROTECTION OF YOUR INFORMATION:</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">PROTECTION OF YOUR INFORMATION:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We take all measures reasonably necessary to protect against the unauthorized access, use, alteration or destruction of Personal Information or such other data on the Platform. Our disclosure of any such information is limited to –
                             </p>
@@ -170,14 +170,14 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">THIRD PARTY WEBSITES</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">THIRD PARTY WEBSITES</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 You may find links to the websites and services of our partners, suppliers, advertisers, sponsors, licensors and other third parties. The content or links that appear on these sites are not controlled by us in any manner and we are not responsible for the practices employed by such websites. Further, these websites/links thereto, including their content, may be constantly changing and the may have their own terms of use and privacy policies. Browsing and interaction on any other website, including websites which have a link to our Site, is subject to that terms and policies published on such websites.
                             </p>
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">CROSS-BORDER DATA TRANSFER</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">CROSS-BORDER DATA TRANSFER</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 Your information including any Personal Information is stored, processed, and transferred in and to the Amazon Web Service (AWS) servers and databases located in India. We may also store, process, and transfer information in and to servers in other countries depending on the location of our affiliates and service providers.
                             </p>
@@ -190,7 +190,7 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">DURATION FOR WHICH YOUR INFORMATION IS STORED</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">DURATION FOR WHICH YOUR INFORMATION IS STORED</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We will retain Your information for as long as it is required for us to retain for the purposes stated hereinabove, including for the purpose of complying with legal obligation or business compliances.
                             </p>
@@ -203,23 +203,23 @@ const PrivacyPolicy = () => {
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">MODIFICATION TO PRIVACY POLICY:</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">MODIFICATION TO PRIVACY POLICY:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 We may modify, revise or change our Policy from time to time; when we do, we will revise the 'updated date' at the beginning of this page. We encourage You to check our Platform frequently to see the recent changes. Unless stated otherwise, our current Policy applies to all information that we have about You.
                             </p>
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">GRIEVANCES:</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">GRIEVANCES:</h2>
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                If you have any questions about this Policy, wish to exercise your rights, concerns about privacy or grievances, please write to us with a thorough description via email to <strong>info.vgsh@gmail.com</strong>.
+                                If you have any questions about this Policy, wish to exercise your rights, concerns about privacy or grievances, please write to us with a thorough description via email to <strong>support@rishabhjain.com</strong>.
                             </p>
                         </section>
 
                         <section className="mb-8">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4 mt-8">COUNTRY SPECIFIC ADDITIONAL RIGHTS</h2>
+                            <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-4 mt-8">COUNTRY SPECIFIC ADDITIONAL RIGHTS</h2>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-6">TERMS APPLICABLE IF YOU ARE AN INDIAN RESIDENT</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-6">TERMS APPLICABLE IF YOU ARE AN INDIAN RESIDENT</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 <strong>Your Rights:</strong> If you are located in India, you may have the following rights under the Personal Data Protection Bill (PDPB) when it becomes a legislation. All requests can be made by using the option provided to you within the Platform upon your login. You may also write to us as stated in the "Grievances" section above, and we will address you concerns to the extent required by law.
                             </p>
@@ -231,7 +231,7 @@ const PrivacyPolicy = () => {
                                 <li><strong>Right to Erasure:</strong> If you wish to withdraw/remove your Personal Information from our Platform, you have the right to request erasure of your Personal Information from our Platform. However, please note that such erasure will remove all your Personal Information from our Platform (except as specifically stated in this Policy) and may result in deletion of your account on the Platform permanently, and the same will not be retrievable.</li>
                             </ul>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-8">TERMS APPLICABLE IF YOU ARE A RESIDENT OF UNITED KINGDOM (UK), A EUROPEAN UNION (EU) COUNTRY OR EUROPEAN ECONOMIC AREA (EEA)</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-8">TERMS APPLICABLE IF YOU ARE A RESIDENT OF UNITED KINGDOM (UK), A EUROPEAN UNION (EU) COUNTRY OR EUROPEAN ECONOMIC AREA (EEA)</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 <strong>Your Rights:</strong> If you are located in the United Kingdom (UK) or European Union (EU) or European Economic Area (EEA), you have the following rights under the UK and EU General Data Protection Regulation (GDPR) respectively. All requests should be sent to the address noted in the "Grievances" section above, and we will fulfil requests to the extent required by applicable law.
                             </p>
@@ -249,7 +249,7 @@ const PrivacyPolicy = () => {
                                 We collect and process Personal Information about you only where we have a legal rationale to do so. Specific legal rationale applied for the same will depend on the type of Personal Information collected and the context in which the same is being processed, including the Services involved.
                             </p>
 
-                            <h3 className="text-xl font-semibold text-slate-800 mb-3 mt-8">TERMS APPLICABLE IF YOU ARE A CALIFORNIA STATE RESIDENT</h3>
+                            <h3 className="text-xl font-bold tracking-tight text-slate-900 mb-3 mt-8">TERMS APPLICABLE IF YOU ARE A CALIFORNIA STATE RESIDENT</h3>
                             <p className="text-slate-700 leading-relaxed mb-4">
                                 If you are a California state resident, then you have the following rights to the extent, and in the manner, set out in the CCPA:
                             </p>
@@ -265,7 +265,7 @@ const PrivacyPolicy = () => {
                             </p>
 
                             <div className="bg-blue-50 p-6 rounded-xl border border-blue-200 mb-6">
-                                <h4 className="text-lg font-bold text-slate-900 mb-3">CCPA NOTICE AT COLLECTION:</h4>
+                                <h4 className="text-lg font-bold tracking-tight text-slate-900 mb-3">CCPA NOTICE AT COLLECTION:</h4>
                                 <p className="text-slate-700 leading-relaxed mb-4">
                                     For purposes of the CCPA, in collecting the information described above, we collect the categories of Personal Information listed below from you:
                                 </p>
@@ -280,7 +280,7 @@ const PrivacyPolicy = () => {
                             </div>
 
                             <p className="text-slate-700 leading-relaxed mb-4">
-                                For complete details on CCPA data practices, consumer rights, and requests under the CCPA, please refer to the full policy document or contact us at <strong>info.vgsh@gmail.com</strong>.
+                                For complete details on CCPA data practices, consumer rights, and requests under the CCPA, please refer to the full policy document or contact us at <strong>support@rishabhjain.com</strong>.
                             </p>
                         </section>
 

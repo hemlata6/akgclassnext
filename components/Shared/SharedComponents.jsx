@@ -35,7 +35,7 @@ export const Footer = () => {
             <div onClick={() => router.push('/')} className="flex items-center gap-2.5 shrink-0 select-none cursor-pointer">
               <div className="bg-[#0a459a] text-white font-black text-base px-2.5 py-1 rounded-lg tracking-tight">RJCE</div>
             <div className="space-y-0.5">
-              <h3 className="font-black text-white tracking-tight text-sm leading-none font-bold">
+              <h3 className="font-bold tracking-tight text-white text-sm leading-none">
                 {institute?.institue ? institute?.institue?.toUpperCase() : "RISHABH JAIN"}
               </h3>
               <span className="text-[8px] uppercase tracking-widest text-slate-400 font-extrabold block font-bold">Commerce Education</span>
@@ -52,7 +52,7 @@ export const Footer = () => {
 
         {/* Column 2: Product & Course Inventory Links (Span 3) */}
         <div className="lg:col-span-3 space-y-3.5 lg:pl-6">
-          <h4 className="text-white font-black uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold">
+          <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
             <Layers className="w-3.5 h-3.5 text-[#0a459a]" /> Academic Products
           </h4>
           <ul className="space-y-2.5 font-semibold">
@@ -67,7 +67,7 @@ export const Footer = () => {
 
         {/* Column 3: General & Statutory Policy Management (Span 2) */}
         <div className="lg:col-span-2 space-y-3.5">
-          <h4 className="text-white font-black uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold">
+          <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5 text-[#0a459a]" /> Corporate Linkages
           </h4>
           <ul className="space-y-2.5 font-semibold">
@@ -84,12 +84,12 @@ export const Footer = () => {
 
         {/* Column 4: Contact Directory Coordinates (Span 3) */}
         <div className="lg:col-span-3 space-y-3.5 lg:pl-2">
-          <h4 className="text-white font-black uppercase tracking-wider text-[11px] flex items-center gap-1 font-bold">
+          <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
             <MapPin className="w-3.5 h-3.5 text-[#0a459a]" /> Help Desk Coordinates
           </h4>
           <ul className="space-y-2.5 font-semibold text-slate-400">
             <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span>{institute?.instituteAppSettingsModals?.contact || "+91 98765 43210"}</span></li>
-            <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span className="break-all">{institute?.email || "info.rishabhjain@gmail.com"}</span></li>
+            <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span className="break-all">{institute?.email || "support@rishabhjain.com"}</span></li>
             <li className="flex items-start gap-2"><MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" /> <span className="leading-normal">{institute?.address || "Main F2F Head Center, Pune, Maharashtra, India"}</span></li>
             <li className="flex items-center gap-2 pt-0.5"><Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span>Mon-Sat (10AM - 6PM)</span></li>
           </ul>

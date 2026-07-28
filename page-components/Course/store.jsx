@@ -197,7 +197,7 @@ const Store = ({ onQuizNavigation }) => {
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           {/* <div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 mb-2">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-orange-600 to-red-600 mb-2">
                 Course Store
               </h1>
               <p className="text-base md:text-lg text-gray-600 max-w-2xl">
@@ -241,7 +241,7 @@ const Store = ({ onQuizNavigation }) => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="h-1 w-12 bg-gradient-to-r from-orange-600 to-red-600 rounded-full"></div>
-                <h2 className="text-2xl md:text-1xl font-bold text-gray-800">Featured Courses</h2>
+                <h2 className="text-2xl md:text-1xl font-bold tracking-tight text-slate-900">Featured Courses</h2>
               </div>
               {courseList.length > 6 && (
                 <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -268,7 +268,7 @@ const Store = ({ onQuizNavigation }) => {
 
                   {/* Course Content */}
                   <div className="p-3">
-                    <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1.5 line-clamp-2 min-h-[2rem] group-hover:text-orange-600 transition-colors">
+                    <h3 className="text-sm md:text-base font-bold tracking-tight text-slate-900 mb-1.5 line-clamp-2 min-h-[2rem] group-hover:text-orange-600 transition-colors">
                       {item.title}
                     </h3>
 
@@ -389,7 +389,7 @@ const Store = ({ onQuizNavigation }) => {
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center gap-3">
                 <div className="h-1 w-12 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full"></div>
-                <h2 className="text-2xl md:text-1xl font-bold text-gray-800">Test Series & Programs</h2>
+                <h2 className="text-2xl md:text-1xl font-bold tracking-tight text-slate-900">Test Series & Programs</h2>
               </div>
               {dripCourseList.length > 6 && (
                 <span className="text-sm text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
@@ -416,7 +416,7 @@ const Store = ({ onQuizNavigation }) => {
 
                   {/* Course Content */}
                   <div className="p-3">
-                    <h3 className="text-sm md:text-base font-bold text-gray-900 mb-1.5 line-clamp-2 min-h-[2rem] group-hover:text-purple-600 transition-colors">
+                    <h3 className="text-sm md:text-base font-bold tracking-tight text-slate-900 mb-1.5 line-clamp-2 min-h-[2rem] group-hover:text-purple-600 transition-colors">
                       {item.title}
                     </h3>
 
@@ -535,7 +535,7 @@ const Store = ({ onQuizNavigation }) => {
               <div className="w-24 h-24 bg-gradient-to-br from-orange-100 to-red-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <ShoppingCart className="h-12 w-12 text-orange-600" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-3">No Courses Available</h3>
+              <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">No Courses Available</h3>
               <p className="text-gray-600">Check back soon for exciting new courses!</p>
             </div>
           </div>

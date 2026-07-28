@@ -103,11 +103,13 @@ export const Header = ({ cartCount }) => {
   const [mobileFacultyOpen, setMobileFacultyOpen] = useState(false);
   const [mobileComboOpen, setMobileComboOpen] = useState(false);
   const [comboDropdownOpen, setComboDropdownOpen] = useState(false);
+  const [showUserMenu, setShowUserMenu] = useState(false);
 
   // REFS FOR CLICK-OUTSIDE DETECTION
   const facultyDropdownRef = useRef(null);
   const exploreDropdownRef = useRef(null);
   const comboDropdownRef = useRef(null);
+  const userMenuRef = useRef(null);
 
   // SCROLL TRIGGER DETECTOR DETACHMENT STATE
   const [isHeaderFixed, setIsHeaderFixed] = useState(false);
@@ -140,6 +142,9 @@ export const Header = ({ cartCount }) => {
       }
       if (comboDropdownRef.current && !comboDropdownRef.current.contains(e.target)) {
         setComboDropdownOpen(false);
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) {
+        setShowUserMenu(false);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -238,6 +243,8 @@ export const Header = ({ cartCount }) => {
     );
   };
 
+  console.log('studentData', studentData)
+
   return (
     <>
       {/* 1. SYSTEM UTILITY PRE-HEADER (Stays relative, scrolls up away naturally) */}
@@ -245,7 +252,7 @@ export const Header = ({ cartCount }) => {
         <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-3 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
           <div className="flex items-center gap-2">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <a href="mailto:info.rishabhjain@gmail.com" className="hover:text-white transition-colors duration-200 font-bold">info.rishabhjain@gmail.com</a>
+            <a href="mailto:support@rishabhjain.com" className="hover:text-white transition-colors duration-200 font-bold">support@rishabhjain.com</a>
           </div>
           <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
             <Link href="/blog" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</Link>
@@ -409,12 +416,38 @@ export const Header = ({ cartCount }) => {
           </button>
 
           {user ? (
-            <button onClick={() => router.push('/my-purchases')} className="bg-gradient-to-r from-[#0a459a] to-[#073373] text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 shadow-[0_4px_12px_rgba(10,69,154,0.2)] hover:shadow-[0_4px_20px_rgba(10,69,154,0.35)] hover:-translate-y-0.5">
-              <User className="w-3.5 h-3.5 text-white" /> <span className="hidden xs:inline">Dashboard</span>
-            </button>
+            <div className="relative" ref={userMenuRef}>
+              <button
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="bg-gradient-to-r from-[#0a459a] to-[#073373] text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 shadow-[0_4px_12px_rgba(10,69,154,0.2)] hover:shadow-[0_4px_20px_rgba(10,69,154,0.35)] hover:-translate-y-0.5"
+              >
+                <User className="w-3.5 h-3.5 text-white" /> <span className="hidden xs:inline">{studentData?.firstName + " " + studentData?.lastName}</span>
+                <ChevronDown className={`w-3 h-3 text-white/80 transition-transform duration-300 ${showUserMenu ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showUserMenu && (
+                <div className="absolute right-0 top-[calc(100%+8px)] w-48 bg-white border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50">
+                  <button
+                    onClick={() => { setShowUserMenu(false); router.push('/my-purchases'); }}
+                    className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center gap-2.5"
+                  >
+                    <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" /></svg>
+                    My Purchases
+                  </button>
+                  <div className="h-px bg-slate-100 my-1"></div>
+                  <button
+                    onClick={() => { setShowUserMenu(false); logout(); router.push('/'); }}
+                    className="w-full text-left font-bold text-xs text-red-600 hover:bg-red-50/70 px-4 py-3 rounded-xl transition-all flex items-center gap-2.5"
+                  >
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
             <button onClick={() => setShowLoginModal(true)} className="bg-gradient-to-r from-[#0a459a] to-[#073373] text-white font-bold text-[11px] sm:text-xs px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl transition-all duration-200 flex items-center gap-1.5 shadow-[0_4px_12px_rgba(10,69,154,0.2)] hover:shadow-[0_4px_20px_rgba(10,69,154,0.35)] hover:-translate-y-0.5">
-              <User className="w-3.5 h-3.5 text-white" /> <span className="hidden xs:inline">Account</span>
+              <User className="w-3.5 h-3.5 text-white" /> <span className="hidden xs:inline">Student Login</span>
             </button>
           )}
 

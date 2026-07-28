@@ -155,7 +155,7 @@ const PublicSignup = ({ onSwitchToLogin, onClose }) => {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Create Account
             </h2>
             <p className="text-gray-600 text-sm">

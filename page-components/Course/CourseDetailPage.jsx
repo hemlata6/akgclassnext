@@ -882,7 +882,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
               </div>
               <div className="md:flex-1 flex flex-col justify-between h-full md:min-h-[200px] py-1">
                 <div className="text-center md:text-left mt-2 md:mt-0">
-                  <h1 className="text-xl sm:text-1xl md:text-2xl font-extrabold text-slate-900 tracking-tight leading-tight uppercase">{courseData?.title || "Course Title"}</h1>
+                  <h1 className="text-xl sm:text-1xl md:text-2xl font-bold tracking-tight text-slate-900 leading-tight uppercase">{courseData?.title || "Course Title"}</h1>
                   <p className="text-xs sm:text-sm text-slate-500 mt-2 leading-relaxed">{courseData?.shortDescription || "Comprehensive Regular Batch for upcoming professional attempts."}</p>
                 </div>
                 <div className="mt-4 sm:mt-5 md:mt-6 pt-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 bg-slate-50/80 p-3 sm:p-4 rounded-xl">
@@ -1360,7 +1360,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
         <div className="bg-white py-12">
           <div className="w-full">
             <div className={LAYOUT_PADDING}>
-              <h2 className="text-2xl md:text-3xl font-bold text-slate-900 mb-8">Frequently Bought Together</h2>
+              <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 mb-8">Frequently Bought Together</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 auto-rows-max w-fit">
                 {suggestedCourses.map((suggestedCourse) => (
                   <div
@@ -1392,7 +1392,7 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
                     {/* Content */}
                     <div className="p-3 flex-1 flex flex-col">
-                      <h3 className="text-sm font-bold text-slate-900 mb-1 line-clamp-2">
+                      <h3 className="text-sm font-bold tracking-tight text-slate-900 mb-1 line-clamp-2">
                         {suggestedCourse.title}
                       </h3>
                       {/* <p className="text-xs text-slate-500 mb-3">

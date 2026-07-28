@@ -22,6 +22,7 @@ import ContactSupportSection from './sections/ContactSupportSection';
 import { SecondBannerSection } from './sections/secondBannerSection';
 import WatchVideoSection from './sections/WatchVideoSection';
 import { Headphones, User } from 'lucide-react';
+import YoutubeVideoCarouselSection from './sections/YoutubeVideoCarouselSection';
 
 const SOCIAL_PROOF_DATA = [
   { name: 'Kaya from Delhi', course: 'CA Final Advanced Audit (EOB)' },
@@ -155,8 +156,9 @@ export default function HomePage() {
       {/* <WhyChooseUs /> */}
       {/* <AboutSection /> */}
       <CoursesSection />
-      <SecondBannerSection />
       <BookStore />
+      <SecondBannerSection />
+      <YoutubeVideoCarouselSection />
       {/* <MarathonGallery /> */}
       <WatchVideoSection />
       {/* <StudentGallery /> */}
@@ -216,7 +218,7 @@ export default function HomePage() {
             </div> */}
 
             <div className="text-center px-4 pb-2 pt-4">
-              <h3 className="text-slate-900 text-sm font-extrabold tracking-tight">EXPERT ACADEMIC DESK</h3>
+              <h3 className="text-slate-900 text-sm font-bold tracking-tight">EXPERT ACADEMIC DESK</h3>
               <p className="text-red-500 font-bold text-[10px] uppercase tracking-wider mt-0.5">DIRECT MENTORSHIP</p>
             </div>
 

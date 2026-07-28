@@ -18,7 +18,7 @@ export const PromoPopup = ({ onClose }) => {
           <span className="bg-yellow-400 text-yellow-900 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider mb-2 inline-block shadow-md">
             New Batch Alert
           </span>
-          <h3 className="text-2xl font-bold">CA Final FR Live</h3>
+          <h3 className="text-2xl font-bold tracking-tight">CA Final FR Live</h3>
           <p className="text-emerald-100 text-sm mt-1">Enroll early for hardcopy books.</p>
         </div>
       </div>

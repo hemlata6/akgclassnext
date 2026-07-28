@@ -18,7 +18,7 @@ export const AboutSection = () => {
             </div>
           </div>
           <div className="w-full md:w-8/12 space-y-4">
-            <h2 className="text-2xl md:text-3xl font-bold text-slate-900 leading-tight">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-slate-900 leading-tight">
               Founder, Accounts & <span className="text-slate-400">FR Expert
               </span>
             </h2>

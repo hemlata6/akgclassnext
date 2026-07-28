@@ -89,7 +89,7 @@ export default function WatchVideoSection() {
                     </span>
 
                     {/* Main Name Header */}
-                    <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight">
+                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
                         CA Rishabh Jain Sir
                     </h2>
 

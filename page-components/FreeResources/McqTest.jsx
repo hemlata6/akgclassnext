@@ -1035,13 +1035,13 @@ const MCQTest = () => {
               <div className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: BRAND_GREEN }}>
                 <Play className="h-8 w-8 text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">{quizData?.title || 'MCQ Test'} - Instructions</h1>
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-2">{quizData?.title || 'MCQ Test'} - Instructions</h1>
               <p className="text-gray-600">Please read the instructions carefully before starting the test</p>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8 mb-8">
               <div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Test Details</h3>
+                <h3 className="text-lg font-bold tracking-tight text-slate-900 mb-4">Test Details</h3>
                 <div className="space-y-3 text-gray-600">
                   <div className="flex items-center">
                     <Clock className="h-5 w-5 mr-3 text-blue-600" />
@@ -1066,7 +1066,7 @@ const MCQTest = () => {
             </div>
 
             <div className="border-l-4 p-6 mb-8" style={{ backgroundColor: `${BRAND_GREEN}15`, borderColor: BRAND_GREEN }}>
-              <h3 className="text-lg font-semibold mb-3" style={{ color: BRAND_GREEN }}>
+              <h3 className="text-lg font-bold tracking-tight mb-3" style={{ color: BRAND_GREEN }}>
                 Quiz Instructions</h3>
               <div className="text-sm" style={{ color: BRAND_GREEN }}>
                 {quizData?.quiz?.instruction ? (
@@ -1119,7 +1119,7 @@ const MCQTest = () => {
                   )}
                 </div>
 
-                <h2 className="text-2xl font-bold text-gray-900 mb-3">
+                <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">
                   {testAccessError.type === 'attempted'
                     ? 'Test Already Attempted'
                     : testAccessError.type === 'expired'
@@ -1168,7 +1168,7 @@ const MCQTest = () => {
           )}
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="text-center md:text-left mb-4 md:mb-0">
-              <h1 className="text-xl sm:text-2xl font-bold text-gray-900">{quizData?.title || 'MCQ Test'}</h1>
+              <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900">{quizData?.title || 'MCQ Test'}</h1>
               <p className="text-gray-600">Question {currentQuestionIndex + 1} of {filteredQuestions.length} {selectedFilter !== 'all' ? `(${questions.length} total)` : ''}</p>
             </div>
 
@@ -1233,7 +1233,7 @@ const MCQTest = () => {
 
               {/* Status Legend */}
               <div className="mb-6">
-                <h4 className="text-sm font-semibold text-gray-900 mb-3">
+                <h4 className="text-sm font-bold tracking-tight text-slate-900 mb-3">
                   Status Legend
                   {selectedFilter.startsWith('section-') && (
                     <span className="block text-xs font-normal text-gray-500 mt-1">
@@ -1335,7 +1335,7 @@ const MCQTest = () => {
 
                 <div className={selectedFilter.startsWith('section-') ? 'bg-gray-50 p-3 rounded-lg' : ''}>
                   {selectedFilter.startsWith('section-') && (
-                    <h5 className="font-semibold text-gray-900 mb-2">Overall Progress</h5>
+                    <h5 className="font-bold tracking-tight text-slate-900 mb-2">Overall Progress</h5>
                   )}
                   <div className="space-y-2">
                     <div className="flex justify-between">
@@ -1592,7 +1592,7 @@ const MCQTest = () => {
                 )}
               </div>
 
-              <h2 className="text-2xl font-bold text-gray-900 mb-3">
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 mb-3">
                 {testAccessError.type === 'attempted'
                   ? 'Test Already Attempted'
                   : testAccessError.type === 'expired'
@@ -1633,7 +1633,7 @@ const MCQTest = () => {
                 <Flag className="h-8 w-8 text-orange-600" />
               </div>
 
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              <h3 className="text-2xl font-bold tracking-tight text-slate-900 mb-4">
                 {showExitModal ? 'Exit Test?' : 'Submit Test?'}
               </h3>
 
