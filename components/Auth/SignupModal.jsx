@@ -34,6 +34,26 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     if (tempData) {
       const parsedData = JSON.parse(tempData);
       setTempSignupData(parsedData);
+      // Pre-fill form fields if student data is available from login
+      if (parsedData.firstName || parsedData.lastName || parsedData.email) {
+        setFormData(prev => ({
+          ...prev,
+          firstname: parsedData.firstName || prev.firstname,
+          lastname: parsedData.lastName || prev.lastname,
+          email: parsedData.email || prev.email,
+        }));
+      }
+      // Pre-fill address fields if address data is available
+      if (parsedData.address || parsedData.cityName || parsedData.stateName) {
+        setAddressForm(prev => ({
+          ...prev,
+          address: parsedData.address || prev.address,
+          cityName: parsedData.cityName || prev.cityName,
+          stateName: parsedData.stateName || prev.stateName,
+          zipCode: parsedData.zipCode || prev.zipCode,
+          cityId: parsedData.cityId || prev.cityId,
+        }));
+      }
     }
   }, [isOpen]);
 

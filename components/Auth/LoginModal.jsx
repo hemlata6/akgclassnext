@@ -316,17 +316,23 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
             setOtpSent(false);
             setErrors({});
 
-            // console.log("Login successful, loginVerifyResponse data:", loginVerifyResponse?.student);
+            // Save student data to tempSignup for the signup modal
+            const studentInfo = loginVerifyResponse?.student || {};
+            localStorage.setItem('tempSignup', JSON.stringify({
+              phone: formData.phone,
+              otp: formData.otp,
+              firstName: studentInfo.firstName || '',
+              lastName: studentInfo.lastName || '',
+              email: studentInfo.email || '',
+              address: studentInfo.address || '',
+              cityName: studentInfo.cityName || '',
+              stateName: studentInfo.stateName || '',
+              zipCode: studentInfo.zipCode || '',
+              cityId: studentInfo.cityId || ''
+            }));
 
-            // Check if student has address
-            if (!loginVerifyResponse?.student?.address || loginVerifyResponse?.student?.address.trim() === '') {
-              // Show address dialog if address is empty
-              setShowAddressDialog(true);
-            } else {
-              // Proceed with navigation if address exists
-              handleNavigate();
-              onClose();
-            }
+            // Open Signup modal with pre-filled student data
+            setOpenSignUpModal(true);
           }
         } else {
           setErrors({ submit: loginVerifyResponse.message || 'OTP verification failed. Please try again.' });
@@ -552,7 +558,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
       <SignupModal
         isOpen={openSignUpModel}
-        onClose={() => setOpenSignUpModal(false)}
+        onClose={() => { setOpenSignUpModal(false); handleClose(); }}
         handleLoginClose={handleClose}
       />
 

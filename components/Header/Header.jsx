@@ -243,8 +243,6 @@ export const Header = ({ cartCount }) => {
     );
   };
 
-  console.log('studentData', studentData)
-
   return (
     <>
       {/* 1. SYSTEM UTILITY PRE-HEADER (Stays relative, scrolls up away naturally) */}
