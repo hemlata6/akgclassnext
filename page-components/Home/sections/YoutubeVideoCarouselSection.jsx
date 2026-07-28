@@ -130,7 +130,7 @@ export const YoutubeVideoCarouselSection = ({ compact }) => {
                         <div>
                             <div className="flex items-center gap-2 text-rose-600 font-bold text-[10px] uppercase tracking-widest mb-1">
                                 <YoutubeIcon className="w-3.5 h-3.5" />
-                                <span>Free Video Lectures</span>
+                                <span>Use Youtube Videos</span>
                             </div>
                         </div>
 
