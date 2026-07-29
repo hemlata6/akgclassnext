@@ -158,7 +158,7 @@ export default function HomePage() {
       <CoursesSection />
       <BookStore />
       <SecondBannerSection />
-      <YoutubeVideoCarouselSection />
+      {/* <YoutubeVideoCarouselSection /> */}
       {/* <MarathonGallery /> */}
       <WatchVideoSection />
       {/* <StudentGallery /> */}
