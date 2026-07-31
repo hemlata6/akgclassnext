@@ -343,7 +343,7 @@ const BookDetailPage = ({ bookData, onBack }) => {
 
     const handleShare = async () => {
         const baseUrl = window.location.hostname === 'localhost'
-            ? 'http://localhost:3000'
+            ? 'http://localhost:5003'
             : 'https://ca-shiris-vyas.netlify.app/';
 
         const shareUrl = `${baseUrl}/book/${bookData?.id}`;

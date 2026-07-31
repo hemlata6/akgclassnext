@@ -17,7 +17,7 @@ const DownloadAppPage = () => {
             name: 'Google Play Store',
             platform: 'Android',
             description: 'Download for Android devices',
-            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub',
+            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.cashriva',
             icon: (
                 <img src="/playStoreLogo.jpeg" alt="Google Play Store" className="w-20 h-20 object-contain" />
             ),
@@ -29,7 +29,7 @@ const DownloadAppPage = () => {
             name: 'App Store',
             platform: 'iOS',
             description: 'Download for iPhone & iPad',
-            url: 'https://apps.apple.com/in/app/vg-study-hub/id6759287172',
+            url: '#',
             icon: (
                 <img src="/appstoreConnectLogo.png" alt="App Store" className="w-20 h-20 object-contain" />
             ),

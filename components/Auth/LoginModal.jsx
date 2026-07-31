@@ -318,15 +318,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
             // console.log("Login successful, loginVerifyResponse data:", loginVerifyResponse?.student);
 
-            // Check if student has address
-            if (!loginVerifyResponse?.student?.address || loginVerifyResponse?.student?.address.trim() === '') {
-              // Show address dialog if address is empty
-              setShowAddressDialog(true);
-            } else {
-              // Proceed with navigation if address exists
-              handleNavigate();
-              onClose();
-            }
+            // Open signup page in BOTH conditions (whether student has address or not)
+            setOpenSignUpModal(true);
           }
         } else {
           setErrors({ submit: loginVerifyResponse.message || 'OTP verification failed. Please try again.' });

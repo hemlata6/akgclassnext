@@ -895,7 +895,7 @@ const MyPurchases = () => {
                                 {/* Download Buttons */}
                                 <div className="space-y-3">
                                     <a
-                                        href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
+                                        href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhubhttps://play.google.com/store/apps/details?id=com.classiolabs.cashriva"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-green-500/30 flex items-center justify-center gap-3"
@@ -904,7 +904,7 @@ const MyPurchases = () => {
                                         Google Play (Android)
                                     </a>
                                     <a
-                                        href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
+                                        href="#"
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-gradient-to-r from-gray-800 to-gray-900 hover:from-gray-900 hover:to-black text-white py-3 px-4 rounded-xl font-semibold text-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg flex items-center justify-center gap-3"

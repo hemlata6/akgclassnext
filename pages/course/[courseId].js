@@ -43,7 +43,7 @@ export default function CourseDetail() {
   return (
     <>
       <Head>
-        <title>Course Details - VG STUDY HUB</title>
+        <title>Course Details - CA Shirish Vyas</title>
         <meta name="description" content="View course details and enroll" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
       </Head>

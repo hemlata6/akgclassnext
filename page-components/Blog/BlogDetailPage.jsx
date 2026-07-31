@@ -182,7 +182,7 @@ export const BlogDetailPage = ({ blogData, error, cId }) => {
     // Share blog function
     const handleShare = async () => {
         const baseUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-            ? 'http://localhost:3000'
+            ? 'http://localhost:5003'
             : 'https://ca-shiris-vyas.netlify.app';
 
         const shareUrl = `${baseUrl}/blog/${cId}/${slug}`;

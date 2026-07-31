@@ -61,7 +61,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
           <Box sx={{ px: 4, pb: 4, space: 2 }}>
             {/* Google Play Store */}
             <a
-              href="https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub"
+              href="https://play.google.com/store/apps/details?id=com.classiolabs.cashriva"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
@@ -103,7 +103,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* App Store */}
             <a
-              href="https://apps.apple.com/in/app/vg-study-hub/id6759287172"
+              href="#"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}

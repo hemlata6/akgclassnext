@@ -28,7 +28,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [tempSignupData, setTempSignupData] = useState(null);
   const { login, auth, stateList } = useAuth();
   const { theme } = useTheme();
-  const { setStudentAuth } = useStudent();
+  const { setStudentAuth , studentData} = useStudent();
+
+  console.log('studentData', studentData)
 
   // Check for temporary signup data on component mount
   useEffect(() => {
@@ -38,6 +40,32 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       setTempSignupData(parsedData);
     }
   }, [isOpen]);
+
+  // Prefill form data from studentData when already logged in
+  useEffect(() => {
+    if (isOpen && studentData) {
+      setFormData(prev => ({
+        ...prev,
+        firstname: studentData?.firstName || prev.firstname,
+        lastname: studentData?.lastName || studentData?.firstName || prev.lastname,
+        email: studentData?.email || prev.email,
+      }));
+
+      if (studentData?.address) {
+        // Stored format: houseNumber, address, cityName, stateName, zipCode
+        const parts = studentData.address.split(',').map(p => p.trim());
+        const [houseNumber = '', address = '', cityName = '', stateName = '', zipCode = ''] = parts;
+        setAddressForm(prev => ({
+          ...prev,
+          houseNumber: houseNumber || prev.houseNumber,
+          address: address || prev.address,
+          cityName: cityName || prev.cityName,
+          stateName: stateName || prev.stateName,
+          zipCode: zipCode || prev.zipCode,
+        }));
+      }
+    }
+  }, [isOpen, studentData]);
 
   if (!isOpen) return null;
 
@@ -207,6 +235,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     setErrors({});
     setAddressErrors({});
     onClose();
+    // Also close the login modal behind the signup modal
+    if (handleLoginClose) handleLoginClose();
   };
 
   return (
