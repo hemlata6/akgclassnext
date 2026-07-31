@@ -17,14 +17,67 @@ export const Footer = () => {
           <p className="text-white/80 text-xs sm:text-sm font-semibold mb-3 tracking-wide">
             Call for Lecture / Books / Test Series Enquiry:
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-0 gap-y-1.5 text-white font-bold text-sm sm:text-base md:text-lg">
-            <a href="tel:9318492718" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">9318492718</a>
-            <span className="text-white/20 hidden sm:inline">|</span>
-            <a href="tel:7703880232" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">7703880232</a>
-            <span className="text-white/20 hidden sm:inline">|</span>
-            <a href="tel:8882090148" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">8882090148</a>
-            <span className="text-white/20 hidden sm:inline">|</span>
-            <a href="tel:9220362206" className="px-2 sm:px-3 py-0.5 hover:text-white/70 transition-colors">9220362206</a>
+
+          {/* Mobile: Categorized Grid */}
+          <div className="sm:hidden grid grid-cols-1 gap-4 text-center">
+            <div>
+              <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">📞 Sales</p>
+              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
+                <a href="tel:8956524481" className="hover:text-white/70 transition-colors">8956524481</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956524482" className="hover:text-white/70 transition-colors">8956524482</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956524483" className="hover:text-white/70 transition-colors">8956524483</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956524484" className="hover:text-white/70 transition-colors">8956524484</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956524485" className="hover:text-white/70 transition-colors">8956524485</a>
+              </div>
+            </div>
+            <div>
+              <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🛠️ Support</p>
+              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
+                <a href="tel:8421875672" className="hover:text-white/70 transition-colors">8421875672</a>
+              </div>
+            </div>
+            <div>
+              <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🏢 Face-to-Face Enquiry</p>
+              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
+                <a href="tel:8956688587" className="hover:text-white/70 transition-colors">8956688587</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956688588" className="hover:text-white/70 transition-colors">8956688588</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956688589" className="hover:text-white/70 transition-colors">8956688589</a>
+                <span className="text-white/20">|</span>
+                <a href="tel:8956688590" className="hover:text-white/70 transition-colors">8956688590</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop: Single Row with Labels */}
+          <div className="hidden sm:flex flex-wrap items-center justify-center gap-x-1 gap-y-1.5 text-white font-bold text-sm sm:text-base md:text-lg">
+            <span className="text-white/60 text-xs font-semibold mr-1">Sales:</span>
+            <a href="tel:8956524481" className="px-1.5 hover:text-white/70 transition-colors">8956524481</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956524482" className="px-1.5 hover:text-white/70 transition-colors">8956524482</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956524483" className="px-1.5 hover:text-white/70 transition-colors">8956524483</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956524484" className="px-1.5 hover:text-white/70 transition-colors">8956524484</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956524485" className="px-1.5 hover:text-white/70 transition-colors">8956524485</a>
+            <span className="mx-3 text-white/20 hidden md:inline">•</span>
+            <span className="text-white/60 text-xs font-semibold mr-1">Support:</span>
+            <a href="tel:8421875672" className="px-1.5 hover:text-white/70 transition-colors">8421875672</a>
+            <span className="mx-3 text-white/20 hidden md:inline">•</span>
+            <span className="text-white/60 text-xs font-semibold mr-1">F2F:</span>
+            <a href="tel:8956688587" className="px-1.5 hover:text-white/70 transition-colors">8956688587</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956688588" className="px-1.5 hover:text-white/70 transition-colors">8956688588</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956688589" className="px-1.5 hover:text-white/70 transition-colors">8956688589</a>
+            <span className="text-white/20">|</span>
+            <a href="tel:8956688590" className="px-1.5 hover:text-white/70 transition-colors">8956688590</a>
           </div>
         </div>
       </div>

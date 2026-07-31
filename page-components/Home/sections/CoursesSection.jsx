@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../../constants/Icons';
 import { useAuth } from '../../../config/AuthContext';
@@ -39,6 +39,8 @@ export const CoursesSection = ({ employeeCourseId }) => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(true);
+    const timerRef = useRef(null);
 
     const hasEmployeeCourseSelection = (() => {
         if (!employeeCourseId) return false;
@@ -54,7 +56,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
         // Dynamic viewport breakpoint monitor
         const handleResize = () => {
             if (window.innerWidth < 640) {
-                setItemsPerView(1); // 1 Card on Mobile
+                setItemsPerView(2); // 2 Cards on Mobile
                 setCarouselGap(16); // gap-4 on mobile
             } else if (window.innerWidth < 768) {
                 setItemsPerView(2); // 2 Cards on Sm-Tablets
@@ -185,6 +187,19 @@ export const CoursesSection = ({ employeeCourseId }) => {
 
     const canGoPrev = currentIndex > 0;
     const canGoNext = currentIndex < filtered.length - itemsPerView;
+    const maxIndex = Math.max(0, filtered.length - itemsPerView);
+
+    // Auto-scroll effect (wraps around)
+    useEffect(() => {
+        if (isPlaying && maxIndex > 0) {
+            timerRef.current = setInterval(() => {
+                setCurrentIndex(prev => prev >= maxIndex ? 0 : prev + 1);
+            }, 3500);
+        }
+        return () => {
+            if (timerRef.current) clearInterval(timerRef.current);
+        };
+    }, [isPlaying, maxIndex]);
 
     const handleAddToCartFromModal = (cartItem) => {
         const existingCartIndex = cartCourses.findIndex(item => item.coursePricingId === cartItem.coursePricingId);
@@ -208,6 +223,113 @@ export const CoursesSection = ({ employeeCourseId }) => {
         }));
         router.push('/store');
     };
+
+    const carouselCards = filtered.map((course, i) => {
+        const pricing = course.coursePricing && Array.isArray(course.coursePricing) && course.coursePricing.length > 0
+            ? course.coursePricing.reduce((lowest, current) => {
+                const currentDiscounted = current.price - (current.price * current.discount / 100);
+                const lowestDiscounted = lowest.price - (lowest.price * lowest.discount / 100);
+                return currentDiscounted < lowestDiscounted ? current : lowest;
+            })
+            : null;
+
+        const originalPrice = pricing ? pricing.price : 0;
+        const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
+        const hasDiscount = pricing && pricing.discount > 0;
+
+        // Clean description typography natively via sanitization script layers
+        const cleanDescription = stripHtmlTags(course.shortDescription);
+
+        return (
+            <div
+                key={i}
+                onClick={() => router.push(`/course/${course.id}`)}
+                className="bg-white border border-slate-200/70 rounded-2xl p-2 hover:border-[#0a459a] transition-all duration-300 cursor-pointer flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_12px_24px_rgba(10,69,154,0.06)] hover:-translate-y-1 group flex-shrink-0"
+                style={{
+                    width: `calc((100% - ${(itemsPerView - 1) * carouselGap}px) / ${itemsPerView})`,
+                    minWidth: `calc((100% - ${(itemsPerView - 1) * carouselGap}px) / ${itemsPerView})`
+                }}
+            >
+                <div>
+                    {/* BADGES METADATA ROW */}
+                    <div className="hidden md:flex justify-between items-center gap-2 mb-3.5">
+                        <span className="flex flex-wrap items-center gap-1.5">
+                            {course.tags?.length > 0
+                                ? course.tags.map((t, ti) => (
+                                    <span key={ti} className="text-[9px] font-semibold text-[#0a459a] bg-blue-50 px-2 py-1 rounded border border-blue-100/60 tracking-wide">
+                                        {t.tag}
+                                    </span>
+                                ))
+                                : ""
+                            }
+                        </span>
+                        {course?.setting?.hourBased && Number.isFinite(course?.setting?.duration) && course.setting.duration > 3600 && (
+                            <span className="text-[9px] font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-md flex items-center gap-1">
+                                <Clock className="w-3 h-3 text-slate-400" />
+                                {`${Math.round(course.setting.duration / 3600)} Hours`}
+                            </span>
+                        )}
+                    </div>
+
+                    {/* FACULTY AND MODULE POSTER CONTROLLER */}
+                    <div className="w-full aspect-square bg-slate-50 border border-slate-200 rounded-xl mb-3.5 relative overflow-hidden flex items-center justify-center p-3 shadow-inner group-hover:bg-slate-100/40 transition-colors">
+                        {course.logo ? (
+                            <img
+                                src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
+                                alt={course.title}
+                                className="absolute inset-0 w-full h-full object-top object-cover group-hover:scale-102 transition-transform duration-500"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 rounded-lg bg-[#0a459a]/10 border border-[#0a459a]/20 flex items-center justify-center font-semibold text-[10px] text-[#0a459a]">
+                                RJCE
+                            </div>
+                        )}
+                    </div>
+
+                    {/* COURSE TITLE & DESCRIPTION */}
+                    <h4 className="font-semibold text-slate-900 text-sm mb-1.5 leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-[#0a459a] transition-colors">
+                        {course.title}
+                    </h4>
+                    {/* <p className="text-[11px] text-slate-500 font-semibold leading-relaxed mb-1 line-clamp-2">
+                        {cleanDescription || "Access deep-dive modules and live streams explicitly aligned with master class blueprints."}
+                    </p> */}
+                </div>
+
+                {/* CARD ENROLL BOTTOM FOOTER ACTIONS */}
+                <div className="border-t border-slate-100 pt-1 mt-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
+                    <div className="flex flex-col">
+                        <div className="flex items-center gap-1.5">
+                            {hasDiscount && (
+                                <>
+                                    <span className="text-[10px] text-slate-400 line-through font-semibold leading-none">
+                                        ₹{originalPrice.toLocaleString('en-IN')}
+                                    </span>
+                                    <span className="text-[9px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 px-1 py-0.2 rounded">
+                                        {pricing.discount}% OFF
+                                    </span>
+                                </>
+                            )}
+                        </div>
+                        <span className="text-sm font-semibold text-slate-900 mt-1 leading-none">
+                            {pricing ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`) : 'Free'}
+                        </span>
+                    </div>
+
+                    <button
+                        onClick={(e) => {
+                            if (!course.coursePricing || course.coursePricing.length === 0) return;
+                            e.stopPropagation();
+                            setSelectedCourse(course);
+                            setShowConfigModal(true);
+                        }}
+                        className="bg-[#0a459a] text-white font-semibold text-[10px] uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow hover:bg-blue-800 transition-all flex items-center justify-center gap-1 active:scale-95 hover:shadow-md w-full sm:w-auto"
+                    >
+                        Enroll <PlayCircle className="w-3.5 h-3.5 ml-0.5" />
+                    </button>
+                </div>
+            </div>
+        );
+    });
 
     return (
         <section id="fr-courses" className="max-w-7xl mx-auto px-4 sm:px-6 pb-16 pt-12 relative overflow-hidden">
@@ -244,7 +366,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                             onClick={() => handleExploreMoreClick('lecture')}
                             className="hidden md:flex items-center gap-1.5 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-xs px-4 py-2.5 rounded-xl transition-all shadow-sm active:scale-95 whitespace-nowrap"
                         >
-                            Explore Store <Icons.ChevronRight size={14} />
+                            Explore Courses <Icons.ChevronRight size={14} />
                         </button>
                     )}
                 </div>
@@ -273,143 +395,96 @@ export const CoursesSection = ({ employeeCourseId }) => {
 
             {/* SLIDING CAROUSEL MAIN VIEWPORT CONTAINER */}
             {!loading && filtered.length > 0 && (
-                <div className="relative group/carousel">
-                    <div className="overflow-hidden px-1 py-4 -mx-1">
-                        <div
-                            className="flex gap-4 sm:gap-5 transition-transform duration-500 ease-in-out"
-                            style={{
-                                transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
-                            }}
-                        >
-                            {filtered.map((course, i) => {
-                                const pricing = course.coursePricing && Array.isArray(course.coursePricing) && course.coursePricing.length > 0
-                                    ? course.coursePricing.reduce((lowest, current) => {
-                                        const currentDiscounted = current.price - (current.price * current.discount / 100);
-                                        const lowestDiscounted = lowest.price - (lowest.price * lowest.discount / 100);
-                                        return currentDiscounted < lowestDiscounted ? current : lowest;
-                                    })
-                                    : null;
-
-                                const originalPrice = pricing ? pricing.price : 0;
-                                const discountedPrice = pricing ? originalPrice - (originalPrice * pricing.discount / 100) : 0;
-                                const hasDiscount = pricing && pricing.discount > 0;
-
-                                // Clean description typography natively via sanitization script layers
-                                const cleanDescription = stripHtmlTags(course.shortDescription);
-
-                                return (
-                                    <div
-                                        key={i}
-                                        onClick={() => router.push(`/course/${course.id}`)}
-                                        className="bg-white border border-slate-200/70 rounded-2xl p-4 hover:border-[#0a459a] transition-all duration-300 cursor-pointer flex flex-col justify-between shadow-[0_4px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_12px_24px_rgba(10,69,154,0.06)] hover:-translate-y-1 group flex-shrink-0"
-                                        style={{
-                                            width: `calc((100% - ${(itemsPerView - 1) * carouselGap}px) / ${itemsPerView})`,
-                                            minWidth: `calc((100% - ${(itemsPerView - 1) * carouselGap}px) / ${itemsPerView})`
-                                        }}
+                <>
+                    {/* MOBILE VIEW: Widget Card */}
+                    <div className="md:hidden bg-white rounded-3xl border border-slate-200 shadow-sm p-4">
+                        <div className="flex items-center justify-between mb-4 pb-3 border-b border-slate-200">
+                            <div className="flex items-center gap-2">
+                                {/* <Icons.Play className="w-4 h-4 text-[#0a459a]" /> */}
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Our Trending Courses</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                {filtered.length > itemsPerView && (
+                                    <button
+                                        onClick={() => setIsPlaying(!isPlaying)}
+                                        className="w-8 h-8 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-[#0a459a] hover:border-[#0a459a] flex items-center justify-center shadow-sm transition-all active:scale-95"
+                                        title={isPlaying ? "Pause Autoplay" : "Start Autoplay"}
                                     >
-                                        <div>
-                                            {/* BADGES METADATA ROW */}
-                                            <div className="flex justify-between items-center gap-2 mb-3.5">
-                                                <span className="flex flex-wrap items-center gap-1.5">
-                                                    {course.tags?.length > 0
-                                                        ? course.tags.map((t, ti) => (
-                                                            <span key={ti} className="text-[9px] font-semibold text-[#0a459a] bg-blue-50 px-2 py-1 rounded border border-blue-100/60 tracking-wide">
-                                                                {t.tag}
-                                                            </span>
-                                                        ))
-                                                        : ""
-                                                    }
-                                                </span>
-                                                {course?.setting?.hourBased && Number.isFinite(course?.setting?.duration) && course.setting.duration > 3600 && (
-                                                    <span className="text-[9px] font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-md flex items-center gap-1">
-                                                        <Clock className="w-3 h-3 text-slate-400" />
-                                                        {`${Math.round(course.setting.duration / 3600)} Hours`}
-                                                    </span>
-                                                )}
-                                            </div>
-
-                                            {/* FACULTY AND MODULE POSTER CONTROLLER */}
-                                            <div className="w-full aspect-square bg-slate-50 border border-slate-200 rounded-xl mb-3.5 relative overflow-hidden flex items-center justify-center p-3 shadow-inner group-hover:bg-slate-100/40 transition-colors">
-                                                {course.logo ? (
-                                                    <img
-                                                        src={`${Endpoints?.mediaBaseUrl}${course.logo}`}
-                                                        alt={course.title}
-                                                        className="absolute inset-0 w-full h-full object-top object-cover group-hover:scale-102 transition-transform duration-500"
-                                                    />
-                                                ) : (
-                                                    <div className="w-16 h-16 rounded-lg bg-[#0a459a]/10 border border-[#0a459a]/20 flex items-center justify-center font-semibold text-[10px] text-[#0a459a]">
-                                                        RJCE
-                                                    </div>
-                                                )}
-                                            </div>
-
-                                            {/* COURSE TITLE & DESCRIPTION */}
-                                            <h4 className="font-semibold text-slate-900 text-sm mb-1.5 leading-snug line-clamp-2 min-h-[2.5rem] group-hover:text-[#0a459a] transition-colors">
-                                                {course.title}
-                                            </h4>
-                                            <p className="text-[11px] text-slate-500 font-semibold leading-relaxed mb-3 line-clamp-2">
-                                                {cleanDescription || "Access deep-dive modules and live streams explicitly aligned with master class blueprints."}
-                                            </p>
-                                        </div>
-
-                                        {/* CARD ENROLL BOTTOM FOOTER ACTIONS */}
-                                        <div className="border-t border-slate-100 pt-3.5 mt-auto flex items-center justify-between">
-                                            <div className="flex flex-col">
-                                                <div className="flex items-center gap-1.5">
-                                                    {hasDiscount && (
-                                                        <>
-                                                            <span className="text-[10px] text-slate-400 line-through font-semibold leading-none">
-                                                                ₹{originalPrice.toLocaleString('en-IN')}
-                                                            </span>
-                                                            <span className="text-[9px] font-semibold text-rose-600 bg-rose-50 border border-rose-100 px-1 py-0.2 rounded">
-                                                                {pricing.discount}% OFF
-                                                            </span>
-                                                        </>
-                                                    )}
-                                                </div>
-                                                <span className="text-sm font-semibold text-slate-900 mt-1 leading-none">
-                                                    {pricing ? (discountedPrice === 0 ? 'Free' : `₹${discountedPrice.toLocaleString('en-IN')}`) : 'Free'}
-                                                </span>
-                                            </div>
-
-                                            <button
-                                                onClick={(e) => {
-                                                    if (!course.coursePricing || course.coursePricing.length === 0) return;
-                                                    e.stopPropagation();
-                                                    setSelectedCourse(course);
-                                                    setShowConfigModal(true);
-                                                }}
-                                                className="bg-[#0a459a] text-white font-semibold text-[10px] uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow hover:bg-blue-800 transition-all flex items-center gap-1 active:scale-95 hover:shadow-md"
-                                            >
-                                                Enroll <PlayCircle className="w-3.5 h-3.5 ml-0.5" />
-                                            </button>
-                                        </div>
-                                    </div>
-                                );
-                            })}
+                                        {isPlaying ? (
+                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                                                <rect x="6" y="4" width="4" height="16" />
+                                                <rect x="14" y="4" width="4" height="16" />
+                                            </svg>
+                                        ) : (
+                                            <svg className="w-3 h-3 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
+                                                <polygon points="5 3 19 12 5 21 5 3" />
+                                            </svg>
+                                        )}
+                                    </button>
+                                )}
+                                <button
+                                    onClick={handlePrev}
+                                    disabled={!canGoPrev}
+                                    className={`w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center shadow-sm transition-all active:scale-95 ${canGoPrev ? 'text-slate-600 hover:text-[#0a459a] hover:border-[#0a459a]' : 'opacity-20 cursor-not-allowed'}`}
+                                >
+                                    <Icons.ChevronLeft size={16} />
+                                </button>
+                                <button
+                                    onClick={handleNext}
+                                    disabled={!canGoNext}
+                                    className={`w-8 h-8 rounded-full border border-slate-200 bg-white flex items-center justify-center shadow-sm transition-all active:scale-95 ${canGoNext ? 'text-slate-600 hover:text-[#0a459a] hover:border-[#0a459a]' : 'opacity-20 cursor-not-allowed'}`}
+                                >
+                                    <Icons.ChevronRight size={16} />
+                                </button>
+                            </div>
+                        </div>
+                        <div
+                            onMouseEnter={() => setIsPlaying(false)}
+                            onMouseLeave={() => setIsPlaying(true)}
+                        >
+                            <div className="overflow-hidden px-1 -mx-1">
+                                <div
+                                    className="flex gap-4 sm:gap-5 transition-transform duration-500 ease-in-out"
+                                    style={{
+                                        transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
+                                    }}
+                                >
+                                    {carouselCards}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    {/* SLIDER VIEWPORT PAGINATION NACHORS CONTROLS */}
-                    <div className="flex justify-center items-center gap-4 mt-6">
-                        <button
-                            onClick={handlePrev}
-                            disabled={!canGoPrev}
-                            className={`bg-[#0a459a] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100 active:scale-95' : 'opacity-20 cursor-not-allowed'
-                                }`}
-                        >
-                            <Icons.ChevronLeft size={20} />
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            disabled={!canGoNext}
-                            className={`bg-[#0a459a] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100 active:scale-95' : 'opacity-20 cursor-not-allowed'
-                                }`}
-                        >
-                            <Icons.ChevronRight size={20} />
-                        </button>
+                    {/* DESKTOP VIEW: Original Layout */}
+                    <div className="hidden md:block relative group/carousel">
+                        <div className="overflow-hidden px-1 py-4 -mx-1">
+                            <div
+                                className="flex gap-4 sm:gap-5 transition-transform duration-500 ease-in-out"
+                                style={{
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
+                                }}
+                            >
+                                {carouselCards}
+                            </div>
+                        </div>
+                        <div className="flex justify-center items-center gap-4 mt-6">
+                            <button
+                                onClick={handlePrev}
+                                disabled={!canGoPrev}
+                                className={`bg-[#0a459a] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoPrev ? 'hover:scale-110 opacity-100 active:scale-95' : 'opacity-20 cursor-not-allowed'}`}
+                            >
+                                <Icons.ChevronLeft size={20} />
+                            </button>
+                            <button
+                                onClick={handleNext}
+                                disabled={!canGoNext}
+                                className={`bg-[#0a459a] text-white w-10 h-10 rounded-full flex items-center justify-center shadow-lg transition-all ${canGoNext ? 'hover:scale-110 opacity-100 active:scale-95' : 'opacity-20 cursor-not-allowed'}`}
+                            >
+                                <Icons.ChevronRight size={20} />
+                            </button>
+                        </div>
                     </div>
-                </div>
+                </>
             )}
 
             {/* Mobile Explore Store — aligned to end */}
@@ -419,7 +494,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                         onClick={() => handleExploreMoreClick('lecture')}
                         className="flex items-center gap-2 bg-[#0a459a] hover:bg-[#073373] text-white font-semibold text-base px-8 py-3.5 rounded-xl transition-all shadow-md active:scale-95"
                     >
-                        Explore Store <Icons.ChevronRight size={20} />
+                        Explore Courses <Icons.ChevronRight size={20} />
                     </button>
                 </div>
             )}
