@@ -103,6 +103,7 @@ export const Header = ({ cartCount }) => {
   const [mobileFacultyOpen, setMobileFacultyOpen] = useState(false);
   const [mobileComboOpen, setMobileComboOpen] = useState(false);
   const [comboDropdownOpen, setComboDropdownOpen] = useState(false);
+  const [expandedComboChild, setExpandedComboChild] = useState(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   // REFS FOR CLICK-OUTSIDE DETECTION
@@ -164,25 +165,36 @@ export const Header = ({ cartCount }) => {
     }
   };
 
+  // Move the lead faculty (CA Rishabh Jain) to the 1st index so they appear first
+  const prioritizeLeadFaculty = (list) => {
+    const lead = list.find(fac => {
+      const name = `${fac?.firstName || ''} ${fac?.lastName || ''}`.toLowerCase();
+      return name.includes('rishabh') && name.includes('jain');
+    });
+    if (!lead) return list;
+    return [lead, ...list.filter(fac => fac !== lead)];
+  };
+
   const fetchFacultyForMenu = async () => {
     try {
       setFacultyLoading(true);
       const response = await fetch(`${Endpoints.baseURL}admin/employee/fetch-public-employee/${instId}`);
       const data = await response.json();
       if (data.status && data.employees?.length > 0) {
-        setFacultyList(data.employees.filter(fac => fac.showInApp === true));
+        const showInApp = data.employees.filter(fac => fac.showInApp === true);
+        setFacultyList(prioritizeLeadFaculty(showInApp));
       } else {
-        setFacultyList([
+        setFacultyList(prioritizeLeadFaculty([
           { id: 1, firstName: 'CA Rishabh', lastName: 'Jain', designation: 'Director & Lead Faculty' },
           { id: 2, firstName: 'Prof. Commerce', lastName: 'Team', designation: 'Faculty Team' }
-        ]);
+        ]));
       }
     } catch (error) {
       console.error('Error fetching faculty:', error);
-      setFacultyList([
+      setFacultyList(prioritizeLeadFaculty([
         { id: 1, firstName: 'CA Rishabh', lastName: 'Jain', designation: 'Director & Lead Faculty' },
         { id: 2, firstName: 'Prof. Commerce', lastName: 'Team', designation: 'Faculty Team' }
-      ]);
+      ]));
     } finally {
       setFacultyLoading(false);
     }
@@ -376,18 +388,33 @@ export const Header = ({ cartCount }) => {
                     {domainLoading ? (
                       <div className="px-4 py-3 text-xs text-slate-400 font-bold">Loading categories...</div>
                     ) : domains.length > 0 ? (
-                      domains.map((parentDomain) => (
-                        (parentDomain.child || []).map((child) => (
-                          <button
-                            key={child.id}
-                            onClick={() => handleComboDomainClick(child, parentDomain)}
-                            className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
-                          >
-                            {child.name}
-                            <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />
-                          </button>
-                        ))
-                      ))
+                      // Show only the children of the first domain ("Video lecture") - CA Intermediate, CA Final
+                      (domains[0]?.child || []).map((child, index) => {
+                        const groupLabel = index === 0 ? 'Group 2' : index === 1 ? 'Group 1' : '';
+                        const isExpanded = expandedComboChild === index;
+                        return (
+                          <div key={child.id ?? index}>
+                            <button
+                              onClick={() => setExpandedComboChild(isExpanded ? null : index)}
+                              className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
+                            >
+                              {child.name}
+                              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {/* STATIC GROUP TEXT - click to go to Store */}
+                            {isExpanded && groupLabel && (
+                              <button
+                                onClick={() => handleComboDomainClick(child, domains[0])}
+                                className="w-full text-left font-bold text-xs text-[#0a459a] bg-blue-50/80 hover:bg-blue-50/70 ml-1 border-l border-slate-200 pl-3 px-4 py-3 rounded-r-xl transition-all flex items-center justify-between group"
+                              >
+                                {groupLabel}
+                                {/* <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" /> */}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })
                     ) : (
                       <div className="px-4 py-3 text-xs text-slate-400">No categories active</div>
                     )}

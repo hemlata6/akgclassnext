@@ -131,6 +131,7 @@ const Store = () => {
     const [navigationStateChanged, setNavigationStateChanged] = useState(0); // Trigger navigation handler when header navigation happens
     const [pendingBatchTag, setPendingBatchTag] = useState(null); // Pending batch tag from URL query param
     const [pendingStage, setPendingStage] = useState(null); // Pending exam stage from footer URL param
+    const [pendingPapers, setPendingPapers] = useState([]); // Pending papers from URL query param (e.g. ?paper=Audit)
     const paperCount = selectedPapers.length;
     const productCount = selectedProductType ? 1 : 0;
     const batchCount = selectedTag ? 1 : 0;
@@ -177,11 +178,13 @@ const Store = () => {
             const tokenParam = params.get('token');
             const batchTagParam = params.get('batchTag');
             const stageParam = params.get('stage');
+            const paperParam = params.get('paper');
 
             if (isMobileParam) setRouteData(isMobileParam);
             if (tokenParam) setTokenFromUrl(tokenParam);
             if (batchTagParam) setPendingBatchTag(batchTagParam);
             if (stageParam) setPendingStage(stageParam);
+            if (paperParam) setPendingPapers(paperParam.split(',').map(p => p.trim()).filter(Boolean));
         }
     }, [router.asPath]);
 
@@ -756,6 +759,73 @@ const Store = () => {
             window.history.replaceState({}, '', url.toString());
         }
     }, [domains, pendingStage, shouldHideGlobalControls]);
+
+    // Select papers from URL query param (e.g. ?paper=Audit) so a shared link pre-selects them
+    useEffect(() => {
+        if (shouldHideGlobalControls || pendingPapers.length === 0) {
+            return;
+        }
+        if (pendingPapers.length > 0 && domains.length > 0) {
+            const normalizeName = (value) => (value || '')
+                .toLowerCase()
+                .replace(/[\s-]+/g, ' ')
+                .trim();
+
+            const targets = pendingPapers.map(normalizeName);
+
+            let matchedPapers = [];
+            let matchedExamStage = null;
+            let matchedDomain = null;
+
+            const searchNodes = (nodes, depth, parentStage, parentDomain) => {
+                for (const node of nodes) {
+                    const nodeName = normalizeName(node.name);
+                    const isPaperMatch = targets.some(target =>
+                        nodeName === target || nodeName.includes(target) || target.includes(nodeName)
+                    );
+                    if (isPaperMatch) {
+                        matchedPapers.push(node);
+                        if (!matchedExamStage) matchedExamStage = parentStage || (depth === 1 ? node : null);
+                        if (!matchedDomain) matchedDomain = parentDomain;
+                    }
+                    if (node.child && node.child.length > 0) {
+                        const nextStage = depth === 1 ? node : parentStage;
+                        searchNodes(node.child, depth + 1, nextStage, parentDomain);
+                    }
+                }
+            };
+
+            domains.filter(d => d.parentId === 0).forEach(domain => {
+                searchNodes(domain.child || [], 1, null, domain);
+            });
+
+            if (matchedPapers.length > 0) {
+                setSelectedPapers(matchedPapers);
+                if (matchedDomain && (!selectedDomain || selectedDomain.id !== matchedDomain.id)) {
+                    setSelectedDomain(matchedDomain);
+                }
+                if (matchedExamStage) {
+                    setSelectedExamStage(matchedExamStage);
+                }
+            }
+
+            setPendingPapers([]);
+        }
+    }, [domains, pendingPapers, shouldHideGlobalControls]);
+
+    // Keep the URL in sync with selected papers (e.g. ?paper=Audit,Law) so it can be shared
+    useEffect(() => {
+        if (typeof window === 'undefined' || shouldHideGlobalControls) {
+            return;
+        }
+        const url = new URL(window.location.href);
+        if (selectedPapers.length > 0) {
+            url.searchParams.set('paper', selectedPapers.map(p => p.name).join(','));
+        } else {
+            url.searchParams.delete('paper');
+        }
+        window.history.replaceState({}, '', url.toString());
+    }, [selectedPapers, shouldHideGlobalControls]);
 
     // Select 'lecture' product type by default
     // useEffect(() => {

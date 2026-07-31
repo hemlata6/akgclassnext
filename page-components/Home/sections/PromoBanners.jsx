@@ -11,22 +11,39 @@ export const PromoBanners = () => {
     const [isAutoPlaying, setIsAutoPlaying] = useState(true);
     const scrollContainerRef = useRef(null);
     const [slides, setSlides] = useState([]);
+    const [isMobileView, setIsMobileView] = useState(false);
 
     const totalSlides = slides.length;
+
+    // Track viewport and re-fetch banners whenever it flips between mobile/desktop
+    useEffect(() => {
+        const handleResize = () => {
+            const mobile = typeof window !== 'undefined' && window.innerWidth < 768;
+            setIsMobileView(prev => (prev === mobile ? prev : mobile));
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Fetch banners from API
     useEffect(() => {
         fetchBanners();
-    }, []);
+    }, [isMobileView]);
 
     const fetchBanners = async () => {
         try {
             const response = await Network.getBannersApi(instId);
             // console.log('API Response for Banners:', response);
             if (response && response.banners && response.banners.length > 0) {
+                // Pick banner group based on viewport (md breakpoint = 768px)
+                const isMobile = isMobileView;
+                const bannerGroup = isMobile ? 'top banner mobile' : 'top banner desktop';
+
                 const activeBanners = response.banners.filter(
                     banner =>
-                        banner.active && banner.group === 'Top banner'
+                        banner.active && banner.group === bannerGroup
                 );
 
                 if (activeBanners.length > 0) {
@@ -98,7 +115,7 @@ export const PromoBanners = () => {
 
     return (
         <section className="relative w-full group bg-[#071226] overflow-hidden">
-            {/* <div className="w-full aspect-[3/1] md:aspect-[3/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
+            <div className="w-full aspect-[3/4] md:aspect-[3/1] lg:aspect-[3.5/1.1] relative overflow-hidden shadow-2xl">
 
 
                 <div className="absolute inset-0 bg-gradient-to-r from-indigo-600/20 via-transparent to-purple-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-5" />
@@ -163,21 +180,21 @@ export const PromoBanners = () => {
                     ))}
                 </div>
 
-            </div> */}
+            </div>
 
             {/* Mobile view */}
-            <img
+            {/* <img
                 src={mobilebanner.src}
                 alt="Promo Banner"
                 className="md:hidden w-full h-auto object-cover"
-            />
+            /> */}
 
             {/* Desktop view */}
-            <img
+            {/* <img
                 src={desktopbanner.src}
                 alt="Promo Banner"
                 className="hidden md:block w-full h-auto object-cover"
-            />
+            /> */}
 
         </section>
     );

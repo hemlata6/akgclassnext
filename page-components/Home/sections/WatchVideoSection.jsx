@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-const FACULTY_IMAGE_URL = "https://classioekatvammedia.classiolabs.com/classioekatvam/image/CA%20Rishabhh1782896141188";
+// Files in public/ are served at the root URL path
+const FACULTY_IMAGE_URL = '/rishabhjain.png';
 
 const feedbackImages = [
     '/feedbackimages/1.png',
@@ -89,7 +90,7 @@ export default function WatchVideoSection() {
                     </span>
 
                     {/* Main Name Header */}
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
+                    <h2 className="text-3xl md:text-3xl font-bold tracking-tight text-white">
                         CA Rishabhh Jainn Sir
                     </h2>
 
