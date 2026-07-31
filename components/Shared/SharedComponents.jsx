@@ -1,13 +1,22 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
-import { ShieldCheck, Layers, MapPin, Phone, Mail, Calendar, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Layers, MapPin, Phone, Mail, Calendar, Clock, ExternalLink } from 'lucide-react';
 
 export const Footer = () => {
   const router = useRouter();
   const { institute, instituteAppSettingsModals } = useAuth();
+  const [isMobileView, setIsMobileView] = useState(false);
+
+  // Track real viewport with JS so only ONE layout renders (mobile grid OR desktop row)
+  useEffect(() => {
+    const update = () => setIsMobileView(window.innerWidth < 768);
+    update();
+    window.addEventListener('resize', update);
+    return () => window.removeEventListener('resize', update);
+  }, []);
 
   return (
     <footer className="bg-[#111827] text-slate-400 text-xs border-t border-slate-800 tracking-wide">
@@ -18,8 +27,9 @@ export const Footer = () => {
             Call for Lecture / Books / Test Series Enquiry:
           </p>
 
-          {/* Mobile: Categorized Grid */}
-          <div className="sm:hidden grid grid-cols-1 gap-4 text-center">
+          {/* Render ONE layout based on real viewport - mobile grid OR desktop row */}
+          {isMobileView ? (
+          <div className="grid grid-cols-1 gap-4 text-center">
             <div>
               <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">📞 Sales</p>
               <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
@@ -53,9 +63,8 @@ export const Footer = () => {
               </div>
             </div>
           </div>
-
-          {/* Desktop: Single Row with Labels */}
-          <div className="hidden sm:flex flex-wrap items-center justify-center gap-x-1 gap-y-1.5 text-white font-bold text-sm sm:text-base md:text-lg">
+          ) : (
+          <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1.5 text-white font-bold text-sm sm:text-base md:text-lg">
             <span className="text-white/60 text-xs font-semibold mr-1">Sales:</span>
             <a href="tel:8956524481" className="px-1.5 hover:text-white/70 transition-colors">8956524481</a>
             <span className="text-white/20">|</span>
@@ -79,6 +88,7 @@ export const Footer = () => {
             <span className="text-white/20">|</span>
             <a href="tel:8956688590" className="px-1.5 hover:text-white/70 transition-colors">8956688590</a>
           </div>
+          )}
         </div>
       </div>
       {/* Upper Link Directories Layer Block Grid */}
@@ -95,26 +105,43 @@ export const Footer = () => {
             </div>
           </div>
           <p className="text-slate-400 leading-relaxed font-medium">
-            {instituteAppSettingsModals?.appBio || "RJCE is a premier commerce education institute dedicated to providing top-notch learning resources and guidance for aspiring professionals."}
+            Rishabhh Jainn Commerce Education Is The Best CA Inter & Final Institute In Pune Which Works With Students To Shine In These Examinations And Achieves Their Career And Life Goals.
           </p>
+          <div className="pt-1">
+            <span className="inline-flex items-center gap-1 text-[#0a459a] bg-[#0a459a]/10 border border-[#0a459a]/20 px-3 py-1.5 rounded-full font-bold text-xs tracking-wide">
+              #AuditMaestro
+            </span>
+          </div>
           <div className="pt-1 flex flex-wrap items-center gap-4 text-slate-500 font-bold text-[10px] uppercase">
             <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4 text-emerald-500" /> ISO 9001 Certified</span>
             <span className="flex items-center gap-1">🔒 Razorpay Secure Sync</span>
           </div>
         </div>
 
-        {/* Column 2: Product & Course Inventory Links (Span 3) */}
-        <div className="lg:col-span-3 space-y-3.5 lg:pl-6">
+        {/* Column 2: Contact Directory Coordinates (Span 3) */}
+        <div className="lg:col-span-3 space-y-3.5 lg:pl-2">
           <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
-            <Layers className="w-3.5 h-3.5 text-[#0a459a]" /> Academic Products
+            <MapPin className="w-3.5 h-3.5 text-[#0a459a]" /> Contact Us
           </h4>
-          <ul className="space-y-2.5 font-semibold">
-            <li><span onClick={() => router.push('/store?stage=CA-Intermediate')} className="cursor-pointer hover:text-white transition-colors">CA Inter Audit Batches</span></li>
-            <li><span onClick={() => router.push('/store?stage=CA-Intermediate')} className="cursor-pointer hover:text-white transition-colors">Strategic Management Classes</span></li>
-            <li><span onClick={() => router.push('/store?stage=CA-Intermediate')} className="cursor-pointer hover:text-white transition-colors">CA Inter Combo Lecture Packs</span></li>
-            <li><span onClick={() => router.push('/store?stage=CA-Final')} className="cursor-pointer hover:text-white transition-colors">CA Final Advanced Audit Courses</span></li>
-            <li><span onClick={() => router.push('/store?stage=CA-Final')} className="cursor-pointer hover:text-white transition-colors">QA Striker & MCQ Master Books</span></li>
-            <li><span onClick={() => router.push('/free-resources')} className="cursor-pointer hover:text-white transition-colors text-emerald-400">Free Resources Vault Hub</span></li>
+          <ul className="space-y-2.5 font-semibold text-slate-400">
+            <li className="flex items-start gap-2">
+              <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
+              <span className="leading-relaxed">
+                Office No. 71, 2nd Floor,<br />
+                Kumar Prestige Point,<br />
+                Bajirao Rd, Opp. Chinchechi Talim,<br />
+                Shukrawar Peth, Pune,<br />
+                Maharashtra 411002
+              </span>
+            </li>
+            <li className="flex items-center gap-2">
+              <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+              <a href="mailto:support@rishabhjain.com" className="break-all hover:text-white transition-colors">support@rishabhjain.com</a>
+            </li>
+            <li className="flex items-center gap-2 pt-0.5">
+              <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+              <span>Mon - Sat (10:00 AM - 6:00 PM)</span>
+            </li>
           </ul>
         </div>
 
@@ -124,27 +151,25 @@ export const Footer = () => {
             <ShieldCheck className="w-3.5 h-3.5 text-[#0a459a]" /> Corporate Linkages
           </h4>
           <ul className="space-y-2.5 font-semibold">
-            {/* <li><span onClick={() => router.push('/')} className="cursor-pointer hover:text-white transition-colors">About Us Focus</span></li> */}
-            {/* <li><span onClick={() => router.push('/download-app')} className="cursor-pointer hover:text-white transition-colors">App Storefront</span></li> */}
             <li><span onClick={() => router.push('/terms-of-use')} className="cursor-pointer hover:text-white transition-colors">Terms & Conditions</span></li>
             <li><span onClick={() => router.push('/refund-policy')} className="cursor-pointer hover:text-white transition-colors">Refund Policy</span></li>
             <li><span onClick={() => router.push('/privacy-policy')} className="cursor-pointer hover:text-white transition-colors">Privacy Policy</span></li>
             <li><span onClick={() => router.push('/download-app')} className="cursor-pointer hover:text-white transition-colors">App Download</span></li>
             <li><span onClick={() => router.push('/contact-us')} className="cursor-pointer hover:text-white transition-colors">Contact Us</span></li>
-            {/* <li><span onClick={() => router.push('/contact-us')} className="cursor-pointer hover:text-white transition-colors">Franchise Deck</span></li> */}
           </ul>
         </div>
 
-        {/* Column 4: Contact Directory Coordinates (Span 3) */}
+        {/* Column 4: Academia Links (Span 3) */}
         <div className="lg:col-span-3 space-y-3.5 lg:pl-2">
           <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
-            <MapPin className="w-3.5 h-3.5 text-[#0a459a]" /> Help Desk Coordinates
+            <Layers className="w-3.5 h-3.5 text-[#0a459a]" /> Academia
           </h4>
-          <ul className="space-y-2.5 font-semibold text-slate-400">
-            <li className="flex items-center gap-2"><Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span>{institute?.instituteAppSettingsModals?.contact || "+91 98765 43210"}</span></li>
-            <li className="flex items-center gap-2"><Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span className="break-all">{institute?.email || "support@rishabhjain.com"}</span></li>
-            <li className="flex items-start gap-2"><MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" /> <span className="leading-normal">{institute?.address || "Main F2F Head Center, Pune, Maharashtra, India"}</span></li>
-            <li className="flex items-center gap-2 pt-0.5"><Calendar className="w-3.5 h-3.5 text-slate-500 shrink-0" /> <span>Mon-Sat (10AM - 6PM)</span></li>
+          <ul className="space-y-2.5 font-semibold">
+            <li><span onClick={() => router.push('/blog')} className="cursor-pointer hover:text-white transition-colors">Blog</span></li>
+            <li><span onClick={() => router.push('/')} className="cursor-pointer hover:text-white transition-colors">Become Franchise Partner</span></li>
+            <li><span onClick={() => router.push('/free-resources')} className="cursor-pointer hover:text-white transition-colors">Free Resources</span></li>
+            <li><span onClick={() => router.push('/store?productType=lecture')} className="cursor-pointer hover:text-white transition-colors">Video Lectures</span></li>
+            <li><span onClick={() => router.push('/store?productType=books')} className="cursor-pointer hover:text-white transition-colors">Book Hub</span></li>
           </ul>
         </div>
       </div>
