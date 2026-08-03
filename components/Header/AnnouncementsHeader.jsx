@@ -29,8 +29,7 @@ function AnnouncementsHeader() {
   const announcementTitles = announcements.length > 0
     ? announcements.map((item) => item?.title).filter(Boolean)
     : [
-      'New CA Inter Batches Starting Soon!',
-      'Get 10% Off on All Video Lectures'
+      'New CA Inter Batches Starting Soon!'
     ];
 
   useEffect(() => {

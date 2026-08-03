@@ -5,57 +5,88 @@ import { useAuth } from '@/config/AuthContext';
 
 const FAQS = [
     {
-        q: 'Are these courses updated as per the latest ICAI syllabus and exam pattern?',
-        a: 'Yes. All lectures, notes, question banks, and test series are fully updated according to the latest ICAI syllabus, amendments, and exam pattern for upcoming CA Foundation, Intermediate, and Final attempts. We continuously update the content whenever ICAI introduces any changes, ensuring you always study the most relevant material.'
+        q: "Are the courses updated according to the latest ICAI syllabus and exam pattern?",
+        a: "Yes. Every course is regularly updated to match the latest ICAI syllabus, amendments, and examination pattern so you always study the most relevant content."
     },
     {
-        q: 'Will I get complete coverage from basics to exam-level preparation?',
-        a: `Absolutely. Our courses are designed to take you from conceptual understanding to exam success:
-
-Conceptual clarity from scratch
-Practical and exam-oriented learning
-Past exam question practice
-Revision and answer-writing strategies
-
-Whether you are a beginner or a repeat student, the course helps you build confidence and perform effectively in exams.`
+        q: "Will I learn from the basics or is prior knowledge required?",
+        a: "Our courses are designed to take you from fundamental concepts to advanced exam-oriented preparation, making them suitable for both beginners and repeaters."
     },
     {
-        q: 'Do you provide notes, question banks, and test series with the course?',
-        a: `Yes. Our course is a complete preparation package that includes:
-
-Comprehensive study notes
-Exam-oriented question bank
-Coverage of past ICAI exam questions
-Mock tests and revision support
-
-You won’t need to purchase additional study material separately.`
+        q: "What study material is included with the course?",
+        a: "Depending on the course, you'll receive comprehensive notes, question banks, practice questions, revision material and other exam-focused resources."
     },
     {
-        q: 'How is this course different from YouTube or free content?',
-        a: `Free content is often scattered, incomplete, and lacks a clear study path. Our courses provide:
-
-Structured learning roadmap
-Complete syllabus coverage
-Exam-focused teaching methodology
-Smart preparation and revision strategy
-
-This helps students avoid confusion, save valuable time, and stay focused on what actually matters for exams.`
+        q: "How is this course different from free YouTube lectures?",
+        a: "The actual lectures are exactly the replica of YouTube lectures which are available as demo for free. There is no difference between the demo lectures and the actual lectures uploaded in the course."
     },
     {
-        q: 'Is this course suitable if I am starting late or have limited preparation time?',
-        a: `Yes. Many students join our courses with limited preparation time and still achieve excellent results because the content is concise, practical, and highly exam-focused.
-
-You’ll get a clear study plan and priority-based preparation strategy to maximize your score in the available time.`
+        q: "Is this course suitable if I'm starting late for my exams?",
+        a: "Absolutely. We offer efficient study plans, revision strategies, and high-impact lectures designed to help students maximize their preparation even with limited time."
     },
     {
-        q: 'What if I am unsure whether this course is right for me?',
-        a: `That’s exactly why we focus on student outcomes and learning experience. Thousands of CA aspirants trust our courses because of:
-
-Simple and clear explanations
-Proven exam strategies
-Consistent student success
-
-If you're serious about clearing CA Foundation, Intermediate, or Final, this course provides the guidance, structure, and confidence needed to achieve your goal.`
+        q: "Will I receive doubt-solving support?",
+        a: "Yes. Students can submit academic doubts through our support system, and our faculty team ensures timely clarification."
+    },
+    {
+        q: "How long will I have access to the course?",
+        a: "Course validity varies by batch. The exact access period is mentioned on each course page before enrollment."
+    },
+    {
+        q: "Can I watch the lectures multiple times?",
+        a: "Yes. During the validity period, you can revisit lectures as many times as permitted under the course access policy."
+    },
+    {
+        q: "Are the lectures available on both mobile and desktop?",
+        a: "Yes. You can access your course through supported devices, allowing you to study anytime and anywhere."
+    },
+    {
+        q: "Is PDF of iPad notes provided?",
+        a: "View option is given of iPad notes used by sir which every student is expected to write and make notes for theory reference during exams."
+    },
+    {
+        q: "Will I receive revision lectures before the exams?",
+        a: "Yes. Revision sessions, amendment updates, and exam-oriented guidance are provided whenever applicable."
+    },
+    {
+        q: "Can I prepare for both May and September attempts using the same course?",
+        a: "For CA/CMA Inter May / June / Sep / Dec & Jan attempt have the same syllabus, and CA Final May & Nov have the same syllabus."
+    },
+    {
+        q: "Is there any refund or cancellation policy?",
+        a: "Please refer to our Refund & Cancellation Policy available on the website before purchasing any course."
+    },
+    {
+        q: "How do I enroll in a course?",
+        a: "Simply choose your preferred course, complete the online payment process, and you'll receive access within 24 hours along with login instructions."
+    },
+    {
+        q: "I'm a repeater. Is this course suitable for me?",
+        a: "Yes. Our structured teaching approach focuses on strengthening conceptual understanding, improving answer-writing skills, and helping repeaters overcome previous challenges."
+    },
+    {
+        q: "Can I access the course after changing my device?",
+        a: "Yes. Device change policies are mentioned in the course guidelines. Support is available if you need assistance."
+    },
+    {
+        q: "What if I face technical issues while accessing my course?",
+        a: "Our technical support team is available to help you resolve login, playback, or access-related issues as quickly as possible."
+    },
+    {
+        q: "How do I know which course is right for me?",
+        a: "Our academic counselors can help you choose the most suitable course based on your level, attempt, and preparation status."
+    },
+    {
+        q: "How can I get a time sheet or chapter-wise duration of lectures?",
+        a: "The time sheet is uploaded on Drive and you will get access once lectures are purchased."
+    },
+    {
+        q: "Can I extend my course after expiry?",
+        a: "Yes, by paying nominal charges the course is extendable."
+    },
+    {
+        q: "Does Shirish Sir solve questions in class?",
+        a: "Yes, all questions in our practice manual are done in class both for Inter and Final."
     }
 ];
 
