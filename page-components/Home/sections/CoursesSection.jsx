@@ -144,7 +144,16 @@ export const CoursesSection = ({ employeeCourseId }) => {
             const employeeCourseIdSet = new Set(employeeCourseIds);
 
             const filteredCourses = Array.isArray(courses)
-                ? courses.filter(c => c.active && c.paid === true && c.type === 'lecture')
+                ? courses.filter((course) => {
+                    const tags = Array.isArray(course?.tags) ? course.tags : [];
+
+                    return (
+                        course.active &&
+                        course.paid === true &&
+                        course.type === "lecture" &&
+                        tags.some((tag) => tag?.tag === "Trending Courses")
+                    );
+                })
                 : [];
 
             const finalCourses = hasEmployeeCourseFilter
@@ -372,7 +381,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                 </div>
 
             </div>
-            
+
 
             {/* STATUS NOTIFICATION BLOCKS */}
             {loading && (

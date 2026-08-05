@@ -4,6 +4,7 @@ import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
 import { ShieldCheck, Layers, MapPin, Phone, Mail, Calendar, Clock, ExternalLink } from 'lucide-react';
+import { Facebook, Instagram, Telegram, YouTube } from '@mui/icons-material';
 
 export const Footer = () => {
   const router = useRouter();
@@ -19,84 +20,155 @@ export const Footer = () => {
   }, []);
 
   return (
-    <footer className="bg-[#111827] text-slate-400 text-xs border-t border-slate-800 tracking-wide">
+    <footer className="w-full overflow-x-hidden bg-[#111827] text-slate-400 text-xs border-t border-slate-800 tracking-wide">
       {/* Contact Banner */}
       <div className="bg-[#0a459a] py-5 px-4">
         <div className="max-w-5xl mx-auto text-center">
-          <p className="text-white/80 text-xs sm:text-sm font-semibold mb-3 tracking-wide">
+          {/* <p className="text-white/80 text-xs sm:text-sm font-semibold mb-3 tracking-wide">
             Call for Lecture / Books / Test Series Enquiry:
-          </p>
+          </p> */}
 
           {/* Render ONE layout based on real viewport - mobile grid OR desktop row */}
           {isMobileView ? (
-          <div className="grid grid-cols-1 gap-4 text-center">
-            <div>
-              <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">📞 Sales</p>
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
-                <a href="tel:8956524481" className="hover:text-white/70 transition-colors">8956524481</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956524482" className="hover:text-white/70 transition-colors">8956524482</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956524483" className="hover:text-white/70 transition-colors">8956524483</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956524484" className="hover:text-white/70 transition-colors">8956524484</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956524485" className="hover:text-white/70 transition-colors">8956524485</a>
+            <div className="grid grid-cols-1 gap-4 text-center">
+              <div>
+                <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">📞 Sales</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
+                  <a href="tel:8956524481" className="hover:text-white/70 transition-colors">8956524481</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956524482" className="hover:text-white/70 transition-colors">8956524482</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956524483" className="hover:text-white/70 transition-colors">8956524483</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956524484" className="hover:text-white/70 transition-colors">8956524484</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956524485" className="hover:text-white/70 transition-colors">8956524485</a>
+                </div>
+              </div>
+              <div>
+                <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🛠️ Support</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
+                  <a href="tel:8421875672" className="hover:text-white/70 transition-colors">8421875672</a>
+                </div>
+              </div>
+              <div>
+                <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🏢 Face-to-Face Enquiry</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
+                  <a href="tel:8956688587" className="hover:text-white/70 transition-colors">8956688587</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956688588" className="hover:text-white/70 transition-colors">8956688588</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956688589" className="hover:text-white/70 transition-colors">8956688589</a>
+                  <span className="text-white/20">|</span>
+                  <a href="tel:8956688590" className="hover:text-white/70 transition-colors">8956688590</a>
+                </div>
               </div>
             </div>
-            <div>
-              <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🛠️ Support</p>
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
-                <a href="tel:8421875672" className="hover:text-white/70 transition-colors">8421875672</a>
-              </div>
-            </div>
-            <div>
-              <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🏢 Face-to-Face Enquiry</p>
-              <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
-                <a href="tel:8956688587" className="hover:text-white/70 transition-colors">8956688587</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956688588" className="hover:text-white/70 transition-colors">8956688588</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956688589" className="hover:text-white/70 transition-colors">8956688589</a>
-                <span className="text-white/20">|</span>
-                <a href="tel:8956688590" className="hover:text-white/70 transition-colors">8956688590</a>
-              </div>
-            </div>
-          </div>
           ) : (
-          <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1.5 text-white font-bold text-sm sm:text-base md:text-lg">
-            <span className="text-white/60 text-xs font-semibold mr-1">Sales:</span>
-            <a href="tel:8956524481" className="px-1.5 hover:text-white/70 transition-colors">8956524481</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956524482" className="px-1.5 hover:text-white/70 transition-colors">8956524482</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956524483" className="px-1.5 hover:text-white/70 transition-colors">8956524483</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956524484" className="px-1.5 hover:text-white/70 transition-colors">8956524484</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956524485" className="px-1.5 hover:text-white/70 transition-colors">8956524485</a>
-            <span className="mx-3 text-white/20 hidden md:inline">•</span>
-            <span className="text-white/60 text-xs font-semibold mr-1">Support:</span>
-            <a href="tel:8421875672" className="px-1.5 hover:text-white/70 transition-colors">8421875672</a>
-            <span className="mx-3 text-white/20 hidden md:inline">•</span>
-            <span className="text-white/60 text-xs font-semibold mr-1">F2F:</span>
-            <a href="tel:8956688587" className="px-1.5 hover:text-white/70 transition-colors">8956688587</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956688588" className="px-1.5 hover:text-white/70 transition-colors">8956688588</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956688589" className="px-1.5 hover:text-white/70 transition-colors">8956688589</a>
-            <span className="text-white/20">|</span>
-            <a href="tel:8956688590" className="px-1.5 hover:text-white/70 transition-colors">8956688590</a>
-          </div>
+            <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-3 text-sm sm:text-base md:text-lg">
+
+              {/* Enquiry Banner */}
+              <span className="bg-yellow-400 text-black font-extrabold px-4 py-2 rounded-full text-xs sm:text-sm shadow-lg animate-pulse">
+                📞 Call for Lecture / Books / Test Series Enquiry
+              </span>
+
+              {/* Sales Section */}
+              <div className="flex flex-wrap items-center gap-x-1 gap-y-2">
+                <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold text-[14px] uppercase tracking-wider px-3 py-1 rounded-full border border-green-300 shadow-lg shadow-green-500/30">
+                  📞 Sales
+                </span>
+
+                <a
+                  href="tel:8956524481"
+                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                >
+                  8956524481
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956524482"
+                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                >
+                  8956524482
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956524483"
+                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                >
+                  8956524483
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956524484"
+                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                >
+                  8956524484
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956524485"
+                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                >
+                  8956524485
+                </a>
+              </div>
+
+              {/* Divider (Desktop Only) */}
+              <span className="hidden lg:inline text-white/30 text-xl">•</span>
+
+              {/* F2F Section */}
+              <div className="flex flex-wrap items-center gap-x-1 gap-y-2">
+                <span className="bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-bold text-[14px] uppercase tracking-wider px-3 py-1 rounded-full border border-blue-300 shadow-lg shadow-blue-500/30">
+                  🏫 F2F
+                </span>
+
+                <a
+                  href="tel:8956688587"
+                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                >
+                  8956688587
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956688588"
+                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                >
+                  8956688588
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956688589"
+                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                >
+                  8956688589
+                </a>
+                <span className="text-white/30">|</span>
+
+                <a
+                  href="tel:8956688590"
+                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                >
+                  8956688590
+                </a>
+              </div>
+
+            </div>
           )}
         </div>
       </div>
       {/* Upper Link Directories Layer Block Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-12 pb-12 grid !grid-cols-1 sm:!grid-cols-2 md:!grid-cols-12 !gap-8">
         {/* Column 1: Core Corporate Branding Narrative (Span 4) */}
-        <div className="lg:col-span-4 space-y-4">
-            <div onClick={() => router.push('/')} className="flex items-center gap-2.5 shrink-0 select-none cursor-pointer">
-              <div className="bg-[#0a459a] text-white font-black text-base px-2.5 py-1 rounded-lg tracking-tight">RJCE</div>
+        <div className="md:col-span-4 space-y-4 min-w-0">
+          <div onClick={() => router.push('/')} className="flex items-center gap-2.5 shrink-0 select-none cursor-pointer">
+            <div className="bg-[#0a459a] text-white font-black text-base px-2.5 py-1 rounded-lg tracking-tight">RJCE</div>
             <div className="space-y-0.5">
               <h3 className="font-bold tracking-tight text-white text-sm leading-none">
                 {institute?.institue ? institute?.institue?.toUpperCase() : "RISHABH JAIN"}
@@ -104,7 +176,7 @@ export const Footer = () => {
               <span className="text-[8px] uppercase tracking-widest text-slate-400 font-extrabold block font-bold">Commerce Education</span>
             </div>
           </div>
-          <p className="text-slate-400 leading-relaxed font-medium">
+          <p className="text-slate-400 leading-relaxed font-medium break-words">
             Rishabhh Jainn Commerce Education Is The Best CA Inter & Final Institute In Pune Which Works With Students To Shine In These Examinations And Achieves Their Career And Life Goals.
           </p>
           <div className="pt-1">
@@ -112,21 +184,60 @@ export const Footer = () => {
               #AuditMaestro
             </span>
           </div>
-          <div className="pt-1 flex flex-wrap items-center gap-4 text-slate-500 font-bold text-[10px] uppercase">
-            <span className="flex items-center gap-1"><ShieldCheck className="w-4 h-4 text-emerald-500" /> ISO 9001 Certified</span>
-            <span className="flex items-center gap-1">🔒 Razorpay Secure Sync</span>
+          <div className="pt-2 flex flex-wrap items-center gap-3">
+
+            {/* Facebook */}
+            <a
+              href="https://www.facebook.com/share/1DWU7cNwup/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-[#1877F2] shadow-lg shadow-blue-500/30 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+            >
+              <Facebook className="w-5 h-5 text-white" />
+            </a>
+
+            {/* Instagram */}
+            <a
+              href="https://www.instagram.com/rjrishabh/?hl=en"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-gradient-to-br from-[#F58529] via-[#DD2A7B] to-[#8134AF] shadow-lg shadow-pink-500/30 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+            >
+              <Instagram className="w-5 h-5 text-white" />
+            </a>
+
+            {/* YouTube */}
+            <a
+              href="https://www.youtube.com/@CARishabhhJainnRJ"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-[#FF0000] shadow-lg shadow-red-500/30 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+            >
+              <YouTube className="w-5 h-5 text-white" />
+            </a>
+
+            {/* Telegram */}
+            <a
+              href="https://t.me/ekatvamacademy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-8 h-8 flex items-center justify-center rounded-full bg-[#229ED9] shadow-lg shadow-cyan-500/30 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
+            >
+              <Telegram className="w-5 h-5 text-white" />
+            </a>
+
           </div>
         </div>
 
         {/* Column 2: Contact Directory Coordinates (Span 3) */}
-        <div className="lg:col-span-3 space-y-3.5 lg:pl-2">
+        <div className="md:col-span-3 space-y-3.5 md:pl-2 min-w-0">
           <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
             <MapPin className="w-3.5 h-3.5 text-[#0a459a]" /> Contact Us
           </h4>
           <ul className="space-y-2.5 font-semibold text-slate-400">
             <li className="flex items-start gap-2">
               <MapPin className="w-3.5 h-3.5 text-slate-500 shrink-0 mt-0.5" />
-              <span className="leading-relaxed">
+              <span className="leading-relaxed break-words">
                 Office No. 71, 2nd Floor,<br />
                 Kumar Prestige Point,<br />
                 Bajirao Rd, Opp. Chinchechi Talim,<br />
@@ -138,6 +249,10 @@ export const Footer = () => {
               <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
               <a href="mailto:support@rishabhjain.com" className="break-all hover:text-white transition-colors">support@rishabhjain.com</a>
             </li>
+            <li className="flex items-center gap-2">
+              <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+              <a href="tel:8421875672" className="break-all hover:text-white transition-colors">8421875672</a>
+            </li>
             <li className="flex items-center gap-2 pt-0.5">
               <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
               <span>Mon - Sat (10:00 AM - 6:00 PM)</span>
@@ -146,7 +261,7 @@ export const Footer = () => {
         </div>
 
         {/* Column 3: General & Statutory Policy Management (Span 2) */}
-        <div className="lg:col-span-2 space-y-3.5">
+        <div className="md:col-span-2 space-y-3.5 min-w-0">
           <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
             <ShieldCheck className="w-3.5 h-3.5 text-[#0a459a]" /> Corporate Linkages
           </h4>
@@ -160,7 +275,7 @@ export const Footer = () => {
         </div>
 
         {/* Column 4: Academia Links (Span 3) */}
-        <div className="lg:col-span-3 space-y-3.5 lg:pl-2">
+        <div className="md:col-span-3 space-y-3.5 md:pl-2 min-w-0">
           <h4 className="text-white font-bold uppercase tracking-wider text-[11px] flex items-center gap-1">
             <Layers className="w-3.5 h-3.5 text-[#0a459a]" /> Academia
           </h4>

@@ -26,7 +26,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [tempSignupData, setTempSignupData] = useState(null);
   const { login, auth } = useAuth();
   const { theme } = useTheme();
-  const { setStudentAuth } = useStudent();
+  const { setStudentAuth, authToken: studentToken } = useStudent();
 
   // Check for temporary signup data on component mount
   useEffect(() => {
@@ -154,8 +154,36 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         addressForm.address.trim()
       ].filter(Boolean).join(', ');
 
-      const registrationBody = {
-        contact: tempSignupData?.phone,
+      // If student already exists (has tempSignupData), edit profile instead of registering
+      if (tempSignupData) {
+        const editProfileBody = {
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          userName: tempSignupData.phone,
+          email: formData.email,
+          dob: null,
+          cityId: null,
+          address: fullAddress,
+          zipCode: null,
+          bio: "",
+          gender: "male",
+          sourceInstituteName: "",
+        };
+
+        const authToken = auth || studentToken;
+        const editResponse = await Network.studentEditProfileAPI(authToken, editProfileBody);
+
+        if (editResponse.status === true) {
+          localStorage.removeItem('tempSignup');
+          handleClose();
+          handleLoginClose();
+        } else {
+          setErrors({ submit: editResponse.message || 'Failed to update profile. Please try again.' });
+        }
+      } else {
+        // New student - register and login flow
+        const registrationBody = {
+          contact: tempSignupData?.phone,
         firstName: formData.firstname,
         lastName: formData.lastname,
         email: formData.email,
@@ -202,6 +230,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         }
       } else {
         setErrors({ submit: registrationResponse.message || 'Registration failed. Please try again.' });
+      }
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -493,12 +522,12 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
               {isLoading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-                  Creating Account...
+                  {tempSignupData ? 'Submitting...' : 'Creating Account...'}
                 </>
               ) : (
                 <>
                   <Sparkles className="h-5 w-5 opacity-80" />
-                  Create Account
+                  {tempSignupData ? 'Submit' : 'Create Account'}
                 </>
               )}
             </button>

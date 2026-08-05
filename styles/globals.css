@@ -12,6 +12,11 @@
   --font-family-base: 'Inter', system-ui, sans-serif;
 }
 
+/* Fix rogue .grid rule overriding footer grid — only targets the footer */
+footer .grid {
+  margin-bottom: initial;
+}
+
 html, body {
   font-family: var(--font-family-base);
 }

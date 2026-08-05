@@ -968,19 +968,29 @@ const Store = () => {
             );
         }
 
-        // Filter by faculties (multiple selection)
+        // Filter by faculties (multiple selection) — exclusive: only show courses where ALL teaching faculty are selected
         if (selectedFaculties.length > 0) {
-            // Collect all courseIds from selected faculties
-            const allowedCourseIds = new Set();
+            // Collect courseIds from selected faculties
+            const selectedCourseIds = new Set();
             selectedFaculties.forEach(faculty => {
                 if (faculty.courseIds && Array.isArray(faculty.courseIds)) {
-                    faculty.courseIds.forEach(courseId => allowedCourseIds.add(courseId));
+                    faculty.courseIds.forEach(courseId => selectedCourseIds.add(courseId));
                 }
             });
 
-            // Filter courses that are in the faculty's courseIds array
+            // Collect courseIds from unselected faculties
+            const unselectedCourseIds = new Set();
+            faculties.forEach(faculty => {
+                if (!selectedFaculties.some(f => f.id === faculty.id)) {
+                    if (faculty.courseIds && Array.isArray(faculty.courseIds)) {
+                        faculty.courseIds.forEach(courseId => unselectedCourseIds.add(courseId));
+                    }
+                }
+            });
+
+            // Only show courses that are in selected but NOT in unselected (exclusive to selected faculty)
             filtered = filtered.filter(course =>
-                allowedCourseIds.has(course.id)
+                selectedCourseIds.has(course.id) && !unselectedCourseIds.has(course.id)
             );
         }
 
@@ -1374,6 +1384,23 @@ const Store = () => {
                     </div>
                 </div>
             )}
+            {getPapers().length > 0 && (
+                <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
+                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Paper</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {getPapers().map((paper) => {
+                            const isActive = selectedPapers.some(p => p.id === paper.id);
+                            return (
+                                <button key={paper.id} onClick={() => togglePaper(paper)}
+                                    className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-full border whitespace-nowrap transition-all ${isActive ? 'text-white border-transparent' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
+                                    style={{ backgroundColor: isActive ? primaryColor : undefined }}>
+                                    {paper.name}
+                                </button>
+                            );
+                        })}
+                    </div>
+                </div>
+            )}
             {faculties.length > 0 && (
                 <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
                     <div className="flex items-center justify-between">
@@ -1414,7 +1441,7 @@ const Store = () => {
 
             {/* GLOBAL HEADER */}
             <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">
+                <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">
 
                     <div onClick={() => router.push('/')} className="flex items-center gap-3 shrink-0 select-none group cursor-pointer">
                         <div className="bg-gradient-to-br from-[#0a459a] to-[#05214c] text-white font-bold text-xl px-3 py-2 rounded-xl tracking-tight shadow-[0_4px_12px_rgba(10,69,154,0.3)] transition-transform duration-300 group-hover:scale-105">
@@ -1477,7 +1504,7 @@ const Store = () => {
                 </div>
             </header>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 md:gap-8">
+            <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col lg:flex-row gap-4 md:gap-8">
 
                 <aside className="hidden lg:block w-full lg:w-64 flex-shrink-0 lg:sticky lg:top-22 h-fit space-y-4">
                     <FilterSidebarContent />
@@ -1493,27 +1520,7 @@ const Store = () => {
                         </button>
                     </div>
 
-                    {getPapers().length > 0 && (
-                        <div className="bg-white border border-slate-100 rounded-2xl p-3 sm:p-4 shadow-sm flex items-center justify-between">
-                            <div className="flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar py-0.5">
-                                <span className="text-[10px] sm:text-[11px] font-bold text-slate-400 uppercase tracking-wider whitespace-nowrap">Paper:</span>
-                                <div className="flex gap-2">
-                                    {getPapers().map((paper) => {
-                                        const isActive = selectedPapers.some(p => p.id === paper.id);
-                                        return (
-                                            <button key={paper.id} onClick={() => togglePaper(paper)}
-                                                className={`px-3 sm:px-3.5 py-1.5 text-xs font-semibold rounded-full border whitespace-nowrap transition-all ${isActive ? 'text-white border-transparent' : 'bg-slate-50 border-slate-200 text-slate-600 hover:bg-slate-100'}`}
-                                                style={{ backgroundColor: isActive ? primaryColor : undefined }}>
-                                                {paper.name}
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        </div>
-                    )}
-
-                    <section className="space-y-4 overflow-y-auto max-h-[calc(100vh-200px)] scrollbar-thin pr-1">
+                    <section className="space-y-4 overflow-y-auto max-h-[calc(100vh-140px)] scrollbar-thin pr-1">
                         {/* <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                             <h2 className="text-sm sm:text-base font-bold tracking-tight text-slate-900">
                                 {selectedTag ? `Batch: ${selectedTag.tag}` : 'All Courses'}
@@ -1523,7 +1530,7 @@ const Store = () => {
 
                         {/* Course Listing */}
                         {loading ? (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4 sm:gap-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-4 sm:gap-6">
                                 {[1, 2, 3, 4].map((n) => (
                                     <div key={n} className="bg-white rounded-2xl border border-slate-100 p-4 space-y-4 animate-pulse">
                                         <div className="w-full aspect-square bg-slate-200 rounded-xl" />
@@ -1538,7 +1545,7 @@ const Store = () => {
                             </div>
                         ) : filteredCourses?.length > 0 ? (
                             selectedTag ? (
-                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 md:gap-4">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-4">
                                     {filteredCourses.map((item) => {
                                         const getPriceInfo = () => {
                                             if (item?.coursePricing && item.coursePricing.length > 0) {
@@ -1626,7 +1633,7 @@ const Store = () => {
                                                         {tag.tag}
                                                     </div>
                                                 </div>
-                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-3 md:gap-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-3 md:gap-4">
                                                     {tagCourses.map((item) => {
                                                         const getPriceInfo = () => {
                                                             if (item?.coursePricing && item.coursePricing.length > 0) {
@@ -1787,6 +1794,7 @@ const Store = () => {
                                     >
                                         Paper
                                     </button>
+
                                     {
                                         faculties.length > 0 && (
                                             <button

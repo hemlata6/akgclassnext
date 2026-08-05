@@ -906,22 +906,18 @@ const CourseContent = ({ courseData, onAddToCart }) => {
                       <p className="text-sm sm:text-base font-bold text-slate-800 truncate">CA {courseData?.faculty || 'Abhishek Zavare'}</p>
                     </div> */}
                     <div>
-                      <div className="flex flex-wrap items-center gap-2">
+                      <div className="flex items-center -space-x-2">
                         {allEmployee
                           ?.filter((employee) =>
                             employee.courseIds?.includes(Number(courseData?.id))
                           )
                           .map((employee) => (
-                            <div key={employee.id} className="flex items-center gap-1.5">
-                              <img
-                                src={Endpoints.mediaBaseUrl + employee.profile}
-                                className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
-                                alt={employee.firstName}
-                              />
-                              <span className="text-xs font-bold text-slate-800 whitespace-nowrap">
-                                {employee.firstName} {employee.lastName}
-                              </span>
-                            </div>
+                            <img
+                              key={employee.id}
+                              src={Endpoints.mediaBaseUrl + employee.profile}
+                              className="h-10 w-10 rounded-full object-cover border-2 border-white shadow-sm"
+                              alt={employee.firstName}
+                            />
                           ))}
                       </div>
                     </div>

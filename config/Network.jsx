@@ -87,6 +87,7 @@ export default class Network {
   static signUpSendOtpUrl = Endpoints.baseURL + "student/signup/sendOtp";
   static signUpVerifyOtpUrl = Endpoints.baseURL + "student/signup/verifyOtp";
   static studentSignup = Endpoints.baseURL + "student/signup";
+  static studentEditProfile = Endpoints.baseURL + "/student/edit-profile";
   static studentLogOut = Endpoints.baseURL + "student/logout";
   static studentLoginUrl = Endpoints.baseURL + "student/login";
   static studentBannerFetchUrl = Endpoints.baseURL + "student/banner/fetch";
@@ -283,6 +284,15 @@ export default class Network {
       withCredentials: false,
     };
     const response = await axios.post(this.studentSignup, body, requestOptions);
+    return response.data;
+  };
+
+  static async studentEditProfileAPI(auth, body) {
+    let requestOptions = {
+      headers: { "X-Auth": auth },
+      withCredentials: false,
+    };
+    const response = await axios.post(this.studentEditProfile, body, requestOptions);
     return response.data;
   };
 
