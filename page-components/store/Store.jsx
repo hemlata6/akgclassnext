@@ -889,7 +889,7 @@ const Store = () => {
         try {
             const data = await Network.fetchTags(instId);
             if (data.status && data.tags) {
-                let newList = data.tags.filter(tag => tag.availablePublic === true);
+                let newList = data.tags.filter(tag => tag.availablePublic === true && tag.tag !== 'Trending Courses');
                 setTags(newList);
             }
         } catch (error) {
