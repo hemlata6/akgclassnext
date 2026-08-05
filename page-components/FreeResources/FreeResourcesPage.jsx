@@ -54,8 +54,6 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
     const [selectedAudio, setSelectedAudio] = useState(null);
     const [showAudioModal, setShowAudioModal] = useState(false);
 
-    console.log(';coursesList', coursesList);
-
 
     const handleCloseVideo = () => {
         setopenDialog(false)
@@ -109,7 +107,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     .map(item => item.course.id);
 
                 setEnrolledCourses(new Set(courseIds));
-                console.log('Loaded enrolled courses:', courseIds);
+                // console.log('Loaded enrolled courses:', courseIds);
             }
         } catch (error) {
             console.log('Error loading enrolled courses:', error);
@@ -132,7 +130,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                     course?.active === true &&
                     course?.tags?.some(tagObj => tagObj?.tag?.toLowerCase() === "Free Resources".toLowerCase())
                 );
-                console.log('filteredCourses', filteredCourses);
+                // console.log('filteredCourses', filteredCourses);
 
                 setCoursesList(filteredCourses);
             }
@@ -378,7 +376,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
             );
 
             if (hasAccess) {
-                console.log('User already has access to this course');
+                // console.log('User already has access to this course');
                 // User already has access, just proceed to open the course
                 setEnrolledCourses(prev => new Set([...prev, enrollingCourse.id]));
                 setShowEnrollModal(false);

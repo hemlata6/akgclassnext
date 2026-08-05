@@ -398,22 +398,22 @@ export const BlogDetailPage = () => {
                 </script>
             </Helmet>
 
-            <div className="py-8 px-4 md:px-8 max-w-7xl mx-auto">
+            <div className="py-8 px-4 md:px-8 max-w-8xl mx-auto">
                 <div className="flex flex-col lg:flex-row gap-6">
                     {/* Left Section - Blog Content */}
-                    <article className="lg:w-[65%]">
-                        <button onClick={() => router.push('/blog')} className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-emerald-700 mb-6 transition-colors">
+                    <article className="w-full">
+                        {/* <button onClick={() => router.push('/blog')} className="flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-emerald-700 mb-6 transition-colors">
                             <Icons.Back /> Back to Blogs
                         </button>
                         {blog.categories && blog.categories.length > 0 && (
                             <span className="text-emerald-600 font-bold tracking-widest text-xs uppercase mb-3 block">
                                 {blog.categories[0].name}
                             </span>
-                        )}
-                        <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
+                        )} */}
+                        {/* <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
                             {blog.title}
-                        </h1>
-                        <div className="flex items-center justify-between border-y border-slate-100 py-4 mb-8">
+                        </h1> */}
+                        {/* <div className="flex items-center justify-between border-y border-slate-100 py-4 mb-8">
                             <div className="flex items-center gap-3">
                                 <Avatar
                                     src={blog.featured_image ? blog.featured_image : (blog?.blog?.thumb ? Endpoints.mediaBaseUrl + blog.blog.thumb : '')}
@@ -442,16 +442,16 @@ export const BlogDetailPage = () => {
                                     </div>
                                 </button>
                             </div>
-                        </div>
-                        {(blog.featured_image || blog?.blog?.thumb) && (
+                        </div> */}
+                        {/* {(blog.featured_image || blog?.blog?.thumb) && (
                             <img
                                 src={blog.featured_image || (blog?.blog?.thumb ? Endpoints.mediaBaseUrl + blog.blog.thumb : '')}
                                 alt={blog.title}
                                 className="w-full h-auto rounded-2xl mb-8 shadow-lg"
                             />
-                        )}
+                        )} */}
                         {(blog.body || blog?.blog?.blog) ? (
-                            <div className="prose prose-slate prose-lg max-w-none prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg">
+                            <div className="prose prose-slate prose-lg prose-p:text-base prose-p:leading-relaxed prose-headings:font-bold prose-a:text-emerald-700 prose-img:rounded-xl prose-img:shadow-lg">
                                 <div
                                     dangerouslySetInnerHTML={{ __html: blog.body || blog?.blog?.blog || '' }}
                                 />
@@ -506,7 +506,7 @@ export const BlogDetailPage = () => {
                     </article>
 
                     {/* Right Section - Slides */}
-                    <aside className="lg:w-[30%] lg:sticky lg:top-32 self-start">
+                    {/* <aside className="lg:w-[30%] lg:sticky lg:top-32 self-start">
                         <div className="space-y-4">
                             {slides && slides.length > 0 && slides.map((slide, index) => (
                                 <div key={index} className="rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
@@ -523,7 +523,7 @@ export const BlogDetailPage = () => {
                                 </div>
                             ))}
                         </div>
-                    </aside>
+                    </aside> */}
                 </div>
 
                 {/* Blog Attachments Section */}

@@ -24,9 +24,62 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [addressErrors, setAddressErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [tempSignupData, setTempSignupData] = useState(null);
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+  const [selectedStateId, setSelectedStateId] = useState('');
   const { login, auth } = useAuth();
   const { theme } = useTheme();
   const { setStudentAuth, authToken: studentToken } = useStudent();
+
+  // Fetch states on mount
+  useEffect(() => {
+    if (isOpen) {
+      const fetchStates = async () => {
+        try {
+          const response = await Network.getStateAPI();
+          const statesData = response?.states || response?.data || response || [];
+          if (Array.isArray(statesData)) {
+            setStates(statesData);
+          }
+        } catch (error) {
+          console.error('Error fetching states:', error);
+        }
+      };
+      fetchStates();
+    }
+  }, [isOpen]);
+
+  // Update cities when state changes
+  useEffect(() => {
+    if (selectedStateId && states.length > 0) {
+      const state = states.find(s => String(s.id) === String(selectedStateId));
+      setCities(state?.city || []);
+    } else {
+      setCities([]);
+    }
+  }, [selectedStateId, states]);
+
+  // Pre-fill state & city from student data once states are loaded
+  useEffect(() => {
+    if (tempSignupData?.cityId && states.length > 0) {
+      // Find which state contains this city
+      for (const state of states) {
+        if (state.city) {
+          const city = state.city.find(c => String(c.id) === String(tempSignupData.cityId));
+          if (city) {
+            setSelectedStateId(String(state.id));
+            setAddressForm(prev => ({
+              ...prev,
+              cityId: String(city.id),
+              cityName: city.city,
+              stateName: state.name,
+            }));
+            break;
+          }
+        }
+      }
+    }
+  }, [tempSignupData, states]);
 
   // Check for temporary signup data on component mount
   useEffect(() => {
@@ -44,14 +97,11 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         }));
       }
       // Pre-fill address fields if address data is available
-      if (parsedData.address || parsedData.cityName || parsedData.stateName) {
+      if (parsedData.address || parsedData.zipCode) {
         setAddressForm(prev => ({
           ...prev,
           address: parsedData.address || prev.address,
-          cityName: parsedData.cityName || prev.cityName,
-          stateName: parsedData.stateName || prev.stateName,
           zipCode: parsedData.zipCode || prev.zipCode,
-          cityId: parsedData.cityId || prev.cityId,
         }));
       }
     }
@@ -127,11 +177,11 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newAddressErrors.zipCode = 'Zipcode is required';
     }
 
-    if (!addressForm.stateName.trim()) {
+    if (!selectedStateId) {
       newAddressErrors.stateName = 'State is required';
     }
 
-    if (!addressForm.cityName.trim()) {
+    if (!addressForm.cityId) {
       newAddressErrors.cityName = 'City is required';
     }
 
@@ -162,9 +212,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           userName: tempSignupData.phone,
           email: formData.email,
           dob: null,
-          cityId: null,
+          cityId: addressForm.cityId ? Number(addressForm.cityId) : null,
           address: fullAddress,
-          zipCode: null,
+          zipCode: addressForm.zipCode.trim(),
           bio: "",
           gender: "male",
           sourceInstituteName: "",
@@ -184,53 +234,53 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         // New student - register and login flow
         const registrationBody = {
           contact: tempSignupData?.phone,
-        firstName: formData.firstname,
-        lastName: formData.lastname,
-        email: formData.email,
-        instId: instId,
-        password: 123456,
-        gender: "male",
-        cityId: null,
-        address: fullAddress,
-        zipCode: addressForm.zipCode.trim(),
-        userName: `${formData.firstname}${formData.lastname}`,
-      };
-
-      const registrationResponse = await Network.studentRegister(registrationBody);
-
-      if (registrationResponse.status === true) {
-        // Registration successful - now call student login API
-        const loginBody = {
-          contact: tempSignupData?.phone,
-          otp: tempSignupData?.otp,
+          firstName: formData.firstname,
+          lastName: formData.lastname,
+          email: formData.email,
           instId: instId,
-          deviceId: "1",
-          deviceOS: "windows",
+          password: 123456,
+          gender: "male",
+          cityId: addressForm.cityId ? Number(addressForm.cityId) : null,
+          address: fullAddress,
+          zipCode: addressForm.zipCode.trim(),
+          userName: `${formData.firstname}${formData.lastname}`,
         };
 
-        const loginResponse = await Network.verifyLoginOtp(loginBody);
+        const registrationResponse = await Network.studentRegister(registrationBody);
 
-        if (loginResponse.status === true) {
-          // Set student data in context
-          const success = setStudentAuth(loginResponse);
+        if (registrationResponse.status === true) {
+          // Registration successful - now call student login API
+          const loginBody = {
+            contact: tempSignupData?.phone,
+            otp: tempSignupData?.otp,
+            instId: instId,
+            deviceId: "1",
+            deviceOS: "windows",
+          };
 
-          if (success) {
-            // Login the user automatically
-            login(tempSignupData?.phone, tempSignupData?.otp);
-            // Clear temporary signup data
-            localStorage.removeItem('tempSignup');
-            // Close the signup form on successful signup/login
-            handleClose();
-            handleLoginClose();
+          const loginResponse = await Network.verifyLoginOtp(loginBody);
+
+          if (loginResponse.status === true) {
+            // Set student data in context
+            const success = setStudentAuth(loginResponse);
+
+            if (success) {
+              // Login the user automatically
+              login(tempSignupData?.phone, tempSignupData?.otp);
+              // Clear temporary signup data
+              localStorage.removeItem('tempSignup');
+              // Close the signup form on successful signup/login
+              handleClose();
+              handleLoginClose();
+            } else {
+              setErrors({ submit: 'Registration successful but failed to set user data.' });
+            }
           } else {
-            setErrors({ submit: 'Registration successful but failed to set user data.' });
+            setErrors({ submit: loginResponse.message || 'Registration successful but login failed.' });
           }
         } else {
-          setErrors({ submit: loginResponse.message || 'Registration successful but login failed.' });
+          setErrors({ submit: registrationResponse.message || 'Registration failed. Please try again.' });
         }
-      } else {
-        setErrors({ submit: registrationResponse.message || 'Registration failed. Please try again.' });
-      }
       }
     } catch (error) {
       console.error('Registration error:', error);
@@ -258,6 +308,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     });
     setErrors({});
     setAddressErrors({});
+    setSelectedStateId('');
+    setCities([]);
     onClose();
   };
 
@@ -265,12 +317,17 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4" onClick={handleClose}>
       <div className="relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-6 space-y-4 max-w-md w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
         {/* Close Button */}
-        <button
-          onClick={handleClose}
-          className="absolute top-6 right-6 p-1 rounded-lg hover:bg-gray-100 transition-colors duration-200"
-        >
-          <X className="h-5 w-5 text-gray-500 hover:text-gray-700" />
-        </button>
+        {
+          !tempSignupData && (
+            <button
+              onClick={handleClose}
+              className="absolute top-6 right-6 p-1 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            >
+              <X className="h-5 w-5 text-gray-500 hover:text-gray-700" />
+            </button>
+
+          )
+        }
 
         {/* Header */}
         <div className="text-center">
@@ -462,38 +519,46 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
             {/* State */}
             <div className="space-y-1">
               <label className="block text-sm font-semibold text-slate-700">State</label>
-              <input
-                type="text"
-                value={addressForm.stateName}
-                onChange={(e) =>
-                  handleAddressInputChange('stateName', e.target.value)
-                }
+              <select
+                value={selectedStateId}
+                onChange={(e) => {
+                  const stateId = e.target.value;
+                  setSelectedStateId(stateId);
+                  handleAddressInputChange('stateName', e.target.options[e.target.selectedIndex].text);
+                  handleAddressInputChange('cityId', '');
+                  handleAddressInputChange('cityName', '');
+                }}
                 className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                placeholder="Enter state"
-              />
+              >
+                <option value="">Select State</option>
+                {states.map((state) => (
+                  <option key={state.id} value={state.id}>{state.name}</option>
+                ))}
+              </select>
               {addressErrors.stateName && (
-                <p className="mt-2 text-xs text-red-600">
-                  {addressErrors.stateName}
-                </p>
+                <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>
               )}
             </div>
 
             {/* City */}
             <div className="space-y-1">
               <label className="block text-sm font-semibold text-slate-700">City</label>
-              <input
-                type="text"
-                value={addressForm.cityName}
-                onChange={(e) =>
-                  handleAddressInputChange('cityName', e.target.value)
-                }
+              <select
+                value={addressForm.cityId}
+                onChange={(e) => {
+                  handleAddressInputChange('cityId', e.target.value);
+                  handleAddressInputChange('cityName', e.target.options[e.target.selectedIndex].text);
+                }}
                 className="w-full rounded-2xl border border-slate-300 px-4 py-2 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                placeholder="Enter city"
-              />
+                disabled={!selectedStateId}
+              >
+                <option value="">Select City</option>
+                {cities.map((city) => (
+                  <option key={city.id} value={city.id}>{city.city}</option>
+                ))}
+              </select>
               {addressErrors.cityName && (
-                <p className="mt-2 text-xs text-red-600">
-                  {addressErrors.cityName}
-                </p>
+                <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>
               )}
             </div>
           </div>

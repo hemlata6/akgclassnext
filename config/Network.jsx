@@ -195,7 +195,7 @@ export default class Network {
     let requestOptions = {
       withCredentials: false,
     };
-    const response = await axios.get(this.stateUrl, instId, requestOptions);
+    const response = await axios.get(this.stateUrl + '?instId=' + instId, requestOptions);
     return response.data;
   };
 

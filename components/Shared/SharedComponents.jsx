@@ -4,7 +4,7 @@ import { Icons, LAYOUT_PADDING } from '../../constants/Icons';
 import { useAuth } from '../../config/AuthContext';
 import Endpoints from '../../config/endpoints';
 import { ShieldCheck, Layers, MapPin, Phone, Mail, Calendar, Clock, ExternalLink } from 'lucide-react';
-import { Facebook, Instagram, Telegram, YouTube } from '@mui/icons-material';
+import { Facebook, Instagram, LinkedIn, Telegram, YouTube } from '@mui/icons-material';
 
 export const Footer = () => {
   const router = useRouter();
@@ -188,12 +188,12 @@ export const Footer = () => {
 
             {/* Facebook */}
             <a
-              href="https://www.facebook.com/share/1DWU7cNwup/"
+              href="https://in.linkedin.com/in/rishabhh-jainn-13b8a355"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 flex items-center justify-center rounded-full bg-[#1877F2] shadow-lg shadow-blue-500/30 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
             >
-              <Facebook className="w-5 h-5 text-white" />
+              <LinkedIn className="w-5 h-5 text-white" />
             </a>
 
             {/* Instagram */}
@@ -218,7 +218,7 @@ export const Footer = () => {
 
             {/* Telegram */}
             <a
-              href="https://t.me/ekatvamacademy"
+              href="https://t.me/CARishabhJain"
               target="_blank"
               rel="noopener noreferrer"
               className="w-8 h-8 flex items-center justify-center rounded-full bg-[#229ED9] shadow-lg shadow-cyan-500/30 hover:scale-110 hover:-translate-y-1 transition-all duration-300"
@@ -251,7 +251,7 @@ export const Footer = () => {
             </li>
             <li className="flex items-center gap-2">
               <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-              <a href="tel:8421875672" className="break-all hover:text-white transition-colors">8421875672</a>
+              <a href="tel:8421875672" className="break-all hover:text-white transition-colors">8421875672 (Support)</a>
             </li>
             <li className="flex items-center gap-2 pt-0.5">
               <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />

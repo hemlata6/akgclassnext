@@ -1520,7 +1520,7 @@ const Store = () => {
                         </button>
                     </div>
 
-                    <section className="space-y-4 overflow-y-auto max-h-[calc(100vh-140px)] scrollbar-thin pr-1">
+                    <section className="space-y-4 overflow-y-auto max-h-[calc(112vh-140px)] scrollbar-thin pr-1 !mt-0">
                         {/* <div className="flex items-center justify-between border-b border-slate-100 pb-2">
                             <h2 className="text-sm sm:text-base font-bold tracking-tight text-slate-900">
                                 {selectedTag ? `Batch: ${selectedTag.tag}` : 'All Courses'}
