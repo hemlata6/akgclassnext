@@ -675,7 +675,7 @@ const Store = () => {
         }
     }, [selectedDomain, domains, isProcessingSubmenu, shouldHideGlobalControls])
 
-    // Select all faculties by default or specific faculty if coming from faculty click
+    // Select specific faculty if coming from faculty click
     useEffect(() => {
         if (shouldHideGlobalControls) {
             return;
@@ -688,9 +688,6 @@ const Store = () => {
             if (matchingFaculty) {
                 setSelectedFaculties([matchingFaculty]);
             }
-        } else if (faculties.length > 0 && selectedFaculties.length === 0 && !filtersInitialized) {
-            // Default behavior - select all faculties
-            setSelectedFaculties(faculties);
         }
     }, [faculties, filtersInitialized, router.query, shouldHideGlobalControls]);
 
@@ -1354,7 +1351,7 @@ const Store = () => {
                 </svg>
                 <span>Reset Filters</span>
             </button>
-            <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-3">
+            {/* <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-3">
                 <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Exam Type</h3>
                 {domains.filter(d => d.parentId === 0).map(domain => {
                     const isActive = selectedDomain?.id === domain.id;
@@ -1368,7 +1365,7 @@ const Store = () => {
                         </button>
                     );
                 })}
-            </div>
+            </div> */}
             {getExamStages().length > 0 && (
                 <div className="bg-white p-5 rounded-3xl border border-slate-100 shadow-[0_4px_20px_rgba(0,0,0,0.01)] space-y-4">
                     <h3 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Exam Stage</h3>

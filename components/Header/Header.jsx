@@ -269,6 +269,9 @@ export const Header = ({ cartCount }) => {
             <Link href="/free-resources" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</Link>
             <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
             <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
+            <button onClick={() => setShowAppDownloadModal(true)} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-[10px] px-2 py-1 rounded-xl transition-all duration-200 shadow-sm">
+              <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Download Our App
+            </button>
           </div>
         </div>)}
 
@@ -436,8 +439,8 @@ export const Header = ({ cartCount }) => {
 
         {/* RIGHT ACTION ITEMS */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <button onClick={() => setShowAppDownloadModal(true)} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm">
-            <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Download Our App
+          <button onClick={() => router.push('/contact-us')} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm">
+            <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Contact Us
           </button>
 
           {user ? (

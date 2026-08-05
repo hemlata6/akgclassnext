@@ -17,7 +17,7 @@ const DownloadAppPage = () => {
             name: 'Google Play Store',
             platform: 'Android',
             description: 'Download for Android devices',
-            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.vgstudyhub',
+            url: 'https://play.google.com/store/apps/details?id=com.classiolabs.ekatvamacademy&pcampaignid=web_share',
             icon: (
                 <img src="/playStoreLogo.jpeg" alt="Google Play Store" className="w-20 h-20 object-contain" />
             ),
@@ -41,7 +41,7 @@ const DownloadAppPage = () => {
             name: 'Microsoft Store',
             platform: 'Windows',
             description: 'Download for Windows PC',
-            url: 'https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare',
+            url: 'https://apps.microsoft.com/detail/9PN88P8LD96S?hl=en-us&gl=IN&ocid=pdpshare',
             icon: (
                 <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M0 3.449L9.75 2.1v9.451H0z" fill="#F25022" />
