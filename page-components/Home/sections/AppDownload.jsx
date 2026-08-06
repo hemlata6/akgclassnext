@@ -62,7 +62,7 @@ export const AppDownload = () => {
     };
 
     return (
-        <section className="relative py-16 md:py-20 overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-[#0a1a3a]">
+        <section className="relative py-16 md:py-20 overflow-hidden bg-[#111827]">
             {/* Animated Background Elements */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="absolute -top-32 -right-32 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-[#0a459a]/15 to-blue-600/8 blur-3xl" />

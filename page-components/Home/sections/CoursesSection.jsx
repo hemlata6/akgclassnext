@@ -261,7 +261,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
             >
                 <div>
                     {/* BADGES METADATA ROW */}
-                    <div className="hidden md:flex justify-between items-center gap-2 mb-3.5">
+                    {/* <div className="hidden md:flex justify-between items-center gap-2 mb-3.5">
                         <span className="flex flex-wrap items-center gap-1.5">
                             {course.tags?.length > 0
                                 ? course.tags.map((t, ti) => (
@@ -278,7 +278,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                 {`${Math.round(course.setting.duration / 3600)} Hours`}
                             </span>
                         )}
-                    </div>
+                    </div> */}
 
                     {/* FACULTY AND MODULE POSTER CONTROLLER */}
                     <div className="w-full aspect-square bg-slate-50 border border-slate-200 rounded-xl mb-3.5 relative overflow-hidden flex items-center justify-center p-3 shadow-inner group-hover:bg-slate-100/40 transition-colors">
