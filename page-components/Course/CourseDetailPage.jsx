@@ -497,14 +497,40 @@ const CourseContent = ({ courseData, onAddToCart }) => {
 
   // Set all default selections together in a single effect
   React.useEffect(() => {
+    if (!courseData?.coursePricing?.length) return;
+
     if (modes.length > 0 && !selectedMode) {
       setSelectedMode(modes[0]);
     }
     if (variants.length > 0 && selectedVariant === null) {
       setSelectedVariant(variants[0]);
     }
-    if (validityOptions.length > 0 && !selectedValidity) {
-      setSelectedValidity(validityOptions[0]);
+
+    // Compute validity inline (not from render-scope validityOptions, which depends on
+    // selectedMode that may still be null on first run) so the default is always set.
+    const activeMode = selectedMode || modes[0];
+    if (activeMode && !selectedValidity) {
+      const activeModes = activeMode.split(" + ");
+      const validPricing = courseData.coursePricing.filter(pricing => {
+        return (
+          (activeModes.includes("Live Access") ? pricing.liveAccess === true : pricing.liveAccess === null) &&
+          (activeModes.includes("Recorded") ? pricing.onlineContentAccess === true : pricing.onlineContentAccess === null) &&
+          (activeModes.includes("Pendrive") ? pricing.offlineContentAccess === true : pricing.offlineContentAccess === null) &&
+          (activeModes.includes("Face to Face") ? pricing.faceToFaceAccess === true : pricing.faceToFaceAccess === null) &&
+          (activeModes.includes("Test-Series") ? pricing.quizAccess === true : pricing.quizAccess === null)
+        );
+      });
+
+      if (validPricing.length > 0) {
+        // Select validity matching the first (smallest) watch time by default
+        const wtSet = [...new Set(validPricing.map(p => p.watchTime).filter(Boolean))].sort((a, b) => a - b);
+        if (wtSet.length > 0) {
+          const match = validPricing.find(p => p.watchTime === wtSet[0]);
+          setSelectedValidity(match || validPricing[0]);
+        } else {
+          setSelectedValidity(validPricing[0]);
+        }
+      }
     }
   }, [courseData?.coursePricing]);
 

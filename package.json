@@ -4,7 +4,7 @@
   "description": "CA Shirish Vyas | CA Shirish Vyas - CA CA Shirish Vyas - Next.js",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 5003",
+    "dev": "next dev -p 5050",
     "build": "next build",
     "start": "next start -p 5050",
     "lint": "next lint",
