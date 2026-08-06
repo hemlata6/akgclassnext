@@ -19,6 +19,7 @@ import { PromoBanners } from './sections/PromoBanners';
 import FacultyAndStatsSection from './sections/FacultySection';
 import ContactSupportSection from './sections/ContactSupportSection';
 import { SecondBannerSection } from './sections/secondBannerSection';
+import YoutubeTestimonials from './sections/YoutubeTestimonials';
 
 export default function HomePage() {
   const { authToken, isAuthenticated } = useAuth();
@@ -48,6 +49,7 @@ export default function HomePage() {
       <BookStore />
       {/* <MarathonGallery /> */}
       <StudentGallery />
+      <YoutubeTestimonials />
       <FreeResources />
       <StudentSupportSection />
       <ContactSupportSection />

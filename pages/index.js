@@ -5,8 +5,8 @@ import HomePage from '../page-components/Home/HomePage';
 export default function Home() {
   const siteUrl = 'https://ca-shiris-vyas.netlify.app/';
   const ogImage = 'https://storage.googleapis.com/stepfly-partners-v1-prod.appspot.com/caclass/adminUploads/VG STUDY HUB-logo-circle-white.webp';
-  const title = 'CA Shirish Vyas | CA Shirish Vyas - CA VIVEK GABA';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';
+  const title = 'CA Shirish Vyas | CA Shirish Vyas - CA Shirish Vyas';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Shirish Vyas';
   const keywords = 'CA Final, Financial Reporting, Ind AS, CA FR Courses, CA Shirish Vyas, CA Final Preparation, Accounting Standards, FR Video Lectures, CA Study Material';
 
   const structuredData = {

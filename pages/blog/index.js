@@ -5,8 +5,8 @@ import { BlogListPage } from '../../page-components/Blog/BlogPages';
 export default function Blog() {
   const siteUrl = 'https://ca-shiris-vyas.netlify.app/blog/';
   const ogImage = 'logoVG STUDY HUB.png';
-  const title = 'CA Shirish Vyas | CA Shirish Vyas - CA VIVEK GABA';
-  const description = 'Get Conceptual Clarity of CA Final IDT - CA VIVEK GABA';
+  const title = 'CA Shirish Vyas | CA Shirish Vyas - CA Shirish Vyas';
+  const description = 'Get Conceptual Clarity of CA Final IDT - CA Shirish Vyas';
 
   return (
     <>

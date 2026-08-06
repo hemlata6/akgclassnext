@@ -8,7 +8,7 @@ export const AppDownload = () => (
         <div className="text-center md:text-left">
           <h2 className="text-2xl font-bold text-white mb-2">Classroom in Your Pocket</h2>
           <p className="text-slate-400 text-sm mb-4 max-w-md">
-            Unlimited views, offline downloads, and live chat with CA VIVEK GABA.
+            Unlimited views, offline downloads, and live chat with CA Shirish Vyas.
           </p>
           <div className="flex flex-wrap justify-center md:justify-start gap-3">
             <a

@@ -13,7 +13,7 @@ export const HeroSection = ({ onExploreClick }) => {
 
     const facultyCards = [
         { title: 'CA Arun Setia', url: '/vghub/Arun Setia.png' },
-        { title: 'CA Vivek Gaba', url: '/vghub/Vivek gaba.png' },
+        { title: 'CA Shirish Vyas', url: '/vghub/Vivek gaba.png' },
         { title: 'CA Ankush Bansal', url: '/vghub/Ankush Bansal.png' },
         { title: 'CA GD Saluja', url: '/vghub/GD Saluja.png' },
         { title: 'CA Harsh Gupta', url: '/vghub/harsh gupta.jpg' }

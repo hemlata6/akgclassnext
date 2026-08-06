@@ -18,7 +18,7 @@ export const BLOG_DATA = [
     id: 1, 
     title: "Ind AS 115: 5 Step Model Explained", 
     date: "Jan 10, 2026", 
-    author: "CA VIVEK GABA", 
+    author: "CA Shirish Vyas", 
     category: "Concept", 
     img: "https://placehold.co/600x400/164e33/FFF?text=Ind+AS+115", 
     desc: "Understanding Revenue Recognition isn't hard if you follow the logical 5-step framework. Here is a breakdown..." 
@@ -36,7 +36,7 @@ export const BLOG_DATA = [
     id: 3, 
     title: "Changes in Ind AS for Nov 26 Exams", 
     date: "Dec 28, 2025", 
-    author: "CA VIVEK GABA", 
+    author: "CA Shirish Vyas", 
     category: "Updates", 
     img: "https://placehold.co/600x400/164e33/FFF?text=Amendments", 
     desc: "ICAI has introduced minor amendments in Ind AS 116 and 109. Check out the complete analysis here." 

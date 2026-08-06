@@ -5,6 +5,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
   const [selectedMode, setSelectedMode] = useState('');
   const [selectedVariation, setSelectedVariation] = useState('');
   const [selectedValidity, setSelectedValidity] = useState(null);
+  const [selectedWatchTime, setSelectedWatchTime] = useState(null);
   const [modes, setModes] = useState([]);
   const [variations, setVariations] = useState([]);
   const [validityOptions, setValidityOptions] = useState([]);
@@ -85,6 +86,15 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
     setValidityOptions(filtered);
     if (filtered.length > 0) {
       setSelectedValidity(filtered[0]);
+      // Auto-select first (smallest) watch time
+      const wtOpts = [...new Set(filtered.map(p => p.watchTime).filter(Boolean))].sort((a, b) => a - b);
+      if (wtOpts.length > 0) {
+        setSelectedWatchTime(wtOpts[0]);
+        const match = filtered.find(p => p.watchTime === wtOpts[0]);
+        if (match) setSelectedValidity(match);
+      } else {
+        setSelectedWatchTime(null);
+      }
     }
   }, [selectedMode, selectedVariation, course]);
 
@@ -115,6 +125,9 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
     return "N/A";
   };
 
+  // Derived: unique watch times from validity options
+  const watchTimeOptions = [...new Set(validityOptions.map(p => p.watchTime).filter(Boolean))].sort((a, b) => a - b);
+
   const handleAddToCart = () => {
     // Use selectedValidity if available, otherwise use first pricing from course
     const pricingToUse = selectedValidity || (course?.coursePricing && course.coursePricing.length > 0 ? course.coursePricing[0] : null);
@@ -128,6 +141,7 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
       selectedMode: selectedMode || '',
       selectedVariation: selectedVariation || '',
       selectedValidity: selectedValidity ? formatValidity(selectedValidity) : '',
+      watchTime: pricingToUse.watchTime || selectedWatchTime,
       finalPrice: pricingToUse.price - (pricingToUse.price * (pricingToUse.discount || 0) / 100),
       originalPrice: pricingToUse.price,
       discount: pricingToUse.discount || 0,
@@ -227,6 +241,41 @@ const CourseConfigModal = ({ course, onClose, onAddToCart }) => {
               <label className="block text-sm font-bold text-slate-700 mb-3">Validity</label>
               <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all ${BRAND_GREEN_CLASS} text-white`}>
                 {formatValidity(validityOptions[0])}
+              </div>
+            </div>
+          )}
+
+          {/* Watch Time Selection */}
+          {watchTimeOptions.length > 1 && (
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-3">Watch Time</label>
+              <div className="flex flex-wrap gap-2">
+                {watchTimeOptions.map((wt) => (
+                  <button
+                    key={wt}
+                    type="button"
+                    onClick={() => {
+                      setSelectedWatchTime(wt);
+                      const match = validityOptions.find(p => p.watchTime === wt);
+                      if (match) setSelectedValidity(match);
+                    }}
+                    className={`px-3 py-2 rounded-lg text-xs font-bold transition-all ${selectedWatchTime === wt
+                        ? `${BRAND_GREEN_CLASS} text-white`
+                        : 'border border-slate-200 text-slate-600 hover:border-indigo-300 hover:bg-slate-50'
+                      }`}
+                  >
+                    {wt === 'Unlimited' ? 'Unlimited' : `${wt}x`}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {watchTimeOptions.length === 1 && (
+            <div>
+              <label className="block text-sm font-bold text-slate-700 mb-3">Watch Time</label>
+              <div className={`inline-flex px-3 py-2 rounded-lg text-xs font-bold transition-all ${BRAND_GREEN_CLASS} text-white`}>
+                {watchTimeOptions[0] === 'Unlimited' ? 'Unlimited' : `${watchTimeOptions[0]}x`}
               </div>
             </div>
           )}
