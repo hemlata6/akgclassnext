@@ -23,6 +23,7 @@ import { SecondBannerSection } from './sections/secondBannerSection';
 import WatchVideoSection from './sections/WatchVideoSection';
 import { Headphones, User } from 'lucide-react';
 import YoutubeVideoCarouselSection from './sections/YoutubeVideoCarouselSection';
+import GallerySection from './sections/GallerySection';
 
 const SOCIAL_PROOF_DATA = [
   { name: 'Kaya from Delhi', course: 'CA Final Advanced Audit (EOB)' },
@@ -321,6 +322,7 @@ export default function HomePage() {
         </div>
       </div>
       <AppDownload />
+      <GallerySection />
       <Footer />
 
       {/* Social Proof Notification */}

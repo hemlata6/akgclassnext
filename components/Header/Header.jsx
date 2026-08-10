@@ -265,10 +265,10 @@ export const Header = ({ cartCount }) => {
             <a href="mailto:support@rishabhjain.com" className="hover:text-white transition-colors duration-200 font-bold">support@rishabhjain.com</a>
           </div>
           <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
-            <Link href="/blog" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Blog</Link>
+            <Link href="/#gallery" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Gallery</Link>
             <Link href="/free-resources" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</Link>
             <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
-            <a href="#" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</a>
+            <Link href="/#student-feedback" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</Link>
             <button onClick={() => setShowAppDownloadModal(true)} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-[10px] px-2 py-1 rounded-xl transition-all duration-200 shadow-sm">
               <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Download Our App
             </button>

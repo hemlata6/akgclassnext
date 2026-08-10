@@ -204,8 +204,18 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         addressForm.address.trim()
       ].filter(Boolean).join(', ');
 
-      // If student already exists (has tempSignupData), edit profile instead of registering
-      if (tempSignupData) {
+      // Guard: tempSignupData is required
+      if (!tempSignupData) {
+        setErrors({ submit: 'Phone verification required. Please go back and verify your phone number first.' });
+        setIsLoading(false);
+        return;
+      }
+
+      // Existing student (logged in successfully) vs New student (from "User Not Found")
+      const isExistingStudent = !!(tempSignupData.firstName || tempSignupData.lastName);
+
+      if (isExistingStudent) {
+        // Existing student — edit profile
         const editProfileBody = {
           firstName: formData.firstname,
           lastName: formData.lastname,
@@ -231,9 +241,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           setErrors({ submit: editResponse.message || 'Failed to update profile. Please try again.' });
         }
       } else {
-        // New student - register and login flow
+        // New student (from "User Not Found") — register + auto-login
         const registrationBody = {
-          contact: tempSignupData?.phone,
+          contact: tempSignupData.phone,
           firstName: formData.firstname,
           lastName: formData.lastname,
           email: formData.email,
@@ -249,10 +259,9 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         const registrationResponse = await Network.studentRegister(registrationBody);
 
         if (registrationResponse.status === true) {
-          // Registration successful - now call student login API
           const loginBody = {
-            contact: tempSignupData?.phone,
-            otp: tempSignupData?.otp,
+            contact: tempSignupData.phone,
+            otp: tempSignupData.otp,
             instId: instId,
             deviceId: "1",
             deviceOS: "windows",
@@ -261,15 +270,11 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           const loginResponse = await Network.verifyLoginOtp(loginBody);
 
           if (loginResponse.status === true) {
-            // Set student data in context
             const success = setStudentAuth(loginResponse);
 
             if (success) {
-              // Login the user automatically
-              login(tempSignupData?.phone, tempSignupData?.otp);
-              // Clear temporary signup data
+              login(tempSignupData.phone, tempSignupData.otp);
               localStorage.removeItem('tempSignup');
-              // Close the signup form on successful signup/login
               handleClose();
               handleLoginClose();
             } else {

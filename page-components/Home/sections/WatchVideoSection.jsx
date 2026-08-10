@@ -38,7 +38,7 @@ export default function WatchVideoSection() {
     const [selectedImage, setSelectedImage] = useState(null);
 
     return (
-        <section className="relative bg-[#111827] text-white py-14 px-4 md:px-8 font-sans overflow-hidden">
+        <section id="student-feedback" className="relative bg-[#111827] text-white py-14 px-4 md:px-8 font-sans overflow-hidden scroll-mt-24">
 
             {/* Dynamic Keyframe Styles */}
             <style>{`
