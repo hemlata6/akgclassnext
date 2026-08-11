@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING } from '../../../constants/Icons';
 import { useAuth } from '../../../config/AuthContext';
@@ -11,6 +11,7 @@ import Endpoints from '../../../config/endpoints';
 // Target Layout Specific Icon Proxies
 const Clock = ({ className }) => <Icons.Clock className={className} />;
 const PlayCircle = ({ className }) => <Icons.Play className={className} />;
+const XIcon = ({ className }) => <Icons.X className={className} />;
 
 const stripHtmlTags = (htmlString) => {
     if (!htmlString) return '';
@@ -39,8 +40,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedCourse, setSelectedCourse] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(true);
-    const timerRef = useRef(null);
+
 
     const hasEmployeeCourseSelection = (() => {
         if (!employeeCourseId) return false;
@@ -198,17 +198,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
     const canGoNext = currentIndex < filtered.length - itemsPerView;
     const maxIndex = Math.max(0, filtered.length - itemsPerView);
 
-    // Auto-scroll effect (wraps around)
-    useEffect(() => {
-        if (isPlaying && maxIndex > 0) {
-            timerRef.current = setInterval(() => {
-                setCurrentIndex(prev => prev >= maxIndex ? 0 : prev + 1);
-            }, 3500);
-        }
-        return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
-        };
-    }, [isPlaying, maxIndex]);
+
 
     const handleAddToCartFromModal = (cartItem) => {
         const existingCartIndex = cartCourses.findIndex(item => item.coursePricingId === cartItem.coursePricingId);
@@ -219,6 +209,14 @@ export const CoursesSection = ({ employeeCourseId }) => {
         } else {
             updatedCart = [...cartCourses, cartItem];
         }
+        setCartCourses(updatedCart);
+        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+        window.dispatchEvent(new Event('cartUpdated'));
+    };
+
+    const handleRemoveFromCart = (course) => {
+        const pricingIds = (course.coursePricing || []).map(p => p.id);
+        const updatedCart = cartCourses.filter(item => !pricingIds.includes(item.coursePricingId));
         setCartCourses(updatedCart);
         localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
         window.dispatchEvent(new Event('cartUpdated'));
@@ -248,6 +246,11 @@ export const CoursesSection = ({ employeeCourseId }) => {
 
         // Clean description typography natively via sanitization script layers
         const cleanDescription = stripHtmlTags(course.shortDescription);
+
+        // Check if this specific course is in the cart
+        const isInCart = cartCourses.length > 0 && cartCourses.some(cartItem =>
+            course.coursePricing?.some(p => p.id === cartItem.coursePricingId)
+        );
 
         return (
             <div
@@ -324,17 +327,43 @@ export const CoursesSection = ({ employeeCourseId }) => {
                         </span>
                     </div>
 
-                    <button
-                        onClick={(e) => {
-                            if (!course.coursePricing || course.coursePricing.length === 0) return;
-                            e.stopPropagation();
-                            setSelectedCourse(course);
-                            setShowConfigModal(true);
-                        }}
-                        className="bg-[#0a459a] text-white font-semibold text-[10px] uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow hover:bg-blue-800 transition-all flex items-center justify-center gap-1 active:scale-95 hover:shadow-md w-full sm:w-auto"
-                    >
-                        Enroll <PlayCircle className="w-3.5 h-3.5 ml-0.5" />
-                    </button>
+                    <div className="flex items-center gap-2 w-full sm:w-auto">
+                        {isInCart ? (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveFromCart(course);
+                                }}
+                                className="bg-red-500 text-white p-1 rounded-xl shadow hover:bg-red-600 transition-all flex items-center justify-center active:scale-95 hover:shadow-md"
+                                title="Remove from cart"
+                            >
+                                <XIcon className="w-3 h-3" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={(e) => {
+                                    if (!course.coursePricing || course.coursePricing.length === 0) return;
+                                    e.stopPropagation();
+                                    setSelectedCourse(course);
+                                    setShowConfigModal(true);
+                                }}
+                                className="bg-[#0a459a] text-white font-semibold text-[10px] uppercase tracking-wider px-3.5 py-2.5 rounded-xl shadow hover:bg-blue-800 transition-all flex items-center justify-center gap-1 active:scale-95 hover:shadow-md"
+                            >
+                                Enroll <PlayCircle className="w-3.5 h-3.5 ml-0.5" />
+                            </button>
+                        )}
+                        {isInCart && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push('/cart');
+                                }}
+                                className="border border-[#0a459a] text-[#0a459a] font-semibold text-[10px] uppercase tracking-wider px-3.5 py-2.5 rounded-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-1 active:scale-95"
+                            >
+                                View Cart
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         );
@@ -413,24 +442,6 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Our Trending Courses</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                {filtered.length > itemsPerView && (
-                                    <button
-                                        onClick={() => setIsPlaying(!isPlaying)}
-                                        className="w-8 h-8 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-[#0a459a] hover:border-[#0a459a] flex items-center justify-center shadow-sm transition-all active:scale-95"
-                                        title={isPlaying ? "Pause Autoplay" : "Start Autoplay"}
-                                    >
-                                        {isPlaying ? (
-                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                                                <rect x="6" y="4" width="4" height="16" />
-                                                <rect x="14" y="4" width="4" height="16" />
-                                            </svg>
-                                        ) : (
-                                            <svg className="w-3 h-3 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
-                                                <polygon points="5 3 19 12 5 21 5 3" />
-                                            </svg>
-                                        )}
-                                    </button>
-                                )}
                                 <button
                                     onClick={handlePrev}
                                     disabled={!canGoPrev}
@@ -447,19 +458,14 @@ export const CoursesSection = ({ employeeCourseId }) => {
                                 </button>
                             </div>
                         </div>
-                        <div
-                            onMouseEnter={() => setIsPlaying(false)}
-                            onMouseLeave={() => setIsPlaying(true)}
-                        >
-                            <div className="overflow-hidden px-1 -mx-1">
-                                <div
-                                    className="flex gap-4 sm:gap-5 transition-transform duration-500 ease-in-out"
-                                    style={{
-                                        transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
-                                    }}
-                                >
-                                    {carouselCards}
-                                </div>
+                        <div className="overflow-hidden px-1 -mx-1">
+                            <div
+                                className="flex gap-4 sm:gap-5 transition-transform duration-500 ease-in-out"
+                                style={{
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
+                                }}
+                            >
+                                {carouselCards}
                             </div>
                         </div>
                     </div>

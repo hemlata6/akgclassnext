@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Icons, LAYOUT_PADDING, BRAND_GREEN_CLASS } from '../../../constants/Icons';
 import { useAuth } from '../../../config/AuthContext';
@@ -34,7 +34,8 @@ import {
     MapPin,
     ExternalLink,
     ShieldCheck,
-    Calendar
+    Calendar,
+    X
 } from 'lucide-react';
 
 // Target Layout Specific Icon Proxies
@@ -66,8 +67,7 @@ export const BookStore = ({ employeeCourseId }) => {
     const [cartCourses, setCartCourses] = useState([]);
     const [selectedBook, setSelectedBook] = useState(null);
     const [showConfigModal, setShowConfigModal] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(true);
-    const timerRef = useRef(null);
+
 
     // CAROUSEL DISPLAY CONTROLLER STATES
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -190,17 +190,15 @@ export const BookStore = ({ employeeCourseId }) => {
     const canGoNext = currentIndex < filtered.length - itemsPerView;
     const maxIndex = Math.max(0, filtered.length - itemsPerView);
 
-    // Auto-scroll effect (wraps around)
-    useEffect(() => {
-        if (isPlaying && maxIndex > 0) {
-            timerRef.current = setInterval(() => {
-                setCurrentIndex(prev => prev >= maxIndex ? 0 : prev + 1);
-            }, 3500);
-        }
-        return () => {
-            if (timerRef.current) clearInterval(timerRef.current);
-        };
-    }, [isPlaying, maxIndex]);
+
+
+    const handleRemoveFromCart = (book) => {
+        const pricingIds = (book.coursePricing || []).map(p => p.id);
+        const updatedCart = cartCourses.filter(item => !pricingIds.includes(item.coursePricingId));
+        setCartCourses(updatedCart);
+        localStorage.setItem('cartCourses', JSON.stringify(updatedCart));
+        window.dispatchEvent(new Event('cartUpdated'));
+    };
 
     const handleExploreAllClick = () => {
         sessionStorage.setItem('storeNavigationState', JSON.stringify({
@@ -243,6 +241,11 @@ export const BookStore = ({ employeeCourseId }) => {
 
         // Clean description typography natively via sanitization script layers
         const cleanDescription = stripHtmlTags(book.shortDescription);
+
+        // Check if this specific book is in the cart
+        const isInCart = cartCourses.length > 0 && cartCourses.some(cartItem =>
+            book.coursePricing?.some(p => p.id === cartItem.coursePricingId)
+        );
 
         return (
             <div
@@ -297,17 +300,43 @@ export const BookStore = ({ employeeCourseId }) => {
                         </span>
                     </div>
 
-                    <button
-                        onClick={(e) => {
-                            if (!book.coursePricing || book.coursePricing.length === 0) return;
-                            e.stopPropagation();
-                            setSelectedBook(book);
-                            setShowConfigModal(true);
-                        }}
-                        className="text-[#0a459a] font-semibold text-[11px] uppercase tracking-wider flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform group-hover:underline"
-                    >
-                        Access Book <ArrowUpRight className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        {isInCart ? (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleRemoveFromCart(book);
+                                }}
+                                className="bg-red-500 text-white p-2 rounded-xl shadow hover:bg-red-600 transition-all flex items-center justify-center active:scale-95"
+                                title="Remove from cart"
+                            >
+                                <X className="w-3.5 h-3.5" />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={(e) => {
+                                    if (!book.coursePricing || book.coursePricing.length === 0) return;
+                                    e.stopPropagation();
+                                    setSelectedBook(book);
+                                    setShowConfigModal(true);
+                                }}
+                                className="text-[#0a459a] font-semibold text-[11px] uppercase tracking-wider flex items-center gap-0.5 group-hover:translate-x-0.5 transition-transform group-hover:underline"
+                            >
+                                Access Book <ArrowUpRight className="w-3.5 h-3.5" />
+                            </button>
+                        )}
+                        {isInCart && (
+                            <button
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    router.push('/cart');
+                                }}
+                                className="border border-[#0a459a] text-[#0a459a] font-semibold text-[10px] uppercase tracking-wider px-3 py-2 rounded-xl hover:bg-blue-50 transition-all flex items-center justify-center gap-1 active:scale-95 whitespace-nowrap"
+                            >
+                                View Cart
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
         );
@@ -386,24 +415,6 @@ export const BookStore = ({ employeeCourseId }) => {
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Books Hub</span>
                             </div>
                             <div className="flex items-center gap-2">
-                                {filtered.length > itemsPerView && (
-                                    <button
-                                        onClick={() => setIsPlaying(!isPlaying)}
-                                        className="w-8 h-8 rounded-full border border-slate-200 bg-white text-slate-500 hover:text-[#0a459a] hover:border-[#0a459a] flex items-center justify-center shadow-sm transition-all active:scale-95"
-                                        title={isPlaying ? "Pause Autoplay" : "Start Autoplay"}
-                                    >
-                                        {isPlaying ? (
-                                            <svg className="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
-                                                <rect x="6" y="4" width="4" height="16" />
-                                                <rect x="14" y="4" width="4" height="16" />
-                                            </svg>
-                                        ) : (
-                                            <svg className="w-3 h-3 ml-0.5" viewBox="0 0 24 24" fill="currentColor">
-                                                <polygon points="5 3 19 12 5 21 5 3" />
-                                            </svg>
-                                        )}
-                                    </button>
-                                )}
                                 <button
                                     onClick={handlePrev}
                                     disabled={!canGoPrev}
@@ -420,19 +431,14 @@ export const BookStore = ({ employeeCourseId }) => {
                                 </button>
                             </div>
                         </div>
-                        <div
-                            onMouseEnter={() => setIsPlaying(false)}
-                            onMouseLeave={() => setIsPlaying(true)}
-                        >
-                            <div className="overflow-hidden px-1 -mx-1">
-                                <div
-                                    className="flex gap-4 sm:gap-6 transition-transform duration-500 ease-in-out"
-                                    style={{
-                                        transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
-                                    }}
-                                >
-                                    {carouselCards}
-                                </div>
+                        <div className="overflow-hidden px-1 -mx-1">
+                            <div
+                                className="flex gap-4 sm:gap-6 transition-transform duration-500 ease-in-out"
+                                style={{
+                                    transform: `translateX(calc(-${currentIndex} * (${100 / itemsPerView}% + ${carouselGap / itemsPerView}px)))`
+                                }}
+                            >
+                                {carouselCards}
                             </div>
                         </div>
                     </div>
