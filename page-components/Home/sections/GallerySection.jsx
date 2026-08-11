@@ -1,133 +1,9 @@
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { LAYOUT_PADDING } from '../../../constants/Icons';
-
-const BASE = '/gallery/Conference Photos of RJ Sir -20260810T111535Z-1-001/Conference Photos of RJ Sir';
-
-const CITIES = [
-  {
-    name: 'Ahilyanagar',
-    images: [
-      'WhatsApp Image 2025-11-21 at 4.35.13 PM.jpeg',
-      'WhatsApp Image 2025-11-21 at 4.35.16 PM.jpeg',
-      'WhatsApp Image 2025-11-21 at 4.35.17 PM.jpeg',
-      'WhatsApp Image 2025-11-21 at 4.35.20 PM.jpeg',
-      'WhatsApp Image 2025-11-21 at 4.35.29 PM.jpeg',
-    ],
-  },
-  {
-    name: 'Faridabad',
-    images: [
-      'WhatsApp Image 2025-12-19 at 11.48.18 AM.jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.20 AM (1).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.20 AM.jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.21 AM (1).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.21 AM (2).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.21 AM (3).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.21 AM.jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.22 AM (1).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.22 AM (2).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.22 AM.jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.23 AM (1).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.23 AM (2).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.23 AM.jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.24 AM (1).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.24 AM (2).jpeg',
-      'WhatsApp Image 2025-12-19 at 11.48.24 AM.jpeg',
-    ],
-  },
-  {
-    name: 'Jamnagar',
-    images: [
-      '20260619_185845.jpg.jpeg',
-      '20260619_185847.jpg.jpeg',
-      'DSC_0509.JPG.jpeg',
-      'DSC_0510.JPG.jpeg',
-      'DSC_0530.JPG.jpeg',
-      'DSC_0536.JPG.jpeg',
-      'DSC_0542.JPG.jpeg',
-      'DSC_0560.JPG.jpeg',
-      'DSC_0563.JPG.jpeg',
-      'DSC_0564.JPG.jpeg',
-      'DSC_0564_1.JPG.jpeg',
-      'DSC_0578.JPG.jpeg',
-      'DSC_0578_1.JPG.jpeg',
-      'DSC_0580.JPG.jpeg',
-      'DSC_0580_1.JPG.jpeg',
-      'DSC_0582.JPG.jpeg',
-    ],
-  },
-  {
-    name: 'Kolkata',
-    images: [
-      'DSC_0182 (1).JPG',
-      'DSC_0182.JPG',
-      'DSC_0195.JPG',
-      'DSC_0202.JPG',
-      'DSC_0204.JPG',
-      'DSC_0206.JPG',
-      'DSC_0316.JPG',
-      'DSC_0317.JPG',
-      'IMG_20260623_170827.jpg.jpeg',
-    ],
-  },
-  {
-    name: 'Nagpur',
-    images: [
-      'WhatsApp Image 2026-07-25 at 8.19.09 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.09 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.09 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.10 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.10 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.10 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.10 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.11 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.11 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.11 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.11 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.12 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.12 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.12 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.12 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.13 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.13 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.13 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.13 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.14 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.14 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.14 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.14 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.15 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.15 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.15 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.15 PM (4).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.15 PM.jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.16 PM (1).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.16 PM (2).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.16 PM (3).jpeg',
-      'WhatsApp Image 2026-07-25 at 8.19.16 PM.jpeg',
-    ],
-  },
-  {
-    name: 'Pune',
-    images: [
-      '9I1A3940.JPG',
-      '9I1A3941.JPG',
-      '9I1A4006.JPG',
-      'DSC_6252.JPG',
-      'DSC_6288.JPG',
-      'DSC_6289.JPG',
-    ],
-  },
-];
-
-// Build flat item list once (module-level, not per render)
-const ALL_ITEMS = CITIES.flatMap((city) =>
-  city.images.map((img) => ({
-    city: city.name.toLowerCase(),
-    cityName: city.name,
-    src: `${BASE}/${encodeURIComponent(city.name)}/${encodeURIComponent(img)}`,
-  }))
-);
+import Network from '@/config/Network';
+import Endpoints from '@/config/endpoints';
+import { useAuth } from '@/config/AuthContext';
+import instId from '@/config/instituteId';
 
 // ── Lightbox ──────────────────────────────────────────────
 const Lightbox = React.memo(({ src, visible, onClose }) => {
@@ -210,12 +86,104 @@ GalleryCard.displayName = 'GalleryCard';
 
 // ── Main Section ──────────────────────────────────────────
 export const GallerySection = () => {
+
+  const { authToken } = useAuth();
   const [filter, setFilter] = useState('all');
   const [lightbox, setLightbox] = useState({ src: null, visible: false });
+  const [loading, setLoading] = useState(true);
+  const [cities, setCities] = useState([]);
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [error, setError] = useState(null);
+
+  const fetchGalleryFromApi = async () => {
+    try {
+      setLoading(true);
+
+      // Step 1: Get the Gallery course
+      const response = await Network.getFreeCourseList(instId);
+      const courses = response?.courses || response || [];
+      const galleryCourse = courses.find(
+        course => course.title === "Gallery"
+      );
+
+      if (!galleryCourse) {
+        setLoading(false);
+        return;
+      }
+
+      const courseId = galleryCourse.id || galleryCourse._id || galleryCourse.courseId;
+
+      // Step 2: Get city folders (parentId = 0)
+      const cityResponse = await Network.fetchScheduleApi(courseId, 0);
+
+      const cityFolders = Array.isArray(cityResponse)
+        ? cityResponse
+        : (cityResponse?.contentList || cityResponse?.contents || cityResponse?.courses || []);
+
+      if (!cityFolders.length) {
+        setLoading(false);
+        return;
+      }
+
+      // Step 3: For each city folder, get images
+      const citiesWithImages = await Promise.all(
+        cityFolders.map(async (folder) => {
+          const folderId = folder.id || folder._id || folder.contentId || folder.courseId;
+          const folderName = folder.name || folder.title || folder.folderName || 'Unknown';
+
+          const imagesResponse = await Network.fetchScheduleApi(courseId, folderId);
+
+          const imageList = Array.isArray(imagesResponse)
+            ? imagesResponse
+            : (imagesResponse?.contentList || imagesResponse?.contents || imagesResponse?.courses || []);
+
+          return {
+            name: folderName,
+            images: imageList.map(img => {
+              const fileName = img.name || img.title || img.fileName || img.contentName || 'image';
+              const rawUrl = img.thumb || img.fileUrl || img.path || img.logo || img.content || '';
+              const fileUrl = rawUrl ? `${Endpoints.mediaBaseUrl}${rawUrl}` : '';
+              return { name: fileName, url: fileUrl };
+            }).filter(img => img.url) // only keep items with valid URLs
+          };
+        })
+      );
+
+      // Filter out cities with no images
+      const validCities = citiesWithImages.filter(c => c.images.length > 0);
+
+      if (validCities.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      // Build flat item list for the marquee
+      const allItems = validCities.flatMap(cityData =>
+        cityData.images.map(img => ({
+          city: cityData.name.toLowerCase(),
+          cityName: cityData.name,
+          src: img.url,
+        }))
+      );
+
+      setCities(validCities);
+      setGalleryItems(allItems);
+      setError(null);
+    } catch (err) {
+      console.error('❌ Error fetching gallery from API:', err);
+      // Keep hardcoded fallback on error
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchGalleryFromApi();
+  }, []);
 
   const filteredItems = useMemo(
-    () => (filter === 'all' ? ALL_ITEMS : ALL_ITEMS.filter((i) => i.city === filter)),
-    [filter]
+    () => (filter === 'all' ? galleryItems : galleryItems.filter((i) => i.city === filter)),
+    [filter, galleryItems]
   );
 
   const openLightbox = useCallback((src) => {
@@ -232,7 +200,7 @@ export const GallerySection = () => {
         .marquee-track-gallery {
           display: flex;
           width: max-content;
-          animation: marqueeLeft 180s linear infinite;
+          animation: marqueeLeft 160s linear infinite;
           will-change: transform;
         }
         .marquee-container-gallery:hover .marquee-track-gallery {
@@ -259,16 +227,15 @@ export const GallerySection = () => {
 
         {/* City Filters */}
         <div className="flex flex-wrap items-center gap-2 mb-6">
-          {[{ name: 'All Cities', key: 'all' }, ...CITIES.map((c) => ({ name: c.name, key: c.name.toLowerCase() }))].map(
+          {[{ name: 'All Cities', key: 'all' }, ...cities.map((c) => ({ name: c.name, key: c.name.toLowerCase() }))].map(
             (tab) => (
               <button
                 key={tab.key}
                 onClick={() => setFilter(tab.key)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 ${
-                  filter === tab.key
-                    ? 'bg-[#0749A2] text-white border-[#0749A2] shadow-md'
-                    : 'bg-white text-slate-600 border-slate-200 hover:border-[#0749A2] hover:text-[#0749A2]'
-                }`}
+                className={`px-4 py-1.5 rounded-full text-xs font-semibold border transition-all duration-300 ${filter === tab.key
+                  ? 'bg-[#0749A2] text-white border-[#0749A2] shadow-md'
+                  : 'bg-white text-slate-600 border-slate-200 hover:border-[#0749A2] hover:text-[#0749A2]'
+                  }`}
               >
                 {tab.key !== 'all' ? `📍 ${tab.name}` : tab.name}
               </button>

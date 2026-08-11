@@ -589,14 +589,14 @@ export default class Network {
   // };
 
 
-  // static async fetchCheduleApi(courseId, contentId) {
-  //   let requestOptions = {
-  //     withCredentials: false,
-  //   };
-  //   const response = await axios.get(this.FETCH_COURSE_SCHEDULR_URL + courseId + '/' + contentId, requestOptions);
+  static async fetchScheduleApi(courseId, contentId) {
+    let requestOptions = {
+      withCredentials: false,
+    };
+    const response = await axios.get(this.FETCH_COURSE_SCHEDULR_URL + courseId + '/' + contentId, requestOptions);
 
-  //   return response.data;
-  // };
+    return response.data;
+  };
 
   static async getBannersApi(instId) {
     let requestOptions = {
