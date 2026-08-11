@@ -307,10 +307,10 @@ export const BookStore = ({ employeeCourseId }) => {
                                     e.stopPropagation();
                                     handleRemoveFromCart(book);
                                 }}
-                                className="bg-red-500 text-white p-2 rounded-xl shadow hover:bg-red-600 transition-all flex items-center justify-center active:scale-95"
+                                className="bg-red-500 text-white p-1 rounded-xl shadow hover:bg-red-600 transition-all flex items-center justify-center active:scale-95"
                                 title="Remove from cart"
                             >
-                                <X className="w-3.5 h-3.5" />
+                                <X className="w-3 h-3" />
                             </button>
                         ) : (
                             <button
