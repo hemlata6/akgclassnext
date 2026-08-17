@@ -58,14 +58,14 @@ export const SecondBannerSection = () => {
                         {/* Content Block */}
                         <div className="space-y-4">
                             {/* Badges */}
-                            <div className="flex flex-wrap items-center gap-2">
-                                <span className="text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1">
+                            <div className="flex flex-col items-start gap-3">
+                                <span className="w-[200px] text-[10px] font-black bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1">
                                     <GraduationCap className="w-3.5 h-3.5 text-indigo-400" /> CA Inter & CA Final
                                 </span>
-                                <span className="text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1">
+                                <span className="w-[200px] text-[10px] font-black bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 px-2.5 py-1 rounded-md uppercase tracking-wider flex items-center gap-1">
                                     ⚡ Instant Access
                                 </span>
-                                <span className="text-[10px] font-extrabold text-amber-300 flex items-center gap-1">
+                                <span className="w-[200px] text-[10px] font-extrabold text-amber-300 flex items-center gap-1">
                                     ⭐ Zero Cost Registration
                                 </span>
                             </div>
@@ -81,7 +81,7 @@ export const SecondBannerSection = () => {
                             </div>
 
                             {/* Stats Counter Row */}
-                            <div className="grid grid-cols-3 gap-2">
+                            {/* <div className="grid grid-cols-3 gap-2">
                                 <div className="text-center bg-white/5 rounded-lg p-2 border border-white/10">
                                     <p className="text-white font-extrabold text-base">1000+</p>
                                     <p className="text-[9px] text-slate-400 font-medium">Exemption</p>
@@ -94,7 +94,7 @@ export const SecondBannerSection = () => {
                                     <p className="text-white font-extrabold text-base">100000+</p>
                                     <p className="text-[9px] text-slate-400 font-medium">Student taught</p>
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Feature Highlights Grid */}
                             <div className="grid grid-cols-2 gap-3 text-[11px] text-slate-200 font-semibold">

@@ -61,7 +61,7 @@ export default function Layout({ children }) {
   return (
     <div className="text-slate-900 bg-[#F4F6F9] min-h-screen selection:bg-indigo-200 selection:text-indigo-900 overflow-x-hidden" style={{fontFamily: "'Inter', system-ui, sans-serif"}}>
       {!shouldHideControls && !isStorePage && <Header cartCount={cartCount} />}
-      {!shouldHideControls && !isStorePage && !isDetailPage && <AnnouncementsHeader cartCount={cartCount} />}
+      {/* {!shouldHideControls && !isStorePage && !isDetailPage && <AnnouncementsHeader cartCount={cartCount} />} */}
       {children}
       {!shouldHideControls && <StickyMobileFooter cartCount={cartCount} />}
     </div>

@@ -101,10 +101,10 @@ export const Footer = () => {
               <Mail className="w-3.5 h-3.5 text-slate-500 shrink-0" />
               <a href="mailto:support@rishabhjain.com" className="break-all hover:text-white transition-colors">support@rishabhjain.com</a>
             </li>
-            <li className="flex items-center gap-2">
+            {/* <li className="flex items-center gap-2">
               <Phone className="w-3.5 h-3.5 text-slate-500 shrink-0" />
               <a href="tel:8421875672" className="break-all hover:text-white transition-colors">8421875672 (Support)</a>
-            </li>
+            </li> */}
             <li className="flex items-center gap-2 pt-0.5">
               <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
               <span>Mon - Sat (10:00 AM - 6:00 PM)</span>

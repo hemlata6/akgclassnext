@@ -1436,6 +1436,17 @@ const Store = () => {
     return (
         <div className="min-h-screen bg-[#fafbfc] text-slate-800 antialiased font-sans">
 
+            {/* Full-Page Loader */}
+            {loading && (
+                <div className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-white/85 backdrop-blur-sm">
+                    <div
+                        className="w-14 h-14 rounded-full border-4 border-slate-200 animate-spin"
+                        style={{ borderTopColor: primaryColor }}
+                    />
+                    <p className="mt-4 text-sm font-bold tracking-wide text-slate-600">Loading Courses…</p>
+                </div>
+            )}
+
             {/* GLOBAL HEADER */}
             <header className="sticky top-0 z-40 bg-white border-b border-slate-100 shadow-sm">
                 <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4 md:gap-6">

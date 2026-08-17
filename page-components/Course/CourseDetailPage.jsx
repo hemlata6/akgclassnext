@@ -231,29 +231,42 @@ const CourseContent = ({ courseData, onAddToCart }) => {
   const placeholderRef = useRef(null);
   const CARD_TOP = 175;
 
-  // Hybrid fixed/absolute to keep purchase card in view while scrolling
+  // Hybrid fixed/absolute to keep purchase card in view while scrolling.
+  // The card is aligned to the placeholder column so it stays inside the
+  // layout at any zoom level / viewport width.
   useEffect(() => {
     const section = document.getElementById('course-content-section');
     const card = cardRef.current;
     const placeholder = placeholderRef.current;
     if (!section || !card || !placeholder) return;
 
-    const syncWidth = () => {
-      card.style.width = `${placeholder.offsetWidth}px`;
+    const syncCard = () => {
+      const placeholderRect = placeholder.getBoundingClientRect();
+      card.style.width = `${placeholderRect.width}px`;
+
+      if (card.style.position === 'absolute') {
+        // Align with the placeholder column relative to the section.
+        card.style.left = `${placeholder.offsetLeft}px`;
+        card.style.right = 'auto';
+      } else {
+        // Align with the placeholder column relative to the viewport.
+        card.style.left = `${placeholderRect.left}px`;
+        card.style.right = 'auto';
+      }
     };
 
     const setFixed = () => {
       card.style.position = 'fixed';
       card.style.top = `${CARD_TOP}px`;
       card.style.bottom = 'auto';
-      syncWidth();
+      syncCard();
     };
 
     const setAbsolute = () => {
       card.style.position = 'absolute';
       card.style.top = 'auto';
       card.style.bottom = '0';
-      syncWidth();
+      syncCard();
     };
 
     const handleScroll = () => {
@@ -267,13 +280,18 @@ const CourseContent = ({ courseData, onAddToCart }) => {
       }
     };
 
+    const handleResize = () => {
+      syncCard();
+      handleScroll();
+    };
+
     setFixed();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', syncWidth);
+    window.addEventListener('resize', handleResize);
     handleScroll();
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', syncWidth);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 

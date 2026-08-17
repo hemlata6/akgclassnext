@@ -45,14 +45,14 @@ function AnnouncementsHeader() {
   return (
     <>
       {/* --- A. TOP ANNOUNCEMENT STRIP --- */}
-      <div className="bg-[#FFF9EB] text-white py-3 text-[13px] font-bold border-b border-white/10 shadow-2xl pr-4">
+      <div className="text-white py-3 text-[13px] font-bold px-4">
         <div className="flex justify-between items-center">
           <div
-            className="flex-1 text-center transition-all duration-700 ease-in-out tracking-wide cursor-pointer"
+            className="flex-1 text-left transition-all duration-700 ease-in-out tracking-wide cursor-pointer"
             onClick={() => router.push('/announcements')}
           >
             <div
-              className="flex-1 text-center text-[#5F2A02] transition-all duration-700 ease-in-out tracking-wide cursor-pointer"
+              className="flex-1 text-left text-white transition-all duration-700 ease-in-out tracking-wide cursor-pointer"
               onClick={() => router.push('/announcements')}
             >
               <span className="bg-[#e11d48] text-white px-3 py-1 rounded-full mr-4 text-[9px] animate-pulse shadow-lg shadow-[#e11d48]/30 uppercase">

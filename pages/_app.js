@@ -8,11 +8,13 @@ import Network from '../config/Network';
 import instId from '../config/instituteId';
 import { Icons } from '../constants/Icons';
 import Endpoints from '../config/endpoints';
+import { Loader } from '../components/Shared/SharedComponents';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const [announcements, setAnnouncements] = useState([]);
   const [showAnnouncementModal, setShowAnnouncementModal] = useState(false);
+  const [isRouteLoading, setIsRouteLoading] = useState(false);
 
   // Fetch announcements on app load
   const fetchAnnouncements = async () => {
@@ -49,11 +51,28 @@ function MyApp({ Component, pageProps }) {
     };
   }, [router.events]);
 
+  useEffect(() => {
+    // Show a loader while navigating between pages
+    const handleRouteStart = () => setIsRouteLoading(true);
+    const handleRouteEnd = () => setIsRouteLoading(false);
+
+    router.events.on('routeChangeStart', handleRouteStart);
+    router.events.on('routeChangeComplete', handleRouteEnd);
+    router.events.on('routeChangeError', handleRouteEnd);
+
+    return () => {
+      router.events.off('routeChangeStart', handleRouteStart);
+      router.events.off('routeChangeComplete', handleRouteEnd);
+      router.events.off('routeChangeError', handleRouteEnd);
+    };
+  }, [router.events]);
+
   return (
     <ThemeProvider>
       <AuthProvider>
         <StudentProvider>
           <Component {...pageProps} />
+          {isRouteLoading && <Loader />}
 
           {/* Announcement Modal */}
           {showAnnouncementModal && announcements.length > 0 && announcements[0]?.image && (

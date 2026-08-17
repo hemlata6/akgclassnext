@@ -138,7 +138,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
                 }
                 return [];
             };
-
+            
             const employeeCourseIds = normalizeEmployeeCourseIds(employeeCourseId);
             const hasEmployeeCourseFilter = employeeCourseIds.length > 0;
             const employeeCourseIdSet = new Set(employeeCourseIds);
@@ -146,7 +146,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
             const filteredCourses = Array.isArray(courses)
                 ? courses.filter((course) => {
                     const tags = Array.isArray(course?.tags) ? course.tags : [];
-
+                    
                     return (
                         course.active &&
                         course.paid === true &&
@@ -166,9 +166,10 @@ export const CoursesSection = ({ employeeCourseId }) => {
                     return idCandidates.some((id) => employeeCourseIdSet.has(id));
                 })
                 : filteredCourses;
-
-            setCoursesData(finalCourses);
-            setError(null);
+                
+                console.log('Employee Course ID:', finalCourses);
+                setCoursesData(finalCourses);
+                setError(null);
         } catch (err) {
             console.error('Error fetching courses:', err);
             setError('Failed to load courses');

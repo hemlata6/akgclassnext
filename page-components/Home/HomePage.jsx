@@ -180,7 +180,9 @@ export default function HomePage() {
       <AppDownload />
       <CounsellingStrip /> */}
       <BlogSection />
-      <div className="bg-[#0a459a] py-5 px-4">
+      <GallerySection />
+      <AppDownload />
+      <div className="bg-[#fff] py-5 px-4">
         <div className="max-w-5xl mx-auto text-center">
           {/* <p className="text-white/80 text-xs sm:text-sm font-semibold mb-3 tracking-wide">
                   Call for Lecture / Books / Test Series Enquiry:
@@ -190,35 +192,35 @@ export default function HomePage() {
           {isMobileView ? (
             <div className="grid grid-cols-1 gap-4 text-center">
               <div>
-                <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">📞 Sales</p>
-                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
-                  <a href="tel:8956524481" className="hover:text-white/70 transition-colors">8956524481</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956524482" className="hover:text-white/70 transition-colors">8956524482</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956524483" className="hover:text-white/70 transition-colors">8956524483</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956524484" className="hover:text-white/70 transition-colors">8956524484</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956524485" className="hover:text-white/70 transition-colors">8956524485</a>
+                <p className="text-black/60 text-[10px] uppercase tracking-widest font-bold mb-2">📞 Sales</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-black font-bold text-sm">
+                  <a href="tel:8956524481" className="hover:text-black/60 transition-colors">8956524481</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956524482" className="hover:text-black/60 transition-colors">8956524482</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956524483" className="hover:text-black/60 transition-colors">8956524483</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956524484" className="hover:text-black/60 transition-colors">8956524484</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956524485" className="hover:text-black/60 transition-colors">8956524485</a>
                 </div>
               </div>
               <div>
-                <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🛠️ Support</p>
-                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
-                  <a href="tel:8421875672" className="hover:text-white/70 transition-colors">8421875672</a>
+                <p className="text-black/60 text-[10px] uppercase tracking-widest font-bold mb-2">🛠️ Support</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-black font-bold text-sm">
+                  <a href="tel:8421875672" className="hover:text-black/60 transition-colors">8421875672</a>
                 </div>
               </div>
               <div>
-                <p className="text-white/60 text-[10px] uppercase tracking-widest font-bold mb-2">🏢 Face-to-Face Enquiry</p>
-                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-white font-bold text-sm">
-                  <a href="tel:8956688587" className="hover:text-white/70 transition-colors">8956688587</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956688588" className="hover:text-white/70 transition-colors">8956688588</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956688589" className="hover:text-white/70 transition-colors">8956688589</a>
-                  <span className="text-white/20">|</span>
-                  <a href="tel:8956688590" className="hover:text-white/70 transition-colors">8956688590</a>
+                <p className="text-black/60 text-[10px] uppercase tracking-widest font-bold mb-2">🏢 Face-to-Face Enquiry</p>
+                <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-black font-bold text-sm">
+                  <a href="tel:8956688587" className="hover:text-black/60 transition-colors">8956688587</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956688588" className="hover:text-black/60 transition-colors">8956688588</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956688589" className="hover:text-black/60 transition-colors">8956688589</a>
+                  <span className="text-black/20">|</span>
+                  <a href="tel:8956688590" className="hover:text-black/60 transition-colors">8956688590</a>
                 </div>
               </div>
             </div>
@@ -238,46 +240,46 @@ export default function HomePage() {
 
                 <a
                   href="tel:8956524481"
-                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-green-600 transition-colors"
                 >
                   8956524481
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956524482"
-                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-green-600 transition-colors"
                 >
                   8956524482
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956524483"
-                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-green-600 transition-colors"
                 >
                   8956524483
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956524484"
-                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-green-600 transition-colors"
                 >
                   8956524484
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956524485"
-                  className="px-2 py-1 font-bold text-white hover:text-green-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-green-600 transition-colors"
                 >
                   8956524485
                 </a>
               </div>
 
               {/* Divider (Desktop Only) */}
-              <span className="hidden lg:inline text-white/30 text-xl">•</span>
+              <span className="hidden lg:inline text-black/30 text-xl">•</span>
 
               {/* F2F Section */}
               <div className="flex flex-wrap items-center gap-x-1 gap-y-2">
@@ -287,31 +289,31 @@ export default function HomePage() {
 
                 <a
                   href="tel:8956688587"
-                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-blue-600 transition-colors"
                 >
                   8956688587
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956688588"
-                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-blue-600 transition-colors"
                 >
                   8956688588
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956688589"
-                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-blue-600 transition-colors"
                 >
                   8956688589
                 </a>
-                <span className="text-white/30">|</span>
+                <span className="text-black/30">|</span>
 
                 <a
                   href="tel:8956688590"
-                  className="px-2 py-1 font-bold text-white hover:text-blue-300 transition-colors"
+                  className="px-2 py-1 font-bold text-black hover:text-blue-600 transition-colors"
                 >
                   8956688590
                 </a>
@@ -321,8 +323,6 @@ export default function HomePage() {
           )}
         </div>
       </div>
-      <AppDownload />
-      <GallerySection />
       <Footer />
 
       {/* Social Proof Notification */}

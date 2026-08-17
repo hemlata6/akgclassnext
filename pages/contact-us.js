@@ -174,13 +174,13 @@ export default function ContactUsPage() {
                     <div className="absolute top-0 left-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
                     <div className="absolute right-0 bottom-0 w-[500px] h-[500px] bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
                     <div className="max-w-7xl mx-auto px-6 sm:px-12 grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
-                        <div className="md:col-span-7 space-y-4">
+                        <div className="md:col-span-12 space-y-4 text-center">
                             <h1 className="text-5xl sm:text-7xl font-serif font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500 leading-none drop-shadow-md">Contact Us</h1>
                             <h2 className="text-xl sm:text-2xl font-serif font-bold text-slate-100 tracking-wide">We're Here to Help You</h2>
                             <DiamondDivider />
-                            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-lg leading-relaxed pt-1">Have questions or need assistance? Reach out to us and our team will get back to you as soon as possible.</p>
+                            <p className="text-slate-300 text-xs sm:text-sm font-medium max-w-lg leading-relaxed pt-1 mx-auto">Have questions or need assistance? Reach out to us and our team will get back to you as soon as possible.</p>
                         </div>
-                        <div className="md:col-span-5 flex justify-center md:justify-end relative">
+                        {/* <div className="md:col-span-5 flex justify-center md:justify-end relative">
                             <div className="relative w-64 sm:w-80 aspect-[3/4] rounded-2xl overflow-hidden shadow-2xl border-2 border-amber-400/40 bg-gradient-to-b from-blue-900 to-slate-900">
                                 <img src="https://classioekatvammedia.classiolabs.com/classioekatvam/image/CA%20Rishabhh1782896141188" alt="Faculty Mentor" className="w-full h-full object-cover object-top hover:scale-105 transition-transform duration-700" />
                                 <div className="absolute top-4 right-4 bg-[#08152e]/90 backdrop-blur-md border border-amber-400/40 p-2.5 rounded-lg text-center shadow-lg">
@@ -188,7 +188,7 @@ export default function ContactUsPage() {
                                     <span className="text-[8px] font-bold text-slate-300 uppercase block tracking-wider mt-0.5">Building Futures<br />Creating Possibilities</span>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </section>
 
@@ -214,22 +214,22 @@ export default function ContactUsPage() {
                                 <DiamondDivider />
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0"><HeadsetIcon className="w-5 h-5" /></div>
-                                        <div>
-                                            <h3 className="font-serif font-bold text-amber-400 text-base">Support</h3>
-                                            <p className="text-slate-200 text-xs sm:text-sm font-extrabold tracking-wide mt-0.5">8421875672</p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <DiamondDivider />
-                                <div className="space-y-3">
-                                    <div className="flex items-center gap-3">
                                         <div className="w-10 h-10 rounded-full bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0"><PhoneIcon className="w-5 h-5" /></div>
                                         <div>
                                             <h3 className="font-serif font-bold text-amber-400 text-base">Face-to-Face Enquiry</h3>
                                             <div className="text-slate-200 text-xs sm:text-sm font-extrabold space-y-0.5 mt-1 tracking-wide">
                                                 <p>8956688587</p><p>8956688588</p><p>8956688589</p><p>8956688590</p>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <DiamondDivider />
+                                <div className="space-y-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-10 h-10 rounded-full bg-amber-400/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shrink-0"><HeadsetIcon className="w-5 h-5" /></div>
+                                        <div>
+                                            <h3 className="font-serif font-bold text-amber-400 text-base">Support</h3>
+                                            <p className="text-slate-200 text-xs sm:text-sm font-extrabold tracking-wide mt-0.5">8421875672</p>
                                         </div>
                                     </div>
                                 </div>

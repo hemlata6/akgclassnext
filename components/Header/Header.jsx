@@ -12,6 +12,7 @@ import SignupModal from '../Auth/SignupModal';
 import AppDownloadModal from '../Modals/AppDownloadModal';
 import Endpoints from '@/config/endpoints';
 import { Typography } from '@mui/material';
+import AnnouncementsHeader from './AnnouncementsHeader';
 
 const Layers = () => <Icons.Book className="w-3.5 h-3.5 text-[#0a459a]" />;
 const ChevronDown = ({ className }) => <Icons.ChevronDown className={className} />;
@@ -259,19 +260,26 @@ export const Header = ({ cartCount }) => {
     <>
       {/* 1. SYSTEM UTILITY PRE-HEADER (Stays relative, scrolls up away naturally) */}
       {!router.pathname.startsWith('/faculty/') && (
-        <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-3 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
-          <div className="flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <a href="mailto:support@rishabhjain.com" className="hover:text-white transition-colors duration-200 font-bold">support@rishabhjain.com</a>
+        <div className="bg-[#111827] text-gray-300 text-[11px] font-bold py-1 px-8 flex justify-between items-center tracking-widest relative border-b border-white/5 shadow-inner hidden md:flex">
+          <div className="flex-1 min-w-0 w-full">
+            {/* <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+            <a href="mailto:support@rishabhjain.com" className="hover:text-white transition-colors duration-200 font-bold">support@rishabhjain.com</a> */}
+            <AnnouncementsHeader />
           </div>
           <div className="flex items-center gap-8 font-bold uppercase text-[10px]">
-            <Link href="/#gallery" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Gallery</Link>
-            <Link href="/free-resources" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</Link>
-            <a href="#" className="text-yellow-400 font-bold hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
-            <Link href="/#student-feedback" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</Link>
-            <button onClick={() => setShowAppDownloadModal(true)} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-[10px] px-2 py-1 rounded-xl transition-all duration-200 shadow-sm">
+            {/* <Link href="/#gallery" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Gallery</Link> */}
+            <a href="#" className="normal-case hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1">
+                Test-Series <span className="bg-rose-50 text-rose-600 border border-rose-100 text-[9px] px-1.5 py-0.5 rounded font-bold tracking-tighter">Soon</span>
+              </a>
+            <Link href="/free-resources" className="normal-case hover:text-white hover:underline decoration-2 transition-all duration-200">Free Resources</Link>
+            <a href="#" className="text-yellow-400 font-bold normal-case hover:scale-105 transition-transform duration-200">Become Franchise Partner</a>
+            {/* <Link href="/#student-feedback" className="hover:text-white hover:underline decoration-2 transition-all duration-200">Student Feedback</Link> */}
+            {/* <button onClick={() => setShowAppDownloadModal(true)} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-[10px] px-2 py-1 rounded-xl transition-all duration-200 shadow-sm">
               <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Download Our App
-            </button>
+            </button> */}
+                      <button onClick={() => router.push('/contact-us')} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-xs px-3 py-1.5 rounded-xl transition-all duration-200 shadow-sm">
+            <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Contact Us
+          </button>
           </div>
         </div>)}
 
@@ -279,8 +287,8 @@ export const Header = ({ cartCount }) => {
       {isHeaderFixed && <div className="h-[73px] w-full invisible pointer-events-none"></div>}
 
       {/* 3. MAIN HEADER (Toggles seamlessly between normal path and fixed-top upon scroll breakpoint) */}
-      <header className={`${isHeaderFixed ? 'fixed top-0 left-0 w-full z-50 shadow-md' : 'relative z-40'} bg-white/70 border-b border-slate-200/60 px-4 sm:px-8 py-4 flex justify-between items-center backdrop-blur-xl transition-all duration-300 font-bold`}>
-        <div className="flex items-center gap-10">
+      <header className={`${isHeaderFixed ? 'fixed top-0 left-0 w-full z-50 shadow-md' : 'relative z-40'} bg-white/70 border-b border-slate-200/60 px-4 sm:px-8 py-4 flex justify-between items-center gap-4 backdrop-blur-xl transition-all duration-300 font-bold`}>
+        <div className="flex flex-1 items-center gap-10 justify-between">
           {/* LOGO */}
           <div onClick={() => router.push('/')} className="flex items-center gap-3 shrink-0 select-none group cursor-pointer">
             <div className="bg-gradient-to-br from-[#0a459a] to-[#05214c] text-white font-bold text-xl px-3 py-2 rounded-xl tracking-tight shadow-[0_4px_12px_rgba(10,69,154,0.3)] transition-transform duration-300 group-hover:scale-105">
@@ -293,20 +301,20 @@ export const Header = ({ cartCount }) => {
           </div>
 
           {/* DESKTOP NAVIGATION CONTENT */}
-          <div className="hidden lg:flex items-center gap-6 border-l border-slate-200/80 pl-6 relative">
+          <div className="hidden lg:flex items-center gap-6 relative">
 
             {/* EXPLORE DROPDOWN BUTTON */}
             <div className="relative" ref={exploreDropdownRef}>
-              <button
+              <div
                 onClick={() => {
                   setExploreDropdownOpen(!exploreDropdownOpen);
                   setFacultyDropdownOpen(false);
                 }}
-                className="flex items-center gap-2 bg-slate-100 hover:bg-slate-200/70 border border-slate-200 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm active:scale-95"
+                className="normal-case flex items-center gap-2 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200"
               >
                 <Layers /> Explore Lectures
                 <ChevronDown className={`w-4 h-4 text-[#0a459a] transition-transform duration-300 ${exploreDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
+              </div>
 
               {exploreDropdownOpen && (
                 <div className="absolute left-0 top-[calc(100%+12px)] w-56 bg-white/95 border border-slate-200 rounded-2xl shadow-xl backdrop-blur-xl p-2 z-50">
@@ -318,7 +326,7 @@ export const Header = ({ cartCount }) => {
                         <button
                           key={child.id}
                           onClick={() => handleDomainChildClick(child, parentDomain)}
-                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
+                          className="normal-case w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
                         >
                           {child.name}
                           <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />
@@ -334,10 +342,6 @@ export const Header = ({ cartCount }) => {
 
             {/* NAV LINKS WITH DYNAMIC FACULTY DROPDOWN */}
             <nav className="flex items-center gap-6 text-xs font-bold text-slate-500 tracking-wider uppercase relative">
-              <a href="#" className="hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1">
-                Test-Series <span className="bg-rose-50 text-rose-600 border border-rose-100 text-[9px] px-1.5 py-0.5 rounded font-bold tracking-tighter">Soon</span>
-              </a>
-
               {/* FACULTY DROPDOWN NAV ANCHOR */}
               <div className="relative" ref={facultyDropdownRef}>
                 <button
@@ -345,7 +349,7 @@ export const Header = ({ cartCount }) => {
                     setFacultyDropdownOpen(!facultyDropdownOpen);
                     setExploreDropdownOpen(false);
                   }}
-                  className="hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1 uppercase tracking-wider font-bold"
+                  className="normal-case hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1 uppercase tracking-wider font-bold"
                 >
                   Faculty
                   <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${facultyDropdownOpen ? 'rotate-180' : ''}`} />
@@ -360,7 +364,7 @@ export const Header = ({ cartCount }) => {
                         <button
                           key={fac.id}
                           onClick={() => handleFacultyRedirect(fac)}
-                          className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3.5 rounded-xl transition-all flex items-center justify-between group"
+                          className="normal-case w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3.5 rounded-xl transition-all flex items-center justify-between group"
                         >
                           {[fac.firstName, fac.lastName].filter(Boolean).join(' ')}
                           <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" />
@@ -380,7 +384,7 @@ export const Header = ({ cartCount }) => {
                     setExploreDropdownOpen(false);
                     setFacultyDropdownOpen(false);
                   }}
-                  className="hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1 uppercase tracking-wider font-bold"
+                  className="normal-case hover:text-[#0a459a] transition-colors duration-200 flex items-center gap-1 uppercase tracking-wider font-bold"
                 >
                   Combo
                   <ChevronDown className={`w-3 h-3 transition-transform duration-300 ${comboDropdownOpen ? 'rotate-180' : ''}`} />
@@ -399,7 +403,7 @@ export const Header = ({ cartCount }) => {
                           <div key={child.id ?? index}>
                             <button
                               onClick={() => setExpandedComboChild(isExpanded ? null : index)}
-                              className="w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
+                              className="normal-case w-full text-left font-bold text-xs text-slate-700 hover:text-[#0a459a] hover:bg-blue-50/70 px-4 py-3 rounded-xl transition-all flex items-center justify-between group"
                             >
                               {child.name}
                               <ChevronDown className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`} />
@@ -409,7 +413,7 @@ export const Header = ({ cartCount }) => {
                             {isExpanded && groupLabel && (
                               <button
                                 onClick={() => handleComboDomainClick(child, domains[0])}
-                                className="w-full text-left font-bold text-xs text-[#0a459a] bg-blue-50/80 hover:bg-blue-50/70 ml-1 border-l border-slate-200 pl-3 px-4 py-3 rounded-r-xl transition-all flex items-center justify-between group"
+                                className="normal-case w-full text-left font-bold text-xs text-[#0a459a] bg-blue-50/80 hover:bg-blue-50/70 ml-1 border-l border-slate-200 pl-3 px-4 py-3 rounded-r-xl transition-all flex items-center justify-between group"
                               >
                                 {groupLabel}
                                 {/* <ArrowRight className="w-3.5 h-3.5 opacity-0 group-hover:opacity-100 transition-all text-[#0a459a]" /> */}
@@ -428,21 +432,18 @@ export const Header = ({ cartCount }) => {
               <Link
                 href="/store?batchTag=F2F%20Pune"
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:text-[#0a459a] transition-colors duration-200"
+                className="normal-case hover:text-[#0a459a] transition-colors duration-200"
               >
                 F2F Pune
               </Link>
-              <Link href="/store?productType=books" className="hover:text-[#0a459a] transition-colors duration-200">Books Hub</Link>
+              <Link href="/store?productType=books" className="normal-case hover:text-[#0a459a] transition-colors duration-200">Books Hub</Link>
             </nav>
           </div>
         </div>
 
         {/* RIGHT ACTION ITEMS */}
         <div className="flex items-center gap-2 sm:gap-3">
-          <button onClick={() => router.push('/contact-us')} className="hidden sm:flex items-center gap-1.5 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-[#0a459a] font-bold text-xs px-4 py-2.5 rounded-xl transition-all duration-200 shadow-sm">
-            <Smartphone className="w-3.5 h-3.5 text-[#0a459a]" /> Contact Us
-          </button>
-
+                
           {user ? (
             <div className="relative" ref={userMenuRef}>
               <button

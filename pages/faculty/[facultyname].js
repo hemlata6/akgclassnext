@@ -218,7 +218,7 @@ const FacultyProfile = ({ }) => {
             subtitle: facultyPayload?.designation || 'Faculty Mentor',
             profile: facultyPayload?.profile || null,
             image: facultyState?.image || '/nextgen/nextgenlogo.png',
-            description: facultyPayload?.description || (domainNames.length > 0 ? `Specialized in ${domainNames.join(', ')}.` : ''),
+            description: facultyPayload?.description,
             journey: facultyPayload?.joining ? `Joined on: ${new Date(facultyPayload.joining).toLocaleDateString()}` : '',
             otherDes: facultyPayload?.address ? `Address: ${facultyPayload.address}` : '',
             tagLine: facultyPayload?.userName ? `@${facultyPayload.userName}` : '',
