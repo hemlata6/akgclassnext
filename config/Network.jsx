@@ -454,7 +454,7 @@ export default class Network {
     return response.data;
   };
 
-  static async editStudentProfile(auth, body) {
+  static async studentEditProfileAPI(auth, body) {
     let requestOptions = {
       headers: { "X-Auth": auth },
       withCredentials: false,

@@ -316,9 +316,22 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
             setOtpSent(false);
             setErrors({});
 
-            // console.log("Login successful, loginVerifyResponse data:", loginVerifyResponse?.student);
+            // Save student data to tempSignup for the signup modal
+            const studentInfo = loginVerifyResponse?.student || {};
+            localStorage.setItem('tempSignup', JSON.stringify({
+              phone: formData.phone,
+              otp: formData.otp,
+              firstName: studentInfo.firstName || '',
+              lastName: studentInfo.lastName || '',
+              email: studentInfo.email || '',
+              address: studentInfo.address || '',
+              cityName: studentInfo.cityName || '',
+              stateName: studentInfo.stateName || '',
+              zipCode: studentInfo.zipCode || '',
+              cityId: studentInfo.cityId || ''
+            }));
 
-            // Open signup page in BOTH conditions (whether student has address or not)
+            // Open Signup modal with pre-filled student data
             setOpenSignUpModal(true);
           }
         } else {
@@ -371,7 +384,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Welcome Back
             </h2>
             <p className="text-gray-600 text-sm">
@@ -545,7 +558,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
       <SignupModal
         isOpen={openSignUpModel}
-        onClose={() => setOpenSignUpModal(false)}
+        onClose={() => { setOpenSignUpModal(false); handleClose(); }}
         handleLoginClose={handleClose}
       />
 
@@ -687,4 +700,3 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 };
 
 export default LoginModal;
-
