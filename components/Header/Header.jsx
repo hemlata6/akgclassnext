@@ -289,7 +289,7 @@ export const Header = ({ cartCount }) => {
       {/* 3. MAIN HEADER (Toggles seamlessly between normal path and fixed-top upon scroll breakpoint) */}
       <header className={`${isHeaderFixed ? 'fixed top-0 left-0 w-full z-50 shadow-md' : 'relative z-40'} bg-white/70 border-b border-slate-200/60 px-4 sm:px-8 py-4 flex justify-between items-center gap-4 backdrop-blur-xl transition-all duration-300 font-bold`}>
         <div className="flex flex-1 items-center gap-10 justify-between">
-          {/* LOGO */}
+          {/* LOGO */}  
           <div onClick={() => router.push('/')} className="flex items-center gap-3 shrink-0 select-none group cursor-pointer">
             <div className="bg-gradient-to-br from-[#0a459a] to-[#05214c] text-white font-bold text-xl px-3 py-2 rounded-xl tracking-tight shadow-[0_4px_12px_rgba(10,69,154,0.3)] transition-transform duration-300 group-hover:scale-105">
               RJCE
