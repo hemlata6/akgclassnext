@@ -255,8 +255,8 @@ export default function CartPage() {
         if (response.data?.valid) {
           setShowSuccessBar(true);
           setSuccessBarMessage("✓ Coupon applied successfully!");
-          if (response.data?.discountAmount) {
-            setDiscountAmount(response.data.discountAmount);
+          if (response.data?.discount) {
+            setDiscountAmount(response.data.discount);
           }
         } else {
           setShowErrorBar(true);
