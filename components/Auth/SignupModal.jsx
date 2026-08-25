@@ -316,7 +316,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
         };
 
         const authToken = auth || studentToken;
-        const editResponse = await Network.studentEditProfileAPI(authToken, editProfileBody);
+        const editResponse = await Network.editStudentProfile(authToken, editProfileBody);
 
         if (editResponse.status === true) {
           localStorage.removeItem('tempSignup');
