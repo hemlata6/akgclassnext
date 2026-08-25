@@ -7,13 +7,16 @@ import { useTheme } from '../../config/ThemeContext';
 import { useStudent } from '@/config/StudentContext';
 
 /**
- * Convert the legacy combined address format back into separate fields.
+ * Convert a legacy combined address string back into separate fields.
  *
- * Legacy API format: `${houseNo}, ${zipCode}, ${address}`
- * e.g. "C 86, 110015, C 86, 3rd Floor, C-86, Block C Kirti Nagar Rd C Block, Kirti Nagar"
+ * Two legacy formats are seen in the wild:
+ *   A) `${houseNo}, ${zipCode}, ${address}`
+ *      e.g. "C 86, 110015, C 86, 3rd Floor, C-86, Block C Kirti Nagar Rd C Block, Kirti Nagar"
+ *   B) `${houseNo}, ${address}, ${zipCode}`  (zipcode at the end)
+ *      e.g. "12ABC, Vijay Nagar, 500001"
  *
- * The separate `zipCode` is used as the anchor to split the combined string,
- * rather than guessing which comma-separated token is the zipcode.
+ * The separate `zipCode` is matched against the comma-separated tokens to
+ * locate the split point, rather than guessing which token is the zipcode.
  *
  * @param {string} address Combined address returned by the API
  * @param {string} zipCode Separate zipcode returned by the API
@@ -41,24 +44,44 @@ function parseCombinedAddress(address, zipCode) {
     return result;
   }
 
-  // The legacy format always puts the zipcode between houseNo and address, so
-  // its first occurrence is the split point.
-  const zipIndex = combined.indexOf(zip);
+  const parts = combined.split(',').map(p => p.trim()).filter(Boolean);
+  const zipIndex = parts.indexOf(zip);
 
   if (zipIndex === -1) {
-    // Old record that doesn't follow the expected format — don't mutate it.
+    // Zipcode isn't present as its own comma-separated token. This is an old
+    // record that doesn't follow an expected format — don't mutate it.
     result.address = combined;
     return result;
   }
 
-  // Everything before the zipcode is the house number.
-  result.houseNo = combined.slice(0, zipIndex).replace(/[\s,]+$/, '').trim();
+  const beforeZip = parts.slice(0, zipIndex);
+  const afterZip = parts.slice(zipIndex + 1);
 
-  // Everything after the zipcode is the street address.
-  result.address = combined
-    .slice(zipIndex + zip.length)
-    .replace(/^[\s,]+/, '')
-    .trim();
+  if (afterZip.length > 0) {
+    // Format A: `houseNo, zipCode, address`
+    result.houseNo = beforeZip[0] || '';  
+    result.address = beforeZip.slice(1).concat(afterZip).join(', ');
+    return result;
+  }
+
+  // Zipcode is the last token. It could be:
+  //   - `houseNo, address..., zipCode`  (house number first, then address)
+  //   - `houseNo, zipCode`              (no address)
+  //   - `address..., zipCode`           (no house number)
+  if (beforeZip.length === 0) {
+    return result;
+  }
+
+  const first = beforeZip[0];
+  if (/\d/.test(first)) {
+    // First token contains digits → treat it as the house number.
+    result.houseNo = first;
+    result.address = beforeZip.slice(1).join(', ');
+  } else {
+    // First token doesn't look like a house number → keep everything before
+    // the zipcode as the address.
+    result.address = beforeZip.join(', ');
+  }
 
   return result;
 }
