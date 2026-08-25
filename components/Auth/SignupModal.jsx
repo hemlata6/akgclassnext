@@ -6,6 +6,63 @@ import instId from '../../config/instituteId';
 import { useTheme } from '../../config/ThemeContext';
 import { useStudent } from '@/config/StudentContext';
 
+/**
+ * Convert the legacy combined address format back into separate fields.
+ *
+ * Legacy API format: `${houseNo}, ${zipCode}, ${address}`
+ * e.g. "C 86, 110015, C 86, 3rd Floor, C-86, Block C Kirti Nagar Rd C Block, Kirti Nagar"
+ *
+ * The separate `zipCode` is used as the anchor to split the combined string,
+ * rather than guessing which comma-separated token is the zipcode.
+ *
+ * @param {string} address Combined address returned by the API
+ * @param {string} zipCode Separate zipcode returned by the API
+ * @returns {{houseNo: string, zipCode: string, address: string}}
+ */
+function parseCombinedAddress(address, zipCode) {
+  const combined = typeof address === 'string' ? address.trim() : '';
+  const zip = typeof zipCode === 'string' ? zipCode.trim() : '';
+
+  const result = {
+    houseNo: '',
+    zipCode: zip,
+    address: '',
+  };
+
+  if (!combined) {
+    return result;
+  }
+
+  // No zipcode anchor — keep the whole value as the address. We can't reliably
+  // separate houseNo from address without it, and fabricating a split would
+  // risk duplicating or losing data on the next submit.
+  if (!zip) {
+    result.address = combined;
+    return result;
+  }
+
+  // The legacy format always puts the zipcode between houseNo and address, so
+  // its first occurrence is the split point.
+  const zipIndex = combined.indexOf(zip);
+
+  if (zipIndex === -1) {
+    // Old record that doesn't follow the expected format — don't mutate it.
+    result.address = combined;
+    return result;
+  }
+
+  // Everything before the zipcode is the house number.
+  result.houseNo = combined.slice(0, zipIndex).replace(/[\s,]+$/, '').trim();
+
+  // Everything after the zipcode is the street address.
+  result.address = combined
+    .slice(zipIndex + zip.length)
+    .replace(/^[\s,]+/, '')
+    .trim();
+
+  return result;
+}
+
 const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const [formData, setFormData] = useState({
     firstname: '',
@@ -96,12 +153,17 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           email: parsedData.email || prev.email,
         }));
       }
-      // Pre-fill address fields if address data is available
+      // Pre-fill address fields if address data is available.
+      // The API stores a single combined `address` string plus a separate
+      // `zipCode`. Normalize it back into the three form fields so that
+      // re-submitting never appends the old combined value again.
       if (parsedData.address || parsedData.zipCode) {
+        const parsedAddress = parseCombinedAddress(parsedData.address, parsedData.zipCode);
         setAddressForm(prev => ({
           ...prev,
-          address: parsedData.address || prev.address,
-          zipCode: parsedData.zipCode || prev.zipCode,
+          houseNo: parsedAddress.houseNo,
+          zipCode: parsedAddress.zipCode,
+          address: parsedAddress.address,
         }));
       }
     }
@@ -200,8 +262,8 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     try {
       const fullAddress = [
         addressForm.houseNo.trim(),
-        addressForm.zipCode.trim(),
-        addressForm.address.trim()
+        addressForm.address.trim(),
+        addressForm.zipCode.trim()
       ].filter(Boolean).join(', ');
 
       // Guard: tempSignupData is required
