@@ -25,19 +25,22 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   // Address form state
   const [showAddressDialog, setShowAddressDialog] = useState(false);
   const [addressForm, setAddressForm] = useState({
-    houseNo: '',
+    houseNumber: '',
     zipCode: '',
     address: '',
     stateName: '',
-    cityId: '',
+    // cityId: '',
     cityName: ''
   });
   const [addressErrors, setAddressErrors] = useState({});
   const [isSavingAddress, setIsSavingAddress] = useState(false);
+  // const [stateList, setStateList] = useState([]);
 
   const handleNavigate = () => {
     if (afterCheckout) {
       window.location.href = '/my-purchases';
+    } else {
+      // window.location.href = '/';
     }
   };
 
@@ -50,6 +53,21 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
     return () => clearTimeout(timer);
   }, [countdown]);
 
+  // Fetch states list
+  // useEffect(() => {
+  //   const fetchStates = async () => {
+  //     try {
+  //       const response = await Network.getStates();
+  //       if (response?.data) {
+  //         setStateList(response.data);
+  //       }
+  //     } catch (error) {
+  //       console.error('Failed to fetch states:', error);
+  //     }
+  //   };
+  //   fetchStates();
+  // }, []);
+
   if (!isOpen) return null;
 
   const validatePhone = (phone) => {
@@ -60,12 +78,12 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
   const validateAddressForm = () => {
     const newErrors = {};
 
-    if (!addressForm.houseNo.trim()) {
-      newErrors.houseNo = 'House No is required';
+    if (!addressForm.houseNumber.trim()) {
+      newErrors.houseNumber = 'House Number is required';
     }
 
     if (!addressForm.zipCode.trim()) {
-      newErrors.zipCode = 'Zipcode is required';
+      newErrors.zipCode = 'Zip Code is required';
     }
 
     if (!addressForm.address.trim()) {
@@ -76,7 +94,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
       newErrors.stateName = 'State is required';
     }
 
-    if (!addressForm.cityId) {
+    if (!addressForm.cityName) {
       newErrors.cityName = 'City is required';
     }
 
@@ -93,15 +111,16 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
   const handleAddressDialogClose = () => {
     setAddressForm({
-      houseNo: '',
+      houseNumber: '',
       zipCode: '',
       address: '',
       stateName: '',
-      cityId: '',
+      // cityId: '',
       cityName: ''
     });
     setAddressErrors({});
     setShowAddressDialog(false);
+    // onClose();
   };
 
   const handleSaveAddress = async () => {
@@ -112,11 +131,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
     setIsSavingAddress(true);
 
     try {
-      const fullAddress = [
-        addressForm.houseNo.trim(),
-        addressForm.zipCode.trim(),
-        addressForm.address.trim()
-      ].filter(Boolean).join(', ');
+      const fullAddress = `${addressForm.houseNumber.trim()}, ${addressForm.address.trim()}, ${addressForm.cityName.trim()}, ${addressForm.stateName.trim()}, ${addressForm.zipCode.trim()}`;
 
       const body = {
         firstName: studentData?.firstName || '',
@@ -125,7 +140,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
         email: studentData?.email || '',
         dob: studentData?.dob ? new Date(studentData.dob).toISOString().slice(0, 10) : new Date().toISOString().slice(0, 10),
         address: fullAddress,
-        cityId: Number(addressForm.cityId),
+        cityId: null,
         bio: studentData?.bio || studentData?.firstName,
         gender: (studentData?.gender || 'male').toLowerCase(),
         zipCode: addressForm.zipCode.trim(),
@@ -135,13 +150,12 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
       if (response?.errorCode === 0 || response?.status) {
         updateStudentData({
-          houseNo: addressForm.houseNo.trim(),
-          zipCode: addressForm.zipCode.trim(),
           address: body.address,
-          cityId: Number(addressForm.cityId),
+          cityId: null,
         });
         setAddressErrors({});
         setShowAddressDialog(false);
+        // Navigate after address is saved
         handleNavigate();
         onClose();
         return;
@@ -193,6 +207,8 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
     try {
       const response = await Network.sendLoginOtp(formData.phone);
+
+      //  console.log("Signup OTP verification response:", response);
 
       if (response.status === true || response.errorCode === 0) {
         setIsNewUser(false);
@@ -261,14 +277,23 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
         };
 
         const verifyResponse = await Network.signUpVerifyOtp(body);
+        // console.log("Signup OTP verification response:", verifyResponse);
         if (verifyResponse.status === true) {
           localStorage.setItem('tempSignup', JSON.stringify({
             phone: formData.phone,
             otp: formData.otp
           }));
+          // handleClose();
+          // onSignupClick();
+
+          // Check if address is empty
+          // if (studentData?.address || studentData?.address.trim() === '') {
+          //   setShowAddressDialog(true);
+          // }
 
           setOpenSignUpModal(true);
         } else {
+
           setErrors({ submit: verifyResponse.message || 'OTP verification failed. Please try again.' });
         }
       } else {
@@ -282,21 +307,32 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
         const loginVerifyResponse = await Network.verifyLoginOtp(body);
 
+        // console.log("Login successful, auth token:", loginVerifyResponse.data);
         if (loginVerifyResponse.status === true) {
           const success = setStudentAuth(loginVerifyResponse);
-
           if (success) {
             login(formData.phone, formData.otp);
             setFormData({ phone: '', otp: '' });
             setOtpSent(false);
             setErrors({});
 
-            if (!loginVerifyResponse?.student?.address || loginVerifyResponse?.student?.address.trim() === '') {
-              setShowAddressDialog(true);
-            } else {
-              handleNavigate();
-              onClose();
-            }
+            // Save student data to tempSignup for the signup modal
+            const studentInfo = loginVerifyResponse?.student || {};
+            localStorage.setItem('tempSignup', JSON.stringify({
+              phone: formData.phone,
+              otp: formData.otp,
+              firstName: studentInfo.firstName || '',
+              lastName: studentInfo.lastName || '',
+              email: studentInfo.email || '',
+              address: studentInfo.address || '',
+              cityName: studentInfo.cityName || '',
+              stateName: studentInfo.stateName || '',
+              zipCode: studentInfo.zipCode || '',
+              cityId: studentInfo.cityId || ''
+            }));
+
+            // Open Signup modal with pre-filled student data
+            setOpenSignUpModal(true);
           }
         } else {
           setErrors({ submit: loginVerifyResponse.message || 'OTP verification failed. Please try again.' });
@@ -348,7 +384,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
           </div>
 
           <div className="space-y-2">
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+            <h2 className="text-3xl font-bold tracking-tight bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
               Welcome Back
             </h2>
             <p className="text-gray-600 text-sm">
@@ -522,7 +558,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 
       <SignupModal
         isOpen={openSignUpModel}
-        onClose={() => setOpenSignUpModal(false)}
+        onClose={() => { setOpenSignUpModal(false); handleClose(); }}
         handleLoginClose={handleClose}
       />
 
@@ -541,29 +577,28 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
             </div>
 
             <div className="p-6 space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">House No.</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">House Number</label>
                   <input
                     type="text"
-                    value={addressForm.houseNo}
-                    onChange={(e) => handleAddressInputChange('houseNo', e.target.value)}
+                    value={addressForm.houseNumber}
+                    onChange={(e) => handleAddressInputChange('houseNumber', e.target.value)}
                     required
                     className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                    placeholder="e.g. 12A"
+                    placeholder="Enter house number"
                   />
-                  {addressErrors.houseNo && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNo}</p>}
+                  {addressErrors.houseNumber && <p className="mt-2 text-xs text-red-600">{addressErrors.houseNumber}</p>}
                 </div>
-
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">Zipcode</label>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">Zip Code</label>
                   <input
                     type="number"
                     value={addressForm.zipCode}
                     onChange={(e) => handleAddressInputChange('zipCode', e.target.value)}
                     required
                     className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
-                    placeholder="e.g. 500001"
+                    placeholder="Enter zip code"
                   />
                   {addressErrors.zipCode && <p className="mt-2 text-xs text-red-600">{addressErrors.zipCode}</p>}
                 </div>
@@ -582,47 +617,55 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
                 {addressErrors.address && <p className="mt-2 text-xs text-red-600">{addressErrors.address}</p>}
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-slate-700 mb-2">State</label>
-                <select
-                  value={addressForm.stateName}
-                  onChange={(e) => {
-                    handleAddressInputChange('stateName', e.target.value);
-                    handleAddressInputChange('cityName', '');
-                    handleAddressInputChange('cityId', '');
-                  }}
-                  required
-                  className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                >
-                  <option value="">Select your state</option>
-                  {stateList.map((state) => (
-                    <option key={state.name} value={state.name}>{state.name}</option>
-                  ))}
-                </select>
-                {addressErrors.stateName && <p className="mt-2 text-xs text-red-600">{addressErrors.stateName}</p>}
-              </div>
-
-              {addressForm.stateName && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* State */}
                 <div>
-                  <label className="block text-sm font-semibold text-slate-700 mb-2">City</label>
-                  <select
-                    value={addressForm.cityId}
-                    onChange={(e) => {
-                      const selectedCityName = e.target.options[e.target.selectedIndex]?.text || '';
-                      handleAddressInputChange('cityId', e.target.value);
-                      handleAddressInputChange('cityName', e.target.value ? selectedCityName : '');
-                    }}
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    State
+                  </label>
+
+                  <input
+                    type="text"
+                    value={addressForm.stateName}
+                    onChange={(e) =>
+                      handleAddressInputChange('stateName', e.target.value)
+                    }
                     required
-                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 bg-white"
-                  >
-                    <option value="">Select your city</option>
-                    {(stateList.find((s) => s.name === addressForm.stateName)?.city || []).map((city) => (
-                      <option key={city.id} value={city.id}>{city.city}</option>
-                    ))}
-                  </select>
-                  {addressErrors.cityName && <p className="mt-2 text-xs text-red-600">{addressErrors.cityName}</p>}
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter your state"
+                  />
+
+                  {addressErrors.stateName && (
+                    <p className="mt-2 text-xs text-red-600">
+                      {addressErrors.stateName}
+                    </p>
+                  )}
                 </div>
-              )}
+
+                {/* City */}
+                <div>
+                  <label className="block text-sm font-semibold text-slate-700 mb-2">
+                    City
+                  </label>
+
+                  <input
+                    type="text"
+                    value={addressForm.cityName}
+                    onChange={(e) =>
+                      handleAddressInputChange('cityName', e.target.value)
+                    }
+                    required
+                    className="w-full rounded-2xl border border-slate-300 px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100"
+                    placeholder="Enter your city"
+                  />
+
+                  {addressErrors.cityName && (
+                    <p className="mt-2 text-xs text-red-600">
+                      {addressErrors.cityName}
+                    </p>
+                  )}
+                </div>
+              </div>
 
               {addressErrors.submit && (
                 <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
@@ -643,7 +686,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
                   type="button"
                   onClick={handleSaveAddress}
                   className="w-full rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
-                  disabled={isSavingAddress || !addressForm.houseNo.trim() || !addressForm.zipCode.trim() || !addressForm.address.trim() || !addressForm.stateName || !addressForm.cityId}
+                  disabled={isSavingAddress || !addressForm.houseNumber.trim() || !addressForm.zipCode.trim() || !addressForm.address.trim() || !addressForm.stateName || !addressForm.cityId}
                 >
                   {isSavingAddress ? 'Saving...' : 'Save Address'}
                 </button>
@@ -657,4 +700,3 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
 };
 
 export default LoginModal;
-
