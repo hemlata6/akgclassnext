@@ -229,19 +229,19 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Call Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Mon-Sat from 9am to 6pm</p>
-                                <p><a href="tel:9318492718" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-9318492718
+                                <p><a href="tel:9930433999" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-9930433999
                                 </a></p>
                                 <p>
-                                    <a href="tel:7703880232" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                        +91-7703880232
+                                    <a href="tel:9930422999" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                        +91-9930422999
                                     </a>
                                 </p>
-                                <p> <a href="tel:8882090148" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-8882090148
+                                <p> <a href="tel:8591089800" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-8591089800
                                 </a></p>
-                                <p> <a href="tel:9220362235" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    +91-9220362235
+                                <p> <a href="tel:8591515899" className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    +91-8591515899
                                 </a></p>
                             </div>
 
