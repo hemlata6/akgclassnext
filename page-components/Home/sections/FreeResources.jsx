@@ -72,7 +72,7 @@ export const FreeResources = () => {
                                     <Download /> App Store
                                 </a>
                                 <a
-                                    href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
+                                    href="https://apps.microsoft.com/detail/9PN6381N9DCM?hl=en-us&gl=IN&ocid=pdpshare"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="bg-white/10 border border-white/20 text-white px-4 py-2 rounded-lg text-xs font-bold flex items-center gap-2 hover:bg-white/20 transition-colors shadow-md"

@@ -251,8 +251,8 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-900 mb-2">Email Us</h3>
                                 <p className="text-slate-600 text-sm mb-2">Our friendly team is here</p>
-                                <a href={`mailto:${institute?.email}`} className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
-                                    {institute?.email}
+                                <a href='{`mailto:cashirishvyasonline@gmail.com`}' className="font-semibold text-indigo-600 hover:opacity-80 transition-opacity">
+                                    cashirishvyasonline@gmail.com
                                 </a>
                             </div>
 
@@ -262,7 +262,7 @@ export default function ContactUsPage() {
                                 </div>
                                 <h3 className="text-lg font-bold mb-2">Office</h3>
                                 <p className="text-sm opacity-90">
-                                    {institute?.address}
+                                    B Wing, 1st Floor, Bhakti Apt, Opp. Jain Temple, Jambhali Galli, Near Moksh Plaza, Borivali West, Mumbai – 400092.
                                 </p>
                             </div>
                         </div>

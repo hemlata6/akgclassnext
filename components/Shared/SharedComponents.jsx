@@ -26,6 +26,7 @@ export const Footer = () => {
   };
 
   const [domains, setDomains] = React.useState([]);
+  const [showDisclaimer, setShowDisclaimer] = React.useState(false);
 
   useEffect(() => {
     fetchDomains();
@@ -140,6 +141,12 @@ export const Footer = () => {
             <h4 className="text-white font-bold mb-3 tracking-wide">Legal</h4>
             <ul className="space-y-2">
               <li
+                onClick={() => setShowDisclaimer(true)}
+                className="cursor-pointer hover:text-[#00a896] transition-colors"
+              >
+                Desclaimer
+              </li>
+              <li
                 onClick={() => router.push('/privacy-policy')}
                 className="cursor-pointer hover:text-[#00a896] transition-colors"
               >
@@ -196,6 +203,54 @@ export const Footer = () => {
           © 2026 {institute?.institue ? institute?.institue : "CA Shirish Vyas"} Education. All rights reserved.
         </div>
       </div>
+
+      {showDisclaimer && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-black/70"
+          onClick={() => setShowDisclaimer(false)}
+        >
+          <div
+            className="bg-white text-slate-800 rounded-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8 relative shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowDisclaimer(false)}
+              className="absolute top-3 right-3 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer"
+              aria-label="Close disclaimer"
+            >
+              <Icons.X className="w-5 h-5" />
+            </button>
+            <h3 className="text-xl md:text-2xl font-bold text-[#191a45] mb-4 pr-8">
+              Disclaimer – Student Results & Representation
+            </h3>
+            <div className="space-y-3 text-sm leading-relaxed text-slate-600">
+              <p>
+                Students who have enrolled with Prime Vision and have studied through any mode,
+                including face-to-face classes, live lectures, recorded sessions, study materials,
+                or YouTube revision videos, and have successfully cleared their examinations, are
+                requested to share their results with us.
+              </p>
+              <p>
+                Please note that even in cases where results are not voluntarily submitted, Prime
+                Vision reserves the right to identify and recognize such successful candidates as
+                students of Shirish Sir based on available records or reasonable association with
+                our courses and content.
+              </p>
+              <p>
+                By enrolling in our courses and/or utilizing our educational resources, you
+                acknowledge and grant Prime Vision the right to represent you as a student of
+                Shirish Sir and to publish, display, and promote your academic achievements on our
+                website, social media platforms, and other promotional channels.
+              </p>
+              <p>
+                Prime Vision reserves the right to use such information for academic recognition and
+                promotional purposes. Enrollment and/or usage of our services shall be deemed as
+                consent for the same.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </footer>
   );
 };

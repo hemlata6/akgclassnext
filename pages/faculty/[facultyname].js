@@ -158,21 +158,26 @@ const FacultyProfile = ({ }) => {
     return (
         <Layout>
             <div id="faculty-profile-container" data-page="faculty-profile" className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+                <div className="flex items-center gap-4 mb-4 mt-4 justify-start md:justify-start px-4 md:px-8">
+                    <button
+                        onClick={() => router.push('/')}
+                        className="back-button inline-flex items-center gap-2 transition-colors hover:opacity-70"
+                        style={{ color: theme.primary }}
+                    >
+                        <Icons.ChevronLeft />
+                        Back to Home
+                    </button>
+                </div>
+                {/* Courses Section */}
+                {employeeCourseIds && employeeCourseIds.length > 0 && (
+                    <>
+                        <CoursesSection employeeCourseId={employeeCourseIds} />
+                    </>
+                )}
                 {/* Hero Section */}
                 <section id="faculty-hero-section" data-section="faculty-hero" className="bg-white py-16" style={{ backgroundColor: '#ffffff' }}>
                     <div className={LAYOUT_PADDING}>
-                        <div className="flex items-center gap-4 mb-8">
-                            <button
-                                onClick={() => router.push('/')}
-                                className="back-button inline-flex items-center gap-2 transition-colors hover:opacity-70"
-                                style={{ color: theme.primary }}
-                            >
-                                <Icons.ChevronLeft />
-                                Back to Home
-                            </button>
 
-
-                        </div>
 
                         <div className={`flex flex-col md:flex-row items-start gap-12 md:min-h-auto`}>
                             <div className="w-full md:w-1/3 md:sticky md:top-28 self-start">
@@ -236,18 +241,13 @@ const FacultyProfile = ({ }) => {
                                 </div>
                             </div>
                         </div>
-
+                        {employeeCourseIds && employeeCourseIds.length > 0 && (
+                            <>
+                                <BookStore employeeCourseId={employeeCourseIds} />
+                            </>
+                        )}
                     </div>
                 </section>
-
-                {/* Courses Section */}
-                {employeeCourseIds && employeeCourseIds.length > 0 && (
-                    <>
-                        <CoursesSection employeeCourseId={employeeCourseIds} />
-                        <BookStore employeeCourseId={employeeCourseIds} />
-                    </>
-                )}
-
             </div>
             <Footer />
         </Layout>

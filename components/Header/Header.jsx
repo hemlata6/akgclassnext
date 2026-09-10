@@ -527,7 +527,7 @@ export const Header = ({ cartCount }) => {
             </div>
 
             <div className="flex items-center gap-10 h-full hidden xl:flex">
-              {/* <button onClick={() => router.push('/')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors relative group">Home</button> */}
+              <button onClick={() => router.push('/')} className="font-semibold text-slate-600 hover:text-slate-900 text-[17px] transition-colors relative group">Home</button>
               <div
                 className="relative group h-full flex items-center"
                 onMouseEnter={() => {
@@ -536,7 +536,7 @@ export const Header = ({ cartCount }) => {
                 }}
                 onMouseLeave={() => setHoveredMenu(null)}
               >
-                <button className="flex items-center gap-1 font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors py-6">
+                <button className="flex items-center gap-1 text-[17px] font-semibold text-slate-600 hover:text-slate-900 transition-colors py-6">
                   Video Lectures <Icons.ChevronDown />
                 </button>
 
@@ -574,7 +574,7 @@ export const Header = ({ cartCount }) => {
                               );
                               router.push('/store');
                             }}
-                            className="block w-full text-left px-4 py-2.5 text-sm font-semibold text-slate-700 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
+                            className="block w-full text-left px-4 py-2.5 text-[17px] font-semibold text-slate-700 hover:text-indigo-700 hover:bg-slate-50 rounded-md transition"
                           >
                             {domain.name}
                           </button>
@@ -598,7 +598,7 @@ export const Header = ({ cartCount }) => {
                                     );
                                     router.push('/store');
                                   }}
-                                  className="block w-full text-left px-4 py-2 text-sm text-slate-500 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition"
+                                  className="block w-full text-left px-4 py-2 text-[17px] text-slate-500 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition"
                                 >
                                   {child.name}
                                 </button>
@@ -620,7 +620,7 @@ export const Header = ({ cartCount }) => {
                 onMouseLeave={() => setHoveredMenu(null)}
               >
                 <button
-                  className={`hover:text-slate-900 transition-colors whitespace-nowrap font-semibold text-slate-600 flex items-center gap-1 text-sm py-4`}
+                  className={`hover:text-slate-900 transition-colors whitespace-nowrap font-semibold text-slate-600 flex items-center gap-1 text-[17px] py-4`}
                 >
                   Faculty <Icons.ChevronDown className="w-3 h-3" />
                 </button>
@@ -654,9 +654,9 @@ export const Header = ({ cartCount }) => {
               <button onClick={() => {
                 sessionStorage.setItem('storeNavigationState', JSON.stringify({ source: 'books', productType: 'books' }));
                 router.push('/store');
-              }} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">Books</button>
+              }} className="hover:text-slate-900 transition-colors whitespace-nowrap font-semibold text-slate-600 text-[#1A2B4A] text-[17px]">Books</button>
 
-              <button className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">
+              <button className="font-semibold text-slate-600 hover:text-slate-900 text-[17px] transition-colors">
                 <span className="relative">
                   Test-Series
                   <span className="absolute -top-5 -right-10 bg-gradient-to-r from-red-500 to-red-600 text-white text-[8px] font-bold px-1 py-0.2 rounded-full whitespace-nowrap shadow-sm">Coming Soon</span>
@@ -664,7 +664,7 @@ export const Header = ({ cartCount }) => {
               </button>
 
 
-              <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-sm transition-colors">F2F Mumbai</button>
+              <button onClick={() => router.push('/store?batchTag=F2F+Mumbai')} className="font-semibold text-[#1A2B4A] hover:text-slate-900 text-[17px] transition-colors">F2F Mumbai</button>
 
               {/* <button
                 onClick={() => router.push('/store?batchTag=Combo')}
@@ -694,10 +694,10 @@ export const Header = ({ cartCount }) => {
 
               {/* <button onClick={() => router.push('/free-resources')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">About Us</button>
               <button onClick={() => router.push('/contact-us')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">Contact Us</button> */}
-              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#2EB1ED] hover:text-slate-900 text-sm transition-colors">Free Resources</button>
+              <button onClick={() => router.push('/free-resources')} className="font-semibold text-[#2EB1ED] hover:text-slate-900 text-[17px] transition-colors">Free Resources</button>
 
 
-              {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-sm transition-colors">My Purchases</button>}
+              {user && <button onClick={() => router.push('/my-purchases')} className="font-semibold text-slate-600 hover:text-slate-900 text-[17px] transition-colors">My Purchases</button>}
             </div>
 
             <div className="flex items-center gap-5">

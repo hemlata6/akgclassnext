@@ -149,7 +149,7 @@ export const StudentSupportSection = () => {
                                         <Phone /> Call: {institute?.instituteAppSettingsModals?.contact || '+91 85910 89800'}
                                     </a>
                                     <a
-                                        href={`https://wa.me/{institute?.instituteAppSettingsModals.contact}`}
+                                        href={`https://wa.me/8591089800`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className="w-full bg-[#25D366] text-white py-3 rounded-xl font-bold text-sm hover:bg-[#20ba5a] transition-colors flex items-center justify-center gap-2 shadow-md border border-white/20"
