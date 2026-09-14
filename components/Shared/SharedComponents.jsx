@@ -144,7 +144,7 @@ export const Footer = () => {
                 onClick={() => setShowDisclaimer(true)}
                 className="cursor-pointer hover:text-[#00a896] transition-colors"
               >
-                Desclaimer
+                Disclaimer
               </li>
               <li
                 onClick={() => router.push('/privacy-policy')}
