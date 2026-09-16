@@ -31,14 +31,14 @@ const RefundPolicy = () => {
             
             <section className="mb-8">
               <p className="text-slate-700 leading-relaxed mb-4">
-                Thank you for shopping at www.{institute?.instituteName || "CA Shirish Vyas"}.com
+                Thank you for shopping at www.cashirishvyas.com/
               </p>
             </section>
 
             <section className="mb-8">
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Non-tangible irrevocable goods ("Digital products")</h2>
+              {/* <h2 className="text-2xl font-bold text-slate-900 mb-4">Non-tangible irrevocable goods ("Digital products")</h2> */}
               <p className="text-slate-700 leading-relaxed mb-4">
-                We do not issue refunds for non-tangible irrevocable goods ("digital products") once the order is confirmed and the product is sent.
+                We do not offer refunds for any products purchased through the website.
               </p>
               <p className="text-slate-700 leading-relaxed mb-4">
                 We recommend contacting us for assistance if you experience any issues receiving or downloading our products.
@@ -51,7 +51,7 @@ const RefundPolicy = () => {
                 If you have any questions about our Returns and Refunds Policy, please contact us:
               </p>
               <div className="bg-amber-50 p-6 rounded-xl border border-amber-200">
-                <p className="text-slate-700"><strong>By email:</strong> info.{institute?.email || ""}.com</p>
+                <p className="text-slate-700"><strong>By email:</strong> cashirishvyasonline@gmail.com</p>
               </div>
             </section>
 
