@@ -185,7 +185,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* Mac Download */}
             <a
-              href="https://baseclassio.b-cdn.net/VG%20Study%20Hub.zip"
+              href="https://baseclassio.b-cdn.net/macos/v6/CA%20Shirish%20Vyas.zip"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}

@@ -58,7 +58,7 @@ const DownloadAppPage = () => {
             name: 'Mac Direct Download',
             platform: 'macOS',
             description: 'Download for Mac',
-            url: '#',
+            url: 'https://baseclassio.b-cdn.net/macos/v6/CA%20Shirish%20Vyas.zip',
             icon: (
                 <img src="/macLogo.png" alt="Mac Direct Download" className="w-20 h-20 object-contain" />
             ),
