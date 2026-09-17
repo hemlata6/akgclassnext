@@ -461,15 +461,15 @@ export default function CartPage() {
         if (response?.data?.status === true && response?.data?.url) {
           setCheckoutResponse(response?.data);
           // Post-payment: redirect authenticated users, show app download for guests
-          // if (isAuthenticated && authToken) {
-          //   setTimeout(() => {
-          //     router.push('/my-purchases');
-          //   }, 1000);
-          // } else {
-          //   setTimeout(() => {
-          //     setShowAppDownloadModal(true);
-          //   }, 1000);
-          // }
+          if (isAuthenticated && authToken) {
+            setTimeout(() => {
+              router.push('/my-purchases');
+            }, 1000);
+          } else {
+            setTimeout(() => {
+              setShowAppDownloadModal(true);
+            }, 1000);
+          }
           const isMobile = window.innerWidth <= 768;
 
           if (isMobile) {
