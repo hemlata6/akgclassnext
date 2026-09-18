@@ -8,6 +8,7 @@ import YouTubePlayer from './YouTubePlayer';
 import { useStudent } from '../../config/StudentContext';
 import { useRouter } from 'next/router';
 import { Footer } from '../../components/Shared/SharedComponents';
+import AppDownloadModal from '../../components/Modals/AppDownloadModal';
 
 const MyPurchases = () => {
     const router = useRouter();
@@ -29,6 +30,7 @@ const MyPurchases = () => {
     const [activeCoursesList, setActiveCoursesList] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [showAppDownloadDialog, setShowAppDownloadDialog] = useState(false);
+    const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
     const [openDialog, setopenDialog] = useState(false);
     const [selectedAudio, setSelectedAudio] = useState(null);
     const [showAudioModal, setShowAudioModal] = useState(false);
@@ -266,6 +268,18 @@ const MyPurchases = () => {
         setIsVisible(true);
     }, []);
 
+    // Show the app download modal only when there is some content
+    useEffect(() => {
+        if (mycourseList.length === 0) {
+            return;
+        }
+
+        const timer = setTimeout(() => {
+            setShowAppDownloadModal(true);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, [mycourseList]);
+
     useEffect(() => {
         if (!studentData) {
             return;
@@ -439,6 +453,10 @@ const MyPurchases = () => {
                         </button>
                     </div>
                 </div>
+                <AppDownloadModal
+                    open={showAppDownloadModal}
+                    onClose={() => setShowAppDownloadModal(false)}
+                />
                 <Footer />
             </div>
         );
@@ -1010,6 +1028,10 @@ const MyPurchases = () => {
                 </div>
             )}
 
+            <AppDownloadModal
+                open={showAppDownloadModal}
+                onClose={() => setShowAppDownloadModal(false)}
+            />
             <Footer />
         </div>
     );
