@@ -59,7 +59,7 @@ function parseCombinedAddress(address, zipCode) {
 
   if (afterZip.length > 0) {
     // Format A: `houseNo, zipCode, address`
-    result.houseNo = beforeZip[0] || '';  
+    result.houseNo = beforeZip[0] || '';
     result.address = beforeZip.slice(1).concat(afterZip).join(', ');
     return result;
   }
@@ -110,7 +110,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
   const { login, auth } = useAuth();
   const { theme } = useTheme();
   const { setStudentAuth, authToken: studentToken, studentData } = useStudent();
-  console.log('studentData', studentData);
+  // console.log('studentData', studentData);
 
   // Fetch states on mount
   useEffect(() => {
@@ -381,6 +381,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     } finally {
       setIsLoading(false);
     }
+    
   };
 
   const handleClose = () => {

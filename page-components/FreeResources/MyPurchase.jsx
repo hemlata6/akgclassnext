@@ -54,7 +54,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
     const [selectedAudio, setSelectedAudio] = useState(null);
     const [showAudioModal, setShowAudioModal] = useState(false);
 
-    console.log(';coursesList', coursesList);
+    // console.log(';coursesList', coursesList);
 
 
     const handleCloseVideo = () => {
