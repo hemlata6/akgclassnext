@@ -24,6 +24,7 @@ import { BRAND_GREEN, BRAND_GREEN_HOVER, BRAND_GREEN_CLASS, BRAND_GREEN_HOVER_CL
 import LoginModal from '../../components/Auth/LoginModal';
 import SignupModal from '../../components/Auth/SignupModal';
 import { Footer } from '../../components/Shared/SharedComponents';
+import AppDownloadModal from '../../components/Modals/AppDownloadModal';
 
 const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => {
 
@@ -53,6 +54,7 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
     const [showSignupModal, setShowSignupModal] = useState(false);
     const [selectedAudio, setSelectedAudio] = useState(null);
     const [showAudioModal, setShowAudioModal] = useState(false);
+    const [showAppDownloadModal, setShowAppDownloadModal] = useState(false);
 
     // console.log(';coursesList', coursesList);
 
@@ -63,6 +65,18 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
 
     useEffect(() => {
         window.scrollTo(0, 0);
+    }, []);
+
+    // Show the app download modal only once per session on this page
+    useEffect(() => {
+        const appDownloadPromptShown = sessionStorage.getItem('appDownloadPromptShown');
+        if (!appDownloadPromptShown) {
+            const timer = setTimeout(() => {
+                setShowAppDownloadModal(true);
+                sessionStorage.setItem('appDownloadPromptShown', 'true');
+            }, 1500);
+            return () => clearTimeout(timer);
+        }
     }, []);
 
     useEffect(() => {
@@ -435,46 +449,46 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
         setEnrollingCourse(null);
     };
 
-    const handleSubmit = async () => {
-        try {
-            const body = {
-                instId: instId,
-                firstName: name,
-                lastName: name,
-                contact: number,
-                campaignId: null,
-                contentId: selectCourse?.id,
-                enquiryType: "course"
-            }
-            let response = await Network.createLeadFormAPI(body, instId);
-            if (response?.errorCode !== 0) {
-            } else if (response?.errorCode === 0) {
+    // const handleSubmit = async () => {
+    //     try {
+    //         const body = {
+    //             instId: instId,
+    //             firstName: name,
+    //             lastName: name,
+    //             contact: number,
+    //             campaignId: null,
+    //             contentId: selectCourse?.id,
+    //             enquiryType: "course"
+    //         }
+    //         let response = await Network.createLeadFormAPI(body, instId);
+    //         if (response?.errorCode !== 0) {
+    //         } else if (response?.errorCode === 0) {
 
-                handleClose();
+    //             handleClose();
 
-                setTimeout(() => {
-                    if (selectedItem?.entityType === "video" && selectedItem?.video?.video) {
-                        window.open(Endpoints.mediaBaseUrl + selectedItem?.video?.video, "_blank");
-                    } else if (selectedItem?.entityType === "note" && selectedItem?.note?.note) {
-                        window.open(Endpoints.mediaBaseUrl + selectedItem?.note?.note, "_blank");
-                    } else if (selectedItem?.entityType === "blog" && selectedItem?.blog?.blog) {
-                        window.open(Endpoints.mediaBaseUrl + selectedItem?.blog?.blog, "_blank");
-                    } else if (selectedItem?.entityType === "pdf" && selectedItem?.pdf?.pdf) {
-                        window.open(Endpoints.mediaBaseUrl + selectedItem?.pdf?.pdf, "_blank");
-                    } else if (selectedItem?.entityType === "document" && selectedItem?.document?.document) {
-                        window.open(Endpoints.mediaBaseUrl + selectedItem?.document?.document, "_blank");
-                    } else {
-                        const fallbackUrl = selectedItem?.url || selectedItem?.link || selectedItem?.contentUrl;
-                        if (fallbackUrl) {
-                            window.open(fallbackUrl.startsWith('http') ? fallbackUrl : Endpoints.mediaBaseUrl + fallbackUrl, "_blank");
-                        }
-                    }
-                }, 300);
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    //             setTimeout(() => {
+    //                 if (selectedItem?.entityType === "video" && selectedItem?.video?.video) {
+    //                     window.open(Endpoints.mediaBaseUrl + selectedItem?.video?.video, "_blank");
+    //                 } else if (selectedItem?.entityType === "note" && selectedItem?.note?.note) {
+    //                     window.open(Endpoints.mediaBaseUrl + selectedItem?.note?.note, "_blank");
+    //                 } else if (selectedItem?.entityType === "blog" && selectedItem?.blog?.blog) {
+    //                     window.open(Endpoints.mediaBaseUrl + selectedItem?.blog?.blog, "_blank");
+    //                 } else if (selectedItem?.entityType === "pdf" && selectedItem?.pdf?.pdf) {
+    //                     window.open(Endpoints.mediaBaseUrl + selectedItem?.pdf?.pdf, "_blank");
+    //                 } else if (selectedItem?.entityType === "document" && selectedItem?.document?.document) {
+    //                     window.open(Endpoints.mediaBaseUrl + selectedItem?.document?.document, "_blank");
+    //                 } else {
+    //                     const fallbackUrl = selectedItem?.url || selectedItem?.link || selectedItem?.contentUrl;
+    //                     if (fallbackUrl) {
+    //                         window.open(fallbackUrl.startsWith('http') ? fallbackUrl : Endpoints.mediaBaseUrl + fallbackUrl, "_blank");
+    //                     }
+    //                 }
+    //             }, 300);
+    //         }
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
 
     return (
         <>
@@ -875,6 +889,11 @@ const FreeResourcesPage = ({ onPageChange, onQuizNavigation, onAuthAction }) => 
                         setShowSignupModal(false);
                         setShowLoginModal(true);
                     }}
+                />
+
+                <AppDownloadModal
+                    open={showAppDownloadModal}
+                    onClose={() => setShowAppDownloadModal(false)}
                 />
             </div>
             <Footer />
