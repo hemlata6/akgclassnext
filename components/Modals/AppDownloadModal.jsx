@@ -144,7 +144,7 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
 
             {/* Microsoft Store */}
             <a
-              href="https://apps.microsoft.com/detail/9PD9K0L5XGD5?hl=en-us&gl=IN&ocid=pdpshare"
+              href="https://apps.microsoft.com/detail/9pn6381n9dcm?hl=en-US&gl=IN&ocid=pdpshare"
               target="_blank"
               rel="noopener noreferrer"
               onClick={onClose}
