@@ -248,7 +248,7 @@ export const CoursesSection = ({ employeeCourseId }) => {
         router.push('/store');
     }
 
-    console.log('filtered', filtered)
+    // console.log('filtered', filtered)
 
     return (
         <section id="fr-courses" className="py-12 bg-slate-50 relative overflow-hidden">

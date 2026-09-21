@@ -5,6 +5,7 @@ import Network from '../../config/Network';
 import instId from '../../config/instituteId';
 import { useTheme } from '../../config/ThemeContext';
 import { useStudent } from '@/config/StudentContext';
+import { NumbersOutlined } from '@mui/icons-material';
 
 /**
  * Convert a legacy combined address string back into separate fields.
@@ -91,6 +92,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     firstname: '',
     lastname: '',
     email: '',
+    rnumber: '',
   });
   const [addressForm, setAddressForm] = useState({
     houseNo: '',
@@ -306,6 +308,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           lastName: formData.lastname,
           userName: tempSignupData.phone,
           email: formData.email,
+          remark: formData.rnumber.trim(),
           dob: null,
           cityId: addressForm.cityId ? Number(addressForm.cityId) : null,
           address: fullAddress,
@@ -332,6 +335,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           firstName: formData.firstname,
           lastName: formData.lastname,
           email: formData.email,
+          remark: formData.rnumber.trim(),
           instId: instId,
           password: 123456,
           gender: "male",
@@ -531,6 +535,37 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
                 </p>
               )}
             </div>
+          </div>
+
+          {/* R-Number */}
+          <div className="space-y-1">
+            <label htmlFor="rnumber" className="block text-sm font-semibold text-gray-700">
+              ICAI/CMAI Registration ID
+            </label>
+            <div className="relative group">
+              <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none transition-colors duration-200 group-focus-within:text-indigo-700">
+                <NumbersOutlined className="h-5 w-5" />
+              </div>
+              <input
+                id="rnumber"
+                name="rnumber"
+                type="rnumber"
+                autoComplete="rnumber"
+                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.rnumber
+                  ? 'border-red-300 focus:border-red-500'
+                  : `border-gray-300 focus:border-indigo-700`
+                  } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
+                placeholder="Enter your ICAI/ICMAI Registration ID"
+                value={formData.rnumber}
+                onChange={handleChange}
+              />
+            </div>
+            {errors.rnumber && (
+              <p className="text-sm text-red-600 flex items-center gap-1">
+                <span className="w-1 h-1 bg-red-600 rounded-full"></span>
+                {errors.rnumber}
+              </p>
+            )}
           </div>
 
           {/* Email */}
