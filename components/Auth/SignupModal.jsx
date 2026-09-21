@@ -92,7 +92,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
     firstname: '',
     lastname: '',
     email: '',
-    rnumber: '',
+    remark: '',
   });
   const [addressForm, setAddressForm] = useState({
     houseNo: '',
@@ -176,6 +176,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           firstname: parsedData.firstName || prev.firstname,
           lastname: parsedData.lastName || prev.lastname,
           email: parsedData.email || prev.email,
+          remark: parsedData.remark || prev.remark,
         }));
       }
       // Pre-fill address fields if address data is available.
@@ -308,7 +309,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           lastName: formData.lastname,
           userName: tempSignupData.phone,
           email: formData.email,
-          remark: formData.rnumber.trim(),
+          remark: formData.remark.trim(),
           dob: null,
           cityId: addressForm.cityId ? Number(addressForm.cityId) : null,
           address: fullAddress,
@@ -335,7 +336,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           firstName: formData.firstname,
           lastName: formData.lastname,
           email: formData.email,
-          remark: formData.rnumber.trim(),
+          remark: formData.remark.trim(),
           instId: instId,
           password: 123456,
           gender: "male",
@@ -539,7 +540,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
 
           {/* R-Number */}
           <div className="space-y-1">
-            <label htmlFor="rnumber" className="block text-sm font-semibold text-gray-700">
+            <label htmlFor="remark" className="block text-sm font-semibold text-gray-700">
               ICAI/CMAI Registration ID
             </label>
             <div className="relative group">
@@ -547,23 +548,23 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
                 <NumbersOutlined className="h-5 w-5" />
               </div>
               <input
-                id="rnumber"
-                name="rnumber"
-                type="rnumber"
-                autoComplete="rnumber"
-                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.rnumber
+                id="remark"
+                name="remark"
+                type="text"
+                autoComplete="off"
+                className={`block w-full pl-12 pr-4 py-3 border-2 ${errors.remark
                   ? 'border-red-300 focus:border-red-500'
                   : `border-gray-300 focus:border-indigo-700`
                   } rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-indigo-700/10 transition-all duration-200 bg-white/50 backdrop-blur-sm hover:bg-white/70`}
                 placeholder="Enter your ICAI/ICMAI Registration ID"
-                value={formData.rnumber}
+                value={formData.remark}
                 onChange={handleChange}
               />
             </div>
-            {errors.rnumber && (
+            {errors.remark && (
               <p className="text-sm text-red-600 flex items-center gap-1">
                 <span className="w-1 h-1 bg-red-600 rounded-full"></span>
-                {errors.rnumber}
+                {errors.remark}
               </p>
             )}
           </div>

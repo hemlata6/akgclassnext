@@ -324,6 +324,7 @@ const LoginModal = ({ isOpen, onClose, onSignupClick, afterCheckout }) => {
               firstName: studentInfo.firstName || '',
               lastName: studentInfo.lastName || '',
               email: studentInfo.email || '',
+              remark: studentInfo.remark || '',
               address: studentInfo.address || '',
               cityName: studentInfo.cityName || '',
               stateName: studentInfo.stateName || '',
