@@ -247,6 +247,10 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       newErrors.lastname = 'Last name is required';
     }
 
+    if (!formData.remark.trim()) {
+      newErrors.remark = 'ICAI/ICMAI Registration ID is required';
+    }
+
     if (!formData.email.trim()) {
       newErrors.email = 'Email is required';
     } else if (!validateEmail(formData.email)) {
@@ -392,6 +396,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
       firstname: '',
       lastname: '',
       email: '',
+      remark: '',
     });
     setAddressForm({
       houseNo: '',
@@ -707,7 +712,7 @@ const SignupModal = ({ isOpen, onClose, onLoginClick, handleLoginClose }) => {
           <div className="pt-1">
             <button
               type="submit"
-              disabled={isLoading}
+              disabled={isLoading || !formData.remark.trim()}
               className={`group relative w-full flex justify-center items-center gap-2 py-2 px-4 border border-transparent text-sm font-semibold rounded-xl text-white ${theme.primaryClass} hover:opacity-90 focus:outline-none focus:ring-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-[1.02] hover:shadow-lg`}
             >
               {isLoading ? (
