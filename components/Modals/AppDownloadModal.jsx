@@ -231,6 +231,9 @@ const AppDownloadModal = ({ open, onClose, brandColor = '#0d5a3e' }) => {
             <p style={{ fontSize: '11px', color: '#64748b', margin: 0 }}>
               Study Anywhere, Anytime
             </p>
+            <p style={{ fontSize: '11px', color: '#64748b', margin: '10px 0 0', lineHeight: '1.5' }}>
+              Please note that our software/system does not support watching videos by connecting any external device to the mobile or laptop on which the initial access is provided. We request you to kindly keep this restriction in mind before placing your order on our website, as we will not be able to accommodate requests for external-device viewing after the order is placed. Thank you for your understanding and cooperation.
+            </p>
           </Box>
         </Box>
       </DialogContent>

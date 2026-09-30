@@ -247,6 +247,15 @@ export const Footer = () => {
                 promotional purposes. Enrollment and/or usage of our services shall be deemed as
                 consent for the same.
               </p>
+              <p>
+                Please note that our software/system does not support watching videos by connecting any external device to the mobile or laptop on which the initial access is provided.
+              </p>
+              <p>
+                We request you to kindly keep this restriction in mind before placing your order on our website, as we will not be able to accommodate requests for external-device viewing after the order is placed.
+              </p>
+              <p>
+                Thank you for your understanding and cooperation.
+              </p>
             </div>
           </div>
         </div>
