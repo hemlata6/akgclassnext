@@ -529,9 +529,12 @@ const CourseContent = ({ courseData, onAddToCart }) => {
     const discountedPrice = Math.round(originalPrice - (originalPrice * discount / 100));
 
     return {
+      pricingId: pricingToUse.id,
       originalPrice,
       discountedPrice,
-      discount
+      discount,
+      validityType: pricingToUse.validityType,
+      watchTime: pricingToUse.watchTime
     };
   };
 
